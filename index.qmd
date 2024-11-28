@@ -1,0 +1,38 @@
+---
+title: "R for Data Science"
+format: html
+project:
+  type: website
+  output-dir: ./docs
+---
+
+## Welcome to the main page of R for Data Science 
+
+This 3 day course is a following of our 2 day course *FromExceltoR* and the material of that course is a prerequit to this course. *R for Data Science* is an advanced course in R-programming for researchers at the Faculty of Health and Medical Sciences, University of Copenhagen. The course is build on code-along presentations and exercises in Quarto documents.
+
+\
+The course goes through the following topics:
+
+1.  Script formats
+2.  Advanced tidyverse using real world data (build on material from our introduction to R course, *FromExceltoR*)
+3.  Scripting in R using functions, for-loops, if-else statements. 
+4.  Modelling in R. 
+
+The material in this repository is for teaching purposes only and not to be distributed commercially.
+
+\
+We will use Quarto for the tutorials of this course. Please see more about Quarto following the links below.\
+[Quarto website](https://quarto.org)\
+["Get started with Quarto" tutorial for RStudio](https://quarto.org/docs/get-started/hello/rstudio.html)\
+["Get started with Quarto" video for RStudio\
+](https://www.youtube.com/watch?v=_f3latmOhew)[Comprehensive guides to Quarto basics](https://quarto.org/docs/guide/)
+
+\
+Finally... Dear course participants, it would greatly help us if you could complete our **UPDATE LINK** [feedback](https://forms.office.com/e/amK1D9wLtd) form.
+
+## Program
+
+INSERT PROGRAM 
+![](images/Program.png)
+
+

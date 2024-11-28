@@ -1,0 +1,37 @@
+[
+  {
+    "objectID": "about_heads.html",
+    "href": "about_heads.html",
+    "title": "About HeaDS",
+    "section": "",
+    "text": "In the Center for Health Data Science (HeaDS) we do both research and in the DataLab and Sandbox we develop and host course. Read more about all the cool stuff we do on our website.\n\n\nThe DataLab offers a range of services to support SUND employees in their data science analyses. Here’s an overview:\n\nCourses: We offer data science and bioinformatics courses for all SUND staff (researchers, administrative staff, technical staff, etc.). Our most popular courses include “From Excel to R,” “Python Tsunami,” and “Introduction to Bulk RNA-seq Analysis.”\nConsultations: We host drop-in sessions every Thursday from 13:00 to 15:00, where we assist with data science-related challenges and questions. Alternatively, you can reach out to arrange a one-on-one meeting on another day.\nCommissions: We conduct commissioned research, such as bioinformatics and data science analyses tailored to your needs. Additionally, we offer a commissioned supervision scheme if you would like to learn how to perform the analysis yourself.\nEvents: We host various data science events. Join us for our seminar series, “Talking HeaDS.” Our next session is in the spring (date and speeker TBA), and you can sign up here: https://eventsignup.ku.dk/talkingheadsspring2025."
+  },
+  {
+    "objectID": "about_heads.html#center-for-health-data-science",
+    "href": "about_heads.html#center-for-health-data-science",
+    "title": "About HeaDS",
+    "section": "",
+    "text": "In the Center for Health Data Science (HeaDS) we do both research and in the DataLab and Sandbox we develop and host course. Read more about all the cool stuff we do on our website.\n\n\nThe DataLab offers a range of services to support SUND employees in their data science analyses. Here’s an overview:\n\nCourses: We offer data science and bioinformatics courses for all SUND staff (researchers, administrative staff, technical staff, etc.). Our most popular courses include “From Excel to R,” “Python Tsunami,” and “Introduction to Bulk RNA-seq Analysis.”\nConsultations: We host drop-in sessions every Thursday from 13:00 to 15:00, where we assist with data science-related challenges and questions. Alternatively, you can reach out to arrange a one-on-one meeting on another day.\nCommissions: We conduct commissioned research, such as bioinformatics and data science analyses tailored to your needs. Additionally, we offer a commissioned supervision scheme if you would like to learn how to perform the analysis yourself.\nEvents: We host various data science events. Join us for our seminar series, “Talking HeaDS.” Our next session is in the spring (date and speeker TBA), and you can sign up here: https://eventsignup.ku.dk/talkingheadsspring2025."
+  },
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "R for Data Science",
+    "section": "",
+    "text": "This 3 day course is a following of our 2 day course FromExceltoR and the material of that course is a prerequit to this course. R for Data Science is an advanced course in R-programming for researchers at the Faculty of Health and Medical Sciences, University of Copenhagen. The course is build on code-along presentations and exercises in Quarto documents.\n\nThe course goes through the following topics:\n\nScript formats\nAdvanced tidyverse using real world data (build on material from our introduction to R course, FromExceltoR)\nScripting in R using functions, for-loops, if-else statements.\nModelling in R.\n\nThe material in this repository is for teaching purposes only and not to be distributed commercially.\n\nWe will use Quarto for the tutorials of this course. Please see more about Quarto following the links below.\nQuarto website\n“Get started with Quarto” tutorial for RStudio\n“Get started with Quarto” video for RStudio\nComprehensive guides to Quarto basics\n\nFinally… Dear course participants, it would greatly help us if you could complete our UPDATE LINK feedback form."
+  },
+  {
+    "objectID": "index.html#welcome-to-the-main-page-of-r-for-data-science",
+    "href": "index.html#welcome-to-the-main-page-of-r-for-data-science",
+    "title": "R for Data Science",
+    "section": "",
+    "text": "This 3 day course is a following of our 2 day course FromExceltoR and the material of that course is a prerequit to this course. R for Data Science is an advanced course in R-programming for researchers at the Faculty of Health and Medical Sciences, University of Copenhagen. The course is build on code-along presentations and exercises in Quarto documents.\n\nThe course goes through the following topics:\n\nScript formats\nAdvanced tidyverse using real world data (build on material from our introduction to R course, FromExceltoR)\nScripting in R using functions, for-loops, if-else statements.\nModelling in R.\n\nThe material in this repository is for teaching purposes only and not to be distributed commercially.\n\nWe will use Quarto for the tutorials of this course. Please see more about Quarto following the links below.\nQuarto website\n“Get started with Quarto” tutorial for RStudio\n“Get started with Quarto” video for RStudio\nComprehensive guides to Quarto basics\n\nFinally… Dear course participants, it would greatly help us if you could complete our UPDATE LINK feedback form."
+  },
+  {
+    "objectID": "index.html#program",
+    "href": "index.html#program",
+    "title": "R for Data Science",
+    "section": "Program",
+    "text": "Program\nINSERT PROGRAM"
+  }
+]
