@@ -1,0 +1,272 @@
+---
+title: "Presentation 1: Base R and Tidyverse"
+format: html
+project:
+ type: website
+ output-dir: ../docs
+---
+
+## Exercise 1 / Presentaion?: Base R and Tidyverse
+
+1.  Load libraries
+
+```{r}
+library(tidyverse)
+```
+
+2.  Create dataset
+
+```{r}
+# Create a sample data frame
+df <- data.frame(
+  ID = 1:10,
+  Name = c("Alice", "Bob", "Charlie", "Diana", "Eve", "Frank", "Grace", "Hannah", "Ian", "Jack"),
+  Age = c(25, 30, 22, 35, 28, NA, 40, 29, 21, 33),
+  Sex = c("Female", "Male", "Male", "Female", "Female", "Male", "Female", "Female", "Male", "Male"),
+  sales_2020 = c(100, 200, 150, 300, 250, NA, 400, 500, 450, 300),
+  sales_2021 = c(110, 210, 160, 320, 240, 260, 420, 510, 460, 310),
+  sales_2022 = c(120, 220, 170, 340, 250, 270, 430, NA, 470, 320),
+  sales_2023 = c(100, 230, 200, 250, 270, 280, 450, 500, 480, 290)
+)
+
+head(df)
+```
+
+Copy the dataset so you have one for performing the base R commands and another for performing the tidyverse commands.
+
+```{r}
+df_baseR <- df
+df_tidyverse <- df 
+```
+
+From here, each exercise should be solve in both the base R and tidyverse way. Here comes an example.\
+Access the Age column:
+
+```{r}
+# Base R 
+df_baseR[['Age']]
+df_tidyverse$Age
+
+# Tidyverse 
+df_tidyverse %>% pull(Age)
+```
+
+1.  Add a column containing the difference in sales in 2022 and 2022.
+
+```{r}
+# Base R 
+df_baseR$sales_diff <- df_baseR$sales_2022 - df_baseR$sales_2020
+
+# Tidyverse 
+df_tidyverse <- df_tidyverse %>% 
+  mutate(sales_diff = sales_2022 - sales_2020)
+```
+
+2.  Select columns with sales numbers.
+
+```{r}
+# Base R 
+df_baseR[, c('sales_2020', 'sales_2021', 'sales_2022')]
+
+# Tidyverse 
+df_tidyverse %>% 
+  select(sales_2020, sales_2021, sales_2022)
+```
+
+3.  Filter rows for people older than 25.
+
+```{r}
+# Base R 
+df_baseR[df_baseR$Age > 25 ,]
+
+# Tidyverse 
+df_tidyverse %>% 
+  filter(Age > 25)
+```
+
+4.  Filter row for people that are 30 years old or younger and have sales in 2022 over 200.
+
+```{r}
+# Base R 
+df_baseR[!is.na(df_baseR$Age) & !is.na(df_baseR$sales_2022) &
+         df_baseR$Age <= 30 & df_baseR$sales_2022 > 200 ,]
+
+# Tidyverse 
+df_tidyverse %>% 
+  filter(Age <= 30, sales_2022 > 200)
+```
+
+Check which columns have NAs. 
+```{r}
+# Base R
+colSums(is.na(df_baseR))
+
+# Tidyverse
+df_tidyverse %>% summarise(across(everything(), ~ sum(is.na(.))))
+```
+
+Remove rows with any NAs. 
+```{r}
+# Base R
+df_baseR_no_na <- df_baseR[complete.cases(df_baseR), ]
+
+# Tidyverse
+df_tidyverse_no_na <- df_tidyverse %>% drop_na()
+```
+
+5.  Sort data based on sales in 2022 in descending order.
+
+```{r}
+# Base R 
+df_baseR[order(-df$sales_2022) ,]
+
+# Tidyverse 
+df_tidyverse %>% arrange(desc(sales_2022))
+```
+
+6.  Do the filtering in 4. and select the Name and Sex column. This far, do you prefer the base R or tidyverse way? Do you see pros and cons with both?
+
+```{r}
+# Base R, NAs not removed
+df_baseR[!is.na(df_baseR$Age) & !is.na(df_baseR$sales_2022) &
+         df_baseR$Age <= 30 & df_baseR$sales_2022 > 200 , c('Age', 'Sex')]
+
+# Base R, NAs removed
+df_baseR_no_na[df_baseR_no_na$Age <= 30 & df_baseR_no_na$sales_2022 > 200 , c('Age', 'Sex')]
+
+# Tidyverse 
+df_tidyverse %>% 
+  filter(Age <= 30, sales_2022 > 200) %>% 
+  select(Age, Sex)
+```
+
+7. 
+```{r}
+
+```
+
+
+7.  The `df_location` data frame contains information about the cities of the sales people. Copy paste this code into a new chunk and run the code.\
+
+```{r}
+set.seed(101)
+
+df_location <- data.frame(
+  ID = sample(10),
+  City = c("New York", "LA", "New York", "Chicago", "Miami", "Miami", "LA", "Chicago", "LA", "New York")
+)
+
+head(df_location)
+```
+
+8.  Join `df` and `df_location`. For base R we use `merge` and for tidyverse we use `left_join`.
+
+```{r}
+# Base R 
+df_baseR_merged <- merge(df_baseR, df_location, by = 'ID')
+head(df_baseR_merged)
+
+# Tidyverse 
+df_tidyverse_join <- df_tidyverse %>% left_join(df_location, by = 'ID')
+head(df_tidyverse_join)
+```
+
+9.  Count the number of people in each of the unique cities.
+
+```{r}
+# Base R
+table(df_baseR_merged$City)
+
+# Tidyverse
+df_tidyverse_join %>% count(City)
+```
+
+10. Plot the city distribution
+
+```{r}
+# Base R
+barplot(table(df_baseR_merged$City))
+
+# Tidyverse
+df_baseR_merged %>% 
+  ggplot(aes(x = City)) + 
+  geom_bar()
+```
+
+
+## Advanced tidyverse
+For this section we will work with some more advance tidyverse.
+
+### Wide format
+
+The data is now in wide format 
+
+```{r}
+df_tidyverse_join %>% 
+  group_by(City) %>% 
+  summarize(sum_sales_2020 = sum(sales_2020, na.rm = TRUE)) %>% 
+  ggplot(aes(x = City, 
+             y = sum_sales_2020)) + 
+  geom_col()
+```
+
+
+
+We want to make a scatter and line plot over the sales development over the years for each person. Have a look at the data. How would you do this?
+
+```{r}
+head(df_tidyverse_join)
+```
+
+
+### Long format
+
+
+The smart way to do this is to reformat the dataframe such that each person has a line per sales year. This is called the long format. 
+USE CASES FOR LONG AND WIDE FORMAT.
+
+11. Make the dataframe wide format like explained above. 
+```{r}
+df_tidyverse_join_longer <- df_tidyverse_join %>% 
+  pivot_longer(cols = starts_with("sales_2"),
+               names_to = "year",
+               values_to = "sales"
+               )
+
+df_tidyverse_join_longer
+```
+
+12. Make the plot explain above (scatter and line plot over the sales development over the years for each person). If you are confused, break down the problem: What should be on the x axis? y axis? What kind of geom(s) should be added? Should the plot be stratified using other aesthetics? What can you conclude from the plot. 
+```{r}
+df_tidyverse_join_longer %>% 
+  ggplot(aes(x = year, 
+             y = sales, 
+             color = Name, 
+             group = Name)) + 
+  geom_point() + 
+  geom_line()
+```
+
+Plot distribution of sales across the years. 
+```{r}
+df_tidyverse_join_longer %>% 
+  ggplot(aes(x = year, 
+             y = sales)) + 
+  geom_col()
+```
+
+```{r}
+df_tidyverse_join_longer %>% 
+  ggplot(aes(x = City, 
+             y = sales, 
+             fill = year)) + 
+  geom_col()
+```
+
+
+
+
+
+
+
+

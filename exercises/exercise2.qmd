@@ -1,0 +1,96 @@
+---
+title: "Exercise 2: Data Wrangling"
+format: html
+project:
+ type: website
+ output-dir: ../docs
+---
+
+## Introduction 
+
+You can solve these exercises however you see fit using base R and/or tidyverse.
+
+## First steps 
+
+1.  Load packages.
+
+```{r message=FALSE}
+library(tidyverse)
+library(readxl)
+```
+
+2.  Load data
+
+```{r}
+diabetes <- read_excel('../data/diabetes_toy_messy.xlsx')
+# diabetes_meta <- read_excel('../data/diabetes_meta_toy_messy.xlsx')
+diabetes_meta <- read_csv('../data/diabetes_meta_toy_messy.csv')
+```
+
+3.  Have a look at the datasets.
+    -   How many observations are there?
+
+    -   What are the variables in each dataset and what class are they of?
+
+    -   Are there any missing variables and mistakes in the data? Have a look at the unique elements in each column. For the numerical values it can be difficult to spot mistakes. Have a look at the distributions of them.
+
+Check number of NA's in each column.
+
+```{r}
+diabetes %>% is.na() %>% colSums()
+```
+
+Check if ID follows the structure ID_XXX, X being a digit.
+
+```{r}
+ID_wrong <- grepl("^ID_\\d{3}$", diabetes$ID)
+diabetes$ID[!ID_wrong]
+```
+
+Check the unique values of sex.
+
+```{r}
+diabetes$Sex %>% unique()
+```
+
+Check distribution of numeric variables.
+
+```{r}
+diabetes$Fasting_Blood_Sugar %>% hist()
+diabetes$Post_Meal_Blood_Sugar %>% hist()
+diabetes$HbA1c %>% hist()
+diabetes$Age %>% hist()
+diabetes$BMI %>% hist()
+diabetes$Blood_Pressure %>% hist()
+```
+
+Same procedure for the meta data.
+
+```{r}
+diabetes_meta %>% is.na() %>% colSums()
+```
+
+```{r}
+ID_meta_wrong <- grepl("^ID_\\d{3}$", diabetes_meta$ID)
+diabetes_meta$ID[!ID_meta_wrong]
+```
+
+```{r}
+diabetes_meta$Treatment_Type %>% table()
+```
+
+```{r}
+diabetes_meta$City %>% table()
+```
+
+```{r}
+diabetes_meta$Diagnosis_Year %>% hist()
+diabetes_meta$Follow_Up_Visits %>% hist()
+```
+
+4.  For the variables with missing variables, delete the row. For the variables where you detected mistakes, correct them.
+
+```{r}
+diabetes_no_na <- diabetes[complete.cases(diabetes), ]
+
+```

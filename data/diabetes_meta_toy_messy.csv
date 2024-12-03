@@ -1,0 +1,101 @@
+ID,Diagnosis_Year,Treatment_Type,City,Follow_Up_Visits
+#ID_010,2013,Diet Control,Aalborg,4
+ID_042,2005,Diet Control ,Aarhus,2
+ID_099,2008,Diet Control,Aarhus,7
+ID_028,2005,Oral Medication,Aarhus,5
+ID_035,2014,Diet Control,Odense,3
+ID_088,2000,Insulin,Copenhagen,9
+ID_057,2011,Insulin,Odense,2
+ID_049,2008,Insulin,Copenhagen,4
+ID_050,2012,Insulin,Aarhus,6
+ID_081,2011,Diet Control,Odense,4
+ID_100,2006,Oral Medication,Odense,8
+ID_040,2006,Diet Control,Copenhagen,7
+ID_025,2010,Oral Medication,Copenhagen,10
+ID_023,2016,Insulin,Aalborg,6
+ID_064,2006,Oral Medication,Aarhus,5
+ID_013,2011,Insulin,Aarhus,7
+ID_037,2013,Oral Medication,Aalborg,8
+ID_091,2007,Diet Control,Aarhus,10
+ID_009,2019,Insulin,Copenhagen,12
+ID_089,2004,Oral Medication,Copenhagen,5
+ID_019,2018,Oral Medication,Aalborg,8
+ID_085,2003,Diet Control,Odense,2
+_ID_012,2005,Oral Medication,Aalborg,10
+ID_001,2002,Diet Control,Aarhus,8
+ID_038,2009,Insulin,Aalborg,2
+ID_080,2008,Diet Control,Aalborg,11
+ID_084,2002,Oral Medication,Copenhagen,11
+ID_087,2006,Oral Medication,Odense,8
+ID_063,2009,Diet Control,Aarhus,2
+ID_027,2000,Diet Control,Aalborg,11
+ID_031,2004,Insulin,Aalborg,6
+ID_022,2016,Oral Medication,Odense,6
+ID_014,2016,Insulin,Aarhus,12
+ID_054,2001,Diet Control,Odense,6
+ID_052,2009,Oral Medication,Odense,6
+ID_044,2020,Diet Control,Aarhus,7
+ID_020,2000,Insulin,Aarhus,9
+ID_008,2005,Diet Control,Copenhagen,11
+ID_043,2004,Insulin,Odense,2
+ID_068,2007,Diet Control,Aalborg,12
+ID_002,2000,Diet Control,Aarhus,7
+ID_061,2015,Oral Medication,Aarhus,12
+ID_056,2016,Diet Control,Copenhagen,8
+ID_030,2013,Oral Medication,Odense,9
+ID_090,2003,Insulin,Copenhagen,6
+ID_060,2009,Diet Control,Aarhus,7
+ID_&053,2016,Insulin,Aalborg,9
+ID_098,2002,Insulin,Aarhus,3
+ID_032,2000,Insulin,Copenhagen,6
+ID_003,2014,Insulin,Aalborg,5
+ID_034,2003,Oral Medication,Aalborg,11
+ID_097,2002,Oral Medication,Aarhus,4
+ID_093,2011,Oral Medication,Odense,4
+ID_094,2011,Oral M$edication,Aarhus,8
+ID_058,2005,Insulin,Aalborg,9
+ID_0)95,2014,Diet Control,Aarhus,4
+ID_075,2015,Insulin,Odense,10
+ID_078,2002,Diet Control,Aarhus,4
+ID_018,2010,Oral Medication,Copenhagen,11
+ID_070,2013,Oral Medication,Aarhus,2
+ID_067,2019,Diet Control,Copenhagen,12
+ID_082,2008,Oral Medication,Aarhus,2
+ID_072,2004,Oral Medication,Aarhus ,2
+ID_076,2019,Insulin,Aalborg,10
+ID_096,2008,Diet Control,Copenhagen,10
+ID_074,2016,Oral Medication,Odense,11
+ID_046,2008,Oral Medication,Odense,2
+ID_*092,2011,Oral Medication,Aalborg,5
+ID_055,2019,Insulin,Copenhagen,4
+ID_011,2008,Oral Medication,Aalborg,11
+ID_021,2010,D@iet Control,Copenhagen,8
+ID_033,2017,Diet Control,Aalborg,8
+ID_016,2008,Oral Medication,Aarhus,4
+ID_086,2002,Diet Control,Copenhagen,12
+ID_066,2003,Insulin,Aalborg,6
+ID_045,2017,Oral Medication,Copenhagen,4
+ID_029,2001,Diet Control,Copenhagen,3
+ID_069,2014,Oral Medication,Copenhagen,12
+ID_059,2018,Oral Medication,Odense,9
+ID_065,2001,Insulin,Copenhagen,6
+ID_004,2003,Insulin,Aarhus,12
+ID_048,2002,Diet Control,Aalborg,12
+ID_015,2010,Insulin,Odense,9
+ID_041,2004,Diet Control,Aarhus,10
+ID_051,2006,Insulin,Aarhus,8
+ID_024,2007,Diet Control,Odense,12
+ID_026,2017,Insulin ,Aalbo&rg,12
+ID_005,2008,Diet Control,Copenhagen,11
+ID_047,2002,Diet Control,Aalborg,12
+ID_007,2010,Diet Control,Copenhagen,10
+ID_006,2000,NA,Aarhus,2
+ID_073,2016,Diet Control,Copenhagen,8
+ID_071,2016,Oral Medication,Copenhagen,2
+ID_017,2017,Insulin,Aarhus,8
+ID_062,2000,Insulin,NA,3
+ID_083,2013,Insulin,Aalborg,6
+ID_039,2002,Oral Medication,Aarhus,11
+ID_077,2005,Oral Medication,Aalborg,12
+ID_079,2013,Diet Control,Copenhagen,3
+ID_036,2006,Ora#l Medication,Aalborg,3
