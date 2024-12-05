@@ -1,0 +1,49 @@
+---
+title: "R for Data Science - How to Quarto"
+format: html
+author: DataLab HeaDS
+editor: visual
+---
+
+## Load Packages
+
+```{r warning=FALSE, message=FALSE}
+library(tidyverse)
+library(readxl)
+```
+
+## Load Data
+
+```{r}
+diabetes <- read_excel('~/Desktop/DataLab/R4DataScience/data/diabetes_toy.xlsx')
+```
+
+## Inspect Data
+
+Check dimensions of data
+
+```{r}
+dim(diabetes)
+```
+
+Check structure of data
+
+```{r}
+str(diabetes)
+```
+
+Check for NA's in each column
+
+```{r}
+colSums(is.na(diabetes))
+```
+
+## Exploratory Data Analysis
+
+Plot distribution of BMI
+
+```{r}
+diabetes %>% 
+  ggplot(aes(x = BMI)) + 
+  geom_histogram(bins = 10)
+```

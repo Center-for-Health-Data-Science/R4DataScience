@@ -1,0 +1,219 @@
+---
+title: "Presentation 2: Base R and Tidyverse"
+format: html
+project:
+ type: website
+ output-dir: ../docs
+---
+
+## Load packages
+
+```{r warning=FALSE, message=FALSE}
+library(tidyverse)
+```
+
+## Create Dataset
+
+Here we are creating a data frame called `df` than contain information about sales employees sales in thousands dkk from 2020 to 2023.
+
+First, we create the dataset the base R way using the `data.frame` function.
+
+```{r}
+df_baseR <- data.frame(
+  ID = 1:10,
+  Name = c("Alice", "Bob", "Charlie", "Sophie", "Eve", "Frank", "Grace", "Hannah", "Ian", "Jack"),
+  Age = c(25, 30, 22, 35, 28, NA, 40, 29, 21, 33),
+  Sex = c("Female", "Male", "Male", "Female", "Female", "Male", "Female", "Female", "Male", "Male"),
+  sales_2020 = c(100, 200, 150, 300, 250, NA, 400, 500, 450, 300),
+  sales_2021 = c(110, 210, 160, 320, 240, 260, 420, 510, 460, 310),
+  sales_2022 = c(120, 220, 170, 340, 250, 270, 430, NA, 470, 320),
+  sales_2023 = c(100, 230, 200, 250, 270, 280, 450, 500, 480, 290)
+)
+```
+
+Using the `tibble` function to create the dataset the tidyverse way.
+```{r}
+df_tidyverse <- tibble(
+  ID = 1:10,
+  Name = c("Alice", "Bob", "Charlie", "Sophie", "Eve", "Frank", "Grace", "Hannah", "Ian", "Jack"),
+  Age = c(25, 30, 22, 35, 28, NA, 40, 29, 21, 33),
+  Sex = c("Female", "Male", "Male", "Female", "Female", "Male", "Female", "Female", "Male", "Male"),
+  sales_2020 = c(100, 200, 150, 300, 250, NA, 400, 500, 450, 300),
+  sales_2021 = c(110, 210, 160, 320, 240, 260, 420, 510, 460, 310),
+  sales_2022 = c(120, 220, 170, 340, 250, 270, 430, NA, 470, 320),
+  sales_2023 = c(100, 230, 200, 250, 270, 280, 450, 500, 480, 290)
+)
+
+head(df_tidyverse)
+```
+
+## Base R and Tidyverse
+
+From here, each exercise should be solve in both the base R and tidyverse way. Here comes an example.\
+Access the Age column:
+
+```{r results="hide"}
+# Base R 
+df_baseR[['Age']]
+df_tidyverse$Age
+
+# Tidyverse 
+df_tidyverse %>% pull(Age)
+```
+
+Add a column containing the difference in sales in 2022 and 2022.
+
+```{r}
+# Base R 
+df_baseR$sales_diff <- df_baseR$sales_2022 - df_baseR$sales_2020
+
+# Tidyverse 
+df_tidyverse <- df_tidyverse %>% 
+  mutate(sales_diff = sales_2022 - sales_2020)
+```
+
+Remove the `sales_diff` column.
+
+```{r}
+# Base R 
+df_baseR$sales_diff <- NULL
+
+# Tidyverse 
+df_tidyverse <- df_tidyverse %>% 
+  select(!sales_diff)
+```
+
+Select columns with sales numbers.
+
+```{r results="hide"}
+# Base R 
+df_baseR[, startsWith(colnames(df_baseR), 'sales_')]
+
+# Tidyverse 
+df_tidyverse %>% 
+  select(starts_with('sales_'))
+```
+
+Filter rows for people older than 25.
+
+```{r results="hide"}
+# Base R 
+df_baseR[df_baseR$Age > 25 ,]
+
+# Tidyverse 
+df_tidyverse %>% 
+  filter(Age > 25)
+```
+
+Filter row for people that are 30 years old or younger and have sales in 2022 over 200.
+
+```{r results="hide"}
+# Base R 
+df_baseR[!is.na(df_baseR$Age) & !is.na(df_baseR$sales_2022) &
+         df_baseR$Age <= 30 & df_baseR$sales_2022 > 200 ,]
+
+# Tidyverse 
+df_tidyverse %>% 
+  filter(Age <= 30, sales_2022 > 200)
+```
+
+Check which columns have NAs.
+
+```{r results="hide"}
+# Base R
+colSums(is.na(df_baseR))
+
+# Tidyverse
+df_tidyverse %>% summarise(across(everything(), ~ sum(is.na(.))))
+```
+
+Remove rows with any NAs.
+
+```{r results="hide"}
+# Base R
+df_baseR_no_na <- df_baseR[complete.cases(df_baseR), ]
+
+# Tidyverse
+df_tidyverse_no_na <- df_tidyverse %>% drop_na()
+```
+
+Sort data based on sales in 2022 in descending order.
+
+```{r results="hide"}
+# Base R 
+df_baseR[order(-df_baseR$sales_2022) ,]
+
+# Tidyverse 
+df_tidyverse %>% arrange(desc(sales_2022))
+```
+
+Do the filtering in 4. and select the Name and Sex column. This far, do you prefer the base R or tidyverse way? Do you see pros and cons with both?
+
+```{r results="hide"}
+# Base R, NAs not removed
+df_baseR[!is.na(df_baseR$Age) & !is.na(df_baseR$sales_2022) &
+         df_baseR$Age <= 30 & df_baseR$sales_2022 > 200 , c('Age', 'Sex')]
+
+# Base R, NAs removed
+df_baseR_no_na[df_baseR_no_na$Age <= 30 & df_baseR_no_na$sales_2022 > 200 , c('Age', 'Sex')]
+
+# Tidyverse 
+df_tidyverse %>% 
+  filter(Age <= 30, sales_2022 > 200) %>% 
+  select(Age, Sex)
+```
+
+The `df_location` data frame contains information about the cities of the sales people. Copy paste this code into a new chunk and run the code.\
+
+```{r results="hide"}
+set.seed(101)
+
+df_location <- data.frame(
+  ID = sample(10),
+  City = c("New York", "LA", "New York", "Chicago", "Miami", "Miami", "LA", "Chicago", "LA", "New York")
+)
+
+head(df_location)
+```
+
+Join `df` and `df_location`. For base R we use `merge` and for tidyverse we use `left_join`.
+
+```{r results="hide"}
+# Base R 
+df_baseR_merged <- merge(df_baseR, df_location, by = 'ID')
+head(df_baseR_merged)
+
+# Tidyverse 
+df_tidyverse_join <- df_tidyverse %>% left_join(df_location, by = 'ID')
+head(df_tidyverse_join)
+```
+
+Count the number of people in each of the unique cities.
+
+```{r results="hide"}
+# Base R
+table(df_baseR_merged$City)
+
+# Tidyverse
+df_tidyverse_join %>% count(City)
+```
+
+Plot the city distribution.
+
+```{r results="hide"}
+# Base R
+barplot(table(df_baseR_merged$City))
+
+# Tidyverse
+df_baseR_merged %>% 
+  ggplot(aes(x = City)) + 
+  geom_bar()
+```
+
+## Export Dataset
+
+Export tidyverse dataset
+
+```{r}
+writexl::write_xlsx(df_tidyverse_join, '../data/sales_data.xlsx')
+```

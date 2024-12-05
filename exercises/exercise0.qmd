@@ -1,0 +1,79 @@
+---
+title: "Exercise 0: R script and Quarto"
+format: html
+project:
+ type: website
+ output-dir: ../docs
+---
+
+## File Management & Data Download
+
+1.  **Make a new directory** for this course.
+
+2.  **Go to course website** and to the Data tab. Press the **Download Data** button.
+
+3.  Move the Data folder to your course directory.
+
+4.  Under your course directory, make a new folder for your scripts and another for the presentations you download.
+
+Your file tree should look something like this:
+
+![](../figures/file_tree.jpg){fig-align="center"}
+
+## Working directories
+
+5.  **Open R studio**.
+6.  **Access your current working directory** by writing `getwd()` in the console.
+
+The working directory in R (or other programming environments) is the folder on your computer where R looks for files to read or write by default. When you load or save data, R will use the working directory unless you specify another path. A path can either be **absolute** or **relative**: - **Absolute path**: The path from the root of your file system to the input file. - **Relative path**: The path from the working directory to the input file.
+
+## R Script
+
+7.  Create an R script and save it in your work folder.
+
+An R script is a plain text file containing a series of R commands and code used for data analysis. R scripts have a `.R` extension and can be executed line-by-line in an interactive R session or as a whole script. They are ideal for automating workflows and keeping your analyses reproducible and organized. Code can be run
+
+9.  Type `getwd()` in your R script and run the line. Compare the working directory with the one from the console.
+
+10. Change the working directory using `setwd()`.
+
+11. Run `getwd()` again.
+
+12. Type in a few lines of code and some comments and re-save the file.
+
+## Quarto
+
+13. Create an Quarto document and save it in your work folder.
+
+Quarto is an open-source publishing system designed to help you create dynamic, reproducible documents, presentations, and websites. It extends the ideas of tools like R Markdown, combining simplicity with powerful customization options for modern scientific and technical communication.
+
+14. Type `getwd()` in a code chunk in your Quarto document and run the line. Compare the working directory with the one from the console.
+
+15. Change the working directory in one chuck using `setwd()`.
+
+16. Run `getwd()` in the same chunk as `setwd()` AND another. What do you observe?
+
+17. Create some code chunks, write text and headers. Re-save the file.
+
+18. Render the Quarto document and have a look at the html file.
+
+Resources for Quarto:\
+[Quarto website](https://quarto.org)\
+["Get started with Quarto" tutorial for RStudio](https://quarto.org/docs/get-started/hello/rstudio.html)\
+["Get started with Quarto" video for RStudio\
+](https://www.youtube.com/watch?v=_f3latmOhew)[Comprehensive guides to Quarto basics](https://quarto.org/docs/guide/)
+
+\
+
+## R project
+
+An R project in RStudio creates a self-contained working environment tied to a specific folder, which becomes the default working directory for all scripts, data, and outputs. This structure helps organize files, ensures reproducibility, and simplifies path management.
+By default, a Quarto document’s working directory is its file location. While this can be changed chunk-wise, the working directory for R scripts can be set globally for all scripts in a folder by creating an R project. The R project is a small configuration file, usually placed in the root of the project folder, and requires no manual interaction—it quietly ensures your workflows remain well-organized.
+
+![](../figures/file_tree_Rproject.jpg){fig-align="center"}
+
+19. Create an R project by clicking the *Project (None)* in the top right → *New Project* → *Existing Directory* and choose an appropriate location. 
+
+20. Check the working directory of the R script and Quarto document. Is it as you expected?
+
+21. If you like the flow of the R project, keep it. If not, delete it. It is not necessary to have an R project.

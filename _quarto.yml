@@ -19,72 +19,48 @@ website:
     contents:
     
       - href: Slideshow/FromExceltoR.pdf
-        text: "Slides 🌟️"
+        text: "Slides️"
 
-      # - section: "Presentations 👩🏽‍🏫"
-      #   contents:
-      #     - href: presentations/presentation0.qmd
-      #       text: "Presentation 0: Introduction"
-      #     - href: Presentations/presentation1.qmd
-      #       text: "Presentation 1: Introduction"
-      #     - href: Presentations/presentation2.qmd
-      #       text: "Presentation 2: Tidyverse"
-      #     - href: Presentations/presentation3.qmd
-      #       text: "Presentation 3: ggplot2"
-      #     - href: Presentations/presentation4.qmd
-      #       text: "Presentation 4: Applied Statistics in R"
-      # 
-      # - href: Presentations/data.qmd
-      #   text: "Data 🗂️"
-      #   
-      # - section: "Exercises 🏋🏽"
-      #   contents:
-      #     - href: Exercises/exercises0.qmd
-      #       text: "Exercise 0: Introduction"
-      #     - href: Exercises/exercises1.qmd
-      #       text: "Exercise 1: Introduction"
-      #     - href: Exercises/exercises2.qmd
-      #       text: "Exercise 2: Tidyverse"
-      #     - href: Exercises/exercises3.qmd
-      #       text: "Exercise 3: ggplot2"
-      #     - href: Exercises/exercises4_PART1.qmd
-      #       text: "Exercise 4, Part 1: Applied Statistics"
-      #     - href: Exercises/exercises4_PART2.qmd
-      #       text: "Exercise 4, Part 2: Applied Statistics"
-      #     - href: Exercises/exercises5.qmd
-      #       text: "Exercise 5: Data Exercise in R"
-      # 
-      # - section: "Solutions 💃🏻"
-      #   contents:
-      #     - href: Solutions/exercises2_SOLUTIONS.qmd # Solutions/solution_not_up.qmd # 
-      #       text: "Exercise 2 - Solution"
-      #     - href: Solutions/exercises3_SOLUTIONS.qmd # Solutions/solution_not_up.qmd # 
-      #       text: "Exercise 3 - Solution"
-      #     - href: Solutions/presentation4_solutions.qmd # Solutions/presentation4_solutions.qmd
-      #       text: "Presentation 4: Applied Statistics in R - Solutions"
-      #     - href: Solutions/exercise4_PART1_solutions.qmd # Solutions/exercise4_PART1_solutions.qmd
-      #       text: "Exercise 4, Part 1 - Solutions"
-      #     - href: Solutions/exercise4_PART2_solutions.qmd # Solutions/exercise4_PART2_solutions.qmd
-      #       text: "Exercise 4, Part 2 - Solutions"
-      #       
-      # - section: "Cheat Sheets 👀"
-      #   contents:
-      #     - href: CheatSheet/quartoCheatSheet.pdf
-      #       text: "Quarto"
-      #     - href: CheatSheet/BaseRCheatSheet.pdf
-      #       text: "Base R"
-      #     - href: CheatSheet/TidyverseCheatSheet.pdf
-      #       text: "Tidyverse"
-      #     - href: CheatSheet/ggplotCheatSheet.pdf
-      #       text: "ggplot2"
+      - section: "Presentations"
+        contents:
+          - href: presentations/presentation1.qmd
+            text: "Presentation 1: Base R and Tidyverse"
+          - href: presentations/presentation2.qmd
+            text: "Presentation 2: Advanced Tidyverse"
+
+      - href: data/data.qmd
+        text: "Data️"
+
+      - section: "Exercises"
+        contents:
+          - href: exercises/exercises0.qmd
+            text: "Exercise 0: R script and Quarto"
+
+      - section: "Solutions"
+        contents:
+            - href: solutions/solution2.qmd # solutions/solution_not_up.qmd #
+              text: "Exercise 2 - Solution"
+
+      - section: "Cheat Sheets"
+        contents:
+          - href: CheatSheet/quartoCheatSheet.pdf
+            text: "Quarto"
+          - href: CheatSheet/BaseRCheatSheet.pdf
+            text: "Base R"
+          - href: CheatSheet/TidyverseCheatSheet.pdf
+            text: "Tidyverse"
+          - href: CheatSheet/ggplotCheatSheet.pdf
+            text: "ggplot2"
           
 
 format:
   html:
-    theme: flatly  # You can try different themes like cosmo, flatly, etc.
+    theme: # theme: flatly  # You can try different themes like cosmo, flatly, etc.
+      light: [flatly, assets/theme-light.scss]
+      dark: [flatly, assets/theme-dark.scss]
     # sidebar:
     #   collapse-level: 1
-    toc: true # Add "On this page"
+    toc: true # "On this page"
     toc-location: right
     
       

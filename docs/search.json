@@ -14,24 +14,311 @@
     "text": "In the Center for Health Data Science (HeaDS) we do both research and in the DataLab and Sandbox we develop and host course. Read more about all the cool stuff we do on our website.\n\n\nThe DataLab offers a range of services to support SUND employees in their data science analyses. Here’s an overview:\n\nCourses: We offer data science and bioinformatics courses for all SUND staff (researchers, administrative staff, technical staff, etc.). Our most popular courses include “From Excel to R,” “Python Tsunami,” and “Introduction to Bulk RNA-seq Analysis.”\nConsultations: We host drop-in sessions every Thursday from 13:00 to 15:00, where we assist with data science-related challenges and questions. Alternatively, you can reach out to arrange a one-on-one meeting on another day.\nCommissions: We conduct commissioned research, such as bioinformatics and data science analyses tailored to your needs. Additionally, we offer a commissioned supervision scheme if you would like to learn how to perform the analysis yourself.\nEvents: We host various data science events. Join us for our seminar series, “Talking HeaDS.” Our next session is in the spring (date and speeker TBA), and you can sign up here: https://eventsignup.ku.dk/talkingheadsspring2025."
   },
   {
+    "objectID": "presentations/presentation2.html",
+    "href": "presentations/presentation2.html",
+    "title": "Presentation 2: Advanced Tidyverse",
+    "section": "",
+    "text": "library(readxl)\nlibrary(tidyverse)\nlibrary(broom)",
+    "crumbs": [
+      "Course Material",
+      "Presentations",
+      "Presentation 2: Advanced Tidyverse"
+    ]
+  },
+  {
+    "objectID": "presentations/presentation2.html#load-packages",
+    "href": "presentations/presentation2.html#load-packages",
+    "title": "Presentation 2: Advanced Tidyverse",
+    "section": "",
+    "text": "library(readxl)\nlibrary(tidyverse)\nlibrary(broom)",
+    "crumbs": [
+      "Course Material",
+      "Presentations",
+      "Presentation 2: Advanced Tidyverse"
+    ]
+  },
+  {
+    "objectID": "presentations/presentation2.html#load-data",
+    "href": "presentations/presentation2.html#load-data",
+    "title": "Presentation 2: Advanced Tidyverse",
+    "section": "Load data",
+    "text": "Load data\n\ndf_tidyverse_join &lt;- read_excel('../data/sales_data.xlsx')\n\n\nWide format\nThe data is now in wide format\n\ndf_tidyverse_join %&gt;% \n  group_by(City) %&gt;% \n  summarize(sum_sales_2020 = sum(sales_2020, na.rm = TRUE)) %&gt;% \n  ggplot(aes(x = City, \n             y = sum_sales_2020)) + \n  geom_col()\n\n\n\n\n\n\n\n\nWe want to make a scatter and line plot over the sales development over the years for each person. Have a look at the data. How would you do this?\n\nhead(df_tidyverse_join)\n\n# A tibble: 6 × 9\n     ID Name      Age Sex    sales_2020 sales_2021 sales_2022 sales_2023 City   \n  &lt;dbl&gt; &lt;chr&gt;   &lt;dbl&gt; &lt;chr&gt;       &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt; &lt;chr&gt;  \n1     1 Alice      25 Female        100        110        120        100 Miami  \n2     2 Bob        30 Male          200        210        220        230 Miami  \n3     3 Charlie    22 Male          150        160        170        200 LA     \n4     4 Sophie     35 Female        300        320        340        250 New Yo…\n5     5 Eve        28 Female        250        240        250        270 LA     \n6     6 Frank      NA Male           NA        260        270        280 New Yo…\n\n\n\n\nLong format\nThe smart way to do this is to reformat the dataframe such that each person has a line per sales year. This is called the long format. USE CASES FOR LONG AND WIDE FORMAT.\n\nMake the dataframe wide format like explained above.\n\n\ndf_tidyverse_join_longer &lt;- df_tidyverse_join %&gt;% \n  pivot_longer(cols = starts_with(\"sales_2\"),\n               names_to = \"year\",\n               values_to = \"sales\"\n               )\n\ndf_tidyverse_join_longer\n\n# A tibble: 40 × 7\n      ID Name      Age Sex    City  year       sales\n   &lt;dbl&gt; &lt;chr&gt;   &lt;dbl&gt; &lt;chr&gt;  &lt;chr&gt; &lt;chr&gt;      &lt;dbl&gt;\n 1     1 Alice      25 Female Miami sales_2020   100\n 2     1 Alice      25 Female Miami sales_2021   110\n 3     1 Alice      25 Female Miami sales_2022   120\n 4     1 Alice      25 Female Miami sales_2023   100\n 5     2 Bob        30 Male   Miami sales_2020   200\n 6     2 Bob        30 Male   Miami sales_2021   210\n 7     2 Bob        30 Male   Miami sales_2022   220\n 8     2 Bob        30 Male   Miami sales_2023   230\n 9     3 Charlie    22 Male   LA    sales_2020   150\n10     3 Charlie    22 Male   LA    sales_2021   160\n# ℹ 30 more rows\n\n\nTransform the year to integer.\n\ndf_tidyverse_join_longer &lt;- df_tidyverse_join_longer %&gt;% \n  mutate(year = str_remove(year, 'sales_') %&gt;% as.integer(),\n         year_factor = year %&gt;% as.factor(),\n         ) \n\ndf_tidyverse_join_longer\n\n# A tibble: 40 × 8\n      ID Name      Age Sex    City   year sales year_factor\n   &lt;dbl&gt; &lt;chr&gt;   &lt;dbl&gt; &lt;chr&gt;  &lt;chr&gt; &lt;int&gt; &lt;dbl&gt; &lt;fct&gt;      \n 1     1 Alice      25 Female Miami  2020   100 2020       \n 2     1 Alice      25 Female Miami  2021   110 2021       \n 3     1 Alice      25 Female Miami  2022   120 2022       \n 4     1 Alice      25 Female Miami  2023   100 2023       \n 5     2 Bob        30 Male   Miami  2020   200 2020       \n 6     2 Bob        30 Male   Miami  2021   210 2021       \n 7     2 Bob        30 Male   Miami  2022   220 2022       \n 8     2 Bob        30 Male   Miami  2023   230 2023       \n 9     3 Charlie    22 Male   LA     2020   150 2020       \n10     3 Charlie    22 Male   LA     2021   160 2021       \n# ℹ 30 more rows\n\n\n\nMake the plot explain above (scatter and line plot over the sales development over the years for each person). If you are confused, break down the problem: What should be on the x axis? y axis? What kind of geom(s) should be added? Should the plot be stratified using other aesthetics? What can you conclude from the plot.\n\n\ndf_tidyverse_join_longer %&gt;% \n  ggplot(aes(x = year, \n             y = sales, \n             color = Name, \n             group = Name)) + \n  geom_point() + \n  geom_line()\n\nWarning: Removed 2 rows containing missing values or values outside the scale range\n(`geom_point()`).\n\n\nWarning: Removed 1 row containing missing values or values outside the scale range\n(`geom_line()`).\n\n\n\n\n\n\n\n\n\nPlot distribution of sales across the years.\n\ndf_tidyverse_join_longer %&gt;% \n  ggplot(aes(x = year, \n             y = sales)) + \n  geom_col()\n\nWarning: Removed 2 rows containing missing values or values outside the scale range\n(`geom_col()`).\n\n\n\n\n\n\n\n\n\n\ndf_tidyverse_join_longer %&gt;% \n  ggplot(aes(x = City, \n             y = sales, \n             fill = year_factor)) + \n  geom_col()\n\nWarning: Removed 2 rows containing missing values or values outside the scale range\n(`geom_col()`).\n\n\n\n\n\n\n\n\n\nUsing pivot_wider to get data back to wide format.\n\ndf_tidyverse_join_wider &lt;- df_tidyverse_join_longer %&gt;% \n  select(!year_factor) %&gt;% \n  pivot_wider(names_from = year, \n              values_from = sales)\n\n# Same content\ndf_tidyverse_join\n\n# A tibble: 10 × 9\n      ID Name      Age Sex    sales_2020 sales_2021 sales_2022 sales_2023 City  \n   &lt;dbl&gt; &lt;chr&gt;   &lt;dbl&gt; &lt;chr&gt;       &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt; &lt;chr&gt; \n 1     1 Alice      25 Female        100        110        120        100 Miami \n 2     2 Bob        30 Male          200        210        220        230 Miami \n 3     3 Charlie    22 Male          150        160        170        200 LA    \n 4     4 Sophie     35 Female        300        320        340        250 New Y…\n 5     5 Eve        28 Female        250        240        250        270 LA    \n 6     6 Frank      NA Male           NA        260        270        280 New Y…\n 7     7 Grace      40 Female        400        420        430        450 Chica…\n 8     8 Hannah     29 Female        500        510         NA        500 Chica…\n 9     9 Ian        21 Male          450        460        470        480 New Y…\n10    10 Jack       33 Male          300        310        320        290 LA    \n\ndf_tidyverse_join_wider\n\n# A tibble: 10 × 9\n      ID Name      Age Sex    City     `2020` `2021` `2022` `2023`\n   &lt;dbl&gt; &lt;chr&gt;   &lt;dbl&gt; &lt;chr&gt;  &lt;chr&gt;     &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;\n 1     1 Alice      25 Female Miami       100    110    120    100\n 2     2 Bob        30 Male   Miami       200    210    220    230\n 3     3 Charlie    22 Male   LA          150    160    170    200\n 4     4 Sophie     35 Female New York    300    320    340    250\n 5     5 Eve        28 Female LA          250    240    250    270\n 6     6 Frank      NA Male   New York     NA    260    270    280\n 7     7 Grace      40 Female Chicago     400    420    430    450\n 8     8 Hannah     29 Female Chicago     500    510     NA    500\n 9     9 Ian        21 Male   New York    450    460    470    480\n10    10 Jack       33 Male   LA          300    310    320    290\n\n\n\n\nNesting\nAvoid redundant information in dataframe by nesting. Group data by Name and nest year and sales into a single column.\n\ndf_tidyverse_join_longer_nested &lt;- df_tidyverse_join_longer %&gt;%  \n  group_by(Name) %&gt;% \n  nest(sales_data = c(year_factor, year, sales)) %&gt;% \n  ungroup()\n\ndf_tidyverse_join_longer_nested\n\n# A tibble: 10 × 6\n      ID Name      Age Sex    City     sales_data      \n   &lt;dbl&gt; &lt;chr&gt;   &lt;dbl&gt; &lt;chr&gt;  &lt;chr&gt;    &lt;list&gt;          \n 1     1 Alice      25 Female Miami    &lt;tibble [4 × 3]&gt;\n 2     2 Bob        30 Male   Miami    &lt;tibble [4 × 3]&gt;\n 3     3 Charlie    22 Male   LA       &lt;tibble [4 × 3]&gt;\n 4     4 Sophie     35 Female New York &lt;tibble [4 × 3]&gt;\n 5     5 Eve        28 Female LA       &lt;tibble [4 × 3]&gt;\n 6     6 Frank      NA Male   New York &lt;tibble [4 × 3]&gt;\n 7     7 Grace      40 Female Chicago  &lt;tibble [4 × 3]&gt;\n 8     8 Hannah     29 Female Chicago  &lt;tibble [4 × 3]&gt;\n 9     9 Ian        21 Male   New York &lt;tibble [4 × 3]&gt;\n10    10 Jack       33 Male   LA       &lt;tibble [4 × 3]&gt;\n\n\nPull sales data from Bob.\n\ndf_tidyverse_join_longer_nested %&gt;% \n  filter(Name == 'Bob') %&gt;% \n  pull(sales_data)\n\n[[1]]\n# A tibble: 4 × 3\n  year_factor  year sales\n  &lt;fct&gt;       &lt;int&gt; &lt;dbl&gt;\n1 2020         2020   200\n2 2021         2021   210\n3 2022         2022   220\n4 2023         2023   230\n\n\nCreate a model object that models sales across year.\n\ndf_tidyverse_join_longer_nested &lt;- df_tidyverse_join_longer_nested %&gt;% \n  mutate(model_object = map(.x = sales_data,\n                            .f = ~lm(formula = sales ~ year,\n                                     data = .x))\n         )\n\ndf_tidyverse_join_longer_nested\n\n# A tibble: 10 × 7\n      ID Name      Age Sex    City     sales_data       model_object\n   &lt;dbl&gt; &lt;chr&gt;   &lt;dbl&gt; &lt;chr&gt;  &lt;chr&gt;    &lt;list&gt;           &lt;list&gt;      \n 1     1 Alice      25 Female Miami    &lt;tibble [4 × 3]&gt; &lt;lm&gt;        \n 2     2 Bob        30 Male   Miami    &lt;tibble [4 × 3]&gt; &lt;lm&gt;        \n 3     3 Charlie    22 Male   LA       &lt;tibble [4 × 3]&gt; &lt;lm&gt;        \n 4     4 Sophie     35 Female New York &lt;tibble [4 × 3]&gt; &lt;lm&gt;        \n 5     5 Eve        28 Female LA       &lt;tibble [4 × 3]&gt; &lt;lm&gt;        \n 6     6 Frank      NA Male   New York &lt;tibble [4 × 3]&gt; &lt;lm&gt;        \n 7     7 Grace      40 Female Chicago  &lt;tibble [4 × 3]&gt; &lt;lm&gt;        \n 8     8 Hannah     29 Female Chicago  &lt;tibble [4 × 3]&gt; &lt;lm&gt;        \n 9     9 Ian        21 Male   New York &lt;tibble [4 × 3]&gt; &lt;lm&gt;        \n10    10 Jack       33 Male   LA       &lt;tibble [4 × 3]&gt; &lt;lm&gt;        \n\n\nPull model object from Bob to access the sales trend across the years.\n\ndf_tidyverse_join_longer_nested %&gt;% \n  filter(Name == 'Bob') %&gt;% \n  pull(model_object) %&gt;% \n  pluck(1) %&gt;% \n  tidy(conf.int = TRUE,\n       conf.level = 0.95)\n\nWarning in summary.lm(x): essentially perfect fit: summary may be unreliable\n\n\nWarning in summary.lm(object, ...): essentially perfect fit: summary may be\nunreliable\n\n\n# A tibble: 2 × 7\n  term        estimate std.error statistic p.value conf.low conf.high\n  &lt;chr&gt;          &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;\n1 (Intercept)   -20000         0      -Inf       0   -20000    -20000\n2 year              10         0       Inf       0       10        10\n\n\n\ndf_tidyverse_join_longer_nested %&gt;% \n  filter(Name == 'Sophie') %&gt;% \n  pull(model_object)\n\n[[1]]\n\nCall:\nlm(formula = sales ~ year, data = .x)\n\nCoefficients:\n(Intercept)         year  \n      26582          -13",
+    "crumbs": [
+      "Course Material",
+      "Presentations",
+      "Presentation 2: Advanced Tidyverse"
+    ]
+  },
+  {
+    "objectID": "slides/Quarto_example.html",
+    "href": "slides/Quarto_example.html",
+    "title": "R for Data Science - How to Quarto",
+    "section": "",
+    "text": "library(tidyverse)\nlibrary(readxl)"
+  },
+  {
+    "objectID": "slides/Quarto_example.html#load-packages",
+    "href": "slides/Quarto_example.html#load-packages",
+    "title": "R for Data Science - How to Quarto",
+    "section": "",
+    "text": "library(tidyverse)\nlibrary(readxl)"
+  },
+  {
+    "objectID": "slides/Quarto_example.html#load-data",
+    "href": "slides/Quarto_example.html#load-data",
+    "title": "R for Data Science - How to Quarto",
+    "section": "Load Data",
+    "text": "Load Data\n\ndiabetes &lt;- read_excel('~/Desktop/DataLab/R4DataScience/data/diabetes_toy.xlsx')"
+  },
+  {
+    "objectID": "slides/Quarto_example.html#inspect-data",
+    "href": "slides/Quarto_example.html#inspect-data",
+    "title": "R for Data Science - How to Quarto",
+    "section": "Inspect Data",
+    "text": "Inspect Data\nCheck dimensions of data\n\ndim(diabetes)\n\n[1] 100   8\n\n\nCheck structure of data\n\nstr(diabetes)\n\ntibble [100 × 8] (S3: tbl_df/tbl/data.frame)\n $ ID                   : chr [1:100] \"ID_035\" \"ID_020\" \"ID_090\" \"ID_089\" ...\n $ Fasting_Blood_Sugar  : num [1:100] 157 146 128 134 157 101 144 149 134 103 ...\n $ Post_Meal_Blood_Sugar: num [1:100] 204 178 177 206 206 250 204 180 183 181 ...\n $ HbA1c                : num [1:100] 5.8 6.3 6.6 8 6.9 7.4 6.9 5.9 6.7 6.3 ...\n $ Age                  : num [1:100] 36 70 63 49 56 39 59 43 57 56 ...\n $ Sex                  : chr [1:100] \"Male\" \"Male\" \"Male\" \"Male\" ...\n $ BMI                  : num [1:100] 33.7 26.5 26 22.9 25.7 24.4 25.5 30.1 19.8 22.5 ...\n $ Blood_Pressure       : num [1:100] 122 120 137 126 115 121 116 116 126 116 ...\n\n\nCheck for NA’s in each column\n\ncolSums(is.na(diabetes))\n\n                   ID   Fasting_Blood_Sugar Post_Meal_Blood_Sugar \n                    0                     0                     0 \n                HbA1c                   Age                   Sex \n                    0                     0                     0 \n                  BMI        Blood_Pressure \n                    0                     0"
+  },
+  {
+    "objectID": "slides/Quarto_example.html#exploratory-data-analysis",
+    "href": "slides/Quarto_example.html#exploratory-data-analysis",
+    "title": "R for Data Science - How to Quarto",
+    "section": "Exploratory Data Analysis",
+    "text": "Exploratory Data Analysis\nPlot distribution of BMI\n\ndiabetes %&gt;% \n  ggplot(aes(x = BMI)) + \n  geom_histogram(bins = 10)"
+  },
+  {
+    "objectID": "solutions/solution2.html",
+    "href": "solutions/solution2.html",
+    "title": "Exercise 2: Data Wrangling",
+    "section": "",
+    "text": "You can solve these exercises however you see fit using base R and/or tidyverse.",
+    "crumbs": [
+      "Course Material",
+      "Solutions",
+      "Exercise 2 - Solution"
+    ]
+  },
+  {
+    "objectID": "solutions/solution2.html#introduction",
+    "href": "solutions/solution2.html#introduction",
+    "title": "Exercise 2: Data Wrangling",
+    "section": "",
+    "text": "You can solve these exercises however you see fit using base R and/or tidyverse.",
+    "crumbs": [
+      "Course Material",
+      "Solutions",
+      "Exercise 2 - Solution"
+    ]
+  },
+  {
+    "objectID": "solutions/solution2.html#first-steps",
+    "href": "solutions/solution2.html#first-steps",
+    "title": "Exercise 2: Data Wrangling",
+    "section": "First steps",
+    "text": "First steps\n\nLoad packages.\n\n\nlibrary(tidyverse)\nlibrary(readxl)\n\n\nLoad data\n\n\ndiabetes &lt;- read_excel('../data/diabetes_toy_messy.xlsx')\n# diabetes_meta &lt;- read_excel('../data/diabetes_meta_toy_messy.xlsx')\ndiabetes_meta &lt;- read_csv('../data/diabetes_meta_toy_messy.csv')\n\nRows: 100 Columns: 5\n── Column specification ────────────────────────────────────────────────────────\nDelimiter: \",\"\nchr (3): ID, Treatment_Type, City\ndbl (2): Diagnosis_Year, Follow_Up_Visits\n\nℹ Use `spec()` to retrieve the full column specification for this data.\nℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.\n\n\n\nHave a look at the datasets.\n\nHow many observations are there?\nWhat are the variables in each dataset and what class are they of?\nAre there any missing variables and mistakes in the data? Have a look at the unique elements in each column. For the numerical values it can be difficult to spot mistakes. Have a look at the distributions of them.\n\n\nCheck number of NA’s in each column.\n\ndiabetes %&gt;% is.na() %&gt;% colSums()\n\n                   ID   Fasting_Blood_Sugar Post_Meal_Blood_Sugar \n                    0                     0                     0 \n                HbA1c                   Age                   Sex \n                    0                     0                     0 \n                  BMI        Blood_Pressure \n                    0                     0 \n\n\nCheck if ID follows the structure ID_XXX, X being a digit.\n\nID_wrong &lt;- grepl(\"^ID_\\\\d{3}$\", diabetes$ID)\ndiabetes$ID[!ID_wrong]\n\ncharacter(0)\n\n\nCheck the unique values of sex.\n\ndiabetes$Sex %&gt;% unique()\n\n[1] \"Male\"   \"Female\" \"FEMALE\" \"MALE\"  \n\n\nCheck distribution of numeric variables.\n\ndiabetes$Fasting_Blood_Sugar %&gt;% hist()\n\n\n\n\n\n\n\ndiabetes$Post_Meal_Blood_Sugar %&gt;% hist()\n\n\n\n\n\n\n\ndiabetes$HbA1c %&gt;% hist()\n\n\n\n\n\n\n\ndiabetes$Age %&gt;% hist()\n\n\n\n\n\n\n\ndiabetes$BMI %&gt;% hist()\n\n\n\n\n\n\n\ndiabetes$Blood_Pressure %&gt;% hist()\n\n\n\n\n\n\n\n\nSame procedure for the meta data.\n\ndiabetes_meta %&gt;% is.na() %&gt;% colSums()\n\n              ID   Diagnosis_Year   Treatment_Type             City \n               0                0                1                1 \nFollow_Up_Visits \n               0 \n\n\n\nID_meta_wrong &lt;- grepl(\"^ID_\\\\d{3}$\", diabetes_meta$ID)\ndiabetes_meta$ID[!ID_meta_wrong]\n\n[1] \"#ID_010\" \"_ID_012\" \"ID_&053\" \"ID_0)95\" \"ID_*092\"\n\n\n\ndiabetes_meta$Treatment_Type %&gt;% table()\n\n.\n   D@iet Control     Diet Control          Insulin Ora#l Medication \n               1               34               30                1 \nOral M$edication  Oral Medication \n               1               32 \n\n\n\ndiabetes_meta$City %&gt;% table()\n\n.\nCopenhagen     Odense   Aalbo&rg    Aalborg     Aarhus \n        26         18          1         24         30 \n\n\n\ndiabetes_meta$Diagnosis_Year %&gt;% hist()\n\n\n\n\n\n\n\ndiabetes_meta$Follow_Up_Visits %&gt;% hist()\n\n\n\n\n\n\n\n\n\nFor the variables with missing variables, delete the row. For the variables where you detected mistakes, correct them.\n\n\ndiabetes_no_na &lt;- diabetes[complete.cases(diabetes), ]",
+    "crumbs": [
+      "Course Material",
+      "Solutions",
+      "Exercise 2 - Solution"
+    ]
+  },
+  {
     "objectID": "index.html",
     "href": "index.html",
     "title": "R for Data Science",
     "section": "",
-    "text": "This 3 day course is a following of our 2 day course FromExceltoR and the material of that course is a prerequit to this course. R for Data Science is an advanced course in R-programming for researchers at the Faculty of Health and Medical Sciences, University of Copenhagen. The course is build on code-along presentations and exercises in Quarto documents.\n\nThe course goes through the following topics:\n\nScript formats\nAdvanced tidyverse using real world data (build on material from our introduction to R course, FromExceltoR)\nScripting in R using functions, for-loops, if-else statements.\nModelling in R.\n\nThe material in this repository is for teaching purposes only and not to be distributed commercially.\n\nWe will use Quarto for the tutorials of this course. Please see more about Quarto following the links below.\nQuarto website\n“Get started with Quarto” tutorial for RStudio\n“Get started with Quarto” video for RStudio\nComprehensive guides to Quarto basics\n\nFinally… Dear course participants, it would greatly help us if you could complete our UPDATE LINK feedback form."
+    "text": "This 3 day course is a following of our 2 day course FromExceltoR and the material of that course is a prerequit to this course. R for Data Science is an advanced course in R-programming for researchers at the Faculty of Health and Medical Sciences, University of Copenhagen. The course is build on code-along presentations and exercises in Quarto documents.\n\nThe course goes through the following topics:\n\nScript formats\nAdvanced tidyverse using real world data (build on material from our introduction to R course, FromExceltoR)\nScripting in R using functions, for-loops, if-else statements.\nModelling in R.\n\nThe material in this repository is for teaching purposes only and not to be distributed commercially.\nFinally… Dear course participants, it would greatly help us if you could complete our UPDATE LINK feedback form."
   },
   {
     "objectID": "index.html#welcome-to-the-main-page-of-r-for-data-science",
     "href": "index.html#welcome-to-the-main-page-of-r-for-data-science",
     "title": "R for Data Science",
     "section": "",
-    "text": "This 3 day course is a following of our 2 day course FromExceltoR and the material of that course is a prerequit to this course. R for Data Science is an advanced course in R-programming for researchers at the Faculty of Health and Medical Sciences, University of Copenhagen. The course is build on code-along presentations and exercises in Quarto documents.\n\nThe course goes through the following topics:\n\nScript formats\nAdvanced tidyverse using real world data (build on material from our introduction to R course, FromExceltoR)\nScripting in R using functions, for-loops, if-else statements.\nModelling in R.\n\nThe material in this repository is for teaching purposes only and not to be distributed commercially.\n\nWe will use Quarto for the tutorials of this course. Please see more about Quarto following the links below.\nQuarto website\n“Get started with Quarto” tutorial for RStudio\n“Get started with Quarto” video for RStudio\nComprehensive guides to Quarto basics\n\nFinally… Dear course participants, it would greatly help us if you could complete our UPDATE LINK feedback form."
+    "text": "This 3 day course is a following of our 2 day course FromExceltoR and the material of that course is a prerequit to this course. R for Data Science is an advanced course in R-programming for researchers at the Faculty of Health and Medical Sciences, University of Copenhagen. The course is build on code-along presentations and exercises in Quarto documents.\n\nThe course goes through the following topics:\n\nScript formats\nAdvanced tidyverse using real world data (build on material from our introduction to R course, FromExceltoR)\nScripting in R using functions, for-loops, if-else statements.\nModelling in R.\n\nThe material in this repository is for teaching purposes only and not to be distributed commercially.\nFinally… Dear course participants, it would greatly help us if you could complete our UPDATE LINK feedback form."
   },
   {
     "objectID": "index.html#program",
     "href": "index.html#program",
     "title": "R for Data Science",
     "section": "Program",
-    "text": "Program\nINSERT PROGRAM"
+    "text": "Program"
+  },
+  {
+    "objectID": "presentations/presentation1.html",
+    "href": "presentations/presentation1.html",
+    "title": "Presentation 2: Base R and Tidyverse",
+    "section": "",
+    "text": "library(tidyverse)",
+    "crumbs": [
+      "Course Material",
+      "Presentations",
+      "Presentation 1: Base R and Tidyverse"
+    ]
+  },
+  {
+    "objectID": "presentations/presentation1.html#load-packages",
+    "href": "presentations/presentation1.html#load-packages",
+    "title": "Presentation 2: Base R and Tidyverse",
+    "section": "",
+    "text": "library(tidyverse)",
+    "crumbs": [
+      "Course Material",
+      "Presentations",
+      "Presentation 1: Base R and Tidyverse"
+    ]
+  },
+  {
+    "objectID": "presentations/presentation1.html#create-dataset",
+    "href": "presentations/presentation1.html#create-dataset",
+    "title": "Presentation 2: Base R and Tidyverse",
+    "section": "Create Dataset",
+    "text": "Create Dataset\nHere we are creating a data frame called df than contain information about sales employees sales in thousands dkk from 2020 to 2023.\nFirst, we create the dataset the base R way using the data.frame function.\n\ndf_baseR &lt;- data.frame(\n  ID = 1:10,\n  Name = c(\"Alice\", \"Bob\", \"Charlie\", \"Sophie\", \"Eve\", \"Frank\", \"Grace\", \"Hannah\", \"Ian\", \"Jack\"),\n  Age = c(25, 30, 22, 35, 28, NA, 40, 29, 21, 33),\n  Sex = c(\"Female\", \"Male\", \"Male\", \"Female\", \"Female\", \"Male\", \"Female\", \"Female\", \"Male\", \"Male\"),\n  sales_2020 = c(100, 200, 150, 300, 250, NA, 400, 500, 450, 300),\n  sales_2021 = c(110, 210, 160, 320, 240, 260, 420, 510, 460, 310),\n  sales_2022 = c(120, 220, 170, 340, 250, 270, 430, NA, 470, 320),\n  sales_2023 = c(100, 230, 200, 250, 270, 280, 450, 500, 480, 290)\n)\n\nUsing the tibble function to create the dataset the tidyverse way.\n\ndf_tidyverse &lt;- tibble(\n  ID = 1:10,\n  Name = c(\"Alice\", \"Bob\", \"Charlie\", \"Sophie\", \"Eve\", \"Frank\", \"Grace\", \"Hannah\", \"Ian\", \"Jack\"),\n  Age = c(25, 30, 22, 35, 28, NA, 40, 29, 21, 33),\n  Sex = c(\"Female\", \"Male\", \"Male\", \"Female\", \"Female\", \"Male\", \"Female\", \"Female\", \"Male\", \"Male\"),\n  sales_2020 = c(100, 200, 150, 300, 250, NA, 400, 500, 450, 300),\n  sales_2021 = c(110, 210, 160, 320, 240, 260, 420, 510, 460, 310),\n  sales_2022 = c(120, 220, 170, 340, 250, 270, 430, NA, 470, 320),\n  sales_2023 = c(100, 230, 200, 250, 270, 280, 450, 500, 480, 290)\n)\n\nhead(df_tidyverse)\n\n# A tibble: 6 × 8\n     ID Name      Age Sex    sales_2020 sales_2021 sales_2022 sales_2023\n  &lt;int&gt; &lt;chr&gt;   &lt;dbl&gt; &lt;chr&gt;       &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt;\n1     1 Alice      25 Female        100        110        120        100\n2     2 Bob        30 Male          200        210        220        230\n3     3 Charlie    22 Male          150        160        170        200\n4     4 Sophie     35 Female        300        320        340        250\n5     5 Eve        28 Female        250        240        250        270\n6     6 Frank      NA Male           NA        260        270        280",
+    "crumbs": [
+      "Course Material",
+      "Presentations",
+      "Presentation 1: Base R and Tidyverse"
+    ]
+  },
+  {
+    "objectID": "presentations/presentation1.html#base-r-and-tidyverse",
+    "href": "presentations/presentation1.html#base-r-and-tidyverse",
+    "title": "Presentation 2: Base R and Tidyverse",
+    "section": "Base R and Tidyverse",
+    "text": "Base R and Tidyverse\nFrom here, each exercise should be solve in both the base R and tidyverse way. Here comes an example.\nAccess the Age column:\n\n# Base R \ndf_baseR[['Age']]\ndf_tidyverse$Age\n\n# Tidyverse \ndf_tidyverse %&gt;% pull(Age)\n\nAdd a column containing the difference in sales in 2022 and 2022.\n\n# Base R \ndf_baseR$sales_diff &lt;- df_baseR$sales_2022 - df_baseR$sales_2020\n\n# Tidyverse \ndf_tidyverse &lt;- df_tidyverse %&gt;% \n  mutate(sales_diff = sales_2022 - sales_2020)\n\nRemove the sales_diff column.\n\n# Base R \ndf_baseR$sales_diff &lt;- NULL\n\n# Tidyverse \ndf_tidyverse &lt;- df_tidyverse %&gt;% \n  select(!sales_diff)\n\nSelect columns with sales numbers.\n\n# Base R \ndf_baseR[, startsWith(colnames(df_baseR), 'sales_')]\n\n# Tidyverse \ndf_tidyverse %&gt;% \n  select(starts_with('sales_'))\n\nFilter rows for people older than 25.\n\n# Base R \ndf_baseR[df_baseR$Age &gt; 25 ,]\n\n# Tidyverse \ndf_tidyverse %&gt;% \n  filter(Age &gt; 25)\n\nFilter row for people that are 30 years old or younger and have sales in 2022 over 200.\n\n# Base R \ndf_baseR[!is.na(df_baseR$Age) & !is.na(df_baseR$sales_2022) &\n         df_baseR$Age &lt;= 30 & df_baseR$sales_2022 &gt; 200 ,]\n\n# Tidyverse \ndf_tidyverse %&gt;% \n  filter(Age &lt;= 30, sales_2022 &gt; 200)\n\nCheck which columns have NAs.\n\n# Base R\ncolSums(is.na(df_baseR))\n\n# Tidyverse\ndf_tidyverse %&gt;% summarise(across(everything(), ~ sum(is.na(.))))\n\nRemove rows with any NAs.\n\n# Base R\ndf_baseR_no_na &lt;- df_baseR[complete.cases(df_baseR), ]\n\n# Tidyverse\ndf_tidyverse_no_na &lt;- df_tidyverse %&gt;% drop_na()\n\nSort data based on sales in 2022 in descending order.\n\n# Base R \ndf_baseR[order(-df_baseR$sales_2022) ,]\n\n# Tidyverse \ndf_tidyverse %&gt;% arrange(desc(sales_2022))\n\nDo the filtering in 4. and select the Name and Sex column. This far, do you prefer the base R or tidyverse way? Do you see pros and cons with both?\n\n# Base R, NAs not removed\ndf_baseR[!is.na(df_baseR$Age) & !is.na(df_baseR$sales_2022) &\n         df_baseR$Age &lt;= 30 & df_baseR$sales_2022 &gt; 200 , c('Age', 'Sex')]\n\n# Base R, NAs removed\ndf_baseR_no_na[df_baseR_no_na$Age &lt;= 30 & df_baseR_no_na$sales_2022 &gt; 200 , c('Age', 'Sex')]\n\n# Tidyverse \ndf_tidyverse %&gt;% \n  filter(Age &lt;= 30, sales_2022 &gt; 200) %&gt;% \n  select(Age, Sex)\n\nThe df_location data frame contains information about the cities of the sales people. Copy paste this code into a new chunk and run the code.\n\n\nset.seed(101)\n\ndf_location &lt;- data.frame(\n  ID = sample(10),\n  City = c(\"New York\", \"LA\", \"New York\", \"Chicago\", \"Miami\", \"Miami\", \"LA\", \"Chicago\", \"LA\", \"New York\")\n)\n\nhead(df_location)\n\nJoin df and df_location. For base R we use merge and for tidyverse we use left_join.\n\n# Base R \ndf_baseR_merged &lt;- merge(df_baseR, df_location, by = 'ID')\nhead(df_baseR_merged)\n\n# Tidyverse \ndf_tidyverse_join &lt;- df_tidyverse %&gt;% left_join(df_location, by = 'ID')\nhead(df_tidyverse_join)\n\nCount the number of people in each of the unique cities.\n\n# Base R\ntable(df_baseR_merged$City)\n\n# Tidyverse\ndf_tidyverse_join %&gt;% count(City)\n\nPlot the city distribution.\n\n# Base R\nbarplot(table(df_baseR_merged$City))\n\n\n\n\n\n\n\n# Tidyverse\ndf_baseR_merged %&gt;% \n  ggplot(aes(x = City)) + \n  geom_bar()",
+    "crumbs": [
+      "Course Material",
+      "Presentations",
+      "Presentation 1: Base R and Tidyverse"
+    ]
+  },
+  {
+    "objectID": "presentations/presentation1.html#export-dataset",
+    "href": "presentations/presentation1.html#export-dataset",
+    "title": "Presentation 2: Base R and Tidyverse",
+    "section": "Export Dataset",
+    "text": "Export Dataset\nExport tidyverse dataset\n\nwritexl::write_xlsx(df_tidyverse_join, '../data/sales_data.xlsx')",
+    "crumbs": [
+      "Course Material",
+      "Presentations",
+      "Presentation 1: Base R and Tidyverse"
+    ]
+  },
+  {
+    "objectID": "exercises/exercise2.html",
+    "href": "exercises/exercise2.html",
+    "title": "Exercise 2: Data Wrangling",
+    "section": "",
+    "text": "You can solve these exercises however you see fit using base R and/or tidyverse."
+  },
+  {
+    "objectID": "exercises/exercise2.html#introduction",
+    "href": "exercises/exercise2.html#introduction",
+    "title": "Exercise 2: Data Wrangling",
+    "section": "",
+    "text": "You can solve these exercises however you see fit using base R and/or tidyverse."
+  },
+  {
+    "objectID": "exercises/exercise2.html#first-steps",
+    "href": "exercises/exercise2.html#first-steps",
+    "title": "Exercise 2: Data Wrangling",
+    "section": "First steps",
+    "text": "First steps\n\nLoad packages.\n\n\nlibrary(tidyverse)\nlibrary(readxl)\n\n\nLoad data\n\n\ndiabetes &lt;- read_excel('../data/diabetes_toy_messy.xlsx')\n# diabetes_meta &lt;- read_excel('../data/diabetes_meta_toy_messy.xlsx')\ndiabetes_meta &lt;- read_csv('../data/diabetes_meta_toy_messy.csv')\n\nRows: 100 Columns: 5\n── Column specification ────────────────────────────────────────────────────────\nDelimiter: \",\"\nchr (3): ID, Treatment_Type, City\ndbl (2): Diagnosis_Year, Follow_Up_Visits\n\nℹ Use `spec()` to retrieve the full column specification for this data.\nℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.\n\n\n\nHave a look at the datasets.\n\nHow many observations are there?\nWhat are the variables in each dataset and what class are they of?\nAre there any missing variables and mistakes in the data? Have a look at the unique elements in each column. For the numerical values it can be difficult to spot mistakes. Have a look at the distributions of them.\n\n\nCheck number of NA’s in each column.\n\ndiabetes %&gt;% is.na() %&gt;% colSums()\n\n                   ID   Fasting_Blood_Sugar Post_Meal_Blood_Sugar \n                    0                     0                     0 \n                HbA1c                   Age                   Sex \n                    0                     0                     0 \n                  BMI        Blood_Pressure \n                    0                     0 \n\n\nCheck if ID follows the structure ID_XXX, X being a digit.\n\nID_wrong &lt;- grepl(\"^ID_\\\\d{3}$\", diabetes$ID)\ndiabetes$ID[!ID_wrong]\n\ncharacter(0)\n\n\nCheck the unique values of sex.\n\ndiabetes$Sex %&gt;% unique()\n\n[1] \"Male\"   \"Female\" \"FEMALE\" \"MALE\"  \n\n\nCheck distribution of numeric variables.\n\ndiabetes$Fasting_Blood_Sugar %&gt;% hist()\n\n\n\n\n\n\n\ndiabetes$Post_Meal_Blood_Sugar %&gt;% hist()\n\n\n\n\n\n\n\ndiabetes$HbA1c %&gt;% hist()\n\n\n\n\n\n\n\ndiabetes$Age %&gt;% hist()\n\n\n\n\n\n\n\ndiabetes$BMI %&gt;% hist()\n\n\n\n\n\n\n\ndiabetes$Blood_Pressure %&gt;% hist()\n\n\n\n\n\n\n\n\nSame procedure for the meta data.\n\ndiabetes_meta %&gt;% is.na() %&gt;% colSums()\n\n              ID   Diagnosis_Year   Treatment_Type             City \n               0                0                1                1 \nFollow_Up_Visits \n               0 \n\n\n\nID_meta_wrong &lt;- grepl(\"^ID_\\\\d{3}$\", diabetes_meta$ID)\ndiabetes_meta$ID[!ID_meta_wrong]\n\n[1] \"#ID_010\" \"_ID_012\" \"ID_&053\" \"ID_0)95\" \"ID_*092\"\n\n\n\ndiabetes_meta$Treatment_Type %&gt;% table()\n\n.\n   D@iet Control     Diet Control          Insulin Ora#l Medication \n               1               34               30                1 \nOral M$edication  Oral Medication \n               1               32 \n\n\n\ndiabetes_meta$City %&gt;% table()\n\n.\nCopenhagen     Odense   Aalbo&rg    Aalborg     Aarhus \n        26         18          1         24         30 \n\n\n\ndiabetes_meta$Diagnosis_Year %&gt;% hist()\n\n\n\n\n\n\n\ndiabetes_meta$Follow_Up_Visits %&gt;% hist()\n\n\n\n\n\n\n\n\n\nFor the variables with missing variables, delete the row. For the variables where you detected mistakes, correct them.\n\n\ndiabetes_no_na &lt;- diabetes[complete.cases(diabetes), ]"
+  },
+  {
+    "objectID": "exercises/exercise0.html",
+    "href": "exercises/exercise0.html",
+    "title": "Exercise 0: R script and Quarto",
+    "section": "",
+    "text": "Make a new directory for this course.\nGo to course website and to the Data tab. Press the Download Data button.\nMove the Data folder to your course directory.\nUnder your course directory, make a new folder for your scripts and another for the presentations you download.\n\nYour file tree should look something like this:"
+  },
+  {
+    "objectID": "exercises/exercise0.html#quarto",
+    "href": "exercises/exercise0.html#quarto",
+    "title": "Exercise 0: R script and Quarto",
+    "section": "Quarto",
+    "text": "Quarto\n\nCreate an Quarto document and save it in your work folder.\n\nQuarto is an open-source publishing system designed to help you create dynamic, reproducible documents, presentations, and websites. It extends the ideas of tools like R Markdown, combining simplicity with powerful customization options for modern scientific and technical communication.\n\nType getwd() in a code chunk in your Quarto document and run the line. Compare the working directory with the one from the console.\nChange the working directory in one chuck using setwd().\nRun getwd() in the same chunk as setwd() AND another. What do you observe?\nCreate some code chunks, write text and headers. Re-save the file.\nRender the Quarto document and have a look at the html file.\n\nResources for Quarto:\nQuarto website\n“Get started with Quarto” tutorial for RStudio\n“Get started with Quarto” video for RStudio\nComprehensive guides to Quarto basics"
+  },
+  {
+    "objectID": "exercises/exercise0.html#running-code",
+    "href": "exercises/exercise0.html#running-code",
+    "title": "Exercise 0: R script and Quarto",
+    "section": "Running Code",
+    "text": "Running Code\nWhen you click the Render button a document will be generated that includes both content and the output of embedded code. You can embed code like this:\n\n1 + 1\n\n[1] 2\n\n\nYou can add options to executable code like this\n\n\n[1] 4\n\n\nThe echo: false option disables the printing of code (only output is displayed)."
+  },
+  {
+    "objectID": "exercises/exercise0.html#quarto-document",
+    "href": "exercises/exercise0.html#quarto-document",
+    "title": "Exercise 0: R script and Quarto",
+    "section": "Quarto Document",
+    "text": "Quarto Document"
+  },
+  {
+    "objectID": "exercises/exercise0.html#working-directories-and-r-project",
+    "href": "exercises/exercise0.html#working-directories-and-r-project",
+    "title": "Exercise 0: R script and Quarto",
+    "section": "Working directories and R project",
+    "text": "Working directories and R project"
+  },
+  {
+    "objectID": "exercises/exercise0.html#r-script",
+    "href": "exercises/exercise0.html#r-script",
+    "title": "Exercise 0: R script and Quarto",
+    "section": "R Script",
+    "text": "R Script\n\nCreate an R script and save it in your work folder.\n\nAn R script is a plain text file containing a series of R commands and code used for data analysis. R scripts have a .R extension and can be executed line-by-line in an interactive R session or as a whole script. They are ideal for automating workflows and keeping your analyses reproducible and organized. Code can be run\n\nType getwd() in your R script and run the line. Compare the working directory with the one from the console.\nChange the working directory using setwd().\nRun getwd() again.\nType in a few lines of code and some comments and re-save the file."
+  },
+  {
+    "objectID": "exercises/exercise0.html#r-project",
+    "href": "exercises/exercise0.html#r-project",
+    "title": "Exercise 0: R script and Quarto",
+    "section": "R project",
+    "text": "R project\nAn R project in RStudio creates a self-contained working environment tied to a specific folder, which becomes the default working directory for all scripts, data, and outputs. This structure helps organize files, ensures reproducibility, and simplifies path management. By default, a Quarto document’s working directory is its file location. While this can be changed chunk-wise, the working directory for R scripts can be set globally for all scripts in a folder by creating an R project. The R project is a small configuration file, usually placed in the root of the project folder, and requires no manual interaction—it quietly ensures your workflows remain well-organized.\n\n\n\n\n\n\nCreate an R project by clicking the Project (None) in the top right → New Project → Existing Directory and choose an appropriate location.\nCheck the working directory of the R script and Quarto document. Is it as you expected?\nIf you like the flow of the R project, keep it. If not, delete it. It is not necessary to have an R project."
+  },
+  {
+    "objectID": "exercises/exercise0.html#working-directories",
+    "href": "exercises/exercise0.html#working-directories",
+    "title": "Exercise 0: R script and Quarto",
+    "section": "Working directories",
+    "text": "Working directories\n\nOpen R studio.\nAccess your current working directory by writing getwd() in the console.\n\nThe working directory in R (or other programming environments) is the folder on your computer where R looks for files to read or write by default. When you load or save data, R will use the working directory unless you specify another path. A path can either be absolute or relative: - Absolute path: The path from the root of your file system to the input file. - Relative path: The path from the working directory to the input file."
+  },
+  {
+    "objectID": "exercises/exercise0.html#file-tree",
+    "href": "exercises/exercise0.html#file-tree",
+    "title": "Exercise 0: R script and Quarto",
+    "section": "File tree",
+    "text": "File tree\n\nMake a new directory for this course.\nGo to course website and to the Data tab. Press the Download Data button.\nMove the Data folder to your course directory.\nUnder your course directory, make a new folder for your scripts and another for the presentations you download."
+  },
+  {
+    "objectID": "exercises/exercise0.html#file-management-data-download",
+    "href": "exercises/exercise0.html#file-management-data-download",
+    "title": "Exercise 0: R script and Quarto",
+    "section": "",
+    "text": "Make a new directory for this course.\nGo to course website and to the Data tab. Press the Download Data button.\nMove the Data folder to your course directory.\nUnder your course directory, make a new folder for your scripts and another for the presentations you download.\n\nYour file tree should look something like this:"
+  },
+  {
+    "objectID": "data/data.html",
+    "href": "data/data.html",
+    "title": "Data",
+    "section": "",
+    "text": "Download Data  \n\nAfter download, unzip the data folder and place it somewhere you can find it again.",
+    "crumbs": [
+      "Course Material",
+      "Data️"
+    ]
+  },
+  {
+    "objectID": "data/data.html#download-data",
+    "href": "data/data.html#download-data",
+    "title": "Data",
+    "section": "",
+    "text": "Download Data  \n\nAfter download, unzip the data folder and place it somewhere you can find it again.",
+    "crumbs": [
+      "Course Material",
+      "Data️"
+    ]
+  },
+  {
+    "objectID": "solutions/solution_not_up.html",
+    "href": "solutions/solution_not_up.html",
+    "title": "Solution not up yet!",
+    "section": "",
+    "text": "Solutions will be available only after you’ve had a chance to work through the exercises on your own. If you’re unsure how to proceed, check the slides, cheat sheets, ask a peer, or reach out to a TA.\n\nEnjoy!"
   }
 ]

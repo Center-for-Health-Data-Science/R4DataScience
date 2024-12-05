@@ -6,11 +6,11 @@ project:
  output-dir: ../docs
 ---
 
-## Introduction 
+## Introduction
 
 You can solve these exercises however you see fit using base R and/or tidyverse.
 
-## First steps 
+## First steps
 
 1.  Load packages.
 
