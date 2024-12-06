@@ -1,5 +1,5 @@
 ---
-title: "Exercise 2: Data Wrangling"
+title: "Exercise 2 - solutions: Advanced Tidyveres"
 format: html
 project:
  type: website
@@ -22,8 +22,7 @@ library(readxl)
 2.  Load data
 
 ```{r}
-diabetes <- read_excel('../data/diabetes_toy_messy.xlsx')
-# diabetes_meta <- read_excel('../data/diabetes_meta_toy_messy.xlsx')
+diabetes_clinical <- read_excel('../data/diabetes_toy_messy.xlsx')
 diabetes_meta <- read_csv('../data/diabetes_meta_toy_messy.csv')
 ```
 

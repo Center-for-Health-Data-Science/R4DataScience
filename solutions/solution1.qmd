@@ -1,0 +1,179 @@
+---
+title: "Presentation 1: Base R and Tidyverse"
+format: html
+project:
+ type: website
+ output-dir: ../docs
+---
+
+## Getting started
+
+1.  Load packages.
+
+```{r}
+library(tidyverse)
+library(readxl)
+```
+
+2.  Load in the diabetes_clinical data set.
+
+```{r}
+diabetes_clinical <- read_excel('../data/data/diabetes_clinical_toy_messy.xlsx')
+head(diabetes_clinical)
+```
+
+## Explore the data
+
+Use can you either base R or/and tidyverse to solve the exercises. For now, we just explore the data.
+
+3.  Check for NA's.
+
+```{r}
+colSums(is.na(diabetes_clinical))
+```
+
+4.  Check the distribution of each of the variables. Consider that the variables are of different classes. Does any of the distributions seam odd to you?
+
+For the categorical variables:
+
+```{r}
+table(diabetes_clinical$Sex)
+table(diabetes_clinical$Smoker)
+table(diabetes_clinical$Diabetes)
+```
+
+For the numerical variables:
+
+```{r}
+diabetes_clinical %>% 
+  ggplot(aes(y = Age)) + 
+  geom_boxplot()
+```
+
+```{r}
+diabetes_clinical %>% 
+  ggplot(aes(y = BloodPressure)) + 
+  geom_boxplot()
+```
+
+```{r}
+diabetes_clinical %>% 
+  ggplot(aes(y = GeneticRisk)) + 
+  geom_boxplot()
+```
+
+```{r}
+diabetes_clinical %>% 
+  ggplot(aes(y = BMI)) + 
+  geom_boxplot()
+```
+
+```{r}
+diabetes_clinical %>% 
+  ggplot(aes(y = PhysicalActivity)) + 
+  geom_boxplot()
+```
+
+## Clean up the data
+
+Now that we had a look at the data, it is time to correct the mistakes that can be corrected and remove the observations that cannot be.
+
+Consider the following:
+
+-   What should we do with the rows that contain NAs? Do we remove them or keep them?
+
+-   What mistakes in the data can be corrected and which cannot?
+
+-   Are there zeros in the data? Are they true zeros or false zeros?
+
+-   Do you want to change any of the classes of the variables?
+
+5.  Clean the data according to your considerations.
+
+My considerations:
+
+-   When modelling, rows with NA's in the variables we want to model should be removed as we cannot model on NAs. Since there are only NA's in the GeneticRisk variables, the rows can be left until we need to do a model with GeneticRisk.
+
+-   The uppercase/lowercase mistakes in the Sex variables does not influence the interpretability of the vairables, so the are simply changes such that the first letter is a capital letter and the remaining letter are lowercase.
+
+-   There are zeros in the BMI variable and the BloodPressure variables. These are considered false zeros as is does not make sense to have these variables as 0.
+
+-   All the variables are kept in their original class.
+
+```{r}
+diabetes_clinical$Sex %>% table()
+nrow(diabetes_clinical)
+```
+
+
+```{r}
+diabetes_clinical_clean <- diabetes_clinical %>% 
+  mutate(Sex = str_to_title(Sex)) %>% 
+  filter(BMI != 0, BloodPressure != 0) 
+
+diabetes_clinical_clean$Sex %>% table()
+nrow(diabetes_clinical_clean)
+```
+
+
+## Redo on other data
+
+7.  Do the same workflow for the diabetes_meta data set.
+
+7.2. Load the data set.
+
+```{r}
+diabetes_meta <- read_excel('../data/data/diabetes_meta_toy_messy.xlsx')
+head(diabetes_meta)
+```
+
+Use can you either base R or/and tidyverse to solve the exercises. For now, we just explore the data.
+
+7.3. Check for NA's.
+
+```{r}
+colSums(is.na(diabetes_meta))
+```
+Check if any of the rows are NA in all three variables. 
+```{r}
+rowSums(is.na(diabetes_meta)) %>% table()
+```
+
+
+7.4. Check the distribution of each of the variables. Consider that the variables are of different classes. Does any of the distributions seam odd to you?
+
+For the categorical variables:
+
+```{r}
+table(diabetes_meta$Married)
+table(diabetes_meta$Work)
+```
+
+7. 5.  Clean the data according to your considerations.
+
+My considerations:
+
+-   Both the Married and Work variable has a lot of mistakes. From looking at the mistakes the mistakes can be fixed like this: Married is changed to 'No' if an 'N' is present in the string and 'Yes' if 'Y' is present. Work is changed such that 
+
+-   ID is changed to numerical. 
+
+```{r}
+nrow(diabetes_meta)
+```
+
+
+```{r}
+diabetes_meta %>% 
+  mutate(Married = case_when(str_detect(Married, 'N') ~ 'No',
+                             str_detect(Married, 'Y') ~ 'Yes',
+                             .default = NA
+                             )
+         )
+```
+
+
+```{r}
+nrow(diabetes_meta_clean)
+```
+
+## Merge the datasets
