@@ -1,5 +1,5 @@
 ---
-title: "Presentation 1: Base R and Tidyverse"
+title: "Presentation 1: Base R and Tidyverse / Data Clean-up and Wrangling"
 format: html
 project:
  type: website
@@ -15,27 +15,28 @@ library(tidyverse)
 library(readxl)
 ```
 
-2.  Load in the diabetes_clinical data set.
+2.  Load in the `diabetes_clinical_toy_messy.xlsx` data set.
 
 ```{r}
-diabetes_clinical <- read_excel('../data/data/diabetes_clinical_toy_messy.xlsx')
+diabetes_clinical <- read_excel('../data/diabetes_clinical_toy_messy.xlsx')
 head(diabetes_clinical)
 ```
 
 ## Explore the data
 
-Use can you either base R or/and tidyverse to solve the exercises. For now, we just explore the data.
+Use can you either base R or/and tidyverse to solve the exercises. 
 
-3.  Check for NA's.
+3.  How many missing values (NA's) are there in each column. 
 
 ```{r}
 colSums(is.na(diabetes_clinical))
 ```
 
-4.  Check the distribution of each of the variables. Consider that the variables are of different classes. Does any of the distributions seam odd to you?
+4.  Check the distribution of each of the variables. Consider that they are of different classes. Do any of the distributions seam odd to you?
 
 For the categorical variables:
 
+The `Sex` values are not consistent. 
 ```{r}
 table(diabetes_clinical$Sex)
 table(diabetes_clinical$Smoker)
@@ -50,6 +51,7 @@ diabetes_clinical %>%
   geom_boxplot()
 ```
 
+Odd: Some `BloodPressure` values are 0. 
 ```{r}
 diabetes_clinical %>% 
   ggplot(aes(y = BloodPressure)) + 
@@ -61,7 +63,7 @@ diabetes_clinical %>%
   ggplot(aes(y = GeneticRisk)) + 
   geom_boxplot()
 ```
-
+Odd: Some `BMI` values are 0. 
 ```{r}
 diabetes_clinical %>% 
   ggplot(aes(y = BMI)) + 
@@ -76,60 +78,78 @@ diabetes_clinical %>%
 
 ## Clean up the data
 
-Now that we had a look at the data, it is time to correct the mistakes that can be corrected and remove the observations that cannot be.
+Now that we have had a look at the data, it is time to correct fixable mistakes and remove observations that cannot be corrected.
 
 Consider the following:
 
 -   What should we do with the rows that contain NAs? Do we remove them or keep them?
 
--   What mistakes in the data can be corrected and which cannot?
+-   Which mistakes in the data can be corrected, and which cannot?
 
--   Are there zeros in the data? Are they true zeros or false zeros?
+-   Are there zeros in the data? Are they true zeros or errors?
 
 -   Do you want to change any of the classes of the variables?
 
 5.  Clean the data according to your considerations.
 
+<div>
+  <a href="#hint-section1" class="collapse-toggle" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="hint-section1" style="text-decoration: none; font-size: 1em;">
+    Hint
+  </a>
+  <div class="collapse" id="hint-section1" style="margin-top: 10px;">
+    
+  Have a look at `BloodPressure`, `BMI`, `Sex`, and `Diabetes`. 
+
+  </div>
+</div>
+
 My considerations:
 
--   When modelling, rows with NA's in the variables we want to model should be removed as we cannot model on NAs. Since there are only NA's in the GeneticRisk variables, the rows can be left until we need to do a model with GeneticRisk.
+-   When modelling, rows with NA's in the variables we want to model should be removed as we cannot model on NAs. Since there are only NA's in `GeneticRisk`, the rows can be left until we need to do a model with `GeneticRisk.`
 
--   The uppercase/lowercase mistakes in the Sex variables does not influence the interpretability of the vairables, so the are simply changes such that the first letter is a capital letter and the remaining letter are lowercase.
+-   The uppercase/lowercase mistakes in `Sex` does not influence the interpretability of the variables, so the are simply changes such that the first letter is a capital letter and the remaining letter are lowercase.
 
--   There are zeros in the BMI variable and the BloodPressure variables. These are considered false zeros as is does not make sense to have these variables as 0.
+-   There are zeros in `BMI` and `BloodPressure`. These are considered false zeros as is does not make sense to have these variables as 0.
 
--   All the variables are kept in their original class.
+-   `Diabetes` is changed to factor
 
 ```{r}
 diabetes_clinical$Sex %>% table()
 nrow(diabetes_clinical)
 ```
 
-
 ```{r}
 diabetes_clinical_clean <- diabetes_clinical %>% 
-  mutate(Sex = str_to_title(Sex)) %>% 
+  mutate(Sex = str_to_title(Sex),
+         Diabetes = Diabetes %>% factor()) %>% 
   filter(BMI != 0, BloodPressure != 0) 
+```
 
+Check the different sexes now.
+```{r}
 diabetes_clinical_clean$Sex %>% table()
+```
+
+Access number of rows.
+```{r}
 nrow(diabetes_clinical_clean)
 ```
 
 
-## Redo on other data
+## Meta Data
 
-7.  Do the same workflow for the diabetes_meta data set.
+6.  Perform step 2-5 from above and do data exploration and cleaning workflow for the `diabetes_meta_toy_messy.xlsx` data set.
 
-7.2. Load the data set.
+6.2. Load the data set.
 
 ```{r}
-diabetes_meta <- read_excel('../data/data/diabetes_meta_toy_messy.xlsx')
+diabetes_meta <- read_excel('../data/diabetes_meta_toy_messy.xlsx')
 head(diabetes_meta)
 ```
 
 Use can you either base R or/and tidyverse to solve the exercises. For now, we just explore the data.
 
-7.3. Check for NA's.
+6.3. How many missing values (NA's) are there in each column. 
 
 ```{r}
 colSums(is.na(diabetes_meta))
@@ -140,7 +160,7 @@ rowSums(is.na(diabetes_meta)) %>% table()
 ```
 
 
-7.4. Check the distribution of each of the variables. Consider that the variables are of different classes. Does any of the distributions seam odd to you?
+6.4. Check the distribution of each of the variables. Consider that they are of different classes. Do any of the distributions seam odd to you?
 
 For the categorical variables:
 
@@ -149,13 +169,13 @@ table(diabetes_meta$Married)
 table(diabetes_meta$Work)
 ```
 
-7. 5.  Clean the data according to your considerations.
+6. 5.  Clean the data according to your considerations.
 
 My considerations:
 
--   Both the Married and Work variable has a lot of mistakes. From looking at the mistakes the mistakes can be fixed like this: Married is changed to 'No' if an 'N' is present in the string and 'Yes' if 'Y' is present. Work is changed such that 
+-   Both `Married` and `Work` has a lot of mistakes. From looking at the mistakes the mistakes can be fixed like this: `Married` is changed to 'No' if an 'N' is present in the string and 'Yes' if 'Y' is present.
 
--   ID is changed to numerical. 
+-   `ID` is changed to numerical to match the `diabetes_clean` dataset. 
 
 ```{r}
 nrow(diabetes_meta)
@@ -163,12 +183,15 @@ nrow(diabetes_meta)
 
 
 ```{r}
-diabetes_meta %>% 
+diabetes_meta_clean <- diabetes_meta %>% 
   mutate(Married = case_when(str_detect(Married, 'N') ~ 'No',
                              str_detect(Married, 'Y') ~ 'Yes',
                              .default = NA
-                             )
+                             ),
+         ID = as.numeric(ID)
          )
+
+head(diabetes_meta_clean)
 ```
 
 
@@ -176,4 +199,46 @@ diabetes_meta %>%
 nrow(diabetes_meta_clean)
 ```
 
-## Merge the datasets
+## Join the datasets
+
+7. Consider what variable the datasets should be joined on.
+
+<div>
+  <a href="#hint-section2" class="collapse-toggle" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="hint-section2" style="text-decoration: none; font-size: 1em;">
+    Hint
+  </a>
+  <div class="collapse" id="hint-section2" style="margin-top: 10px;">
+    
+  The joining variable must be the same type in both datasets.
+
+  </div>
+</div>
+
+8. Join the datasets by the variable you selected above.
+```{r}
+diabetes_join <- diabetes_clinical_clean %>% 
+  left_join(diabetes_meta_clean, by = 'ID')
+```
+
+9. How many rows does the joined dataset have? Explain why. 
+
+<div>
+  <a href="#hint-section3" class="collapse-toggle" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="hint-section3" style="text-decoration: none; font-size: 1em;">
+    Hint
+  </a>
+  <div class="collapse" id="hint-section3" style="margin-top: 10px;">
+    
+  Because we used left_join, only the IDs that are in `diabetes_clinical_clean` are kept. 
+
+  </div>
+</div>
+
+```{r}
+nrow(diabetes_join)
+```
+
+10. Export the joined dataset. Think about which directory you want to save the file in. 
+```{r}
+writexl::write_xlsx(diabetes_join, '../out/diabetes_join.xlsx')
+```
+

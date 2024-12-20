@@ -1,5 +1,5 @@
 ---
-title: "Presentation 2: Advanced Tidyverse"
+title: "Presentation 2: Advanced Tidyverse / Pivot longer, wider, and nesting"
 format: html
 project:
  type: website
@@ -10,150 +10,101 @@ project:
 ```{r warning=FALSE, message=FALSE}
 library(readxl)
 library(tidyverse)
-library(broom)
 ```
-
 
 ## Load data
 ```{r}
-df_tidyverse_join <- read_excel('../data/sales_data.xlsx')
+df_sales <- read_excel('../out/sales_data_2.xlsx')
+```
+
+## Goal 
+The goal is to make a plot like this where we visualize the sales for each year across each employee.
+
+![](../out/sales_2_plot.png){fig-align="center"}
+
+The data is now in wide format. Can we make the plot in the way the data is formatted now?
+
+<div>
+  <a href="#hint-section" class="collapse-toggle" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="hint-section" style="text-decoration: none; font-size: 1em;">
+    Hint
+  </a>
+  <div class="collapse" id="hint-section" style="margin-top: 10px;">
+    
+  No. To create the plot, we need a column for the years to use on the x-axis, a column for sales in thousands DKK, and a column for Names. While the Names column is already present, the sales data is spread across four separate columns, and there is no column for the year.
+
+  </div>
+</div>
+
+```{r}
+head(df_sales)
 ```
 
 
-### Wide format
+## Long format
 
-The data is now in wide format 
-
+The data set is in wide format. The data can be restructured to long format such that there is one line per year per person. For this we use the `pivot_longer` function. 
 ```{r}
-df_tidyverse_join %>% 
-  group_by(City) %>% 
-  summarize(sum_sales_2020 = sum(sales_2020, na.rm = TRUE)) %>% 
-  ggplot(aes(x = City, 
-             y = sum_sales_2020)) + 
-  geom_col()
-```
-
-
-
-We want to make a scatter and line plot over the sales development over the years for each person. Have a look at the data. How would you do this?
-
-```{r}
-head(df_tidyverse_join)
-```
-
-
-### Long format
-
-
-The smart way to do this is to reformat the dataframe such that each person has a line per sales year. This is called the long format. 
-USE CASES FOR LONG AND WIDE FORMAT.
-
-11. Make the dataframe wide format like explained above. 
-```{r}
-df_tidyverse_join_longer <- df_tidyverse_join %>% 
-  pivot_longer(cols = starts_with("sales_2"),
+df_sales_longer <- df_sales %>% 
+  pivot_longer(cols = starts_with("sales_"),
                names_to = "year",
                values_to = "sales"
                )
 
-df_tidyverse_join_longer
+head(df_sales_longer)
 ```
 
-Transform the year to integer. 
+We can transform the year to integer. 
 ```{r}
-df_tidyverse_join_longer <- df_tidyverse_join_longer %>% 
-  mutate(year = str_remove(year, 'sales_') %>% as.integer(),
-         year_factor = year %>% as.factor(),
-         ) 
+df_sales_longer <- df_sales_longer %>% 
+  mutate(year = str_remove(year, 'sales_') %>% as.integer()) 
 
-df_tidyverse_join_longer
+head(df_sales_longer)
 ```
 
-
-12. Make the plot explain above (scatter and line plot over the sales development over the years for each person). If you are confused, break down the problem: What should be on the x axis? y axis? What kind of geom(s) should be added? Should the plot be stratified using other aesthetics? What can you conclude from the plot. 
-```{r}
-df_tidyverse_join_longer %>% 
+Make the plot explained above (scatter and line plot over the sales development over the years for each person). 
+```{r warning=FALSE}
+df_sales_longer %>% 
   ggplot(aes(x = year, 
              y = sales, 
-             color = Name, 
-             group = Name)) + 
+             color = Name)) + 
   geom_point() + 
-  geom_line()
+  geom_line() + 
+  theme_bw()
+
+# Saving the plot
+# ggsave('../out/sales_2_plot.png', width = 10.37, height = 7.55, units = 'in')
 ```
 
-Plot distribution of sales across the years. 
+## Wide format 
+The `pivot_wider` function is used to get data to wide format. 
 ```{r}
-df_tidyverse_join_longer %>% 
-  ggplot(aes(x = year, 
-             y = sales)) + 
-  geom_col()
-```
-
-```{r}
-df_tidyverse_join_longer %>% 
-  ggplot(aes(x = City, 
-             y = sales, 
-             fill = year_factor)) + 
-  geom_col()
-```
-
-Using `pivot_wider` to get data back to wide format. 
-```{r}
-df_tidyverse_join_wider <- df_tidyverse_join_longer %>% 
-  select(!year_factor) %>% 
+df_sales_wider <- df_sales_longer %>% 
   pivot_wider(names_from = year, 
-              values_from = sales)
+              values_from = sales,
+              names_prefix = 'sales_')
 
 # Same content
-df_tidyverse_join
-df_tidyverse_join_wider
+head(df_sales)
+head(df_sales_wider)
 ```
 
-
-### Nesting
-Avoid redundant information in dataframe by nesting. Group data by Name and nest year and sales into a single column. 
+## Nesting
+The long format can contain many repetitions e.g. information on the sales employee in `df_sales_longer`. Group data by `Name` and nest `year` and `sales` into a single column that we will name `sales_data`. 
 ```{r}
-df_tidyverse_join_longer_nested <- df_tidyverse_join_longer %>%  
+df_sales_longer_nested <- df_sales_longer %>%  
   group_by(Name) %>% 
-  nest(sales_data = c(year_factor, year, sales)) %>% 
+  nest(sales_data = c(year, sales)) %>% 
   ungroup()
 
-df_tidyverse_join_longer_nested
+head(df_sales_longer_nested)
 ```
 
-Pull sales data from Bob. 
+**Note:** Nested data cannot be exported as an Excel or CSV file. Instead, you need to export it as an RDS file, a format specifically designed to save R objects.
+
+We can extract the sales information from an employee using the `pull` function.
 ```{r}
-df_tidyverse_join_longer_nested %>% 
+df_sales_longer_nested %>% 
   filter(Name == 'Bob') %>% 
   pull(sales_data)
-```
-
-Create a model object that models sales across year. 
-```{r}
-df_tidyverse_join_longer_nested <- df_tidyverse_join_longer_nested %>% 
-  mutate(model_object = map(.x = sales_data,
-                            .f = ~lm(formula = sales ~ year,
-                                     data = .x))
-         )
-
-df_tidyverse_join_longer_nested
-```
-
-
-
-Pull model object from Bob to access the sales trend across the years. 
-```{r}
-df_tidyverse_join_longer_nested %>% 
-  filter(Name == 'Bob') %>% 
-  pull(model_object) %>% 
-  pluck(1) %>% 
-  tidy(conf.int = TRUE,
-       conf.level = 0.95)
-```
-
-```{r}
-df_tidyverse_join_longer_nested %>% 
-  filter(Name == 'Sophie') %>% 
-  pull(model_object)
 ```
 

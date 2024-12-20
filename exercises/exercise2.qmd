@@ -1,5 +1,5 @@
 ---
-title: "Exercise 2: Data Wrangling"
+title: "Exercise 2 - solutions: Advanced Tidyveres / Pivot longer, wider, and nesting"
 format: html
 project:
  type: website
@@ -8,89 +8,115 @@ project:
 
 ## Introduction
 
-You can solve these exercises however you see fit using base R and/or tidyverse.
+In this exercise you will do some more advance tidyverse operations such as pivoting and nesting, as well as create plots to brush up on your ggplot skills.
 
 ## First steps
 
 1.  Load packages.
 
-```{r message=FALSE}
-library(tidyverse)
-library(readxl)
+2.  Load the joined diabetes data set you created in exercise 1 and the glucose dataset from the data folder.
+
+3.  Have a look at the glucose dataset. The `OGTT` column contains measurements from a Oral Glucose Tolerance Test where blood glucose is measured at fasting (Glucose_0), 6 hours after glucose intake (Glucose_6), and 12 hours after (Glucose_12).
+
+4.  Restructure the glucose dataset into a long format. How many rows are there per ID? Does that make sense?
+
+<div>
+
+<a href="#hint-section1" class="collapse-toggle" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="hint-section1" style="text-decoration: none; font-size: 1em;"> Hint </a>
+
+::: {#hint-section1 .collapse style="margin-top: 10px;"}
+Remember the flow:
+
+```{r eval = FALSE}
+pivot_longer(cols = LIST_WITH_COLUMNS_TO_PIVOT,
+             names_to = "NEW_COLUMN_CONTAINING_COLUMN_NAMES",
+             values_to = "NEW_COLUMN_CONTAINING_COLUMN_VALUES")
 ```
 
-2.  Load data
+Have a look at the slides for better overview.
+:::
 
-```{r}
-diabetes <- read_excel('../data/diabetes_toy_messy.xlsx')
-# diabetes_meta <- read_excel('../data/diabetes_meta_toy_messy.xlsx')
-diabetes_meta <- read_csv('../data/diabetes_meta_toy_messy.csv')
+</div>
+
+5.  Change the glucose measurements to numeric variable.
+
+<div>
+  <a href="#hint-section2" class="collapse-toggle" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="hint-section2" style="text-decoration: none; font-size: 1em;">
+    Hint
+  </a>
+  <div class="collapse" id="hint-section2" style="margin-top: 10px;">
+    
+  The `stringr` packages is a part of tidyverse and has many functions for manipulating strings. Find a function that can **split** the string so you can extract the numbers on the other side of the underscore.   
+
+  </div>
+</div>
+
+6.  Nest the glucose measurements and values such that there is only one row per ID.
+
+<div>
+  <a href="#hint-section3" class="collapse-toggle" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="hint-section3" style="text-decoration: none; font-size: 1em;">
+    Hint
+  </a>
+  <div class="collapse" id="hint-section3" style="margin-top: 10px;">
+    
+  Remember the flow:
+```{r eval = FALSE}
+group_by() %>% 
+  nest() %>% 
+  ungroup()
 ```
 
-3.  Have a look at the datasets.
-    -   How many observations are there?
+  </div>
+</div>
 
-    -   What are the variables in each dataset and what class are they of?
+7.  Merge the nested glucose dataset with the joined diabetes.
 
-    -   Are there any missing variables and mistakes in the data? Have a look at the unique elements in each column. For the numerical values it can be difficult to spot mistakes. Have a look at the distributions of them.
+8.  Pull the glucose measurements (`OGTT`) from your favorite ID.
 
-Check number of NA's in each column.
+<div>
+  <a href="#hint-section4" class="collapse-toggle" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="hint-section4" style="text-decoration: none; font-size: 1em;">
+    Hint
+  </a>
+  <div class="collapse" id="hint-section4" style="margin-top: 10px;">
+    
+  First `filter` for your favorite ID and then `pull` the nested column. 
 
-```{r}
-diabetes %>% is.na() %>% colSums()
-```
+  </div>
+</div>
 
-Check if ID follows the structure ID_XXX, X being a digit.
+9.  Create a figure that visualizes glucose measurements at each time point (Measurement), stratified by patient ID. Give the plot a meaningful title.
 
-```{r}
-ID_wrong <- grepl("^ID_\\d{3}$", diabetes$ID)
-diabetes$ID[!ID_wrong]
-```
+10. Calculate the mean glucose measure for each measurement.
 
-Check the unique values of sex.
+<div>
+  <a href="#hint-section5" class="collapse-toggle" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="hint-section5" style="text-decoration: none; font-size: 1em;">
+    Hint
+  </a>
+  <div class="collapse" id="hint-section5" style="margin-top: 10px;">
+    
+  You will need to use `unnest()`, `group_by()`, and `summerize()`.
 
-```{r}
-diabetes$Sex %>% unique()
-```
+  </div>
+</div>
 
-Check distribution of numeric variables.
+11. Make the same calculation and stratify on Diabetes as well.
 
-```{r}
-diabetes$Fasting_Blood_Sugar %>% hist()
-diabetes$Post_Meal_Blood_Sugar %>% hist()
-diabetes$HbA1c %>% hist()
-diabetes$Age %>% hist()
-diabetes$BMI %>% hist()
-diabetes$Blood_Pressure %>% hist()
-```
+This next exercise might be a bit more challenging. It requires multiple operations and might involve some techniques that were not explicitly shown in the presentations.
 
-Same procedure for the meta data.
+12. Recreate the plot you made in Exercise 10 and include the mean value for each glucose measurement for the two Diabetes statuses (0 and 1).
 
-```{r}
-diabetes_meta %>% is.na() %>% colSums()
-```
+<div>
+  <a href="#hint-section6" class="collapse-toggle" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="hint-section6" style="text-decoration: none; font-size: 1em;">
+    Hint
+  </a>
+  <div class="collapse" id="hint-section6" style="margin-top: 10px;">
+    
+  There are several ways to solve this task. There is a workflow suggestion:
+  - The line in the plot is connected by ID. Create new IDs for the mean values that do not already exist in the dataset. Use `RANDOM_ID %in% df$ID` to check if an ID is already present. 
+  - Data from another dataset can be added to the plot like this: `+ geom_point(DATA, aes(x = VAR1, y = VAR2, group = VAR3))`
 
-```{r}
-ID_meta_wrong <- grepl("^ID_\\d{3}$", diabetes_meta$ID)
-diabetes_meta$ID[!ID_meta_wrong]
-```
+  </div>
+</div>
 
-```{r}
-diabetes_meta$Treatment_Type %>% table()
-```
+13. Export the final dataset. Since the dataset is nested, you cannot export it as an excel file. Export the dataset as an `.rds` file. Have a guess at what the function is called.
 
-```{r}
-diabetes_meta$City %>% table()
-```
-
-```{r}
-diabetes_meta$Diagnosis_Year %>% hist()
-diabetes_meta$Follow_Up_Visits %>% hist()
-```
-
-4.  For the variables with missing variables, delete the row. For the variables where you detected mistakes, correct them.
-
-```{r}
-diabetes_no_na <- diabetes[complete.cases(diabetes), ]
-
-```

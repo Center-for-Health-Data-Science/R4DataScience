@@ -1,0 +1,84 @@
+---
+title: "Presentation 1: Base R and Tidyverse / Data Clean-up and Wrangling"
+format: html
+project:
+ type: website
+ output-dir: ../docs
+---
+
+## Getting started
+
+1.  Load packages.
+
+2.  Load in the `diabetes_clinical_toy_messy.xlsx` data set.
+
+## Explore the data
+
+Use can you either base R or/and tidyverse to solve the exercises. 
+
+3.  How many missing values (NA's) are there in each column. 
+
+4.  Check the distribution of each of the variables. Consider that they are of different classes. Do any of the distributions seam odd to you?
+
+## Clean up the data
+
+Now that we have had a look at the data, it is time to correct fixable mistakes and remove observations that cannot be corrected.
+
+Consider the following:
+
+-   What should we do with the rows that contain NAs? Do we remove them or keep them?
+
+-   Which mistakes in the data can be corrected, and which cannot?
+
+-   Are there zeros in the data? Are they true zeros or errors?
+
+-   Do you want to change any of the classes of the variables?
+
+5.  Clean the data according to your considerations.
+
+<div>
+  <a href="#hint-section1" class="collapse-toggle" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="hint-section1" style="text-decoration: none; font-size: 1em;">
+    Hint
+  </a>
+  <div class="collapse" id="hint-section1" style="margin-top: 10px;">
+    
+  Have a look at `BloodPressure`, `BMI`, `Sex`, and `Diabetes`. 
+
+  </div>
+</div>
+
+## Meta Data
+
+6.  Perform step 2-5 from above and do data exploration and cleaning workflow for the `diabetes_meta_toy_messy.xlsx` data set.
+
+## Join the datasets
+
+7. Consider what variable the datasets should be joined on.
+
+<div>
+  <a href="#hint-section2" class="collapse-toggle" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="hint-section2" style="text-decoration: none; font-size: 1em;">
+    Hint
+  </a>
+  <div class="collapse" id="hint-section2" style="margin-top: 10px;">
+    
+  The joining variable must be the same type in both datasets.
+
+  </div>
+</div>
+
+8. Join the datasets by the variable you selected above.
+
+9. How many rows does the joined dataset have? Explain why. 
+
+<div>
+  <a href="#hint-section3" class="collapse-toggle" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="hint-section3" style="text-decoration: none; font-size: 1em;">
+    Hint
+  </a>
+  <div class="collapse" id="hint-section3" style="margin-top: 10px;">
+    
+  Because we used left_join, only the IDs that are in `diabetes_clinical_clean` are kept. 
+
+  </div>
+</div>
+
+10. Export the joined dataset. Think about which directory you want to save the file in. 

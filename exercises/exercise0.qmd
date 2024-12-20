@@ -14,7 +14,7 @@ project:
 
 3.  Move the Data folder to your course directory.
 
-4.  Under your course directory, make a new folder for your scripts and another for the presentations you download.
+4.  Under your course directory, make a new folder for your scripts, one for our output, and another for the presentations you download.
 
 Your file tree should look something like this:
 

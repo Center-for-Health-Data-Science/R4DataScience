@@ -6,50 +6,25 @@ project:
  output-dir: ../docs
 ---
 
-## Load packages
+## Load Packages
 
 ```{r warning=FALSE, message=FALSE}
 library(tidyverse)
 ```
 
-## Create Dataset
+## Load Dataset
 
-Here we are creating a data frame called `df` than contain information about sales employees sales in thousands dkk from 2020 to 2023.
-
-First, we create the dataset the base R way using the `data.frame` function.
+Here we load a dataframe that contains sales data for employees (in thousands DKK) from 2020 to 2023. We load the data as `df_baseR` which we will use to demonstrate base R commands. A copy of the same dataframe, `df_tidyverse`, is used to demonstrate tidyverse commands.
 
 ```{r}
-df_baseR <- data.frame(
-  ID = 1:10,
-  Name = c("Alice", "Bob", "Charlie", "Sophie", "Eve", "Frank", "Grace", "Hannah", "Ian", "Jack"),
-  Age = c(25, 30, 22, 35, 28, NA, 40, 29, 21, 33),
-  Sex = c("Female", "Male", "Male", "Female", "Female", "Male", "Female", "Female", "Male", "Male"),
-  sales_2020 = c(100, 200, 150, 300, 250, NA, 400, 500, 450, 300),
-  sales_2021 = c(110, 210, 160, 320, 240, 260, 420, 510, 460, 310),
-  sales_2022 = c(120, 220, 170, 340, 250, 270, 430, NA, 470, 320),
-  sales_2023 = c(100, 230, 200, 250, 270, 280, 450, 500, 480, 290)
-)
+df_baseR <- readxl::read_excel('../data/df_sales_1.xlsx')
+df_tidyverse <- df_baseR
 ```
 
-Using the `tibble` function to create the dataset the tidyverse way.
-```{r}
-df_tidyverse <- tibble(
-  ID = 1:10,
-  Name = c("Alice", "Bob", "Charlie", "Sophie", "Eve", "Frank", "Grace", "Hannah", "Ian", "Jack"),
-  Age = c(25, 30, 22, 35, 28, NA, 40, 29, 21, 33),
-  Sex = c("Female", "Male", "Male", "Female", "Female", "Male", "Female", "Female", "Male", "Male"),
-  sales_2020 = c(100, 200, 150, 300, 250, NA, 400, 500, 450, 300),
-  sales_2021 = c(110, 210, 160, 320, 240, 260, 420, 510, 460, 310),
-  sales_2022 = c(120, 220, 170, 340, 250, 270, 430, NA, 470, 320),
-  sales_2023 = c(100, 230, 200, 250, 270, 280, 450, 500, 480, 290)
-)
-
-head(df_tidyverse)
-```
 
 ## Base R and Tidyverse
 
-From here, each exercise should be solve in both the base R and tidyverse way.
+From here, each task is solved in both the base R and tidyverse way.
 
 Access the Age column:
 
@@ -216,5 +191,5 @@ df_baseR_merged %>%
 Export tidyverse dataset
 
 ```{r}
-writexl::write_xlsx(df_tidyverse_join, '../data/sales_data.xlsx')
+writexl::write_xlsx(df_tidyverse_join, '../out/sales_data_2.xlsx')
 ```

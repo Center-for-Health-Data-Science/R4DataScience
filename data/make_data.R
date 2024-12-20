@@ -1,14 +1,28 @@
 
 setwd('~/Desktop/DataLab/R4DataScience/data/')
 
-diabetes <- read_csv('diabetes.csv')
+############ SALES ############ 
 
+df_sales <- data.frame(
+  ID = 1:10,
+  Name = c("Alice", "Bob", "Charlie", "Sophie", "Eve", "Frank", "Grace", "Hannah", "Ian", "Jack"),
+  Age = c(25, 30, 22, 35, 28, NA, 40, 29, 21, 33),
+  Sex = c("Female", "Male", "Male", "Female", "Female", "Male", "Female", "Female", "Male", "Male"),
+  sales_2020 = c(100, 200, 150, 300, 250, NA, 400, 500, 450, 300),
+  sales_2021 = c(110, 210, 160, 320, 240, 260, 420, 510, 460, 310),
+  sales_2022 = c(120, 220, 170, 340, 250, 270, 430, NA, 470, 320),
+  sales_2023 = c(100, 230, 200, 250, 270, 280, 450, 500, 480, 290)
+)
+
+writexl::write_xlsx(df_sales, './df_sales_1.xlsx')
+
+############ DIABETES ############ 
 library(tidyverse)
+
+diabetes <- read_csv('diabetes.csv')
 
 diabetes_clinical <- diabetes %>% select(ID, Sex, Age, BloodPressure, GeneticRisk, BMI, PhysicalActivity, Smoker, Diabetes)
 diabetes_meta <- diabetes %>% select(ID, Married, Work)
-
-rm(diabetes)
 
 # Randomize the order of rows
 diabetes_meta <- diabetes_meta[sample(1:nrow(diabetes_meta)), ]
@@ -34,11 +48,57 @@ diabetes_meta_messy <- messy(diabetes_meta, messiness = 0.005)
 #          Follow_Up_Visits = as.numeric(Follow_Up_Visits)
 #   )
 
+############ DIABETES GLUCOSE ############ 
+ids <- diabetes$ID
+
+# Set the number of samples
+num_diabetic <- 265
+num_non_diabetic <- 267
+
+# Define ranges for glucose levels
+# Non-diabetic: [Glucose] 0' < 6.0 mmol/L, [Glucose] 120' < 7.8 mmol/L
+# Diabetic: [Glucose] 0' > 7.0 mmol/L, [Glucose] 120' > 11.1 mmol/L
+# Impaired Glucose Tolerance: 6.1 - 6.9 mmol/L (0'), 7.9 - 11.0 mmol/L (120')
+
+# Function to generate random glucose levels within specified range
+generate_glucose <- function(n, min_0, max_0, min_120, max_120) {
+  Glucose_0 <- runif(n, min = min_0, max = max_0)
+  Glucose_120 <- runif(n, min = min_120, max = max_120)
+  
+  # Ensure Glucose_120 >= Glucose_0 (biological constraint)
+  Glucose_120 <- pmax(Glucose_0, Glucose_120)
+  
+  Glucose_60 <- runif(n, min = Glucose_0 + (Glucose_120 - Glucose_0) * 0.4, max = Glucose_0 + (Glucose_120 - Glucose_0) * 0.7)
+  data.frame(Glucose_0, Glucose_60, Glucose_120)
+}
+
+# Generate impaired glucose tolerance measurements
+impared_glucose <- generate_glucose(50, 6, 7, 7.5, 11.5)
+
+# Generate non-diabetic measurements
+# non_diabetic <- generate_glucose(num_non_diabetic-25, 3.9, 5.9, 3.9, 7.7)
+# non_diabetic <- rbind(non_diabetic, impared_glucose[1:25, ])
+# non_diabetic$ID <- diabetes %>% filter(Diabetes == 0) %>% pull(ID)
+
+non_diabetic_2 <- generate_glucose(num_non_diabetic, 3.9, 7, 3.9, 11.5)
+non_diabetic_2$ID <- diabetes %>% filter(Diabetes == 0) %>% pull(ID)
+
+# Generate diabetic measurements
+# diabetic <- generate_glucose(num_diabetic-25, 7.1, 15, 11.2, 20)
+# diabetic <- rbind(diabetic, impared_glucose[26:50, ])
+# diabetic$ID <- diabetes %>% filter(Diabetes == 1) %>% pull(ID)
+
+diabetic_2 <- generate_glucose(num_diabetic, 6, 15, 7.5, 20)
+diabetic_2$ID <- diabetes %>% filter(Diabetes == 1) %>% pull(ID)
+
+# Combine into one dataset
+# df_glucose <- rbind(non_diabetic, diabetic)
+df_glucose_2 <- rbind(non_diabetic_2, diabetic_2)
 
 # Export datasets
-writexl::write_xlsx(diabetes_clinical, './data/diabetes_clinical_toy.xlsx')
-writexl::write_xlsx(diabetes_clinical_messy, './data/diabetes_clinical_toy_messy.xlsx')
-writexl::write_xlsx(diabetes_meta, './data/diabetes_meta_toy.xlsx')
-writexl::write_xlsx(diabetes_meta_messy, './data/diabetes_meta_toy_messy.xlsx')
-
+# writexl::write_xlsx(diabetes_clinical, './diabetes_clinical_toy.xlsx')
+writexl::write_xlsx(diabetes_clinical_messy, './diabetes_clinical_toy_messy.xlsx')
+# writexl::write_xlsx(diabetes_meta, './diabetes_meta_toy.xlsx')
+writexl::write_xlsx(diabetes_meta_messy, './diabetes_meta_toy_messy.xlsx')
+writexl::write_xlsx(df_glucose_2, './df_glucose.xlsx')
 

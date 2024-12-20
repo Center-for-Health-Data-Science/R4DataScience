@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Presentation 2: Advanced Tidyverse – R for Data Science</title>
+<title>Presentation 2: Advanced Tidyverse / Pivot longer, wider, and nesting – R for Data Science</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -184,10 +184,16 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </li>
       </ul>
   </li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../data/data.qmd" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Data️</span></a>
+  </div>
+</li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
             <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="false">
- <span class="menu-text">Solutions</span></a>
+ <span class="menu-text">Exercises</span></a>
           <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="false" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
@@ -195,8 +201,84 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 ">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
+  <a href="../exercises/exercise0.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Exercise 0: R script and Quarto</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../exercises/exercise1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Exercise 1: Data Clean Up</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../exercises/exercise2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Exercise 2: Data Clean Up</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="false">
+ <span class="menu-text">Solutions</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../solutions/solution1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Exercise 1 - Solution</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
   <a href="../solutions/solution2.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Exercise 2 - Solution</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../solutions/solution3.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Exercise 3 - Solution</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="false">
+ <span class="menu-text">Cheat Sheets</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../CheatSheet/quartoCheatSheet.pdf" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Quarto</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../CheatSheet/BaseRCheatSheet.pdf" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Base R</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../CheatSheet/TidyverseCheatSheet.pdf" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Tidyverse</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../CheatSheet/ggplotCheatSheet.pdf" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">ggplot2</span></a>
   </div>
 </li>
       </ul>
@@ -212,12 +294,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
    
   <ul>
   <li><a href="#load-packages" id="toc-load-packages" class="nav-link active" data-scroll-target="#load-packages">Load packages</a></li>
-  <li><a href="#load-data" id="toc-load-data" class="nav-link" data-scroll-target="#load-data">Load data</a>
-  <ul class="collapse">
-  <li><a href="#wide-format" id="toc-wide-format" class="nav-link" data-scroll-target="#wide-format">Wide format</a></li>
+  <li><a href="#load-data" id="toc-load-data" class="nav-link" data-scroll-target="#load-data">Load data</a></li>
+  <li><a href="#goal" id="toc-goal" class="nav-link" data-scroll-target="#goal">Goal</a></li>
   <li><a href="#long-format" id="toc-long-format" class="nav-link" data-scroll-target="#long-format">Long format</a></li>
+  <li><a href="#wide-format" id="toc-wide-format" class="nav-link" data-scroll-target="#wide-format">Wide format</a></li>
   <li><a href="#nesting" id="toc-nesting" class="nav-link" data-scroll-target="#nesting">Nesting</a></li>
-  </ul></li>
   </ul>
 </nav>
     </div>
@@ -226,7 +307,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../presentations/presentation1.html">Presentations</a></li><li class="breadcrumb-item"><a href="../presentations/presentation2.html">Presentation 2: Advanced Tidyverse</a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title">Presentation 2: Advanced Tidyverse</h1>
+<h1 class="title">Presentation 2: Advanced Tidyverse / Pivot longer, wider, and nesting</h1>
 </div>
 
 
@@ -247,36 +328,32 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h2 class="anchored" data-anchor-id="load-packages">Load packages</h2>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(readxl)</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(broom)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="load-data" class="level2">
 <h2 class="anchored" data-anchor-id="load-data">Load data</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>df_tidyverse_join <span class="ot">&lt;-</span> <span class="fu">read_excel</span>(<span class="st">'../data/sales_data.xlsx'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>df_sales <span class="ot">&lt;-</span> <span class="fu">read_excel</span>(<span class="st">'../out/sales_data_2.xlsx'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<section id="wide-format" class="level3">
-<h3 class="anchored" data-anchor-id="wide-format">Wide format</h3>
-<p>The data is now in wide format</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>df_tidyverse_join <span class="sc">%&gt;%</span> </span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(City) <span class="sc">%&gt;%</span> </span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">sum_sales_2020 =</span> <span class="fu">sum</span>(sales_2020, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)) <span class="sc">%&gt;%</span> </span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> City, </span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>             <span class="at">y =</span> sum_sales_2020)) <span class="sc">+</span> </span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output-display">
-<div>
+</section>
+<section id="goal" class="level2">
+<h2 class="anchored" data-anchor-id="goal">Goal</h2>
+<p>The goal is to make a plot like this where we visualize the sales for each year across each employee.</p>
+<div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="presentation2_files/figure-html/unnamed-chunk-3-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="../out/sales_2_plot.png" class="img-fluid quarto-figure quarto-figure-center figure-img"></p>
 </figure>
 </div>
+<p>The data is now in wide format. Can we make the plot in the way the data is formatted now?</p>
+<div>
+<a href="#hint-section" class="collapse-toggle" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="hint-section" style="text-decoration: none; font-size: 1em;"> Hint </a>
+<div id="hint-section" class="collapse" style="margin-top: 10px;">
+<p>No.&nbsp;To create the plot, we need a column for the years to use on the x-axis, a column for sales in thousands DKK, and a column for Names. While the Names column is already present, the sales data is spread across four separate columns, and there is no column for the year.</p>
 </div>
 </div>
-<p>We want to make a scatter and line plot over the sales development over the years for each person. Have a look at the data. How would you do this?</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(df_tidyverse_join)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(df_sales)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 6 × 9
      ID Name      Age Sex    sales_2020 sales_2021 sales_2022 sales_2023 City   
@@ -290,275 +367,144 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </section>
-<section id="long-format" class="level3">
-<h3 class="anchored" data-anchor-id="long-format">Long format</h3>
-<p>The smart way to do this is to reformat the dataframe such that each person has a line per sales year. This is called the long format. USE CASES FOR LONG AND WIDE FORMAT.</p>
-<ol start="11" type="1">
-<li>Make the dataframe wide format like explained above.</li>
-</ol>
+<section id="long-format" class="level2">
+<h2 class="anchored" data-anchor-id="long-format">Long format</h2>
+<p>The data set is in wide format. The data can be restructured to long format such that there is one line per year per person. For this we use the <code>pivot_longer</code> function.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>df_tidyverse_join_longer <span class="ot">&lt;-</span> df_tidyverse_join <span class="sc">%&gt;%</span> </span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="at">cols =</span> <span class="fu">starts_with</span>(<span class="st">"sales_2"</span>),</span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>               <span class="at">names_to =</span> <span class="st">"year"</span>,</span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>               <span class="at">values_to =</span> <span class="st">"sales"</span></span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>               )</span>
-<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>df_tidyverse_join_longer</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>df_sales_longer <span class="ot">&lt;-</span> df_sales <span class="sc">%&gt;%</span> </span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="at">cols =</span> <span class="fu">starts_with</span>(<span class="st">"sales_"</span>),</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>               <span class="at">names_to =</span> <span class="st">"year"</span>,</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>               <span class="at">values_to =</span> <span class="st">"sales"</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>               )</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(df_sales_longer)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 40 × 7
-      ID Name      Age Sex    City  year       sales
-   &lt;dbl&gt; &lt;chr&gt;   &lt;dbl&gt; &lt;chr&gt;  &lt;chr&gt; &lt;chr&gt;      &lt;dbl&gt;
- 1     1 Alice      25 Female Miami sales_2020   100
- 2     1 Alice      25 Female Miami sales_2021   110
- 3     1 Alice      25 Female Miami sales_2022   120
- 4     1 Alice      25 Female Miami sales_2023   100
- 5     2 Bob        30 Male   Miami sales_2020   200
- 6     2 Bob        30 Male   Miami sales_2021   210
- 7     2 Bob        30 Male   Miami sales_2022   220
- 8     2 Bob        30 Male   Miami sales_2023   230
- 9     3 Charlie    22 Male   LA    sales_2020   150
-10     3 Charlie    22 Male   LA    sales_2021   160
-# ℹ 30 more rows</code></pre>
+<pre><code># A tibble: 6 × 7
+     ID Name    Age Sex    City  year       sales
+  &lt;dbl&gt; &lt;chr&gt; &lt;dbl&gt; &lt;chr&gt;  &lt;chr&gt; &lt;chr&gt;      &lt;dbl&gt;
+1     1 Alice    25 Female Miami sales_2020   100
+2     1 Alice    25 Female Miami sales_2021   110
+3     1 Alice    25 Female Miami sales_2022   120
+4     1 Alice    25 Female Miami sales_2023   100
+5     2 Bob      30 Male   Miami sales_2020   200
+6     2 Bob      30 Male   Miami sales_2021   210</code></pre>
 </div>
 </div>
-<p>Transform the year to integer.</p>
+<p>We can transform the year to integer.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>df_tidyverse_join_longer <span class="ot">&lt;-</span> df_tidyverse_join_longer <span class="sc">%&gt;%</span> </span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">year =</span> <span class="fu">str_remove</span>(year, <span class="st">'sales_'</span>) <span class="sc">%&gt;%</span> <span class="fu">as.integer</span>(),</span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>         <span class="at">year_factor =</span> year <span class="sc">%&gt;%</span> <span class="fu">as.factor</span>(),</span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>         ) </span>
-<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>df_tidyverse_join_longer</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>df_sales_longer <span class="ot">&lt;-</span> df_sales_longer <span class="sc">%&gt;%</span> </span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">year =</span> <span class="fu">str_remove</span>(year, <span class="st">'sales_'</span>) <span class="sc">%&gt;%</span> <span class="fu">as.integer</span>()) </span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(df_sales_longer)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 40 × 8
-      ID Name      Age Sex    City   year sales year_factor
-   &lt;dbl&gt; &lt;chr&gt;   &lt;dbl&gt; &lt;chr&gt;  &lt;chr&gt; &lt;int&gt; &lt;dbl&gt; &lt;fct&gt;      
- 1     1 Alice      25 Female Miami  2020   100 2020       
- 2     1 Alice      25 Female Miami  2021   110 2021       
- 3     1 Alice      25 Female Miami  2022   120 2022       
- 4     1 Alice      25 Female Miami  2023   100 2023       
- 5     2 Bob        30 Male   Miami  2020   200 2020       
- 6     2 Bob        30 Male   Miami  2021   210 2021       
- 7     2 Bob        30 Male   Miami  2022   220 2022       
- 8     2 Bob        30 Male   Miami  2023   230 2023       
- 9     3 Charlie    22 Male   LA     2020   150 2020       
-10     3 Charlie    22 Male   LA     2021   160 2021       
-# ℹ 30 more rows</code></pre>
+<pre><code># A tibble: 6 × 7
+     ID Name    Age Sex    City   year sales
+  &lt;dbl&gt; &lt;chr&gt; &lt;dbl&gt; &lt;chr&gt;  &lt;chr&gt; &lt;int&gt; &lt;dbl&gt;
+1     1 Alice    25 Female Miami  2020   100
+2     1 Alice    25 Female Miami  2021   110
+3     1 Alice    25 Female Miami  2022   120
+4     1 Alice    25 Female Miami  2023   100
+5     2 Bob      30 Male   Miami  2020   200
+6     2 Bob      30 Male   Miami  2021   210</code></pre>
 </div>
 </div>
-<ol start="12" type="1">
-<li>Make the plot explain above (scatter and line plot over the sales development over the years for each person). If you are confused, break down the problem: What should be on the x axis? y axis? What kind of geom(s) should be added? Should the plot be stratified using other aesthetics? What can you conclude from the plot.</li>
-</ol>
+<p>Make the plot explained above (scatter and line plot over the sales development over the years for each person).</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>df_tidyverse_join_longer <span class="sc">%&gt;%</span> </span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> year, </span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>             <span class="at">y =</span> sales, </span>
-<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>             <span class="at">color =</span> Name, </span>
-<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>             <span class="at">group =</span> Name)) <span class="sc">+</span> </span>
-<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span> </span>
-<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Warning: Removed 2 rows containing missing values or values outside the scale range
-(`geom_point()`).</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Warning: Removed 1 row containing missing values or values outside the scale range
-(`geom_line()`).</code></pre>
-</div>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>df_sales_longer <span class="sc">%&gt;%</span> </span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> year, </span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>             <span class="at">y =</span> sales, </span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>             <span class="at">color =</span> Name)) <span class="sc">+</span> </span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span> </span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>() <span class="sc">+</span> </span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="presentation2_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="presentation2_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Saving the plot</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="co"># ggsave('../out/sales_2_plot.png', width = 10.37, height = 7.55, units = 'in')</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>Plot distribution of sales across the years.</p>
+</section>
+<section id="wide-format" class="level2">
+<h2 class="anchored" data-anchor-id="wide-format">Wide format</h2>
+<p>The <code>pivot_wider</code> function is used to get data to wide format.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>df_tidyverse_join_longer <span class="sc">%&gt;%</span> </span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> year, </span>
-<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>             <span class="at">y =</span> sales)) <span class="sc">+</span> </span>
-<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Warning: Removed 2 rows containing missing values or values outside the scale range
-(`geom_col()`).</code></pre>
-</div>
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="presentation2_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid figure-img" width="672"></p>
-</figure>
-</div>
-</div>
-</div>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>df_tidyverse_join_longer <span class="sc">%&gt;%</span> </span>
-<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> City, </span>
-<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>             <span class="at">y =</span> sales, </span>
-<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>             <span class="at">fill =</span> year_factor)) <span class="sc">+</span> </span>
-<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Warning: Removed 2 rows containing missing values or values outside the scale range
-(`geom_col()`).</code></pre>
-</div>
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="presentation2_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid figure-img" width="672"></p>
-</figure>
-</div>
-</div>
-</div>
-<p>Using <code>pivot_wider</code> to get data back to wide format.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>df_tidyverse_join_wider <span class="ot">&lt;-</span> df_tidyverse_join_longer <span class="sc">%&gt;%</span> </span>
-<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">!</span>year_factor) <span class="sc">%&gt;%</span> </span>
-<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_wider</span>(<span class="at">names_from =</span> year, </span>
-<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>              <span class="at">values_from =</span> sales)</span>
-<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Same content</span></span>
-<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>df_tidyverse_join</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>df_sales_wider <span class="ot">&lt;-</span> df_sales_longer <span class="sc">%&gt;%</span> </span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_wider</span>(<span class="at">names_from =</span> year, </span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>              <span class="at">values_from =</span> sales,</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>              <span class="at">names_prefix =</span> <span class="st">'sales_'</span>)</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Same content</span></span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(df_sales)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 10 × 9
-      ID Name      Age Sex    sales_2020 sales_2021 sales_2022 sales_2023 City  
-   &lt;dbl&gt; &lt;chr&gt;   &lt;dbl&gt; &lt;chr&gt;       &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt; &lt;chr&gt; 
- 1     1 Alice      25 Female        100        110        120        100 Miami 
- 2     2 Bob        30 Male          200        210        220        230 Miami 
- 3     3 Charlie    22 Male          150        160        170        200 LA    
- 4     4 Sophie     35 Female        300        320        340        250 New Y…
- 5     5 Eve        28 Female        250        240        250        270 LA    
- 6     6 Frank      NA Male           NA        260        270        280 New Y…
- 7     7 Grace      40 Female        400        420        430        450 Chica…
- 8     8 Hannah     29 Female        500        510         NA        500 Chica…
- 9     9 Ian        21 Male          450        460        470        480 New Y…
-10    10 Jack       33 Male          300        310        320        290 LA    </code></pre>
+<pre><code># A tibble: 6 × 9
+     ID Name      Age Sex    sales_2020 sales_2021 sales_2022 sales_2023 City   
+  &lt;dbl&gt; &lt;chr&gt;   &lt;dbl&gt; &lt;chr&gt;       &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt; &lt;chr&gt;  
+1     1 Alice      25 Female        100        110        120        100 Miami  
+2     2 Bob        30 Male          200        210        220        230 Miami  
+3     3 Charlie    22 Male          150        160        170        200 LA     
+4     4 Sophie     35 Female        300        320        340        250 New Yo…
+5     5 Eve        28 Female        250        240        250        270 LA     
+6     6 Frank      NA Male           NA        260        270        280 New Yo…</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>df_tidyverse_join_wider</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(df_sales_wider)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 10 × 9
-      ID Name      Age Sex    City     `2020` `2021` `2022` `2023`
-   &lt;dbl&gt; &lt;chr&gt;   &lt;dbl&gt; &lt;chr&gt;  &lt;chr&gt;     &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;
- 1     1 Alice      25 Female Miami       100    110    120    100
- 2     2 Bob        30 Male   Miami       200    210    220    230
- 3     3 Charlie    22 Male   LA          150    160    170    200
- 4     4 Sophie     35 Female New York    300    320    340    250
- 5     5 Eve        28 Female LA          250    240    250    270
- 6     6 Frank      NA Male   New York     NA    260    270    280
- 7     7 Grace      40 Female Chicago     400    420    430    450
- 8     8 Hannah     29 Female Chicago     500    510     NA    500
- 9     9 Ian        21 Male   New York    450    460    470    480
-10    10 Jack       33 Male   LA          300    310    320    290</code></pre>
+<pre><code># A tibble: 6 × 9
+     ID Name      Age Sex    City    sales_2020 sales_2021 sales_2022 sales_2023
+  &lt;dbl&gt; &lt;chr&gt;   &lt;dbl&gt; &lt;chr&gt;  &lt;chr&gt;        &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt;
+1     1 Alice      25 Female Miami          100        110        120        100
+2     2 Bob        30 Male   Miami          200        210        220        230
+3     3 Charlie    22 Male   LA             150        160        170        200
+4     4 Sophie     35 Female New Yo…        300        320        340        250
+5     5 Eve        28 Female LA             250        240        250        270
+6     6 Frank      NA Male   New Yo…         NA        260        270        280</code></pre>
 </div>
 </div>
 </section>
-<section id="nesting" class="level3">
-<h3 class="anchored" data-anchor-id="nesting">Nesting</h3>
-<p>Avoid redundant information in dataframe by nesting. Group data by Name and nest year and sales into a single column.</p>
+<section id="nesting" class="level2">
+<h2 class="anchored" data-anchor-id="nesting">Nesting</h2>
+<p>The long format can contain many repetitions e.g.&nbsp;information on the sales employee in <code>df_sales_longer</code>. Group data by <code>Name</code> and nest <code>year</code> and <code>sales</code> into a single column that we will name <code>sales_data</code>.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>df_tidyverse_join_longer_nested <span class="ot">&lt;-</span> df_tidyverse_join_longer <span class="sc">%&gt;%</span>  </span>
-<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Name) <span class="sc">%&gt;%</span> </span>
-<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">nest</span>(<span class="at">sales_data =</span> <span class="fu">c</span>(year_factor, year, sales)) <span class="sc">%&gt;%</span> </span>
-<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>()</span>
-<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>df_tidyverse_join_longer_nested</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>df_sales_longer_nested <span class="ot">&lt;-</span> df_sales_longer <span class="sc">%&gt;%</span>  </span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Name) <span class="sc">%&gt;%</span> </span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">nest</span>(<span class="at">sales_data =</span> <span class="fu">c</span>(year, sales)) <span class="sc">%&gt;%</span> </span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>()</span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(df_sales_longer_nested)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 10 × 6
-      ID Name      Age Sex    City     sales_data      
-   &lt;dbl&gt; &lt;chr&gt;   &lt;dbl&gt; &lt;chr&gt;  &lt;chr&gt;    &lt;list&gt;          
- 1     1 Alice      25 Female Miami    &lt;tibble [4 × 3]&gt;
- 2     2 Bob        30 Male   Miami    &lt;tibble [4 × 3]&gt;
- 3     3 Charlie    22 Male   LA       &lt;tibble [4 × 3]&gt;
- 4     4 Sophie     35 Female New York &lt;tibble [4 × 3]&gt;
- 5     5 Eve        28 Female LA       &lt;tibble [4 × 3]&gt;
- 6     6 Frank      NA Male   New York &lt;tibble [4 × 3]&gt;
- 7     7 Grace      40 Female Chicago  &lt;tibble [4 × 3]&gt;
- 8     8 Hannah     29 Female Chicago  &lt;tibble [4 × 3]&gt;
- 9     9 Ian        21 Male   New York &lt;tibble [4 × 3]&gt;
-10    10 Jack       33 Male   LA       &lt;tibble [4 × 3]&gt;</code></pre>
+<pre><code># A tibble: 6 × 6
+     ID Name      Age Sex    City     sales_data      
+  &lt;dbl&gt; &lt;chr&gt;   &lt;dbl&gt; &lt;chr&gt;  &lt;chr&gt;    &lt;list&gt;          
+1     1 Alice      25 Female Miami    &lt;tibble [4 × 2]&gt;
+2     2 Bob        30 Male   Miami    &lt;tibble [4 × 2]&gt;
+3     3 Charlie    22 Male   LA       &lt;tibble [4 × 2]&gt;
+4     4 Sophie     35 Female New York &lt;tibble [4 × 2]&gt;
+5     5 Eve        28 Female LA       &lt;tibble [4 × 2]&gt;
+6     6 Frank      NA Male   New York &lt;tibble [4 × 2]&gt;</code></pre>
 </div>
 </div>
-<p>Pull sales data from Bob.</p>
+<p><strong>Note:</strong> Nested data cannot be exported as an Excel or CSV file. Instead, you need to export it as an RDS file, a format specifically designed to save R objects.</p>
+<p>We can extract the sales information from an employee using the <code>pull</code> function.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>df_tidyverse_join_longer_nested <span class="sc">%&gt;%</span> </span>
-<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(Name <span class="sc">==</span> <span class="st">'Bob'</span>) <span class="sc">%&gt;%</span> </span>
-<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pull</span>(sales_data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>df_sales_longer_nested <span class="sc">%&gt;%</span> </span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(Name <span class="sc">==</span> <span class="st">'Bob'</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pull</span>(sales_data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[[1]]
-# A tibble: 4 × 3
-  year_factor  year sales
-  &lt;fct&gt;       &lt;int&gt; &lt;dbl&gt;
-1 2020         2020   200
-2 2021         2021   210
-3 2022         2022   220
-4 2023         2023   230</code></pre>
-</div>
-</div>
-<p>Create a model object that models sales across year.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>df_tidyverse_join_longer_nested <span class="ot">&lt;-</span> df_tidyverse_join_longer_nested <span class="sc">%&gt;%</span> </span>
-<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">model_object =</span> <span class="fu">map</span>(<span class="at">.x =</span> sales_data,</span>
-<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>                            <span class="at">.f =</span> <span class="sc">~</span><span class="fu">lm</span>(<span class="at">formula =</span> sales <span class="sc">~</span> year,</span>
-<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>                                     <span class="at">data =</span> .x))</span>
-<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>         )</span>
-<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a>df_tidyverse_join_longer_nested</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 10 × 7
-      ID Name      Age Sex    City     sales_data       model_object
-   &lt;dbl&gt; &lt;chr&gt;   &lt;dbl&gt; &lt;chr&gt;  &lt;chr&gt;    &lt;list&gt;           &lt;list&gt;      
- 1     1 Alice      25 Female Miami    &lt;tibble [4 × 3]&gt; &lt;lm&gt;        
- 2     2 Bob        30 Male   Miami    &lt;tibble [4 × 3]&gt; &lt;lm&gt;        
- 3     3 Charlie    22 Male   LA       &lt;tibble [4 × 3]&gt; &lt;lm&gt;        
- 4     4 Sophie     35 Female New York &lt;tibble [4 × 3]&gt; &lt;lm&gt;        
- 5     5 Eve        28 Female LA       &lt;tibble [4 × 3]&gt; &lt;lm&gt;        
- 6     6 Frank      NA Male   New York &lt;tibble [4 × 3]&gt; &lt;lm&gt;        
- 7     7 Grace      40 Female Chicago  &lt;tibble [4 × 3]&gt; &lt;lm&gt;        
- 8     8 Hannah     29 Female Chicago  &lt;tibble [4 × 3]&gt; &lt;lm&gt;        
- 9     9 Ian        21 Male   New York &lt;tibble [4 × 3]&gt; &lt;lm&gt;        
-10    10 Jack       33 Male   LA       &lt;tibble [4 × 3]&gt; &lt;lm&gt;        </code></pre>
-</div>
-</div>
-<p>Pull model object from Bob to access the sales trend across the years.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>df_tidyverse_join_longer_nested <span class="sc">%&gt;%</span> </span>
-<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(Name <span class="sc">==</span> <span class="st">'Bob'</span>) <span class="sc">%&gt;%</span> </span>
-<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pull</span>(model_object) <span class="sc">%&gt;%</span> </span>
-<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pluck</span>(<span class="dv">1</span>) <span class="sc">%&gt;%</span> </span>
-<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tidy</span>(<span class="at">conf.int =</span> <span class="cn">TRUE</span>,</span>
-<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a>       <span class="at">conf.level =</span> <span class="fl">0.95</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Warning in summary.lm(x): essentially perfect fit: summary may be unreliable</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Warning in summary.lm(object, ...): essentially perfect fit: summary may be
-unreliable</code></pre>
-</div>
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 2 × 7
-  term        estimate std.error statistic p.value conf.low conf.high
-  &lt;chr&gt;          &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;
-1 (Intercept)   -20000         0      -Inf       0   -20000    -20000
-2 year              10         0       Inf       0       10        10</code></pre>
-</div>
-</div>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>df_tidyverse_join_longer_nested <span class="sc">%&gt;%</span> </span>
-<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(Name <span class="sc">==</span> <span class="st">'Sophie'</span>) <span class="sc">%&gt;%</span> </span>
-<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pull</span>(model_object)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[[1]]
-
-Call:
-lm(formula = sales ~ year, data = .x)
-
-Coefficients:
-(Intercept)         year  
-      26582          -13  </code></pre>
+# A tibble: 4 × 2
+   year sales
+  &lt;int&gt; &lt;dbl&gt;
+1  2020   200
+2  2021   210
+3  2022   220
+4  2023   230</code></pre>
 </div>
 </div>
 
 
-</section>
 </section>
 
 </main> <!-- /main -->

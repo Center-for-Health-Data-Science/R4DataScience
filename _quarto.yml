@@ -26,20 +26,29 @@ website:
           - href: presentations/presentation1.qmd
             text: "Presentation 1: Base R and Tidyverse"
           - href: presentations/presentation2.qmd
-            text: "Presentation 2: Advanced Tidyverse"
+            text: "Presentation 2: Advanced Tidyverse" 
 
       - href: data/data.qmd
         text: "Data️"
 
       - section: "Exercises"
         contents:
-          - href: exercises/exercises0.qmd
+          - href: exercises/exercise0.qmd
             text: "Exercise 0: R script and Quarto"
+          - href: exercises/exercise1.qmd
+            text: "Exercise 1: Data Clean Up"
+          - href: exercises/exercise2.qmd
+            text: "Exercise 2: Data Clean Up"
+            
 
       - section: "Solutions"
         contents:
+            - href: solutions/solution1.qmd # solutions/solution_not_up.qmd #
+              text: "Exercise 1 - Solution"
             - href: solutions/solution2.qmd # solutions/solution_not_up.qmd #
               text: "Exercise 2 - Solution"
+            - href: solutions/solution3.qmd # solutions/solution_not_up.qmd #
+              text: "Exercise 3 - Solution"
 
       - section: "Cheat Sheets"
         contents:
