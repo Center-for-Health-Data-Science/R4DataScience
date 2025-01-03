@@ -123,7 +123,7 @@ ul.task-list li input[type="checkbox"] {
     <ul class="list-unstyled mt-1">
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../Slideshow/FromExceltoR.pdf" class="sidebar-item-text sidebar-link">
+  <a href="../slides/R4datascience_slides.pdf" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Slides️</span></a>
   </div>
 </li>
@@ -152,7 +152,7 @@ ul.task-list li input[type="checkbox"] {
   </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../data/data.qmd" class="sidebar-item-text sidebar-link">
+  <a href="../data/data.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Data️</span></a>
   </div>
 </li>
@@ -180,7 +180,7 @@ ul.task-list li input[type="checkbox"] {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../exercises/exercise2.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Exercise 2: Data Clean Up</span></a>
+ <span class="menu-text">Exercise 2: ggplot</span></a>
   </div>
 </li>
       </ul>
@@ -317,10 +317,20 @@ ul.task-list li input[type="checkbox"] {
 <ol start="5" type="1">
 <li>Clean the data according to your considerations.</li>
 </ol>
-<div>
-<a href="#hint-section1" class="collapse-toggle" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="hint-section1" style="text-decoration: none; font-size: 1em;"> Hint </a>
-<div id="hint-section1" class="collapse" style="margin-top: 10px;">
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Hint
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-1" class="callout-1-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
 <p>Have a look at <code>BloodPressure</code>, <code>BMI</code>, <code>Sex</code>, and <code>Diabetes</code>.</p>
+</div>
 </div>
 </div>
 </section>
@@ -335,20 +345,40 @@ ul.task-list li input[type="checkbox"] {
 <ol start="7" type="1">
 <li>Consider what variable the datasets should be joined on.</li>
 </ol>
-<div>
-<a href="#hint-section2" class="collapse-toggle" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="hint-section2" style="text-decoration: none; font-size: 1em;"> Hint </a>
-<div id="hint-section2" class="collapse" style="margin-top: 10px;">
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Hint
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-2" class="callout-2-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
 <p>The joining variable must be the same type in both datasets.</p>
+</div>
 </div>
 </div>
 <ol start="8" type="1">
 <li><p>Join the datasets by the variable you selected above.</p></li>
 <li><p>How many rows does the joined dataset have? Explain why.</p></li>
 </ol>
-<div>
-<a href="#hint-section3" class="collapse-toggle" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="hint-section3" style="text-decoration: none; font-size: 1em;"> Hint </a>
-<div id="hint-section3" class="collapse" style="margin-top: 10px;">
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-3-contents" aria-controls="callout-3" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Hint
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-3" class="callout-3-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
 <p>Because we used left_join, only the IDs that are in <code>diabetes_clinical_clean</code> are kept.</p>
+</div>
 </div>
 </div>
 <ol start="10" type="1">

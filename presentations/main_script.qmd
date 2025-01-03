@@ -1,0 +1,159 @@
+---
+title: "Main Script"
+format: html
+---
+
+## Load packages 
+
+## Source script
+All global variables (including functions) in the functions.R script will be loaded and appear in the Global environment in the top left corner. 
+```{r}
+source('./functions.R')
+```
+
+## Function calls 
+Calculate BMI.
+```{r}
+calculate_bmi(weight_kg = 70, height_m = 1.80)
+```
+
+```{r}
+calculate_bmi(70, 1.80)
+```
+
+```{r}
+calculate_bmi(1.80, 70)
+```
+
+```{r}
+calculate_bmi(height_m = 1.80, weight_kg = 70)
+```
+
+Estimate birth year of 50 year old person.
+```{r}
+estimate_birth_year(age = 50)
+```
+
+Estimate birth year of a person that was 50 years old in 2005. 
+```{r}
+estimate_birth_year(age = 50, currect_year = 2005)
+```
+
+## If-statements 
+Data on person 1.
+```{r}
+age <- 45
+weight_kg = 85
+height_m = 1.75
+```
+
+BMI should only be calculated for individuals over the age of 18. 
+```{r}
+if (age >= 18){
+  calculate_bmi(weight_kg, height_m)
+}
+```
+
+## For-loops 
+Data on 5 people 
+```{r}
+df <- data.frame(row.names = 1:5, 
+                 age = c(45, 16, 31, 56, 19), 
+                 weight_kg = c(85, 65, 81, 53, 76), 
+                 height_m = c(1.75, 1.55, 1.95, 1.51, 1.89)
+                 )
+```
+
+Print ID of individuals
+```{r}
+for (id in rownames(df)){
+  print(id)
+}
+```
+
+## Combination of function call, if-statement and for-loops. 
+Print BMI for individuals that are 18 years old or older. 
+```{r}
+for (id in rownames(df)) {
+  
+  if (df[id, 'age'] >= 18) {
+    
+    bmi <- calculate_bmi(df[id, 'weight_kg'], df[id, 'height_m'])
+    print(bmi)
+
+  }
+  
+}
+```
+
+Use `mapply` for alternative to calling function in for-loop. 
+```{r}
+mapply(FUN = calculate_bmi, 
+       weight_kg = df$weight_kg, 
+       height_m = df$height_m)
+```
+
+
+Add BMI and estimated birth year to data frame. 
+```{r}
+for (id in rownames(df)){
+  
+  # Add BMI to data frame
+  if (df[id, 'age'] >= 18) {
+    
+    bmi <- calculate_bmi(df[id, 'weight_kg'], df[id, 'height_m'])
+    df[id, 'bmi'] <- bmi
+    
+  } else {
+    
+    df[id, 'bmi'] <- NA
+    
+  }
+  
+  # Add birth year to data frame 
+  birth_year <- estimate_birth_year(age = df[id, 'age'])
+  df[id, 'birth_year'] <- birth_year
+  
+}
+```
+
+Have a look at the data frame. 
+```{r}
+df
+```
+
+## Advanced functions 
+
+The BMI function with out error handling returns a meaningless BMI value if given a negative weight.
+```{r}
+calculate_bmi(weight_kg = -50, height_m = 1.80)
+```
+
+The BMI function with error handling returns an error if given a negative weight.
+```{r eval=FALSE}
+calculate_bmi_2(weight_kg = -50, height_m = 1.80)
+```
+
+The BMI function with error handling returns an warning if a BMI outside the normal range is calculated. 
+```{r}
+calculate_bmi_2(weight_kg = 25, height_m = 1.80)
+```
+
+
+
+
+```{r}
+names <- c('Thilde', 'Diana', 'Henrike', 'Helene', 'Chelsea', 'Signe')
+
+for (name in names){
+  print(name)
+}
+```
+
+
+```{r}
+for (i in seq_along(names)){
+  print(names[i])
+}
+```
+

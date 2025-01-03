@@ -36,16 +36,10 @@ Consider the following:
 
 5.  Clean the data according to your considerations.
 
-<div>
-  <a href="#hint-section1" class="collapse-toggle" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="hint-section1" style="text-decoration: none; font-size: 1em;">
-    Hint
-  </a>
-  <div class="collapse" id="hint-section1" style="margin-top: 10px;">
-    
-  Have a look at `BloodPressure`, `BMI`, `Sex`, and `Diabetes`. 
-
-  </div>
-</div>
+::: {.callout-tip collapse="true"}
+## Hint
+Have a look at `BloodPressure`, `BMI`, `Sex`, and `Diabetes`. 
+:::
 
 ## Meta Data
 
@@ -55,30 +49,18 @@ Consider the following:
 
 7. Consider what variable the datasets should be joined on.
 
-<div>
-  <a href="#hint-section2" class="collapse-toggle" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="hint-section2" style="text-decoration: none; font-size: 1em;">
-    Hint
-  </a>
-  <div class="collapse" id="hint-section2" style="margin-top: 10px;">
-    
-  The joining variable must be the same type in both datasets.
-
-  </div>
-</div>
+::: {.callout-tip collapse="true"}
+## Hint
+The joining variable must be the same type in both datasets.
+:::
 
 8. Join the datasets by the variable you selected above.
 
 9. How many rows does the joined dataset have? Explain why. 
 
-<div>
-  <a href="#hint-section3" class="collapse-toggle" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="hint-section3" style="text-decoration: none; font-size: 1em;">
-    Hint
-  </a>
-  <div class="collapse" id="hint-section3" style="margin-top: 10px;">
-    
-  Because we used left_join, only the IDs that are in `diabetes_clinical_clean` are kept. 
-
-  </div>
-</div>
+::: {.callout-tip collapse="true"}
+## Hint
+Because we used left_join, only the IDs that are in `diabetes_clinical_clean` are kept. 
+:::
 
 10. Export the joined dataset. Think about which directory you want to save the file in. 

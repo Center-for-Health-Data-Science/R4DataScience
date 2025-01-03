@@ -157,7 +157,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <ul class="list-unstyled mt-1">
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../Slideshow/FromExceltoR.pdf" class="sidebar-item-text sidebar-link">
+  <a href="../slides/R4datascience_slides.pdf" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Slides️</span></a>
   </div>
 </li>
@@ -186,7 +186,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../data/data.qmd" class="sidebar-item-text sidebar-link">
+  <a href="../data/data.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Data️</span></a>
   </div>
 </li>
@@ -214,7 +214,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../exercises/exercise2.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Exercise 2: Data Clean Up</span></a>
+ <span class="menu-text">Exercise 2: ggplot</span></a>
   </div>
 </li>
       </ul>
@@ -359,16 +359,26 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <ol start="4" type="1">
 <li>Restructure the glucose dataset into a long format. How many rows are there per ID? Does that make sense?</li>
 </ol>
-<div>
-<a href="#hint-section1" class="collapse-toggle" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="hint-section1" style="text-decoration: none; font-size: 1em;"> Hint </a>
-<div id="hint-section1" class="collapse" style="margin-top: 10px;">
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Hint
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-1" class="callout-1-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
 <p>Remember the flow:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">pivot_longer</span>(<span class="at">cols =</span> LIST_WITH_COLUMNS_TO_PIVOT,</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>             <span class="at">names_to =</span> <span class="st">"NEW_COLUMN_CONTAINING_COLUMN_NAMES"</span>,</span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>             <span class="at">values_to =</span> <span class="st">"NEW_COLUMN_CONTAINING_COLUMN_VALUES"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>Have a look at the slides for better overview.</p>
+<p>Have a look at slide 16 for a visual overview.</p>
+</div>
 </div>
 </div>
 <div class="cell">
@@ -394,10 +404,20 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <ol start="5" type="1">
 <li>Change the glucose measurements to numeric variable.</li>
 </ol>
-<div>
-<a href="#hint-section2" class="collapse-toggle" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="hint-section2" style="text-decoration: none; font-size: 1em;"> Hint </a>
-<div id="hint-section2" class="collapse" style="margin-top: 10px;">
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Hint
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-2" class="callout-2-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
 <p>The <code>stringr</code> packages is a part of tidyverse and has many functions for manipulating strings. Find a function that can <strong>split</strong> the string so you can extract the numbers on the other side of the underscore.</p>
+</div>
 </div>
 </div>
 <div class="cell">
@@ -420,14 +440,24 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <ol start="6" type="1">
 <li>Nest the glucose measurements and values such that there is only one row per ID.</li>
 </ol>
-<div>
-<a href="#hint-section3" class="collapse-toggle" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="hint-section3" style="text-decoration: none; font-size: 1em;"> Hint </a>
-<div id="hint-section3" class="collapse" style="margin-top: 10px;">
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-3-contents" aria-controls="callout-3" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Hint
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-3" class="callout-3-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
 <p>Remember the flow:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">group_by</span>() <span class="sc">%&gt;%</span> </span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">nest</span>() <span class="sc">%&gt;%</span> </span>
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
 </div>
 </div>
 </div>
@@ -474,10 +504,20 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <ol start="8" type="1">
 <li>Pull the glucose measurements (<code>OGTT</code>) from your favorite ID.</li>
 </ol>
-<div>
-<a href="#hint-section4" class="collapse-toggle" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="hint-section4" style="text-decoration: none; font-size: 1em;"> Hint </a>
-<div id="hint-section4" class="collapse" style="margin-top: 10px;">
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-4-contents" aria-controls="callout-4" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Hint
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-4" class="callout-4-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
 <p>First <code>filter</code> for your favorite ID and then <code>pull</code> the nested column.</p>
+</div>
 </div>
 </div>
 <div class="cell">
@@ -516,10 +556,20 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <ol start="10" type="1">
 <li>Calculate the mean glucose measure for each measurement.</li>
 </ol>
-<div>
-<a href="#hint-section5" class="collapse-toggle" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="hint-section5" style="text-decoration: none; font-size: 1em;"> Hint </a>
-<div id="hint-section5" class="collapse" style="margin-top: 10px;">
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-5-contents" aria-controls="callout-5" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Hint
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-5" class="callout-5-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
 <p>You will need to use <code>unnest()</code>, <code>group_by()</code>, and <code>summerize()</code>.</p>
+</div>
 </div>
 </div>
 <div class="cell">
@@ -566,10 +616,24 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <ol start="12" type="1">
 <li>Recreate the plot you made in Exercise 10 and include the mean value for each glucose measurement for the two Diabetes statuses (0 and 1).</li>
 </ol>
-<div>
-<a href="#hint-section6" class="collapse-toggle" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="hint-section6" style="text-decoration: none; font-size: 1em;"> Hint </a>
-<div id="hint-section6" class="collapse" style="margin-top: 10px;">
-<p>There are several ways to solve this task. There is a workflow suggestion: - The line in the plot is connected by ID. Create new IDs for the mean values that do not already exist in the dataset. Use <code>RANDOM_ID %in% df$ID</code> to check if an ID is already present. - Data from another dataset can be added to the plot like this: <code>+ geom_point(DATA, aes(x = VAR1, y = VAR2, group = VAR3))</code></p>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-6-contents" aria-controls="callout-6" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Hint
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-6" class="callout-6-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>There are several ways to solve this task. There is a workflow suggestion:</p>
+<ul>
+<li><p>The line in the plot is connected by ID. Create new IDs for the mean values that do not already exist in the dataset. Use <code>RANDOM_ID %in% df$ID</code> to check if an ID is already present.</p></li>
+<li><p>Data from another dataset can be added to the plot like this: <code>+ geom_point(DATA, aes(x = VAR1, y = VAR2, group = VAR3))</code></p></li>
+</ul>
+</div>
 </div>
 </div>
 <p>The points in the plot is connected by ID. Let’s find two ID’s (one for <code>Diabetes == 0</code> and another for <code>Diabetes == 1</code>) that are not in the data. We can use the same numbers as the Diabetes status.</p>

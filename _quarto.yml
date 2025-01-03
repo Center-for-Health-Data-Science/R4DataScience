@@ -18,7 +18,7 @@ website:
     collapse-level: 1
     contents:
     
-      - href: Slideshow/FromExceltoR.pdf
+      - href: slides/R4datascience_slides.pdf
         text: "Slides️"
 
       - section: "Presentations"
@@ -38,9 +38,8 @@ website:
           - href: exercises/exercise1.qmd
             text: "Exercise 1: Data Clean Up"
           - href: exercises/exercise2.qmd
-            text: "Exercise 2: Data Clean Up"
+            text: "Exercise 2: ggplot"
             
-
       - section: "Solutions"
         contents:
             - href: solutions/solution1.qmd # solutions/solution_not_up.qmd #

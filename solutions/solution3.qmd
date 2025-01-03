@@ -9,7 +9,7 @@ project:
 ## Getting started 
 
 1. Load packages. 
-```{r}
+```{r message=FALSE}
 library(tidyverse)
 ```
 
@@ -29,7 +29,7 @@ diabetes_glucose %>%
   geom_point() 
 ```
 
-4. Make a scatter plot of PhysicalActivity and BMI. Do you see a trend?
+4. Make a scatter plot of `PhysicalActivity` and `BMI.` Do you see a trend?
 ```{r}
 diabetes_glucose %>% 
   ggplot(aes(x = PhysicalActivity, 
@@ -37,7 +37,7 @@ diabetes_glucose %>%
   geom_point() 
 ```
 
-5. Now make the same two plots as above, and color by Diabetes. Do you see a trend?
+5. Now make the same two plots as above, and color by `Diabetes.` Do you see a trend?
 ```{r}
 diabetes_glucose %>% 
   ggplot(aes(x = BloodPressure, 
@@ -54,7 +54,7 @@ diabetes_glucose %>%
   geom_point() 
 ```
 
-6. Plot a boxplot of BMI across Diabaetes. Give the plot a meaningful title.
+6. Plot a boxplot of `BMI` across `Diabaetes.` Give the plot a meaningful title.
 ```{r}
 diabetes_glucose %>% 
   ggplot(aes(y = BMI, 
@@ -64,7 +64,7 @@ diabetes_glucose %>%
   labs(title = 'Distribution of BMI Across Diabetes')
 ```
 
-7. Plot a boxplot of PhysicalActivity across Smoker. Give the plot a meaningful title.
+7. Plot a boxplot of `PhysicalActivity` across `Smoker`. Give the plot a meaningful title.
 ```{r}
 diabetes_glucose %>% 
   ggplot(aes(y = PhysicalActivity, 
@@ -76,11 +76,10 @@ diabetes_glucose %>%
 
 
 
-
 ## Plotting - Part 2
 For plotting the data inside the nested variable (glucose measurements) the data needs to be unnested. 
 
-8. Boxplots of glucose measurements for time 0 across Diabetes. Give the plot a meaningful title.
+8. Boxplots of glucose measurements for time 0 across `Diabetes.` Give the plot a meaningful title.
 ```{r}
 diabetes_glucose %>%
   unnest(OGTT) %>% 
@@ -93,7 +92,7 @@ diabetes_glucose %>%
   labs(title = 'Glucose Measurement for Time Point 0 (fasted)')
 ```
 
-9. Boxplots of glucose measurements across time points and Diabetes. Give the plot a meaningful title.
+9. Boxplots of glucose measurements across time points and `Diabetes.` Give the plot a meaningful title.
 ```{r}
 diabetes_glucose %>%
   unnest(OGTT) %>% 
@@ -106,7 +105,7 @@ diabetes_glucose %>%
   labs(title = 'Glucose Measurements for Time Point 0, 60, and 120')
 ```
 
-10. Create a figure that visualizes glucose measurements at each time point (Measurement), stratified by patient ID. Give the plot a meaningful title.
+10. Create a figure that visualizes glucose measurements at each time point, stratified by patient ID. Give the plot a meaningful title.
 ```{r}
 diabetes_glucose %>%
   unnest(OGTT) %>% 
@@ -119,16 +118,11 @@ diabetes_glucose %>%
 
 11. Calculate the mean glucose measure for each measurement.
 
-<div>
-  <a href="#hint-section" class="collapse-toggle" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="hint-section" style="text-decoration: none; font-size: 1em;">
-    Hint
-  </a>
-  <div class="collapse" id="hint-section" style="margin-top: 10px;">
-    
-  You will need to use `unnest()`, `group_by()`, and `summerize()`.
+::: {.callout-tip collapse="true"}
+## Hint
+You will need to use `unnest()`, `group_by()`, and `summerize()`.
+:::
 
-  </div>
-</div>
 
 ```{r}
 diabetes_glucose %>%
@@ -152,18 +146,15 @@ This next exercise might be a bit more challenging. It requires multiple operati
 
 13. Recreate the plot you made in Exercise 10 and include the mean value for each glucose measurement for the two Diabetes statuses (0 and 1).
 
-<div>
-  <a href="#hint-section" class="collapse-toggle" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="hint-section" style="text-decoration: none; font-size: 1em;">
-    Hint
-  </a>
-  <div class="collapse" id="hint-section" style="margin-top: 10px;">
-    
-  There are several ways to solve this task. There is a workflow suggestion:
+::: {.callout-tip collapse="true"}
+## Hint
+There are several ways to solve this task. There is a workflow suggestion:
+
   - The line in the plot is connected by ID. Create new IDs for the mean values that do not already exist in the dataset. Use `RANDOM_ID %in% df$ID` to check if an ID is already present. 
+  
   - Data from another dataset can be added to the plot like this: `+ geom_point(DATA, aes(x = VAR1, y = VAR2, group = VAR3))`
 
-  </div>
-</div>
+:::
 
 The points in the plot is connected by ID. Let's find two ID's (one for `Diabetes == 0` and another for `Diabetes == 1`) that are not in the data. We can use the same numbers as the Diabetes status. 
 ```{r}
