@@ -20,6 +20,40 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 
@@ -307,17 +341,21 @@ ul.task-list li input[type="checkbox"] {
 <section id="working-directories" class="level2">
 <h2 class="anchored" data-anchor-id="working-directories">Working directories</h2>
 <ol start="5" type="1">
-<li><strong>Open R studio</strong>.</li>
-<li><strong>Access your current working directory</strong> by writing <code>getwd()</code> in the console.</li>
+<li><p><strong>Open R studio</strong>.</p></li>
+<li><p><strong>Access your current working directory</strong> by writing <code>getwd()</code> in the console.</p></li>
 </ol>
-<p>The working directory in R (or other programming environments) is the folder on your computer where R looks for files to read or write by default. When you load or save data, R will use the working directory unless you specify another path. A path can either be <strong>absolute</strong> or <strong>relative</strong>: - <strong>Absolute path</strong>: The path from the root of your file system to the input file. - <strong>Relative path</strong>: The path from the working directory to the input file.</p>
+<p>The working directory in R (or other programming environments) is the folder on your computer where R looks for files to read or write by default. When you load or save data, R will use the working directory unless you specify another path. A path can either be <strong>absolute</strong> or <strong>relative</strong>:</p>
+<ul>
+<li><p><strong>Absolute path</strong>: The path from the root of your file system to the input file.</p></li>
+<li><p><strong>Relative path</strong>: The path from the working directory to the input file.</p></li>
+</ul>
 </section>
 <section id="r-script" class="level2">
 <h2 class="anchored" data-anchor-id="r-script">R Script</h2>
 <ol start="7" type="1">
 <li>Create an R script and save it in your work folder.</li>
 </ol>
-<p>An R script is a plain text file containing a series of R commands and code used for data analysis. R scripts have a <code>.R</code> extension and can be executed line-by-line in an interactive R session or as a whole script. They are ideal for automating workflows and keeping your analyses reproducible and organized. Code can be run</p>
+<p>An R script is a plain text file containing a series of R commands and code used for data analysis. R scripts have a <code>.R</code> extension and can be executed line-by-line in an interactive R session or as a whole script. They are ideal for automating workflows and keeping your analyses reproducible and organized. R scripts can be submitted to a job on a supercomputer unlike Quarto documents.</p>
 <ol start="9" type="1">
 <li><p>Type <code>getwd()</code> in your R script and run the line. Compare the working directory with the one from the console.</p></li>
 <li><p>Change the working directory using <code>setwd()</code>.</p></li>
@@ -334,12 +372,36 @@ ul.task-list li input[type="checkbox"] {
 <ol start="14" type="1">
 <li><p>Type <code>getwd()</code> in a code chunk in your Quarto document and run the line. Compare the working directory with the one from the console.</p></li>
 <li><p>Change the working directory in one chuck using <code>setwd()</code>.</p></li>
-<li><p>Run <code>getwd()</code> in the same chunk as <code>setwd()</code> AND another. What do you observe?</p></li>
+<li><p>Run <code>getwd()</code> in the same chunk as <code>setwd()</code> AND in another chunk. What do you observe?</p></li>
+</ol>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Hint
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-1" class="callout-1-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">setwd</span>(<span class="st">''</span>)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">getwd</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">getwd</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
+</div>
+<ol start="17" type="1">
 <li><p>Create some code chunks, write text and headers. Re-save the file.</p></li>
 <li><p>Render the Quarto document and have a look at the html file.</p></li>
 </ol>
 <div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -348,7 +410,7 @@ Resources for Quarto
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-1" class="callout-1-contents callout-collapse collapse">
+<div id="callout-2" class="callout-2-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <ul>
 <li><p><a href="https://quarto.org">Quarto website</a><br>
@@ -371,9 +433,30 @@ Resources for Quarto
 </figure>
 </div>
 <ol start="19" type="1">
-<li><p>Create an R project by clicking the <em>Project (None)</em> in the top right → <em>New Project</em> → <em>Existing Directory</em> and choose an appropriate location.</p></li>
-<li><p>Check the working directory of the R script and Quarto document. Is it as you expected?</p></li>
-<li><p>If you like the flow of the R project, keep it. If not, delete it. It is not necessary to have an R project.</p></li>
+<li><p>Create an R project by clicking the <em>Project (None)</em> in the top right → <em>New Project</em> → <em>Existing Directory</em> and choose an appropriate location. Look at the top-right corner to check that you are in your R project.</p></li>
+<li><p>Reopen the the R script and Quarto document you created in Exercise 7 and 13 respectively. Check each of their working directories. Are they as you expect? Explain.</p></li>
+</ol>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-3-contents" aria-controls="callout-3" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Hint
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-3" class="callout-3-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<ul>
+<li><p>The working directory of the R script is the same as the location of the <code>.Rproj</code> file.</p></li>
+<li><p>The working directory of the Quarto document is always the same as the location of the document.</p></li>
+</ul>
+</div>
+</div>
+</div>
+<ol start="21" type="1">
+<li>If you like the flow of the R project, keep it. If not, delete it. It is not necessary to have an R project. <strong>NB</strong> If you delete it, click the R project drop-down menu in the top-right corner → <em>Close Project</em>.</li>
 </ol>
 
 

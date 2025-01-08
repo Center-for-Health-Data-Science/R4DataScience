@@ -1,5 +1,5 @@
 ---
-title: "Exercise 3 - solutions: ggplot2 (INCLUDE?)"
+title: "Exercise 3 - Solutions: ggplot2"
 format: html
 project:
  type: website
@@ -19,7 +19,7 @@ diabetes_glucose <- read_rds('../out/diabetes_glucose.rds')
 ```
 
 ## Plotting - Part 1
-We will have you make some basic plots to get your started with ggplot again. 
+We will have you make some basic plots to get you started with ggplot again. 
 
 3. Make a scatter plot of Age and Blood Pressure Do you see a trend?
 ```{r}
@@ -144,7 +144,9 @@ glucose_mean
 
 This next exercise might be a bit more challenging. It requires multiple operations and might involve some techniques that were not explicitly shown in the presentations. 
 
-13. Recreate the plot you made in Exercise 10 and include the mean value for each glucose measurement for the two Diabetes statuses (0 and 1).
+13. Recreate the plot you made in Exercise 10 and include the mean value for each glucose measurement for the two Diabetes statuses (0 and 1) like this:
+
+![](../out/figure3_13.png){fig-align="center"}
 
 ::: {.callout-tip collapse="true"}
 ## Hint
@@ -193,4 +195,108 @@ diabetes_glucose %>%
 ggsave('../out/figure3_13.png')
 ```
 
+## Plotting - Part 3: PCA 
+
+For this part we will a tutorial to make a principal component analysis (PCA): https://cran.r-project.org/web/packages/ggfortify/vignettes/plot_pca.html. 
+13. Have a look at your diabetes data set. Can you use all the variables to perform PCA? Subset the dataset to only include the relevant variables. 
+WHAT TO DO WITH OGTT
+
+::: {.callout-tip collapse="true"}
+## Hint
+PCA can only be performed on numerical values. Extract these (except ID) from the dataset.
+
+:::
+
+```{r}
+numerical_columns <- sapply(diabetes_glucose, is.numeric)
+numerical_columns['ID'] <- FALSE
+diabetes_glucose_numerical <- diabetes_glucose[numerical_columns]
+```
+
+
+```{r}
+diabetes_glucose_unnest_wide <- diabetes_glucose %>% 
+  unnest(OGTT) %>% 
+  pivot_wider(names_from = Measurement, 
+              values_from = `Glucose (mmol/L)`, 
+              names_prefix = "Measurement_"
+              )
+
+numerical_columns <- sapply(diabetes_glucose_unnest_wide, is.numeric)
+numerical_columns['ID'] <- FALSE
+diabetes_glucose_numerical <- diabetes_glucose_unnest_wide[numerical_columns]
+```
+
+14. Remove NAs
+```{r}
+diabetes_glucose_numerical_remove_NA <- drop_na(diabetes_glucose_numerical)
+diabetes_glucose_remove_NA <- drop_na(diabetes_glucose, any_of(colnames(diabetes_glucose_numerical)))
+```
+
+
+15. Perform the **Plotting PCA (Principal Component Analysis)** part of the tutorial on your diabetes data. Think about which variables to color by. 
+
+::: {.callout-tip collapse="true"}
+## Hint
+
+- Notice how you can use the arguments `color` and `colour` interchangeably. 
+
+- 
+
+:::
+
+```{r}
+library(ggfortify)
+
+pca_res <- prcomp(diabetes_glucose_numerical_remove_NA, scale. = TRUE)
+
+autoplot(pca_res, data = diabetes_glucose_remove_NA, color = "Diabetes")
+```
+
+```{r}
+autoplot(pca_res, data = diabetes_glucose_remove_NA, colour = 'Diabetes', label = TRUE, label.size = 3)
+```
+
+```{r}
+autoplot(pca_res, data = diabetes_glucose_remove_NA, colour = 'Diabetes', shape = FALSE, label.size = 3)
+```
+
+```{r}
+autoplot(pca_res, data = diabetes_glucose_remove_NA, colour = 'Diabetes', loadings = TRUE)
+```
+
+```{r}
+autoplot(pca_res, data = diabetes_glucose_remove_NA, colour = 'Diabetes',
+         loadings = TRUE, loadings.colour = 'blue',
+         loadings.label = TRUE, loadings.label.size = 3)
+```
+
+16. Make your last plot personal by adding a ggplot `theme`, title and whatever else you would like.
+
+::: {.callout-note collapse="true"}
+## Tip
+
+Want to change the size of your plot: 
+
+1. Copy-paste the plot-code to the console. 
+
+2. Press *Export* → *Copy to Clipboard...*
+
+3. Drag the plot in the bottom-right corner to adjust the size.
+
+4. Note down the width and the height and write the values to the `width` and `height` arguments of the `ggsave` function.
+
+:::
+
+```{r}
+autoplot(pca_res, data = diabetes_glucose_remove_NA, colour = "Diabetes",
+         loadings = TRUE, loadings.colour = "grey30", loadings.label.colour = "black",
+         loadings.label = TRUE, loadings.label.size = 3.5) + 
+  theme_minimal() + 
+  labs(title = "PCA of Diabetes Dataset")
+
+# ggsave('../figures/PCA_diabetes.png', width = 7, height = 5)
+```
+
+17. Render you document and review the html file.
 

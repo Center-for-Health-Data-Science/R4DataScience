@@ -24,9 +24,17 @@ df_tidyverse <- df_baseR
 
 ## Base R and Tidyverse
 
-From here, each task is solved in both the base R and tidyverse way.
+Access the `Age` column:
 
-Access the Age column:
+```{r results="hide"}
+# Base R 
+df_baseR['Age']
+
+# Tidyverse 
+df_tidyverse %>% select(Age)
+```
+
+Access the `Age` column as a vector:
 
 ```{r results="hide"}
 # Base R 
@@ -93,6 +101,43 @@ df_tidyverse %>%
   filter(Age <= 30, sales_2022 > 200)
 ```
 
+Add column. 
+```{r results="hide"}
+# Base R 
+df_baseR$mood <- "happy"
+
+# Tidyverse 
+df_tidyverse <- df_tidyverse %>% 
+  mutate(mood = "happy")
+```
+
+Conditions using `ifelse`. 
+```{r results="hide"}
+# Base R 
+df_baseR$raise <- ifelse(df_baseR$sales_2023 > df_baseR$sales_2022, "yes", "no")
+
+# Tidyverse 
+df_tidyverse <- df_tidyverse %>% 
+  mutate(raise = ifelse(sales_2023 > sales_2022, "yes", "no"))
+```
+
+Conditions using `case_when`. 
+```{r results="hide"}
+# Base R 
+df_baseR$group <- ifelse(df_baseR$Age < 30 & df_baseR$Sex == "Female", "young_female",
+                  ifelse(df_baseR$Age < 30 & df_baseR$Sex == "Male", "young_male",
+                  ifelse(df_baseR$Age >= 30 & df_baseR$Sex == "Female", "mature_female",
+                  ifelse(df_baseR$Age >= 30 & df_baseR$Sex == "Male", "mature_male", NA))))
+
+# Tidyverse 
+df_tidyverse <- df_tidyverse %>% 
+  mutate(group = case_when(Age < 30 & Sex == "Female" ~ "young_female",
+                           Age < 30 & Sex == "Male" ~ "young_male",
+                           Age >= 30 & Sex == "Female" ~ "mature_female",
+                           Age >= 30 & Sex == "Male" ~ "mature_male", 
+                           .default = NA))
+```
+
 Check which columns have NAs.
 
 ```{r results="hide"}
@@ -139,7 +184,7 @@ df_tidyverse %>%
   select(Age, Sex)
 ```
 
-The `df_location` data frame contains information about the cities of the sales people. Copy paste this code into a new chunk and run the code.\
+The `df_location` data frame contains information about the cities of the sales people. 
 
 ```{r results="hide"}
 set.seed(101)
@@ -174,16 +219,69 @@ table(df_baseR_merged$City)
 df_tidyverse_join %>% count(City)
 ```
 
-Plot the city distribution.
+## String manipulation 
 
-```{r results="hide"}
-# Base R
-barplot(table(df_baseR_merged$City))
+We will do string manipulation the tidyverse way. 
 
-# Tidyverse
-df_baseR_merged %>% 
-  ggplot(aes(x = City)) + 
-  geom_bar()
+The `paste` function concatenates two strings to one. 
+```{r}
+paste('Alice', 'Hansen')
+```
+
+The `sep` argument is a space by default, but can be changed to any character. 
+```{r}
+paste('Alice', 'Hansen', sep = "_")
+```
+
+The `paste0` function concatenates two strings to one without adding any separator between them.
+```{r}
+paste0('Alice', 'Hansen')
+```
+
+Let's give all the employees the last name *Hansen*. 
+```{r}
+df_tidyverse_join <- df_tidyverse_join %>% 
+  mutate(Name = paste(Name, 'Hansen'))
+
+head(df_tidyverse_join)
+```
+
+We use the `str_split` function to split a string into multiple parts in a list. 
+```{r}
+str_split('Alice Hansen', pattern = ' ')
+```
+
+```{r}
+str_split('Alice_Hansen_Jensen', pattern = '_')
+```
+
+Indexing one of the strings in the list using the `str_split_i` function.
+```{r}
+str_split_i('Alice_Hansen_Jensen', pattern = '_', i = 2)
+```
+
+Let's remove the last name we just gave the employees. 
+```{r}
+df_tidyverse_join <- df_tidyverse_join %>% 
+  mutate(Name = str_split_i(Name, pattern = ' ', i = 1))
+
+head(df_tidyverse_join)
+```
+
+Detect substring in main string using `str_detect`.
+```{r}
+str_detect('Alice', 'A')
+```
+
+```{r}
+str_detect('Alice', 'B')
+```
+
+Check is "A" or "a" in `Name`.
+```{r}
+df_tidyverse_join %>% 
+  mutate(A_in_name = str_detect(Name, 'A|a')) %>% 
+  head()
 ```
 
 ## Export Dataset

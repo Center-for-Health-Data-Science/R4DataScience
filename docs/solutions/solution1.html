@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Presentation 1: Base R and Tidyverse / Data Clean-up and Wrangling – R for Data Science</title>
+<title>Presentation 1 - Solutions: Base R and Tidyverse / Data Clean-up and Wrangling – R for Data Science</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -306,7 +306,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../solutions/solution1.html">Solutions</a></li><li class="breadcrumb-item"><a href="../solutions/solution1.html">Exercise 1 - Solution</a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title">Presentation 1: Base R and Tidyverse / Data Clean-up and Wrangling</h1>
+<h1 class="title">Presentation 1 - Solutions: Base R and Tidyverse / Data Clean-up and Wrangling</h1>
 </div>
 
 
@@ -603,7 +603,7 @@ Self-employe)d  SELF-EMPLOYED  Self-employed Self.-employed
 </ol>
 <p>My considerations:</p>
 <ul>
-<li><p>Both <code>Married</code> and <code>Work</code> has a lot of mistakes. From looking at the mistakes the mistakes can be fixed like this: <code>Married</code> is changed to ‘No’ if an ‘N’ is present in the string and ‘Yes’ if ‘Y’ is present.</p></li>
+<li><p>Both <code>Married</code> and <code>Work</code> has a lot of mistakes. From looking at the mistakes the mistakes can be fixed like this: <code>Married</code> is changed to ‘No’ if an ‘N’ is present in the string and ‘Yes’ if ‘Y’ is present. For <code>Work</code> the values that contain a capital “S” can be changed to “Self-employed”, “Retired” it looking fine, and for “Public” and “Private”, we need to correct these manually.</p></li>
 <li><p><code>ID</code> is changed to numerical to match the <code>diabetes_clean</code> dataset.</p></li>
 </ul>
 <div class="cell">
@@ -618,10 +618,15 @@ Self-employe)d  SELF-EMPLOYED  Self-employed Self.-employed
 <span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a>                             <span class="fu">str_detect</span>(Married, <span class="st">'Y'</span>) <span class="sc">~</span> <span class="st">'Yes'</span>,</span>
 <span id="cb39-4"><a href="#cb39-4" aria-hidden="true" tabindex="-1"></a>                             <span class="at">.default =</span> <span class="cn">NA</span></span>
 <span id="cb39-5"><a href="#cb39-5" aria-hidden="true" tabindex="-1"></a>                             ),</span>
-<span id="cb39-6"><a href="#cb39-6" aria-hidden="true" tabindex="-1"></a>         <span class="at">ID =</span> <span class="fu">as.numeric</span>(ID)</span>
-<span id="cb39-7"><a href="#cb39-7" aria-hidden="true" tabindex="-1"></a>         )</span>
-<span id="cb39-8"><a href="#cb39-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb39-9"><a href="#cb39-9" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(diabetes_meta_clean)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb39-6"><a href="#cb39-6" aria-hidden="true" tabindex="-1"></a>         <span class="at">Work =</span> <span class="fu">case_when</span>(<span class="fu">str_starts</span>(Work, <span class="st">'S'</span>) <span class="sc">~</span> <span class="st">'Self-employed'</span>,</span>
+<span id="cb39-7"><a href="#cb39-7" aria-hidden="true" tabindex="-1"></a>                          Work <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">'-Public'</span>, <span class="st">'*Public'</span>, <span class="st">'*Public'</span>, <span class="st">'P!UBLIC'</span>, <span class="st">'Pu.blic'</span>, <span class="st">'Publ&amp;ic'</span>, <span class="st">'Publi-c'</span>, <span class="st">'Publi+c'</span>, <span class="st">'Public'</span>) <span class="sc">~</span> <span class="st">'Public'</span>,</span>
+<span id="cb39-8"><a href="#cb39-8" aria-hidden="true" tabindex="-1"></a>                          Work <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">'P#rivate'</span>, <span class="st">'P%rivate'</span>, <span class="st">'Priva.te'</span>, <span class="st">'Privat-e'</span>, <span class="st">'Privat+e'</span>, <span class="st">'Private'</span>, <span class="st">'PRIVATE'</span>) <span class="sc">~</span> <span class="st">'Private'</span>,</span>
+<span id="cb39-9"><a href="#cb39-9" aria-hidden="true" tabindex="-1"></a>                          <span class="at">.default =</span> <span class="cn">NA</span></span>
+<span id="cb39-10"><a href="#cb39-10" aria-hidden="true" tabindex="-1"></a>                          ),</span>
+<span id="cb39-11"><a href="#cb39-11" aria-hidden="true" tabindex="-1"></a>         <span class="at">ID =</span> <span class="fu">as.numeric</span>(ID)</span>
+<span id="cb39-12"><a href="#cb39-12" aria-hidden="true" tabindex="-1"></a>         )</span>
+<span id="cb39-13"><a href="#cb39-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb39-14"><a href="#cb39-14" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(diabetes_meta_clean)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 6 × 3
      ID Married Work   

@@ -1,0 +1,184 @@
+---
+title: "Exercise 4 - Solutions"
+format: html
+project:
+ type: website
+ output-dir: ../docs
+---
+
+## Functions
+
+1. Create a file that will contain your functions. 
+
+2. In the file, write a function that takes a dataframe and a numerical value and returns a boxplot. Do not worry about error or warning handling yet. **NB** If you modify the function script, be sure to save it and `source` it again so that your updates are reflected in the main script.
+
+::: {.callout-tip collapse="true"}
+## Hint
+
+`aes_string` allows the function to dynamically reference a column name from the dataframe.
+
+Example: `aes_string("colname")`
+
+:::
+
+## Main script
+
+3. Create a Quarto document and start by loading relevant packages. 
+```{r message=FALSE}
+library(tidyverse)
+library(glue)
+```
+
+4. Source the function script into the Quarto document. 
+```{r}
+source('solution4_functions.R')
+```
+
+5. Load data from the `.rds` you created in Exercise 2. 
+```{r}
+diabetes_glucose <- read_rds('../out/diabetes_glucose.rds')
+```
+
+6. Run the boxplot function for the diabetes dataset and the `Age` variable.
+```{r}
+boxplot(df = diabetes_glucose, var_num = 'Age')
+```
+
+7. In a for-loop, run the boxplot function for the diabetes dataset and each of the numerical variables in the script. 
+```{r}
+numerical_columns <- sapply(diabetes_glucose, is.numeric)
+numerical_colnames <- names(diabetes_glucose)[numerical_columns]
+```
+
+```{r}
+for (var_num in numerical_colnames){
+  
+  p <- boxplot(df = diabetes_glucose, var_num = var_num)
+  print(p)
+  # ggsave(paste0("../out/boxplot_", var_num,".png"))
+  
+}
+```
+
+8. Go back to your function script. Create a function that takes a dataframe and a categorical value and returns a bar plot.
+
+9. Run the function on the `Sex` variable. 
+```{r}
+bar_plot(df = diabetes_glucose, var_cat = 'Sex')
+```
+
+10. In a for-loop, run the bar plot function for the diabetes dataset and each of the categorical variables in the script.
+```{r}
+categorical_columns <- sapply(diabetes_glucose, is.character)
+categorical_colnames <- names(diabetes_glucose)[categorical_columns]
+```
+
+```{r}
+for (var_cat in categorical_colnames){
+  
+  p <- bar_plot(df = diabetes_glucose, var_cat = var_cat)
+  print(p)
+  # ggsave(paste0("../out/bar_plot_", var_cat,".png"))
+  
+}
+```
+
+11. It's time for a fun exercise! Customize your plot functions by adding a theme, colors and labels. Add a `ggsave` statement in your for-loops to recreate and save your plots.
+
+## Functions and error handling 
+
+12. In your function script, copy the function you created in Exercise 2 and modify it so that it generates an error if `var_num` is assigned a non-numerical argument. 
+
+::: {.callout-tip collapse="true"}
+## Hint
+
+When checking the class of the variables, make sure that they are in vector format. Have a look at Presentation 1 if you are unsure of how to access a variable in a data frame as a vector. 
+
+```{r eval=FALSE}
+is.numeric(vector)
+```
+
+:::
+
+13. Test the function by using `Sex` as the numerical variable argument.
+```{r eval=FALSE}
+boxplot_2(df = diabetes_glucose, var_num = 'Sex')
+# Gives an error.
+```
+
+14. Use the same logic for the function you created in Exercise 8.
+
+15. Test the function by using `Age` as the categorical variable argument.
+```{r eval=FALSE}
+bar_plot_2(df = diabetes_glucose, var_cat = 'Age')
+# Gives an error.
+```
+
+16. In Exercise 7, a boxplot have made for the `ID` variable if you simply looped over all the numcerical values. Avoid this using an if-statement. 
+```{r}
+for (var_num in numerical_colnames){
+  
+  if (var_num != 'ID'){
+    
+    p <- boxplot(df = diabetes_glucose, var_num = var_num)
+    print(p)
+    
+  }
+  
+}
+```
+
+17. Make a function that takes an ID and outputs a graph of the glucose measurement over time. There are several way to do this depending on how generalized your function is. The more generalized, the more difficult. 
+
+::: {.callout-tip collapse="true"}
+## Hint
+
+Remember that you need to put backticks when you access a `colname with spaces`. 
+
+When using `aes_string`, you need backticks **and** quotation marks: ``aes_string("`colname with spaces`")``. 
+
+:::
+
+18. Run the function on your favorite ID. 
+```{r}
+df <- diabetes_glucose %>% unnest(OGTT)
+
+glucose_measurement_id_plot(df = df, id = "12109")
+```
+
+19. Inspired by Exercise 3.13, create a function that takes a dataframe and a categorical variable as input, calculates the mean glucose levels over time for each category, and produces a line plot showing the mean glucose measurements across time points.
+
+::: {.callout-tip collapse="true"}
+## Hint
+
+The function requires the column name to be passed as a string. However, not all tidyverse functions can directly handle column names in this format. Fortunately, there is a workaround. For example, the `group_by()` function can dynamically reference a column name provided as a string using `.data[[...]]`:
+```{r eval=FALSE}
+var_cat <- "Age"
+
+df %>% 
+    group_by(Measurement, .data[[var_cat]])
+```
+
+Here, `.data` refers to the data frame being used — in this case, `df.`
+
+Also, you might get a warning like this *You can override using the* `.groups` *argument.* This can be solved adding `.groups = "drop"` to the `summerize` function. 
+
+:::
+
+20. Run the function with `Sex` as input. 
+```{r}
+glucose_measurement_mean_plot(df = df, var_cat = 'Sex')
+```
+
+21. In a for-loop, run the function on all categorical variables in the data frame. Between which groups do you visually notice the largest differences in the mean OGTT?
+```{r}
+for (var_cat in categorical_colnames){
+  
+  p <- glucose_measurement_mean_plot(df = df, var_cat = var_cat)
+  print(p)
+  
+}
+```
+
+
+Last. Render you document and review the generated html. If you get errors, correct them and re-render. 

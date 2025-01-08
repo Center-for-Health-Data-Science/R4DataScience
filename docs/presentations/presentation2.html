@@ -355,15 +355,16 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="cell">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(df_sales)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 6 × 9
-     ID Name      Age Sex    sales_2020 sales_2021 sales_2022 sales_2023 City   
-  &lt;dbl&gt; &lt;chr&gt;   &lt;dbl&gt; &lt;chr&gt;       &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt; &lt;chr&gt;  
-1     1 Alice      25 Female        100        110        120        100 Miami  
-2     2 Bob        30 Male          200        210        220        230 Miami  
-3     3 Charlie    22 Male          150        160        170        200 LA     
-4     4 Sophie     35 Female        300        320        340        250 New Yo…
-5     5 Eve        28 Female        250        240        250        270 LA     
-6     6 Frank      NA Male           NA        260        270        280 New Yo…</code></pre>
+<pre><code># A tibble: 6 × 12
+     ID Name      Age Sex    sales_2020 sales_2021 sales_2022 sales_2023 mood 
+  &lt;dbl&gt; &lt;chr&gt;   &lt;dbl&gt; &lt;chr&gt;       &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt; &lt;chr&gt;
+1     1 Alice      25 Female        100        110        120        100 happy
+2     2 Bob        30 Male          200        210        220        230 happy
+3     3 Charlie    22 Male          150        160        170        200 happy
+4     4 Sophie     35 Female        300        320        340        250 happy
+5     5 Eve        28 Female        250        240        250        270 happy
+6     6 Frank      NA Male           NA        260        270        280 happy
+# ℹ 3 more variables: raise &lt;chr&gt;, group &lt;chr&gt;, City &lt;chr&gt;</code></pre>
 </div>
 </div>
 </section>
@@ -379,15 +380,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(df_sales_longer)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 6 × 7
-     ID Name    Age Sex    City  year       sales
-  &lt;dbl&gt; &lt;chr&gt; &lt;dbl&gt; &lt;chr&gt;  &lt;chr&gt; &lt;chr&gt;      &lt;dbl&gt;
-1     1 Alice    25 Female Miami sales_2020   100
-2     1 Alice    25 Female Miami sales_2021   110
-3     1 Alice    25 Female Miami sales_2022   120
-4     1 Alice    25 Female Miami sales_2023   100
-5     2 Bob      30 Male   Miami sales_2020   200
-6     2 Bob      30 Male   Miami sales_2021   210</code></pre>
+<pre><code># A tibble: 6 × 10
+     ID Name    Age Sex    mood  raise group        City  year       sales
+  &lt;dbl&gt; &lt;chr&gt; &lt;dbl&gt; &lt;chr&gt;  &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;        &lt;chr&gt; &lt;chr&gt;      &lt;dbl&gt;
+1     1 Alice    25 Female happy no    young_female Miami sales_2020   100
+2     1 Alice    25 Female happy no    young_female Miami sales_2021   110
+3     1 Alice    25 Female happy no    young_female Miami sales_2022   120
+4     1 Alice    25 Female happy no    young_female Miami sales_2023   100
+5     2 Bob      30 Male   happy yes   mature_male  Miami sales_2020   200
+6     2 Bob      30 Male   happy yes   mature_male  Miami sales_2021   210</code></pre>
 </div>
 </div>
 <p>We can transform the year to integer.</p>
@@ -397,15 +398,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(df_sales_longer)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 6 × 7
-     ID Name    Age Sex    City   year sales
-  &lt;dbl&gt; &lt;chr&gt; &lt;dbl&gt; &lt;chr&gt;  &lt;chr&gt; &lt;int&gt; &lt;dbl&gt;
-1     1 Alice    25 Female Miami  2020   100
-2     1 Alice    25 Female Miami  2021   110
-3     1 Alice    25 Female Miami  2022   120
-4     1 Alice    25 Female Miami  2023   100
-5     2 Bob      30 Male   Miami  2020   200
-6     2 Bob      30 Male   Miami  2021   210</code></pre>
+<pre><code># A tibble: 6 × 10
+     ID Name    Age Sex    mood  raise group        City   year sales
+  &lt;dbl&gt; &lt;chr&gt; &lt;dbl&gt; &lt;chr&gt;  &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;        &lt;chr&gt; &lt;int&gt; &lt;dbl&gt;
+1     1 Alice    25 Female happy no    young_female Miami  2020   100
+2     1 Alice    25 Female happy no    young_female Miami  2021   110
+3     1 Alice    25 Female happy no    young_female Miami  2022   120
+4     1 Alice    25 Female happy no    young_female Miami  2023   100
+5     2 Bob      30 Male   happy yes   mature_male  Miami  2020   200
+6     2 Bob      30 Male   happy yes   mature_male  Miami  2021   210</code></pre>
 </div>
 </div>
 <p>Make the plot explained above (scatter and line plot over the sales development over the years for each person).</p>
@@ -440,27 +441,29 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Same content</span></span>
 <span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(df_sales)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 6 × 9
-     ID Name      Age Sex    sales_2020 sales_2021 sales_2022 sales_2023 City   
-  &lt;dbl&gt; &lt;chr&gt;   &lt;dbl&gt; &lt;chr&gt;       &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt; &lt;chr&gt;  
-1     1 Alice      25 Female        100        110        120        100 Miami  
-2     2 Bob        30 Male          200        210        220        230 Miami  
-3     3 Charlie    22 Male          150        160        170        200 LA     
-4     4 Sophie     35 Female        300        320        340        250 New Yo…
-5     5 Eve        28 Female        250        240        250        270 LA     
-6     6 Frank      NA Male           NA        260        270        280 New Yo…</code></pre>
+<pre><code># A tibble: 6 × 12
+     ID Name      Age Sex    sales_2020 sales_2021 sales_2022 sales_2023 mood 
+  &lt;dbl&gt; &lt;chr&gt;   &lt;dbl&gt; &lt;chr&gt;       &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt; &lt;chr&gt;
+1     1 Alice      25 Female        100        110        120        100 happy
+2     2 Bob        30 Male          200        210        220        230 happy
+3     3 Charlie    22 Male          150        160        170        200 happy
+4     4 Sophie     35 Female        300        320        340        250 happy
+5     5 Eve        28 Female        250        240        250        270 happy
+6     6 Frank      NA Male           NA        260        270        280 happy
+# ℹ 3 more variables: raise &lt;chr&gt;, group &lt;chr&gt;, City &lt;chr&gt;</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(df_sales_wider)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 6 × 9
-     ID Name      Age Sex    City    sales_2020 sales_2021 sales_2022 sales_2023
-  &lt;dbl&gt; &lt;chr&gt;   &lt;dbl&gt; &lt;chr&gt;  &lt;chr&gt;        &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt;
-1     1 Alice      25 Female Miami          100        110        120        100
-2     2 Bob        30 Male   Miami          200        210        220        230
-3     3 Charlie    22 Male   LA             150        160        170        200
-4     4 Sophie     35 Female New Yo…        300        320        340        250
-5     5 Eve        28 Female LA             250        240        250        270
-6     6 Frank      NA Male   New Yo…         NA        260        270        280</code></pre>
+<pre><code># A tibble: 6 × 12
+     ID Name      Age Sex    mood  raise group       City  sales_2020 sales_2021
+  &lt;dbl&gt; &lt;chr&gt;   &lt;dbl&gt; &lt;chr&gt;  &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;       &lt;chr&gt;      &lt;dbl&gt;      &lt;dbl&gt;
+1     1 Alice      25 Female happy no    young_fema… Miami        100        110
+2     2 Bob        30 Male   happy yes   mature_male Miami        200        210
+3     3 Charlie    22 Male   happy yes   young_male  LA           150        160
+4     4 Sophie     35 Female happy no    mature_fem… New …        300        320
+5     5 Eve        28 Female happy yes   young_fema… LA           250        240
+6     6 Frank      NA Male   happy yes   &lt;NA&gt;        New …         NA        260
+# ℹ 2 more variables: sales_2022 &lt;dbl&gt;, sales_2023 &lt;dbl&gt;</code></pre>
 </div>
 </div>
 </section>
@@ -475,15 +478,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(df_sales_longer_nested)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 6 × 6
-     ID Name      Age Sex    City     sales_data      
-  &lt;dbl&gt; &lt;chr&gt;   &lt;dbl&gt; &lt;chr&gt;  &lt;chr&gt;    &lt;list&gt;          
-1     1 Alice      25 Female Miami    &lt;tibble [4 × 2]&gt;
-2     2 Bob        30 Male   Miami    &lt;tibble [4 × 2]&gt;
-3     3 Charlie    22 Male   LA       &lt;tibble [4 × 2]&gt;
-4     4 Sophie     35 Female New York &lt;tibble [4 × 2]&gt;
-5     5 Eve        28 Female LA       &lt;tibble [4 × 2]&gt;
-6     6 Frank      NA Male   New York &lt;tibble [4 × 2]&gt;</code></pre>
+<pre><code># A tibble: 6 × 9
+     ID Name      Age Sex    mood  raise group         City     sales_data      
+  &lt;dbl&gt; &lt;chr&gt;   &lt;dbl&gt; &lt;chr&gt;  &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;         &lt;chr&gt;    &lt;list&gt;          
+1     1 Alice      25 Female happy no    young_female  Miami    &lt;tibble [4 × 2]&gt;
+2     2 Bob        30 Male   happy yes   mature_male   Miami    &lt;tibble [4 × 2]&gt;
+3     3 Charlie    22 Male   happy yes   young_male    LA       &lt;tibble [4 × 2]&gt;
+4     4 Sophie     35 Female happy no    mature_female New York &lt;tibble [4 × 2]&gt;
+5     5 Eve        28 Female happy yes   young_female  LA       &lt;tibble [4 × 2]&gt;
+6     6 Frank      NA Male   happy yes   &lt;NA&gt;          New York &lt;tibble [4 × 2]&gt;</code></pre>
 </div>
 </div>
 <p><strong>Note:</strong> Nested data cannot be exported as an Excel or CSV file. Instead, you need to export it as an RDS file, a format specifically designed to save R objects.</p>

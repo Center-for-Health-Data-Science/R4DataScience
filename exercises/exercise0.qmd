@@ -23,15 +23,20 @@ Your file tree should look something like this:
 ## Working directories
 
 5.  **Open R studio**.
+
 6.  **Access your current working directory** by writing `getwd()` in the console.
 
-The working directory in R (or other programming environments) is the folder on your computer where R looks for files to read or write by default. When you load or save data, R will use the working directory unless you specify another path. A path can either be **absolute** or **relative**: - **Absolute path**: The path from the root of your file system to the input file. - **Relative path**: The path from the working directory to the input file.
+The working directory in R (or other programming environments) is the folder on your computer where R looks for files to read or write by default. When you load or save data, R will use the working directory unless you specify another path. A path can either be **absolute** or **relative**: 
+
+- **Absolute path**: The path from the root of your file system to the input file. 
+
+- **Relative path**: The path from the working directory to the input file.
 
 ## R Script
 
 7.  Create an R script and save it in your work folder.
 
-An R script is a plain text file containing a series of R commands and code used for data analysis. R scripts have a `.R` extension and can be executed line-by-line in an interactive R session or as a whole script. They are ideal for automating workflows and keeping your analyses reproducible and organized. Code can be run
+An R script is a plain text file containing a series of R commands and code used for data analysis. R scripts have a `.R` extension and can be executed line-by-line in an interactive R session or as a whole script. They are ideal for automating workflows and keeping your analyses reproducible and organized. R scripts can be submitted to a job on a supercomputer unlike Quarto documents. 
 
 9.  Type `getwd()` in your R script and run the line. Compare the working directory with the one from the console.
 
@@ -51,7 +56,22 @@ Quarto is an open-source publishing system designed to help you create dynamic, 
 
 15. Change the working directory in one chuck using `setwd()`.
 
-16. Run `getwd()` in the same chunk as `setwd()` AND another. What do you observe?
+16. Run `getwd()` in the same chunk as `setwd()` AND in another chunk. What do you observe?
+
+::: {.callout-tip collapse="true"}
+## Hint
+
+```{r eval=FALSE}
+setwd('')
+getwd()
+```
+
+```{r eval=FALSE}
+getwd()
+```
+
+:::
+
 
 17. Create some code chunks, write text and headers. Re-save the file.
 
@@ -76,8 +96,17 @@ By default, a Quarto document’s working directory is its file location. While 
 
 ![](../figures/file_tree_Rproject.jpg){fig-align="center"}
 
-19. Create an R project by clicking the *Project (None)* in the top right → *New Project* → *Existing Directory* and choose an appropriate location. 
+19. Create an R project by clicking the *Project (None)* in the top right → *New Project* → *Existing Directory* and choose an appropriate location. Look at the top-right corner to check that you are in your R project. 
 
-20. Check the working directory of the R script and Quarto document. Is it as you expected?
+20. Reopen the the R script and Quarto document you created in Exercise 7 and 13 respectively. Check each of their working directories. Are they as you expect? Explain. 
 
-21. If you like the flow of the R project, keep it. If not, delete it. It is not necessary to have an R project.
+::: {.callout-tip collapse="true"}
+## Hint
+
+- The working directory of the R script is the same as the location of the `.Rproj` file. 
+
+- The working directory of the Quarto document is always the same as the location of the document. 
+
+:::
+
+21. If you like the flow of the R project, keep it. If not, delete it. It is not necessary to have an R project. **NB** If you delete it, click the R project drop-down menu in the top-right corner → *Close Project*.

@@ -37,3 +37,34 @@ rm(tree_wide,
    )
 
 
+######## PCA ######## 
+
+library(ggfortify)
+library(glue)
+
+iris_colnames <- colnames(iris)[1:4]
+
+for (colname1 in iris_colnames){
+  for (colname2 in iris_colnames){
+    if (!(colname1 == colname2)){
+      
+      iris %>% 
+        ggplot(aes_string(x = colname1, y = colname2, color = 'Species')) + 
+        geom_point()
+      
+      ggsave(glue('~/Desktop/DataLab/R4DataScience/figures/iris_{colname1}_{colname2}.png'), width = 6.5, height = 4.36)
+      
+    }
+  }
+}
+
+
+df <- iris[1:4]
+pca_res <- prcomp(df, scale. = TRUE)
+autoplot(pca_res, data = iris, color = "Species")
+ggsave(glue('~/Desktop/DataLab/R4DataScience/figures/iris_PCA.png'), width = 8.5, height = 5.5)
+
+
+
+
+

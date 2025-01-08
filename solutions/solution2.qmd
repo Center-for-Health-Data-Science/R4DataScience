@@ -1,5 +1,5 @@
 ---
-title: "Exercise 2 - solutions: Advanced Tidyveres"
+title: "Exercise 2 - Solutions: Advanced Tidyveres"
 format: html
 project:
  type: website
@@ -119,92 +119,7 @@ diabetes_glucose %>%
   pull(OGTT)
 ```
 
-9. Create a figure that visualizes glucose measurements at each time point (Measurement), stratified by patient ID. Give the plot a meaningful title.
-```{r}
-diabetes_glucose %>%
-  unnest(OGTT) %>% 
-  ggplot(aes(x = Measurement,
-             y = `Glucose (mmol/L)`)) +
-  geom_point(aes(color = Diabetes)) + 
-  geom_line(aes(group = ID, color = Diabetes)) + 
-  labs(title = 'Glucose Measurements Across Time Points by Diabetes Status')
-```
 
-10. Calculate the mean glucose measure for each measurement.
-
-::: {.callout-tip collapse="true"}
-## Hint
-You will need to use `unnest()`, `group_by()`, and `summerize()`.
-:::
-
-```{r}
-diabetes_glucose %>%
-  unnest(OGTT) %>% 
-  group_by(Measurement) %>% 
-  summarize(`Glucose (mmol/L)` = mean(`Glucose (mmol/L)`))
-```
-
-11. Make the same calculation and stratify on Diabetes. 
-```{r}
-glucose_mean <- diabetes_glucose %>%
-  unnest(OGTT) %>% 
-  group_by(Measurement, Diabetes) %>%
-  summarize(`Glucose (mmol/L)` = mean(`Glucose (mmol/L)`)) %>%
-  ungroup()
-
-glucose_mean
-```
-
-This next exercise might be a bit more challenging. It requires multiple operations and might involve some techniques that were not explicitly shown in the presentations. 
-
-12. Recreate the plot you made in Exercise 10 and include the mean value for each glucose measurement for the two Diabetes statuses (0 and 1).
-
-::: {.callout-tip collapse="true"}
-## Hint
-There are several ways to solve this task. There is a workflow suggestion:
-
-  - The line in the plot is connected by ID. Create new IDs for the mean values that do not already exist in the dataset. Use `RANDOM_ID %in% df$ID` to check if an ID is already present. 
-  
-  - Data from another dataset can be added to the plot like this: `+ geom_point(DATA, aes(x = VAR1, y = VAR2, group = VAR3))`
-  
-:::
-
-The points in the plot is connected by ID. Let's find two ID's (one for `Diabetes == 0` and another for `Diabetes == 1`) that are not in the data. We can use the same numbers as the Diabetes status. 
-```{r}
-0 %in% diabetes_glucose$ID
-1 %in% diabetes_glucose$ID
-```
-
-Change the class of Measurement to factor and add ID to the glucose mean data set. 
-```{r}
-glucose_mean <- glucose_mean %>% 
-  mutate(ID = Diabetes %>% as.double())
-
-glucose_mean
-```
-
-Copy-paste the code in Exercise 9 and add lines with new data. 
-```{r}
-diabetes_glucose %>%
-  unnest(OGTT) %>% 
-  ggplot(aes(x = Measurement,
-             y = `Glucose (mmol/L)`)) +
-  geom_point(aes(color = Diabetes)) + 
-  geom_line(aes(group = ID, color = Diabetes)) + 
-  # Glucose mean data
-  geom_point(data = glucose_mean, 
-             aes(x = Measurement, 
-                 y = `Glucose (mmol/L)`, 
-                 group = ID)) + 
-  geom_line(data = glucose_mean, 
-            aes(x = Measurement, 
-                y = `Glucose (mmol/L)`, 
-                group = ID, 
-                linetype = Diabetes)) + 
-  labs(title = "Glucose Measurements with Mean by Diabetes Status")
-
-ggsave('../out/figure2_12.png')
-```
 
 13. Export the final dataset. Since the dataset is nested, you cannot export it as an excel file. Export the dataset as an `.rds` file. Have a guess at what the function is called. 
 ```{r}

@@ -1,5 +1,5 @@
 ---
-title: "Presentation 1: Base R and Tidyverse / Data Clean-up and Wrangling"
+title: "Presentation 1 - Solutions: Base R and Tidyverse / Data Clean-up and Wrangling"
 format: html
 project:
  type: website
@@ -167,7 +167,7 @@ table(diabetes_meta$Work)
 
 My considerations:
 
--   Both `Married` and `Work` has a lot of mistakes. From looking at the mistakes the mistakes can be fixed like this: `Married` is changed to 'No' if an 'N' is present in the string and 'Yes' if 'Y' is present.
+-   Both `Married` and `Work` has a lot of mistakes. From looking at the mistakes the mistakes can be fixed like this: `Married` is changed to 'No' if an 'N' is present in the string and 'Yes' if 'Y' is present. For `Work` the values that contain a capital "S" can be changed to "Self-employed", "Retired" it looking fine, and for "Public" and "Private", we need to correct these manually.
 
 -   `ID` is changed to numerical to match the `diabetes_clean` dataset. 
 
@@ -182,6 +182,11 @@ diabetes_meta_clean <- diabetes_meta %>%
                              str_detect(Married, 'Y') ~ 'Yes',
                              .default = NA
                              ),
+         Work = case_when(str_starts(Work, 'S') ~ 'Self-employed',
+                          Work %in% c('-Public', '*Public', '*Public', 'P!UBLIC', 'Pu.blic', 'Publ&ic', 'Publi-c', 'Publi+c', 'Public') ~ 'Public',
+                          Work %in% c('P#rivate', 'P%rivate', 'Priva.te', 'Privat-e', 'Privat+e', 'Private', 'PRIVATE') ~ 'Private',
+                          .default = NA
+                          ),
          ID = as.numeric(ID)
          )
 
