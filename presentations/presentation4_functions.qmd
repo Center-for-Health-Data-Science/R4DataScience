@@ -1,0 +1,15 @@
+---
+title: "Presentation 4, Functions"
+format: html
+project:
+ type: website
+ output-dir: ../docs
+---
+
+Here is the solution4_functions.R showed:
+
+```{r echo=FALSE}
+# Include the content of the .R file
+file_content <- readLines("./presentation4_functions.R")
+cat(file_content, sep = "\n")
+```

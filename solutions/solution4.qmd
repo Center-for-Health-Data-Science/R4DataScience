@@ -159,7 +159,7 @@ df %>%
     group_by(Measurement, .data[[var_cat]])
 ```
 
-Here, `.data` refers to the data frame being used — in this case, `df.`
+Here, `.data` refers to the data frame being used — in this case, `df`.
 
 Also, you might get a warning like this *You can override using the* `.groups` *argument.* This can be solved adding `.groups = "drop"` to the `summerize` function. 
 

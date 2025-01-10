@@ -1,6 +1,9 @@
 ---
-title: "Main Script"
+title: "Presentation 4: Main Script"
 format: html
+project:
+ type: website
+ output-dir: ../docs
 ---
 
 ## Load packages 

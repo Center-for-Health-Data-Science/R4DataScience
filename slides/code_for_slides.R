@@ -64,7 +64,5 @@ pca_res <- prcomp(df, scale. = TRUE)
 autoplot(pca_res, data = iris, color = "Species")
 ggsave(glue('~/Desktop/DataLab/R4DataScience/figures/iris_PCA.png'), width = 8.5, height = 5.5)
 
-
-
-
-
+autoplot(pca_res, data = iris, color = "Species", loadings = TRUE, loadings.label = TRUE)
+ggsave(glue('~/Desktop/DataLab/R4DataScience/figures/iris_PCA_loadings.png'), width = 8.5, height = 5.5)

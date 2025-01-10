@@ -1,4 +1,3 @@
-
 # 2. Function that take dataframe and a numerical value and returns a boxplot. 
 # Required packages: ggplot2
 boxplot <- function(df, var_num){
