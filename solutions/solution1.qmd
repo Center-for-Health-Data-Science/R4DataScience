@@ -32,7 +32,7 @@ Use can you either base R or/and tidyverse to solve the exercises.
 colSums(is.na(diabetes_clinical))
 ```
 
-4.  Check the distribution of each of the variables. Consider that they are of different classes. Do any of the distributions seam odd to you?
+4.  Check the distribution of each of the variables. Consider that the variables are of different classes. Do any of the distributions seem odd to you?
 
 For the categorical variables:
 
@@ -82,9 +82,9 @@ Now that we have had a look at the data, it is time to correct fixable mistakes 
 
 Consider the following:
 
--   What should we do with the rows that contain NAs? Do we remove them or keep them?
+-   What should we do with the rows that contain NA's? Do we remove them or keep them?
 
--   Which mistakes in the data can be corrected, and which cannot?
+-   Which odd things in the data can we correct with confidence and which cannot?
 
 -   Are there zeros in the data? Are they true zeros or errors?
 
@@ -101,17 +101,18 @@ My considerations:
 
 -   When modelling, rows with NA's in the variables we want to model should be removed as we cannot model on NAs. Since there are only NA's in `GeneticRisk`, the rows can be left until we need to do a model with `GeneticRisk.`
 
--   The uppercase/lowercase mistakes in `Sex` does not influence the interpretability of the variables, so the are simply changes such that the first letter is a capital letter and the remaining letter are lowercase.
+-   The uppercase/lowercase mistakes in `Sex` does not influence the interpretability of the variables, so they are simply changes such that the first letter is a capital letter and the remaining letter are lowercase.
 
--   There are zeros in `BMI` and `BloodPressure`. These are considered false zeros as is does not make sense to have these variables as 0.
+-   There are zeros in `BMI` and `BloodPressure`. These are considered false zeros as is does not make sense that these variables have a value of 0.
 
--   `Diabetes` is changed to factor
+-   `Diabetes` is changed to factor. 
 
+Access number of rows before cleaning.
 ```{r}
-diabetes_clinical$Sex %>% table()
 nrow(diabetes_clinical)
 ```
 
+Cleaning data according to considerations.
 ```{r}
 diabetes_clinical_clean <- diabetes_clinical %>% 
   mutate(Sex = str_to_title(Sex),
@@ -119,25 +120,24 @@ diabetes_clinical_clean <- diabetes_clinical %>%
   filter(BMI != 0, BloodPressure != 0) 
 ```
 
-Check the different sexes now.
+Check the unique sexes now.
 ```{r}
-diabetes_clinical_clean$Sex %>% table()
+diabetes_clinical_clean$Sex %>% unique()
 ```
 
-Access number of rows.
+Access number of rows after cleaning. 
 ```{r}
 nrow(diabetes_clinical_clean)
 ```
 
-
 ## Meta Data
 
-6.  Perform step 2-5 from above and do data exploration and cleaning workflow for the `diabetes_meta_toy_messy.xlsx` data set.
+6.  Perform step 2-5 from above and do data exploration and cleaning workflow for the `diabetes_meta_toy_messy.csv` data set. Use the `read_delim` function to load in the dataset. 
 
 6.2. Load the data set.
 
-```{r}
-diabetes_meta <- read_excel('../data/diabetes_meta_toy_messy.xlsx')
+```{r message=FALSE}
+diabetes_meta <- read_delim('../data/diabetes_meta_toy_messy.csv')
 head(diabetes_meta)
 ```
 
@@ -148,52 +148,45 @@ Use can you either base R or/and tidyverse to solve the exercises. For now, we j
 ```{r}
 colSums(is.na(diabetes_meta))
 ```
-Check if any of the rows are NA in all three variables. 
-```{r}
-rowSums(is.na(diabetes_meta)) %>% table()
-```
 
-
-6.4. Check the distribution of each of the variables. Consider that they are of different classes. Do any of the distributions seam odd to you?
+6.4. Check the distribution of each of the variables. Consider that the variables are of different classes. Do any of the distributions seam odd to you?
 
 For the categorical variables:
-
 ```{r}
 table(diabetes_meta$Married)
 table(diabetes_meta$Work)
+```
+
+By investigating the unique values of the `Married` variable we see that some of the values have whitespace. 
+```{r}
+unique(diabetes_meta$Married)
 ```
 
 6. 5.  Clean the data according to your considerations.
 
 My considerations:
 
--   Both `Married` and `Work` has a lot of mistakes. From looking at the mistakes the mistakes can be fixed like this: `Married` is changed to 'No' if an 'N' is present in the string and 'Yes' if 'Y' is present. For `Work` the values that contain a capital "S" can be changed to "Self-employed", "Retired" it looking fine, and for "Public" and "Private", we need to correct these manually.
+-   The `Married` variable has whitespace in the some of the values. The values "Yes" and "Yes " will be interpreted as different values. We can confidently remove all the whitespaces in this variable. 
 
 -   `ID` is changed to numerical to match the `diabetes_clean` dataset. 
 
+Access number of rows before cleaning.
 ```{r}
 nrow(diabetes_meta)
 ```
 
-
 ```{r}
 diabetes_meta_clean <- diabetes_meta %>% 
-  mutate(Married = case_when(str_detect(Married, 'N') ~ 'No',
-                             str_detect(Married, 'Y') ~ 'Yes',
-                             .default = NA
-                             ),
-         Work = case_when(str_starts(Work, 'S') ~ 'Self-employed',
-                          Work %in% c('-Public', '*Public', '*Public', 'P!UBLIC', 'Pu.blic', 'Publ&ic', 'Publi-c', 'Publi+c', 'Public') ~ 'Public',
-                          Work %in% c('P#rivate', 'P%rivate', 'Priva.te', 'Privat-e', 'Privat+e', 'Private', 'PRIVATE') ~ 'Private',
-                          .default = NA
-                          ),
-         ID = as.numeric(ID)
-         )
-
-head(diabetes_meta_clean)
+  mutate(Married = str_trim(Married),
+         ID = as.numeric(ID))
 ```
 
+Check the unique marital status now.
+```{r}
+unique(diabetes_meta_clean$Married)
+```
 
+Access number of rows after cleaning.
 ```{r}
 nrow(diabetes_meta_clean)
 ```
@@ -217,7 +210,7 @@ diabetes_join <- diabetes_clinical_clean %>%
 
 ::: {.callout-tip collapse="true"}
 ## Hint
-Because we used left_join, only the IDs that are in `diabetes_clinical_clean` are kept. 
+Because we used `left_join`, only the IDs that are in `diabetes_clinical_clean` are kept. 
 :::
 
 ```{r}

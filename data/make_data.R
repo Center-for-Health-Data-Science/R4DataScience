@@ -1,6 +1,7 @@
 
 setwd('~/Desktop/DataLab/R4DataScience/data/')
 
+library(messy)
 ############ SALES ############ 
 
 df_sales <- data.frame(
@@ -16,6 +17,10 @@ df_sales <- data.frame(
 
 writexl::write_xlsx(df_sales, './df_sales_1.xlsx')
 
+df_sales_messy <- add_whitespace(df_sales, cols = "Sex", messiness = 0.5)
+
+write_csv(df_sales_messy, './df_sales_messy.csv')
+
 ############ DIABETES ############ 
 library(tidyverse)
 
@@ -29,10 +34,10 @@ diabetes_meta <- diabetes_meta[sample(1:nrow(diabetes_meta)), ]
 
 # Make the data messy 
 # remotes::install_github("nrennie/messy")
-library(messy)
+
 set.seed(101)
 diabetes_clinical_messy <- change_case(diabetes_clinical, messiness = 0.01, cols = 'Sex')
-diabetes_meta_messy <- messy(diabetes_meta, messiness = 0.005)
+diabetes_meta_messy <- add_whitespace(diabetes_meta, messiness = 0.01, cols = 'Married')
 
 # diabetes_messy <- diabetes_messy %>% 
 #   mutate(Fasting_Blood_Sugar = as.numeric(Fasting_Blood_Sugar),
@@ -99,6 +104,7 @@ df_glucose_2 <- rbind(non_diabetic_2, diabetic_2)
 # writexl::write_xlsx(diabetes_clinical, './diabetes_clinical_toy.xlsx')
 writexl::write_xlsx(diabetes_clinical_messy, './diabetes_clinical_toy_messy.xlsx')
 # writexl::write_xlsx(diabetes_meta, './diabetes_meta_toy.xlsx')
-writexl::write_xlsx(diabetes_meta_messy, './diabetes_meta_toy_messy.xlsx')
+# writexl::write_xlsx(diabetes_meta_messy, './diabetes_meta_toy_messy.xlsx')
+write_csv(diabetes_meta_messy, './diabetes_meta_toy_messy.csv')
 writexl::write_xlsx(df_glucose_2, './df_glucose.xlsx')
 

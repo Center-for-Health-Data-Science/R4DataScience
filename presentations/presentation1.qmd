@@ -284,6 +284,35 @@ df_tidyverse_join %>%
   head()
 ```
 
+## Whitespace
+Whitespace includes spaces, newlines, and other blank characters in text. It can cause errors or inconsistencies in data, so removing unnecessary whitespace is an important step in cleaning data.
+
+Let's have a look at a version of the sales data frame with whitespaces. In the tibble format it cannot be spotted. 
+```{r message=FALSE}
+df_sales_messy <- read_delim('../data/df_sales_messy.csv')
+head(df_sales_messy)
+```
+Accessing the unique sexes of the `Sex` column before cleaning. 
+```{r}
+df_sales_messy$Sex %>% unique()
+```
+
+Use the `str_trim` function to remove whitespace. 
+```{r}
+df_sales_messy$Sex %>% str_trim() %>% unique()
+```
+
+Like other function, the `str_trim` function can also be used inside the `mutate` function to alter the data frame. 
+```{r}
+df_sales_clean <- df_sales_messy %>% 
+  mutate(Sex = str_trim(Sex))
+```
+
+Accessing the unique sexes of the `Sex` column after cleaning. 
+```{r}
+df_sales_clean$Sex %>% unique()
+```
+
 ## Export Dataset
 
 Export tidyverse dataset
