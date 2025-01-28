@@ -184,7 +184,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../presentations/presentation4_main_script.qmd" class="sidebar-item-text sidebar-link">
+  <a href="../presentations/presentation4_main_script.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Presentation 4: Scripting in R</span></a>
   </div>
 </li>
@@ -394,7 +394,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 <ol start="4" type="1">
-<li>Check the distribution of each of the variables. Consider that they are of different classes. Do any of the distributions seam odd to you?</li>
+<li>Check the distribution of each of the variables. Consider that the variables are of different classes. Do any of the distributions seem odd to you?</li>
 </ol>
 <p>For the categorical variables:</p>
 <p>The <code>Sex</code> values are not consistent.</p>
@@ -491,8 +491,8 @@ FEMALE Female   Male   male
 <p>Now that we have had a look at the data, it is time to correct fixable mistakes and remove observations that cannot be corrected.</p>
 <p>Consider the following:</p>
 <ul>
-<li><p>What should we do with the rows that contain NAs? Do we remove them or keep them?</p></li>
-<li><p>Which mistakes in the data can be corrected, and which cannot?</p></li>
+<li><p>What should we do with the rows that contain NA’s? Do we remove them or keep them?</p></li>
+<li><p>Which odd things in the data can we correct with confidence and which cannot?</p></li>
 <li><p>Are there zeros in the data? Are they true zeros or errors?</p></li>
 <li><p>Do you want to change any of the classes of the variables?</p></li>
 </ul>
@@ -518,40 +518,34 @@ Hint
 <p>My considerations:</p>
 <ul>
 <li><p>When modelling, rows with NA’s in the variables we want to model should be removed as we cannot model on NAs. Since there are only NA’s in <code>GeneticRisk</code>, the rows can be left until we need to do a model with <code>GeneticRisk.</code></p></li>
-<li><p>The uppercase/lowercase mistakes in <code>Sex</code> does not influence the interpretability of the variables, so the are simply changes such that the first letter is a capital letter and the remaining letter are lowercase.</p></li>
-<li><p>There are zeros in <code>BMI</code> and <code>BloodPressure</code>. These are considered false zeros as is does not make sense to have these variables as 0.</p></li>
-<li><p><code>Diabetes</code> is changed to factor</p></li>
+<li><p>The uppercase/lowercase mistakes in <code>Sex</code> does not influence the interpretability of the variables, so they are simply changes such that the first letter is a capital letter and the remaining letter are lowercase.</p></li>
+<li><p>There are zeros in <code>BMI</code> and <code>BloodPressure</code>. These are considered false zeros as is does not make sense that these variables have a value of 0.</p></li>
+<li><p><code>Diabetes</code> is changed to factor.</p></li>
 </ul>
+<p>Access number of rows before cleaning.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>diabetes_clinical<span class="sc">$</span>Sex <span class="sc">%&gt;%</span> <span class="fu">table</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>.
-FEMALE Female   Male   male 
-     2    291    237      2 </code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">nrow</span>(diabetes_clinical)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">nrow</span>(diabetes_clinical)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 532</code></pre>
 </div>
 </div>
+<p>Cleaning data according to considerations.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>diabetes_clinical_clean <span class="ot">&lt;-</span> diabetes_clinical <span class="sc">%&gt;%</span> </span>
-<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Sex =</span> <span class="fu">str_to_title</span>(Sex),</span>
-<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>         <span class="at">Diabetes =</span> Diabetes <span class="sc">%&gt;%</span> <span class="fu">factor</span>()) <span class="sc">%&gt;%</span> </span>
-<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(BMI <span class="sc">!=</span> <span class="dv">0</span>, BloodPressure <span class="sc">!=</span> <span class="dv">0</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>diabetes_clinical_clean <span class="ot">&lt;-</span> diabetes_clinical <span class="sc">%&gt;%</span> </span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Sex =</span> <span class="fu">str_to_title</span>(Sex),</span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>         <span class="at">Diabetes =</span> Diabetes <span class="sc">%&gt;%</span> <span class="fu">factor</span>()) <span class="sc">%&gt;%</span> </span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(BMI <span class="sc">!=</span> <span class="dv">0</span>, BloodPressure <span class="sc">!=</span> <span class="dv">0</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>Check the different sexes now.</p>
+<p>Check the unique sexes now.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>diabetes_clinical_clean<span class="sc">$</span>Sex <span class="sc">%&gt;%</span> <span class="fu">table</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>diabetes_clinical_clean<span class="sc">$</span>Sex <span class="sc">%&gt;%</span> <span class="fu">unique</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>.
-Female   Male 
-   272    221 </code></pre>
+<pre><code>[1] "Male"   "Female"</code></pre>
 </div>
 </div>
-<p>Access number of rows.</p>
+<p>Access number of rows after cleaning.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="fu">nrow</span>(diabetes_clinical_clean)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">nrow</span>(diabetes_clinical_clean)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 493</code></pre>
 </div>
@@ -560,64 +554,54 @@ Female   Male
 <section id="meta-data" class="level2">
 <h2 class="anchored" data-anchor-id="meta-data">Meta Data</h2>
 <ol start="6" type="1">
-<li>Perform step 2-5 from above and do data exploration and cleaning workflow for the <code>diabetes_meta_toy_messy.xlsx</code> data set.</li>
+<li>Perform step 2-5 from above and do data exploration and cleaning workflow for the <code>diabetes_meta_toy_messy.csv</code> data set. Use the <code>read_delim</code> function to load in the dataset.</li>
 </ol>
 <p>6.2. Load the data set.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>diabetes_meta <span class="ot">&lt;-</span> <span class="fu">read_excel</span>(<span class="st">'../data/diabetes_meta_toy_messy.xlsx'</span>)</span>
-<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(diabetes_meta)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>diabetes_meta <span class="ot">&lt;-</span> <span class="fu">read_delim</span>(<span class="st">'../data/diabetes_meta_toy_messy.csv'</span>)</span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(diabetes_meta)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 6 × 3
-  ID    Married Work   
-  &lt;chr&gt; &lt;chr&gt;   &lt;chr&gt;  
-1 43717 No      Public 
-2 57419 Yes     Private
-3 54918 Yes     Private
-4 8154  No      Private
-5 &lt;NA&gt;  Yes     Private
-6 59906 &lt;NA&gt;    Public </code></pre>
+     ID Married Work         
+  &lt;dbl&gt; &lt;chr&gt;   &lt;chr&gt;        
+1 33879 Yes     Self-employed
+2 52800 Yes     Private      
+3 16817 Yes     Private      
+4 70676 Yes     Self-employed
+5  6319 No      Public       
+6 71379 No      Public       </code></pre>
 </div>
 </div>
 <p>Use can you either base R or/and tidyverse to solve the exercises. For now, we just explore the data.</p>
 <p>6.3. How many missing values (NA’s) are there in each column.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="fu">colSums</span>(<span class="fu">is.na</span>(diabetes_meta))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="fu">colSums</span>(<span class="fu">is.na</span>(diabetes_meta))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>     ID Married    Work 
-      5       5       2 </code></pre>
+      0       0       0 </code></pre>
 </div>
 </div>
-<p>Check if any of the rows are NA in all three variables.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="fu">rowSums</span>(<span class="fu">is.na</span>(diabetes_meta)) <span class="sc">%&gt;%</span> <span class="fu">table</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>.
-  0   1 
-520  12 </code></pre>
-</div>
-</div>
-<p>6.4. Check the distribution of each of the variables. Consider that they are of different classes. Do any of the distributions seam odd to you?</p>
+<p>6.4. Check the distribution of each of the variables. Consider that the variables are of different classes. Do any of the distributions seam odd to you?</p>
 <p>For the categorical variables:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(diabetes_meta<span class="sc">$</span>Married)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(diabetes_meta<span class="sc">$</span>Married)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
-^Yes  N#o   No Y&amp;es Y%es Ye(s  YES  Yes 
-   1    1  184    1    1    1    3  335 </code></pre>
+  No  No   Yes Yes  
+ 183    3  345    1 </code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(diabetes_meta<span class="sc">$</span>Work)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(diabetes_meta<span class="sc">$</span>Work)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
-       -Public        *Public        P-ublic        P!UBLIC       P#rivate 
-             1              1              1              1              1 
-      P%rivate       Priva.te       Privat-e       Privat+e        PRIVATE 
-             1              1              1              1              1 
-       Private        Pu.blic        Publ&amp;ic        Publi-c        Publi+c 
-           275              1              1              1              1 
-        Public        Retired S@elf-employed Se.lf-employed Self-emplo$yed 
-           146              6              1              1              1 
-Self-employe)d  SELF-EMPLOYED  Self-employed Self.-employed 
-             1              1             83              1 </code></pre>
+      Private        Public       Retired Self-employed 
+          283           154             6            89 </code></pre>
+</div>
+</div>
+<p>By investigating the unique values of the <code>Married</code> variable we see that some of the values have whitespace.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="fu">unique</span>(diabetes_meta<span class="sc">$</span>Married)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "Yes"  "No"   "Yes " "No " </code></pre>
 </div>
 </div>
 <ol start="6" type="1">
@@ -627,44 +611,31 @@ Self-employe)d  SELF-EMPLOYED  Self-employed Self.-employed
 </ol>
 <p>My considerations:</p>
 <ul>
-<li><p>Both <code>Married</code> and <code>Work</code> has a lot of mistakes. From looking at the mistakes the mistakes can be fixed like this: <code>Married</code> is changed to ‘No’ if an ‘N’ is present in the string and ‘Yes’ if ‘Y’ is present. For <code>Work</code> the values that contain a capital “S” can be changed to “Self-employed”, “Retired” it looking fine, and for “Public” and “Private”, we need to correct these manually.</p></li>
+<li><p>The <code>Married</code> variable has whitespace in the some of the values. The values “Yes” and “Yes” will be interpreted as different values. We can confidently remove all the whitespaces in this variable.</p></li>
 <li><p><code>ID</code> is changed to numerical to match the <code>diabetes_clean</code> dataset.</p></li>
 </ul>
+<p>Access number of rows before cleaning.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="fu">nrow</span>(diabetes_meta)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="fu">nrow</span>(diabetes_meta)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 532</code></pre>
 </div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a>diabetes_meta_clean <span class="ot">&lt;-</span> diabetes_meta <span class="sc">%&gt;%</span> </span>
-<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Married =</span> <span class="fu">case_when</span>(<span class="fu">str_detect</span>(Married, <span class="st">'N'</span>) <span class="sc">~</span> <span class="st">'No'</span>,</span>
-<span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a>                             <span class="fu">str_detect</span>(Married, <span class="st">'Y'</span>) <span class="sc">~</span> <span class="st">'Yes'</span>,</span>
-<span id="cb39-4"><a href="#cb39-4" aria-hidden="true" tabindex="-1"></a>                             <span class="at">.default =</span> <span class="cn">NA</span></span>
-<span id="cb39-5"><a href="#cb39-5" aria-hidden="true" tabindex="-1"></a>                             ),</span>
-<span id="cb39-6"><a href="#cb39-6" aria-hidden="true" tabindex="-1"></a>         <span class="at">Work =</span> <span class="fu">case_when</span>(<span class="fu">str_starts</span>(Work, <span class="st">'S'</span>) <span class="sc">~</span> <span class="st">'Self-employed'</span>,</span>
-<span id="cb39-7"><a href="#cb39-7" aria-hidden="true" tabindex="-1"></a>                          Work <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">'-Public'</span>, <span class="st">'*Public'</span>, <span class="st">'*Public'</span>, <span class="st">'P!UBLIC'</span>, <span class="st">'Pu.blic'</span>, <span class="st">'Publ&amp;ic'</span>, <span class="st">'Publi-c'</span>, <span class="st">'Publi+c'</span>, <span class="st">'Public'</span>) <span class="sc">~</span> <span class="st">'Public'</span>,</span>
-<span id="cb39-8"><a href="#cb39-8" aria-hidden="true" tabindex="-1"></a>                          Work <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">'P#rivate'</span>, <span class="st">'P%rivate'</span>, <span class="st">'Priva.te'</span>, <span class="st">'Privat-e'</span>, <span class="st">'Privat+e'</span>, <span class="st">'Private'</span>, <span class="st">'PRIVATE'</span>) <span class="sc">~</span> <span class="st">'Private'</span>,</span>
-<span id="cb39-9"><a href="#cb39-9" aria-hidden="true" tabindex="-1"></a>                          <span class="at">.default =</span> <span class="cn">NA</span></span>
-<span id="cb39-10"><a href="#cb39-10" aria-hidden="true" tabindex="-1"></a>                          ),</span>
-<span id="cb39-11"><a href="#cb39-11" aria-hidden="true" tabindex="-1"></a>         <span class="at">ID =</span> <span class="fu">as.numeric</span>(ID)</span>
-<span id="cb39-12"><a href="#cb39-12" aria-hidden="true" tabindex="-1"></a>         )</span>
-<span id="cb39-13"><a href="#cb39-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb39-14"><a href="#cb39-14" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(diabetes_meta_clean)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 6 × 3
-     ID Married Work   
-  &lt;dbl&gt; &lt;chr&gt;   &lt;chr&gt;  
-1 43717 No      Public 
-2 57419 Yes     Private
-3 54918 Yes     Private
-4  8154 No      Private
-5    NA Yes     Private
-6 59906 &lt;NA&gt;    Public </code></pre>
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a>diabetes_meta_clean <span class="ot">&lt;-</span> diabetes_meta <span class="sc">%&gt;%</span> </span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Married =</span> <span class="fu">str_trim</span>(Married),</span>
+<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a>         <span class="at">ID =</span> <span class="fu">as.numeric</span>(ID))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-</div>
+<p>Check the unique marital status now.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="fu">nrow</span>(diabetes_meta_clean)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="fu">unique</span>(diabetes_meta_clean<span class="sc">$</span>Married)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "Yes" "No" </code></pre>
+</div>
+</div>
+<p>Access number of rows after cleaning.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="fu">nrow</span>(diabetes_meta_clean)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 532</code></pre>
 </div>
@@ -695,8 +666,8 @@ Hint
 <li>Join the datasets by the variable you selected above.</li>
 </ol>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a>diabetes_join <span class="ot">&lt;-</span> diabetes_clinical_clean <span class="sc">%&gt;%</span> </span>
-<span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(diabetes_meta_clean, <span class="at">by =</span> <span class="st">'ID'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a>diabetes_join <span class="ot">&lt;-</span> diabetes_clinical_clean <span class="sc">%&gt;%</span> </span>
+<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(diabetes_meta_clean, <span class="at">by =</span> <span class="st">'ID'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <ol start="9" type="1">
 <li>How many rows does the joined dataset have? Explain why.</li>
@@ -713,12 +684,12 @@ Hint
 </div>
 <div id="callout-3" class="callout-3-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<p>Because we used left_join, only the IDs that are in <code>diabetes_clinical_clean</code> are kept.</p>
+<p>Because we used <code>left_join</code>, only the IDs that are in <code>diabetes_clinical_clean</code> are kept.</p>
 </div>
 </div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="fu">nrow</span>(diabetes_join)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a><span class="fu">nrow</span>(diabetes_join)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 493</code></pre>
 </div>
@@ -727,7 +698,7 @@ Hint
 <li>Export the joined dataset. Think about which directory you want to save the file in.</li>
 </ol>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a>writexl<span class="sc">::</span><span class="fu">write_xlsx</span>(diabetes_join, <span class="st">'../out/diabetes_join.xlsx'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a>writexl<span class="sc">::</span><span class="fu">write_xlsx</span>(diabetes_join, <span class="st">'../out/diabetes_join.xlsx'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 
 
