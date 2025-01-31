@@ -1,0 +1,15 @@
+---
+title: "Presentation 3 - Exploratory Data Analysis (EDA)"
+format: html
+project:
+ type: website
+ output-dir: ../docs
+---
+
+We will not be going through any presentation for this part.
+
+For Exercise 3-13 we refer to the FromExceltoR material: <https://center-for-health-data-science.github.io/FromExceltoR/Presentations/presentation3.html.>
+
+For Exercise 14-19 we refer to the this tutorial about Principal Component Analysis (PCA): <https://cran.r-project.org/web/packages/ggfortify/vignettes/plot_pca.html>.
+
+For theory about PCA have a look at this video: <https://www.youtube.com/watch?v=FgakZw6K1QQ&t=799s>. **NB:** This video structures samples/mice as features and genes as observations, where as the usual structure is genes as features and samples/mice as observations.

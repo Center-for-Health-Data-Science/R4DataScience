@@ -27,6 +27,8 @@ website:
             text: "Presentation 1: Base R and Tidyverse"
           - href: presentations/presentation2.qmd
             text: "Presentation 2: Advanced Tidyverse" 
+          - href: presentations/presentation3.qmd
+            text: "Presentation 3: Exploratory Data Analysis" 
           - href: presentations/presentation4_main_script.qmd
             text: "Presentation 4: Scripting in R" 
           - href: presentations/presentation4_functions.qmd
@@ -42,7 +44,7 @@ website:
           - href: exercises/exercise1.qmd
             text: "Exercise 1: Data Clean Up"
           - href: exercises/exercise2.qmd
-            text: "Exercise 2: ggplot"
+            text: "Exercise 2: Exploratory Data Analysis"
             
       - section: "Solutions"
         contents:

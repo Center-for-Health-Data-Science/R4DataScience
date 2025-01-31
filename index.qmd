@@ -8,7 +8,7 @@ project:
 
 ## Welcome to the main page of R for Data Science 
 
-This 3 day course is a following of our 2 day course *FromExceltoR* and the material of that course is a prerequisite to this course. If you have not used R since you took the course, please go through the course material again ([link to course](https://center-for-health-data-science.github.io/FromExceltoR/)). *R for Data Science* is an advanced course in R-programming for researchers at the Faculty of Health and Medical Sciences (SUND), University of Copenhagen. The course is build on code-along presentations and exercises in Quarto documents.
+This 3 day course is a continuation of our 2 day course *FromExceltoR* and the material of that course is a prerequisite to this course. If you have not used R since you took the course, please go through the course material again ([link to course](https://center-for-health-data-science.github.io/FromExceltoR/)). *R for Data Science* is an advanced course in R-programming for researchers at the Faculty of Health and Medical Sciences (SUND), University of Copenhagen. The course is build on code-along presentations and exercises in Quarto documents.
 
 \
 The course goes through the following topics:
@@ -24,6 +24,6 @@ Finally... Dear course participants, it would greatly help us if you could compl
 
 ## Program
 
-![](figures/program/program.001.jpeg)
+![](figures/program/program.002.jpeg)
 
 

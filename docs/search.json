@@ -22,7 +22,7 @@
     "crumbs": [
       "Course Material",
       "Exercises",
-      "Exercise 2: ggplot"
+      "Exercise 2: Exploratory Data Analysis"
     ]
   },
   {
@@ -34,7 +34,7 @@
     "crumbs": [
       "Course Material",
       "Exercises",
-      "Exercise 2: ggplot"
+      "Exercise 2: Exploratory Data Analysis"
     ]
   },
   {
@@ -46,7 +46,7 @@
     "crumbs": [
       "Course Material",
       "Exercises",
-      "Exercise 2: ggplot"
+      "Exercise 2: Exploratory Data Analysis"
     ]
   },
   {
@@ -122,6 +122,90 @@
     ]
   },
   {
+    "objectID": "presentations/presentation2.html",
+    "href": "presentations/presentation2.html",
+    "title": "Presentation 2: Advanced Tidyverse / Pivot longer, wider, and nesting",
+    "section": "",
+    "text": "library(readxl)\nlibrary(tidyverse)",
+    "crumbs": [
+      "Course Material",
+      "Presentations",
+      "Presentation 2: Advanced Tidyverse"
+    ]
+  },
+  {
+    "objectID": "presentations/presentation2.html#load-packages",
+    "href": "presentations/presentation2.html#load-packages",
+    "title": "Presentation 2: Advanced Tidyverse / Pivot longer, wider, and nesting",
+    "section": "",
+    "text": "library(readxl)\nlibrary(tidyverse)",
+    "crumbs": [
+      "Course Material",
+      "Presentations",
+      "Presentation 2: Advanced Tidyverse"
+    ]
+  },
+  {
+    "objectID": "presentations/presentation2.html#load-data",
+    "href": "presentations/presentation2.html#load-data",
+    "title": "Presentation 2: Advanced Tidyverse / Pivot longer, wider, and nesting",
+    "section": "Load data",
+    "text": "Load data\n\ndf_sales &lt;- read_excel('../out/sales_data_2.xlsx')",
+    "crumbs": [
+      "Course Material",
+      "Presentations",
+      "Presentation 2: Advanced Tidyverse"
+    ]
+  },
+  {
+    "objectID": "presentations/presentation2.html#goal",
+    "href": "presentations/presentation2.html#goal",
+    "title": "Presentation 2: Advanced Tidyverse / Pivot longer, wider, and nesting",
+    "section": "Goal",
+    "text": "Goal\nThe goal is to make a plot like this where we visualize the sales for each year across each employee.\n\n\n\n\n\nThe data is now in wide format. Can we make the plot in the way the data is formatted now?\n\n Hint \n\nNo. To create the plot, we need a column for the years to use on the x-axis, a column for sales in thousands DKK, and a column for Names. While the Names column is already present, the sales data is spread across four separate columns, and there is no column for the year.\n\n\n\nhead(df_sales)\n\n# A tibble: 6 × 12\n     ID Name      Age Sex    sales_2020 sales_2021 sales_2022 sales_2023 mood \n  &lt;dbl&gt; &lt;chr&gt;   &lt;dbl&gt; &lt;chr&gt;       &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt; &lt;chr&gt;\n1     1 Alice      25 Female        100        110        120        100 happy\n2     2 Bob        30 Male          200        210        220        230 happy\n3     3 Charlie    22 Male          150        160        170        200 happy\n4     4 Sophie     35 Female        300        320        340        250 happy\n5     5 Eve        28 Female        250        240        250        270 happy\n6     6 Frank      NA Male           NA        260        270        280 happy\n# ℹ 3 more variables: raise &lt;chr&gt;, group &lt;chr&gt;, City &lt;chr&gt;",
+    "crumbs": [
+      "Course Material",
+      "Presentations",
+      "Presentation 2: Advanced Tidyverse"
+    ]
+  },
+  {
+    "objectID": "presentations/presentation2.html#long-format",
+    "href": "presentations/presentation2.html#long-format",
+    "title": "Presentation 2: Advanced Tidyverse / Pivot longer, wider, and nesting",
+    "section": "Long format",
+    "text": "Long format\nThe data set is in wide format. The data can be restructured to long format such that there is one line per year per person. For this we use the pivot_longer function.\n\ndf_sales_longer &lt;- df_sales %&gt;% \n  pivot_longer(cols = starts_with(\"sales_\"),\n               names_to = \"year\",\n               values_to = \"sales\"\n               )\n\nhead(df_sales_longer)\n\n# A tibble: 6 × 10\n     ID Name    Age Sex    mood  raise group        City  year       sales\n  &lt;dbl&gt; &lt;chr&gt; &lt;dbl&gt; &lt;chr&gt;  &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;        &lt;chr&gt; &lt;chr&gt;      &lt;dbl&gt;\n1     1 Alice    25 Female happy no    young_female Miami sales_2020   100\n2     1 Alice    25 Female happy no    young_female Miami sales_2021   110\n3     1 Alice    25 Female happy no    young_female Miami sales_2022   120\n4     1 Alice    25 Female happy no    young_female Miami sales_2023   100\n5     2 Bob      30 Male   happy yes   mature_male  Miami sales_2020   200\n6     2 Bob      30 Male   happy yes   mature_male  Miami sales_2021   210\n\n\nWe can transform the year to integer.\n\ndf_sales_longer &lt;- df_sales_longer %&gt;% \n  mutate(year = str_remove(year, 'sales_') %&gt;% as.integer()) \n\nhead(df_sales_longer)\n\n# A tibble: 6 × 10\n     ID Name    Age Sex    mood  raise group        City   year sales\n  &lt;dbl&gt; &lt;chr&gt; &lt;dbl&gt; &lt;chr&gt;  &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;        &lt;chr&gt; &lt;int&gt; &lt;dbl&gt;\n1     1 Alice    25 Female happy no    young_female Miami  2020   100\n2     1 Alice    25 Female happy no    young_female Miami  2021   110\n3     1 Alice    25 Female happy no    young_female Miami  2022   120\n4     1 Alice    25 Female happy no    young_female Miami  2023   100\n5     2 Bob      30 Male   happy yes   mature_male  Miami  2020   200\n6     2 Bob      30 Male   happy yes   mature_male  Miami  2021   210\n\n\nMake the plot explained above (scatter and line plot over the sales development over the years for each person).\n\ndf_sales_longer %&gt;% \n  ggplot(aes(x = year, \n             y = sales, \n             color = Name)) + \n  geom_point() + \n  geom_line() + \n  theme_bw()\n\n\n\n\n\n\n\n# Saving the plot\n# ggsave('../out/sales_2_plot.png', width = 10.37, height = 7.55, units = 'in')",
+    "crumbs": [
+      "Course Material",
+      "Presentations",
+      "Presentation 2: Advanced Tidyverse"
+    ]
+  },
+  {
+    "objectID": "presentations/presentation2.html#wide-format",
+    "href": "presentations/presentation2.html#wide-format",
+    "title": "Presentation 2: Advanced Tidyverse / Pivot longer, wider, and nesting",
+    "section": "Wide format",
+    "text": "Wide format\nThe pivot_wider function is used to get data to wide format.\n\ndf_sales_wider &lt;- df_sales_longer %&gt;% \n  pivot_wider(names_from = year, \n              values_from = sales,\n              names_prefix = 'sales_')\n\n# Same content\nhead(df_sales)\n\n# A tibble: 6 × 12\n     ID Name      Age Sex    sales_2020 sales_2021 sales_2022 sales_2023 mood \n  &lt;dbl&gt; &lt;chr&gt;   &lt;dbl&gt; &lt;chr&gt;       &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt; &lt;chr&gt;\n1     1 Alice      25 Female        100        110        120        100 happy\n2     2 Bob        30 Male          200        210        220        230 happy\n3     3 Charlie    22 Male          150        160        170        200 happy\n4     4 Sophie     35 Female        300        320        340        250 happy\n5     5 Eve        28 Female        250        240        250        270 happy\n6     6 Frank      NA Male           NA        260        270        280 happy\n# ℹ 3 more variables: raise &lt;chr&gt;, group &lt;chr&gt;, City &lt;chr&gt;\n\nhead(df_sales_wider)\n\n# A tibble: 6 × 12\n     ID Name      Age Sex    mood  raise group       City  sales_2020 sales_2021\n  &lt;dbl&gt; &lt;chr&gt;   &lt;dbl&gt; &lt;chr&gt;  &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;       &lt;chr&gt;      &lt;dbl&gt;      &lt;dbl&gt;\n1     1 Alice      25 Female happy no    young_fema… Miami        100        110\n2     2 Bob        30 Male   happy yes   mature_male Miami        200        210\n3     3 Charlie    22 Male   happy yes   young_male  LA           150        160\n4     4 Sophie     35 Female happy no    mature_fem… New …        300        320\n5     5 Eve        28 Female happy yes   young_fema… LA           250        240\n6     6 Frank      NA Male   happy yes   &lt;NA&gt;        New …         NA        260\n# ℹ 2 more variables: sales_2022 &lt;dbl&gt;, sales_2023 &lt;dbl&gt;",
+    "crumbs": [
+      "Course Material",
+      "Presentations",
+      "Presentation 2: Advanced Tidyverse"
+    ]
+  },
+  {
+    "objectID": "presentations/presentation2.html#nesting",
+    "href": "presentations/presentation2.html#nesting",
+    "title": "Presentation 2: Advanced Tidyverse / Pivot longer, wider, and nesting",
+    "section": "Nesting",
+    "text": "Nesting\nThe long format can contain many repetitions e.g. information on the sales employee in df_sales_longer. Group data by Name and nest year and sales into a single column that we will name sales_data.\n\ndf_sales_longer_nested &lt;- df_sales_longer %&gt;%  \n  group_by(Name) %&gt;% \n  nest(sales_data = c(year, sales)) %&gt;% \n  ungroup()\n\nhead(df_sales_longer_nested)\n\n# A tibble: 6 × 9\n     ID Name      Age Sex    mood  raise group         City     sales_data      \n  &lt;dbl&gt; &lt;chr&gt;   &lt;dbl&gt; &lt;chr&gt;  &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;         &lt;chr&gt;    &lt;list&gt;          \n1     1 Alice      25 Female happy no    young_female  Miami    &lt;tibble [4 × 2]&gt;\n2     2 Bob        30 Male   happy yes   mature_male   Miami    &lt;tibble [4 × 2]&gt;\n3     3 Charlie    22 Male   happy yes   young_male    LA       &lt;tibble [4 × 2]&gt;\n4     4 Sophie     35 Female happy no    mature_female New York &lt;tibble [4 × 2]&gt;\n5     5 Eve        28 Female happy yes   young_female  LA       &lt;tibble [4 × 2]&gt;\n6     6 Frank      NA Male   happy yes   &lt;NA&gt;          New York &lt;tibble [4 × 2]&gt;\n\n\nNote: Nested data cannot be exported as an Excel or CSV file. Instead, you need to export it as an RDS file, a format specifically designed to save R objects.\nWe can extract the sales information from an employee using the pull function.\n\ndf_sales_longer_nested %&gt;% \n  filter(Name == 'Bob') %&gt;% \n  pull(sales_data)\n\n[[1]]\n# A tibble: 4 × 2\n   year sales\n  &lt;int&gt; &lt;dbl&gt;\n1  2020   200\n2  2021   210\n3  2022   220\n4  2023   230",
+    "crumbs": [
+      "Course Material",
+      "Presentations",
+      "Presentation 2: Advanced Tidyverse"
+    ]
+  },
+  {
     "objectID": "presentations/presentation1.html",
     "href": "presentations/presentation1.html",
     "title": "Presentation 1: Base R and Tidyverse",
@@ -150,7 +234,7 @@
     "href": "presentations/presentation1.html#load-dataset",
     "title": "Presentation 1: Base R and Tidyverse",
     "section": "Load Dataset",
-    "text": "Load Dataset\nHere we load a dataframe that contains sales data for employees (in thousands DKK) from 2020 to 2023. We load the data as df_baseR which we will use to demonstrate base R commands. A copy of the same dataframe, df_tidyverse, is used to demonstrate tidyverse commands.\n\ndf_baseR &lt;- readxl::read_excel('../data/df_sales_1.xlsx')\ndf_tidyverse &lt;- df_baseR",
+    "text": "Load Dataset\nHere we load a dataframe that contains sales data for employees (in thousands DKK) from 2020 to 2023. We load the data as df_baseR which we will use to demonstrate base R commands. A copy of the same dataframe, df_tidyverse, is used to demonstrate tidyverse commands.\n\ndf_baseR &lt;- readxl::read_excel('../data/df_sales_1.xlsx') %&gt;% as.data.frame()\ndf_tidyverse &lt;- readxl::read_excel('../data/df_sales_1.xlsx') %&gt;% as_tibble()\n\nTable format in baseR is called data.frame. Have a look at the object in the terminal. It is very simple.\n\nclass(df_baseR)\n\n[1] \"data.frame\"\n\n\nTable format in tidyverse is called tibble. Have a look at the object in the terminal. The dimensions of the tibble is provided together with the classes of each column.\n\nclass(df_tidyverse)\n\n[1] \"tbl_df\"     \"tbl\"        \"data.frame\"",
     "crumbs": [
       "Course Material",
       "Presentations",
@@ -174,7 +258,7 @@
     "href": "presentations/presentation1.html#string-manipulation",
     "title": "Presentation 1: Base R and Tidyverse",
     "section": "String manipulation",
-    "text": "String manipulation\nWe will do string manipulation the tidyverse way.\nThe paste function concatenates two strings to one.\n\npaste('Alice', 'Hansen')\n\n[1] \"Alice Hansen\"\n\n\nThe sep argument is a space by default, but can be changed to any character.\n\npaste('Alice', 'Hansen', sep = \"_\")\n\n[1] \"Alice_Hansen\"\n\n\nThe paste0 function concatenates two strings to one without adding any separator between them.\n\npaste0('Alice', 'Hansen')\n\n[1] \"AliceHansen\"\n\n\nLet’s give all the employees the last name Hansen.\n\ndf_tidyverse_join &lt;- df_tidyverse_join %&gt;% \n  mutate(Name = paste(Name, 'Hansen'))\n\nhead(df_tidyverse_join)\n\n# A tibble: 6 × 12\n     ID Name         Age Sex   sales_2020 sales_2021 sales_2022 sales_2023 mood \n  &lt;dbl&gt; &lt;chr&gt;      &lt;dbl&gt; &lt;chr&gt;      &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt; &lt;chr&gt;\n1     1 Alice Han…    25 Fema…        100        110        120        100 happy\n2     2 Bob Hansen    30 Male         200        210        220        230 happy\n3     3 Charlie H…    22 Male         150        160        170        200 happy\n4     4 Sophie Ha…    35 Fema…        300        320        340        250 happy\n5     5 Eve Hansen    28 Fema…        250        240        250        270 happy\n6     6 Frank Han…    NA Male          NA        260        270        280 happy\n# ℹ 3 more variables: raise &lt;chr&gt;, group &lt;chr&gt;, City &lt;chr&gt;\n\n\nWe use the str_split function to split a string into multiple parts in a list.\n\nstr_split('Alice Hansen', pattern = ' ')\n\n[[1]]\n[1] \"Alice\"  \"Hansen\"\n\n\n\nstr_split('Alice_Hansen_Jensen', pattern = '_')\n\n[[1]]\n[1] \"Alice\"  \"Hansen\" \"Jensen\"\n\n\nIndexing one of the strings in the list using the str_split_i function.\n\nstr_split_i('Alice_Hansen_Jensen', pattern = '_', i = 2)\n\n[1] \"Hansen\"\n\n\nLet’s remove the last name we just gave the employees.\n\ndf_tidyverse_join &lt;- df_tidyverse_join %&gt;% \n  mutate(Name = str_split_i(Name, pattern = ' ', i = 1))\n\nhead(df_tidyverse_join)\n\n# A tibble: 6 × 12\n     ID Name      Age Sex    sales_2020 sales_2021 sales_2022 sales_2023 mood \n  &lt;dbl&gt; &lt;chr&gt;   &lt;dbl&gt; &lt;chr&gt;       &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt; &lt;chr&gt;\n1     1 Alice      25 Female        100        110        120        100 happy\n2     2 Bob        30 Male          200        210        220        230 happy\n3     3 Charlie    22 Male          150        160        170        200 happy\n4     4 Sophie     35 Female        300        320        340        250 happy\n5     5 Eve        28 Female        250        240        250        270 happy\n6     6 Frank      NA Male           NA        260        270        280 happy\n# ℹ 3 more variables: raise &lt;chr&gt;, group &lt;chr&gt;, City &lt;chr&gt;\n\n\nDetect substring in main string using str_detect.\n\nstr_detect('Alice', 'A')\n\n[1] TRUE\n\n\n\nstr_detect('Alice', 'B')\n\n[1] FALSE\n\n\nCheck is “A” or “a” in Name.\n\ndf_tidyverse_join %&gt;% \n  mutate(A_in_name = str_detect(Name, 'A|a')) %&gt;% \n  head()\n\n# A tibble: 6 × 13\n     ID Name      Age Sex    sales_2020 sales_2021 sales_2022 sales_2023 mood \n  &lt;dbl&gt; &lt;chr&gt;   &lt;dbl&gt; &lt;chr&gt;       &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt; &lt;chr&gt;\n1     1 Alice      25 Female        100        110        120        100 happy\n2     2 Bob        30 Male          200        210        220        230 happy\n3     3 Charlie    22 Male          150        160        170        200 happy\n4     4 Sophie     35 Female        300        320        340        250 happy\n5     5 Eve        28 Female        250        240        250        270 happy\n6     6 Frank      NA Male           NA        260        270        280 happy\n# ℹ 4 more variables: raise &lt;chr&gt;, group &lt;chr&gt;, City &lt;chr&gt;, A_in_name &lt;lgl&gt;",
+    "text": "String manipulation\nWe will do string manipulation the tidyverse way.\nThe paste function concatenates two strings to one.\n\npaste('Alice', 'Hansen')\n\n[1] \"Alice Hansen\"\n\n\nThe sep argument is a space by default, but can be changed to any character.\n\npaste('Alice', 'Hansen', sep = \"_\")\n\n[1] \"Alice_Hansen\"\n\n\nThe paste0 function concatenates two strings to one without adding any separator between them.\n\npaste0('Alice', 'Hansen')\n\n[1] \"AliceHansen\"\n\n\nLet’s give all the employees the last name Hansen.\n\ndf_tidyverse_join &lt;- df_tidyverse_join %&gt;% \n  mutate(Name = paste(Name, 'Hansen'))\n\nhead(df_tidyverse_join)\n\n# A tibble: 6 × 12\n     ID Name         Age Sex   sales_2020 sales_2021 sales_2022 sales_2023 mood \n  &lt;dbl&gt; &lt;chr&gt;      &lt;dbl&gt; &lt;chr&gt;      &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt; &lt;chr&gt;\n1     1 Alice Han…    25 Fema…        100        110        120        100 happy\n2     2 Bob Hansen    30 Male         200        210        220        230 happy\n3     3 Charlie H…    22 Male         150        160        170        200 happy\n4     4 Sophie Ha…    35 Fema…        300        320        340        250 happy\n5     5 Eve Hansen    28 Fema…        250        240        250        270 happy\n6     6 Frank Han…    NA Male          NA        260        270        280 happy\n# ℹ 3 more variables: raise &lt;chr&gt;, group &lt;chr&gt;, City &lt;chr&gt;\n\n\nWe use the str_split function to split a string into multiple parts in a list.\n\nstr_split('Alice Hansen', pattern = ' ')\n\n[[1]]\n[1] \"Alice\"  \"Hansen\"\n\n\n\nstr_split('Alice_Hansen_Jensen', pattern = '_')\n\n[[1]]\n[1] \"Alice\"  \"Hansen\" \"Jensen\"\n\n\nIndexing one of the strings in the list using the str_split_i function.\n\nstr_split_i('Alice_Hansen_Jensen', pattern = '_', i = 2)\n\n[1] \"Hansen\"\n\n\nLet’s remove the last name we just gave the employees.\n\ndf_tidyverse_join &lt;- df_tidyverse_join %&gt;% \n  mutate(Name = str_split_i(Name, pattern = ' ', i = 1))\n\nhead(df_tidyverse_join)\n\n# A tibble: 6 × 12\n     ID Name      Age Sex    sales_2020 sales_2021 sales_2022 sales_2023 mood \n  &lt;dbl&gt; &lt;chr&gt;   &lt;dbl&gt; &lt;chr&gt;       &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt; &lt;chr&gt;\n1     1 Alice      25 Female        100        110        120        100 happy\n2     2 Bob        30 Male          200        210        220        230 happy\n3     3 Charlie    22 Male          150        160        170        200 happy\n4     4 Sophie     35 Female        300        320        340        250 happy\n5     5 Eve        28 Female        250        240        250        270 happy\n6     6 Frank      NA Male           NA        260        270        280 happy\n# ℹ 3 more variables: raise &lt;chr&gt;, group &lt;chr&gt;, City &lt;chr&gt;\n\n\nDetect substring in main string using str_detect.\n\nstr_detect('Alice', 'A')\n\n[1] TRUE\n\n\n\nstr_detect('Alice', 'B')\n\n[1] FALSE\n\n\nAdd column that check if “A” or “a” in Name and place it after the Name column.\n\ndf_tidyverse_join %&gt;% \n  mutate(A_in_name = str_detect(Name, 'A|a'),\n         .after = Name) %&gt;% \n  head()\n\n# A tibble: 6 × 13\n     ID Name   A_in_name   Age Sex   sales_2020 sales_2021 sales_2022 sales_2023\n  &lt;dbl&gt; &lt;chr&gt;  &lt;lgl&gt;     &lt;dbl&gt; &lt;chr&gt;      &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt;\n1     1 Alice  TRUE         25 Fema…        100        110        120        100\n2     2 Bob    FALSE        30 Male         200        210        220        230\n3     3 Charl… TRUE         22 Male         150        160        170        200\n4     4 Sophie FALSE        35 Fema…        300        320        340        250\n5     5 Eve    FALSE        28 Fema…        250        240        250        270\n6     6 Frank  TRUE         NA Male          NA        260        270        280\n# ℹ 4 more variables: mood &lt;chr&gt;, raise &lt;chr&gt;, group &lt;chr&gt;, City &lt;chr&gt;",
     "crumbs": [
       "Course Material",
       "Presentations",
@@ -282,14 +366,14 @@
     "href": "index.html",
     "title": "R for Data Science",
     "section": "",
-    "text": "This 3 day course is a following of our 2 day course FromExceltoR and the material of that course is a prerequisite to this course. If you have not used R since you took the course, please go through the course material again (link to course). R for Data Science is an advanced course in R-programming for researchers at the Faculty of Health and Medical Sciences (SUND), University of Copenhagen. The course is build on code-along presentations and exercises in Quarto documents.\n\nThe course goes through the following topics:\n\nScript formats\nAdvanced tidyverse using real world data (build on material from our introduction to R course, FromExceltoR)\nScripting in R using functions, for-loops, if-else statements.\nModelling in R.\n\nThe material in this repository is for teaching purposes only and not to be distributed commercially.\nFinally… Dear course participants, it would greatly help us if you could complete our UPDATE LINK feedback form."
+    "text": "This 3 day course is a continuation of our 2 day course FromExceltoR and the material of that course is a prerequisite to this course. If you have not used R since you took the course, please go through the course material again (link to course). R for Data Science is an advanced course in R-programming for researchers at the Faculty of Health and Medical Sciences (SUND), University of Copenhagen. The course is build on code-along presentations and exercises in Quarto documents.\n\nThe course goes through the following topics:\n\nScript formats\nAdvanced tidyverse using real world data (build on material from our introduction to R course, FromExceltoR)\nScripting in R using functions, for-loops, if-else statements.\nModelling in R.\n\nThe material in this repository is for teaching purposes only and not to be distributed commercially.\nFinally… Dear course participants, it would greatly help us if you could complete our UPDATE LINK feedback form."
   },
   {
     "objectID": "index.html#welcome-to-the-main-page-of-r-for-data-science",
     "href": "index.html#welcome-to-the-main-page-of-r-for-data-science",
     "title": "R for Data Science",
     "section": "",
-    "text": "This 3 day course is a following of our 2 day course FromExceltoR and the material of that course is a prerequisite to this course. If you have not used R since you took the course, please go through the course material again (link to course). R for Data Science is an advanced course in R-programming for researchers at the Faculty of Health and Medical Sciences (SUND), University of Copenhagen. The course is build on code-along presentations and exercises in Quarto documents.\n\nThe course goes through the following topics:\n\nScript formats\nAdvanced tidyverse using real world data (build on material from our introduction to R course, FromExceltoR)\nScripting in R using functions, for-loops, if-else statements.\nModelling in R.\n\nThe material in this repository is for teaching purposes only and not to be distributed commercially.\nFinally… Dear course participants, it would greatly help us if you could complete our UPDATE LINK feedback form."
+    "text": "This 3 day course is a continuation of our 2 day course FromExceltoR and the material of that course is a prerequisite to this course. If you have not used R since you took the course, please go through the course material again (link to course). R for Data Science is an advanced course in R-programming for researchers at the Faculty of Health and Medical Sciences (SUND), University of Copenhagen. The course is build on code-along presentations and exercises in Quarto documents.\n\nThe course goes through the following topics:\n\nScript formats\nAdvanced tidyverse using real world data (build on material from our introduction to R course, FromExceltoR)\nScripting in R using functions, for-loops, if-else statements.\nModelling in R.\n\nThe material in this repository is for teaching purposes only and not to be distributed commercially.\nFinally… Dear course participants, it would greatly help us if you could complete our UPDATE LINK feedback form."
   },
   {
     "objectID": "index.html#program",
@@ -464,7 +548,7 @@
   {
     "objectID": "solutions/solution3.html",
     "href": "solutions/solution3.html",
-    "title": "Exercise 3 - Solutions: ggplot2",
+    "title": "Exercise 3 - Solutions: Exploratory Data Analysis (EDA)",
     "section": "",
     "text": "Load packages.\n\n\nlibrary(tidyverse)\n\n\nLoad data from the .rds file you created in Exercise 2. Have a guess at what the function is called.\n\n\ndiabetes_glucose &lt;- read_rds('../out/diabetes_glucose.rds')",
     "crumbs": [
@@ -476,7 +560,7 @@
   {
     "objectID": "solutions/solution3.html#getting-started",
     "href": "solutions/solution3.html#getting-started",
-    "title": "Exercise 3 - Solutions: ggplot2",
+    "title": "Exercise 3 - Solutions: Exploratory Data Analysis (EDA)",
     "section": "",
     "text": "Load packages.\n\n\nlibrary(tidyverse)\n\n\nLoad data from the .rds file you created in Exercise 2. Have a guess at what the function is called.\n\n\ndiabetes_glucose &lt;- read_rds('../out/diabetes_glucose.rds')",
     "crumbs": [
@@ -488,7 +572,7 @@
   {
     "objectID": "solutions/solution3.html#plotting---part-1",
     "href": "solutions/solution3.html#plotting---part-1",
-    "title": "Exercise 3 - Solutions: ggplot2",
+    "title": "Exercise 3 - Solutions: Exploratory Data Analysis (EDA)",
     "section": "Plotting - Part 1",
     "text": "Plotting - Part 1\nYou will first do some basic plots to get started with ggplot again.\nIf it has been a while since you work with ggplot, have a look at the ggplot material from the FromExceltoR course: https://center-for-health-data-science.github.io/FromExceltoR/Presentations/presentation3.html.\n\nCreate a scatter plot of Age and Blood Pressure. Do you notice a trend?\n\n\ndiabetes_glucose %&gt;% \n  ggplot(aes(x = BloodPressure, \n             y = Age)) + \n  geom_point() \n\n\n\n\n\n\n\n\n\nCreate a scatter plot of PhysicalActivity and BMI. Do you notice a trend?\n\n\ndiabetes_glucose %&gt;% \n  ggplot(aes(x = PhysicalActivity, \n             y = BMI)) + \n  geom_point() \n\n\n\n\n\n\n\n\n\nNow, create the same two plots as before, but this time stratify them by Diabetes. Do you notice any trends?\n\n\n\n\n\n\n\nHint\n\n\n\n\n\nYou can stratify a plot by a categorical variable in several ways, depending on the type of plot. The purpose of stratification is to distinguish samples based on their categorical values, making patterns or differences easier to identify. This can be done using aesthetics like color, fill, shape.\n\n\n\n\ndiabetes_glucose %&gt;% \n  ggplot(aes(x = BloodPressure, \n             y = Age, \n             color = Diabetes)) + \n  geom_point()\n\n\n\n\n\n\n\n\n\ndiabetes_glucose %&gt;% \n  ggplot(aes(x = PhysicalActivity, \n             y = BMI, \n             color = Diabetes)) + \n  geom_point() \n\n\n\n\n\n\n\n\n\nCreate a boxplot of BMI stratified by Diabaetes. Give the plot a meaningful title.\n\n\ndiabetes_glucose %&gt;% \n  ggplot(aes(y = BMI, \n             x = Diabetes, \n             color = Diabetes)) + \n  geom_boxplot() + \n  labs(title = 'Distribution of BMI Stratified by Diabetes')\n\n\n\n\n\n\n\n\n\nCreate a boxplot of PhysicalActivity stratified by Smoker. Give the plot a meaningful title.\n\n\ndiabetes_glucose %&gt;% \n  ggplot(aes(y = PhysicalActivity, \n             x = Smoker, \n             fill = Smoker)) + \n  geom_boxplot() + \n  labs(title = 'Distribution of Physical Activity Stratified by Smoker Status')",
     "crumbs": [
@@ -500,7 +584,7 @@
   {
     "objectID": "solutions/solution3.html#plotting---part-2",
     "href": "solutions/solution3.html#plotting---part-2",
-    "title": "Exercise 3 - Solutions: ggplot2",
+    "title": "Exercise 3 - Solutions: Exploratory Data Analysis (EDA)",
     "section": "Plotting - Part 2",
     "text": "Plotting - Part 2\nIn order to plot the data inside the nested variable, the data needs to be unnested.\n\nCreate a boxplot of the glucose measurements at time 0 stratified by Diabetes. Give the plot a meaningful title.\n\n\ndiabetes_glucose %&gt;%\n  unnest(OGTT) %&gt;% \n  mutate(Measurement = Measurement %&gt;% as.factor()) %&gt;% \n  filter(Measurement == 0) %&gt;% \n  ggplot(aes(y = `Glucose (mmol/L)`, \n             x = Diabetes, \n             color = Diabetes)) +\n  geom_boxplot() + \n  labs(title = 'Glucose Measurement for Time Point 0 (fasted)')\n\n\n\n\n\n\n\n\n\nCreate boxplots of glucose measurements stratified by Diabetes for each time point (0, 60, 120) using faceting by Measurement. Give the plot a meaningful title.\n\n\n\n\n\n\n\nHint\n\n\n\n\n\nFaceting allows you to create multiple plots based on the values of a categorical variable, making it easier to compare patterns across groups. In ggplot2, you can use facet_wrap for a single variable or facet_grid for multiple variables.\n\n\n\n\ndiabetes_glucose %&gt;%\n  unnest(OGTT) %&gt;% \n  mutate(Measurement = Measurement %&gt;% as.factor()) %&gt;% \n  ggplot(aes(y = `Glucose (mmol/L)`, \n             x = Diabetes, \n             color = Diabetes)) +\n  geom_boxplot() + \n  facet_wrap(vars(Measurement)) + \n  labs(title = 'Glucose Measurements for Time Point 0, 60, and 120')\n\n\n\n\n\n\n\n\n\nCreate a plot that visualizes glucose measurements across time points for each patient ID, stratified by their diabetes status. Each patient’s glucose measurements should be connected with a line, grouped by their ID, and color-coded by Diabetes. Give the plot a meaningful title.\n\n\ndiabetes_glucose %&gt;%\n  unnest(OGTT) %&gt;% \n  ggplot(aes(x = Measurement,\n             y = `Glucose (mmol/L)`)) +\n  geom_point(aes(color = Diabetes)) + \n  geom_line(aes(group = ID, color = Diabetes)) + \n  labs(title = 'Glucose Measurements Across Time Points by Diabetes Status')\n\n\n\n\n\n\n\n\n\nCalculate the mean glucose levels for each time point.\n\n\n\n\n\n\n\nHint\n\n\n\n\n\nYou will need to use unnest(), group_by(), and summerize().\n\n\n\n\ndiabetes_glucose %&gt;%\n  unnest(OGTT) %&gt;% \n  group_by(Measurement) %&gt;% \n  summarize(`Glucose (mmol/L)` = mean(`Glucose (mmol/L)`))\n\n# A tibble: 3 × 2\n  Measurement `Glucose (mmol/L)`\n        &lt;dbl&gt;              &lt;dbl&gt;\n1           0               8.06\n2          60               9.74\n3         120              11.1 \n\n\n\nMake the same calculation as above, but additionally group the results by Diabetes. Save the data frame in a variable.\n\n\n\n\n\n\n\nHint\n\n\n\n\n\nGroup by several variables: group_by(var1, var2).\n\n\n\n\nglucose_mean &lt;- diabetes_glucose %&gt;%\n  unnest(OGTT) %&gt;% \n  group_by(Measurement, Diabetes) %&gt;%\n  summarize(`Glucose (mmol/L)` = mean(`Glucose (mmol/L)`)) %&gt;%\n  ungroup()\n\n`summarise()` has grouped output by 'Measurement'. You can override using the\n`.groups` argument.\n\nglucose_mean\n\n# A tibble: 6 × 3\n  Measurement Diabetes `Glucose (mmol/L)`\n        &lt;dbl&gt; &lt;chr&gt;                 &lt;dbl&gt;\n1           0 0                      5.51\n2           0 1                     10.6 \n3          60 0                      6.83\n4          60 1                     12.6 \n5         120 0                      7.89\n6         120 1                     14.2 \n\n\nThis next exercise might be a bit more challenging. It requires multiple operations and might involve some techniques that were not explicitly shown in the presentations.\n\nRecreate the plot you made in Exercise 10 and include the mean value for each glucose measurement for the two diabetes statuses (0 and 1) you calculated in Exercise 12. This plot should lool like this:\n\n\n\n\n\n\n\n\n\n\n\n\nHint\n\n\n\n\n\nThere are several ways to solve this task. Here is a workflow suggestion:\n\nThe line in the plot symbolize a patient ID. You will need to create new IDs for the mean values that are not present in the dataset. Use RANDOM_ID %in% df$ID to check if an ID is already present in the dataset as a patient ID. The ID’s should be added to the data frame created in Exercise 12.\nData from another dataset can be added to the plot like this: + geom_point(DATA, aes(x = VAR1, y = VAR2, group = VAR3))\nYou can stratify the mean glucose lines by linetype.\n\n\n\n\nThe line in the plot symbolize a patient ID. Let’s find two ID’s (one for Diabetes == 0 and another for Diabetes == 1) that are not present in the dataset. We can use the same numbers as the Diabetes status for the ID’s.\n\n0 %in% diabetes_glucose$ID\n\n[1] FALSE\n\n1 %in% diabetes_glucose$ID\n\n[1] FALSE\n\n\nAdd ID’s to the glucose mean data frame.\n\nglucose_mean &lt;- glucose_mean %&gt;% \n  mutate(ID = Diabetes %&gt;% as.double())\n\nglucose_mean\n\n# A tibble: 6 × 4\n  Measurement Diabetes `Glucose (mmol/L)`    ID\n        &lt;dbl&gt; &lt;chr&gt;                 &lt;dbl&gt; &lt;dbl&gt;\n1           0 0                      5.51     0\n2           0 1                     10.6      1\n3          60 0                      6.83     0\n4          60 1                     12.6      1\n5         120 0                      7.89     0\n6         120 1                     14.2      1\n\n\nCopy-paste the code in Exercise 10 and add lines with new data.\n\ndiabetes_glucose %&gt;%\n  unnest(OGTT) %&gt;% \n  ggplot(aes(x = Measurement,\n             y = `Glucose (mmol/L)`)) +\n  geom_point(aes(color = Diabetes)) + \n  geom_line(aes(group = ID, color = Diabetes)) + \n  # Glucose mean data\n  geom_point(data = glucose_mean, \n             aes(x = Measurement, \n                 y = `Glucose (mmol/L)`, \n                 group = ID)) + \n  geom_line(data = glucose_mean, \n            aes(x = Measurement, \n                y = `Glucose (mmol/L)`, \n                group = ID, \n                linetype = Diabetes)) + \n  labs(title = \"Glucose Measurements with Mean by Diabetes Status\")\n\n\n\n\n\n\n\nggsave('../out/figure3_13.png')\n\nSaving 7 x 5 in image",
     "crumbs": [
@@ -512,7 +596,7 @@
   {
     "objectID": "solutions/solution3.html#plotting---part-3-pca",
     "href": "solutions/solution3.html#plotting---part-3-pca",
-    "title": "Exercise 3 - Solutions: ggplot2",
+    "title": "Exercise 3 - Solutions: Exploratory Data Analysis (EDA)",
     "section": "Plotting - Part 3: PCA",
     "text": "Plotting - Part 3: PCA\nFor this part we will use a tutorial to make a principal component analysis (PCA): https://cran.r-project.org/web/packages/ggfortify/vignettes/plot_pca.html. First, we perform some reprocessing to get the data in the right format.\n\nHave a look at your diabetes data set. Can you use all the variables to perform PCA? Subset the dataset to only include the relevant variables.\n\n\n\n\n\n\n\nHint\n\n\n\n\n\nPCA can only be performed on numerical values. Extract these (except ID) from the dataset. It is up to you to decide whether to include the OGTT measurements. If you include them, unnest the data and convert it to wide format using pivot_wider, ensuring only glucose measurements (not time points) are included as variables in the PCA.\n\n\n\nExtract the numerical columns, excluding the OGTT measurements.\n\nnumerical_columns &lt;- sapply(diabetes_glucose, is.numeric)\nnumerical_columns['ID'] &lt;- FALSE\ndiabetes_glucose_numerical &lt;- diabetes_glucose[numerical_columns]\nhead(diabetes_glucose_numerical)\n\nExtract the numerical columns, including the OGTT measurements.\n\ndiabetes_glucose_unnest_wide &lt;- diabetes_glucose %&gt;% \n  unnest(OGTT) %&gt;% \n  pivot_wider(names_from = Measurement, \n              values_from = `Glucose (mmol/L)`, \n              names_prefix = \"Measurement_\"\n              )\n\nnumerical_columns &lt;- sapply(diabetes_glucose_unnest_wide, is.numeric)\nnumerical_columns['ID'] &lt;- FALSE\ndiabetes_glucose_numerical &lt;- diabetes_glucose_unnest_wide[numerical_columns]\n\nhead(diabetes_glucose_numerical)\n\n# A tibble: 6 × 8\n    Age BloodPressure GeneticRisk   BMI PhysicalActivity Measurement_0\n  &lt;dbl&gt;         &lt;dbl&gt;       &lt;dbl&gt; &lt;dbl&gt;            &lt;dbl&gt;         &lt;dbl&gt;\n1    34            84       0.619  24.7               93          6.65\n2    25            74       0.591  22.5              102          4.49\n3    50            80       0.178  34.5               98         12.9 \n4    27            60       0.206  26.3               82          5.76\n5    35            84       0.286  35                 58         10.8 \n6    31            78       1.22   43.3               59         11.1 \n# ℹ 2 more variables: Measurement_60 &lt;dbl&gt;, Measurement_120 &lt;dbl&gt;\n\n\n\nPCA cannot handle NA’s in the dataset. Remove all rows with NA in any column. Perform this operation on both the original dataset (with all columns) and the numerical subset you created in Exercise 13.\n\n\ndiabetes_glucose_numerical_remove_NA &lt;- drop_na(diabetes_glucose_numerical)\ndiabetes_glucose_remove_NA &lt;- drop_na(diabetes_glucose, any_of(colnames(diabetes_glucose_numerical)))\n\n\nPerform the Plotting PCA (Principal Component Analysis) part of the tutorial on your diabetes data. Think about which variables to color by.\n\n\n\n\n\n\n\nHint\n\n\n\n\n\n\nRemember to install and load the ggfortify package.\nNotice how you can use the arguments color and colour interchangeably.\n\n\n\n\n\nlibrary(ggfortify)\n\npca_res &lt;- prcomp(diabetes_glucose_numerical_remove_NA, scale. = TRUE)\n\nautoplot(pca_res, data = diabetes_glucose_remove_NA, color = \"Diabetes\")\n\n\n\n\n\n\n\n\n\nautoplot(pca_res, data = diabetes_glucose_remove_NA, colour = 'Diabetes', label = TRUE, label.size = 3)\n\n\n\n\n\n\n\n\n\nautoplot(pca_res, data = diabetes_glucose_remove_NA, colour = 'Diabetes', shape = FALSE, label.size = 3)\n\n\n\n\n\n\n\n\n\nautoplot(pca_res, data = diabetes_glucose_remove_NA, colour = 'Diabetes', loadings = TRUE)\n\n\n\n\n\n\n\n\n\nautoplot(pca_res, data = diabetes_glucose_remove_NA, colour = 'Diabetes',\n         loadings = TRUE, loadings.colour = 'blue',\n         loadings.label = TRUE, loadings.label.size = 3)\n\n\n\n\n\n\n\n\n\nMake your last plot personal by adding a ggplot theme, title and whatever else you would like.\n\n\n\n\n\n\n\nTip\n\n\n\n\n\nWant to change the size of your plot:\n\nCopy-paste the plot-code to the console.\nPress Export → Copy to Clipboard…\nDrag the plot in the bottom-right corner to adjust the size.\nNote down the width and the height and write the values to the width and height arguments of the ggsave function.\n\n\n\n\n\nautoplot(pca_res, data = diabetes_glucose_remove_NA, colour = \"Diabetes\",\n         loadings = TRUE, loadings.colour = \"grey30\", loadings.label.colour = \"black\",\n         loadings.label = TRUE, loadings.label.size = 3.5) + \n  theme_minimal() + \n  labs(title = \"PCA of Diabetes Dataset\")\n\n\n\n\n\n\n\n# ggsave('../figures/PCA_diabetes.png', width = 7, height = 5)\n\n\nCalculate the variance explained by each of the PC’s using the following function.\n\n\\[\n\\text{Variance Explained} = \\frac{\\text{sdev}^2}{\\sum \\text{sdev}^2} \\times 100\n\\]\n\n\n\n\n\n\nHint\n\n\n\n\n\nAccess the standard deviation from the PCA object like this: pca_res$sdev.\n\n\n\n\nvariance_explained &lt;- ((pca_res$sdev^2) / sum(pca_res$sdev^2)) * 100\n\n\nMake two-column-data-frame with names of the PC’s in one column and the variance explained in the other column.\n\n\ndf_variance_explained &lt;- tibble(PC = c(paste0('PC', 1:length(variance_explained))),\n                                variance_explained = variance_explained)\n\ndf_variance_explained\n\n# A tibble: 8 × 2\n  PC    variance_explained\n  &lt;chr&gt;              &lt;dbl&gt;\n1 PC1              47.8   \n2 PC2              15.5   \n3 PC3              11.6   \n4 PC4               8.45  \n5 PC5               7.51  \n6 PC6               5.14  \n7 PC7               4.02  \n8 PC8               0.0897\n\n\n\nUse the data frame you just made to create a column plot of the variances explained.\n\n\ndf_variance_explained %&gt;% \n  ggplot(aes(x = PC, \n             y = variance_explained))+ \n  geom_col() + \n  labs(title = \"Varinace explained for each PC\", \n       y = \"Variance Explained\")\n\n\n\n\n\n\n\n\n\nRender you document and review the html file.",
     "crumbs": [
@@ -581,88 +665,65 @@
     ]
   },
   {
-    "objectID": "presentations/presentation2.html",
-    "href": "presentations/presentation2.html",
-    "title": "Presentation 2: Advanced Tidyverse / Pivot longer, wider, and nesting",
+    "objectID": "presentations/presentation3.html",
+    "href": "presentations/presentation3.html",
+    "title": "Presentation 3 - Exploratory Data Analysis (EDA)",
     "section": "",
-    "text": "library(readxl)\nlibrary(tidyverse)",
+    "text": "We will not be going through any presentation for this part.\nFor Exercise 3-13 we refer to the FromExceltoR material: https://center-for-health-data-science.github.io/FromExceltoR/Presentations/presentation3.html.\nFor Exercise 14-19 we refer to the this tutorial about Principal Component Analysis (PCA): https://cran.r-project.org/web/packages/ggfortify/vignettes/plot_pca.html.\nFor theory about PCA have a look at this video: https://www.youtube.com/watch?v=FgakZw6K1QQ&t=799s. NB: This video structures samples/mice as features and genes as observations, where as the usual structure is genes as features and samples/mice as observations.",
     "crumbs": [
       "Course Material",
       "Presentations",
-      "Presentation 2: Advanced Tidyverse"
+      "Presentation 3: Exploratory Data Analysis"
     ]
   },
   {
-    "objectID": "presentations/presentation2.html#load-packages",
-    "href": "presentations/presentation2.html#load-packages",
-    "title": "Presentation 2: Advanced Tidyverse / Pivot longer, wider, and nesting",
+    "objectID": "presentations/presentation5.html",
+    "href": "presentations/presentation5.html",
+    "title": "Presentation 5: Modelling in R",
     "section": "",
-    "text": "library(readxl)\nlibrary(tidyverse)",
-    "crumbs": [
-      "Course Material",
-      "Presentations",
-      "Presentation 2: Advanced Tidyverse"
-    ]
+    "text": "library(tidyverse)\n\n── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──\n✔ dplyr     1.1.4     ✔ readr     2.1.5\n✔ forcats   1.0.0     ✔ stringr   1.5.1\n✔ ggplot2   3.5.1     ✔ tibble    3.2.1\n✔ lubridate 1.9.3     ✔ tidyr     1.3.1\n✔ purrr     1.0.2     \n── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──\n✖ dplyr::filter() masks stats::filter()\n✖ dplyr::lag()    masks stats::lag()\nℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors\n\nlibrary(caret)\n\nIndlæser krævet pakke: lattice\n\nVedhæfter pakke: 'caret'\n\nDet følgende objekt er maskeret fra 'package:purrr':\n\n    lift"
   },
   {
-    "objectID": "presentations/presentation2.html#load-data",
-    "href": "presentations/presentation2.html#load-data",
-    "title": "Presentation 2: Advanced Tidyverse / Pivot longer, wider, and nesting",
+    "objectID": "presentations/presentation5.html#load-packages",
+    "href": "presentations/presentation5.html#load-packages",
+    "title": "Presentation 5: Modelling in R",
+    "section": "",
+    "text": "library(tidyverse)\n\n── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──\n✔ dplyr     1.1.4     ✔ readr     2.1.5\n✔ forcats   1.0.0     ✔ stringr   1.5.1\n✔ ggplot2   3.5.1     ✔ tibble    3.2.1\n✔ lubridate 1.9.3     ✔ tidyr     1.3.1\n✔ purrr     1.0.2     \n── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──\n✖ dplyr::filter() masks stats::filter()\n✖ dplyr::lag()    masks stats::lag()\nℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors\n\nlibrary(caret)\n\nIndlæser krævet pakke: lattice\n\nVedhæfter pakke: 'caret'\n\nDet følgende objekt er maskeret fra 'package:purrr':\n\n    lift"
+  },
+  {
+    "objectID": "presentations/presentation5.html#load-data",
+    "href": "presentations/presentation5.html#load-data",
+    "title": "Presentation 5: Modelling in R",
     "section": "Load data",
-    "text": "Load data\n\ndf_sales &lt;- read_excel('../out/sales_data_2.xlsx')",
-    "crumbs": [
-      "Course Material",
-      "Presentations",
-      "Presentation 2: Advanced Tidyverse"
-    ]
+    "text": "Load data\n\ndf_sales &lt;- readxl::read_xlsx('../data/df_sales_1.xlsx')\n# data &lt;- mtcars"
   },
   {
-    "objectID": "presentations/presentation2.html#goal",
-    "href": "presentations/presentation2.html#goal",
-    "title": "Presentation 2: Advanced Tidyverse / Pivot longer, wider, and nesting",
-    "section": "Goal",
-    "text": "Goal\nThe goal is to make a plot like this where we visualize the sales for each year across each employee.\n\n\n\n\n\nThe data is now in wide format. Can we make the plot in the way the data is formatted now?\n\n Hint \n\nNo. To create the plot, we need a column for the years to use on the x-axis, a column for sales in thousands DKK, and a column for Names. While the Names column is already present, the sales data is spread across four separate columns, and there is no column for the year.\n\n\n\nhead(df_sales)\n\n# A tibble: 6 × 12\n     ID Name      Age Sex    sales_2020 sales_2021 sales_2022 sales_2023 mood \n  &lt;dbl&gt; &lt;chr&gt;   &lt;dbl&gt; &lt;chr&gt;       &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt; &lt;chr&gt;\n1     1 Alice      25 Female        100        110        120        100 happy\n2     2 Bob        30 Male          200        210        220        230 happy\n3     3 Charlie    22 Male          150        160        170        200 happy\n4     4 Sophie     35 Female        300        320        340        250 happy\n5     5 Eve        28 Female        250        240        250        270 happy\n6     6 Frank      NA Male           NA        260        270        280 happy\n# ℹ 3 more variables: raise &lt;chr&gt;, group &lt;chr&gt;, City &lt;chr&gt;",
-    "crumbs": [
-      "Course Material",
-      "Presentations",
-      "Presentation 2: Advanced Tidyverse"
-    ]
+    "objectID": "presentations/presentation5.html#linear-regression",
+    "href": "presentations/presentation5.html#linear-regression",
+    "title": "Presentation 5: Modelling in R",
+    "section": "Linear Regression",
+    "text": "Linear Regression\n\nSplit Data into Traning and Test Set\nCreate an 80/20 train-test split using the createDataPartition function.\n\n# Set seed to ensure reproducibility\nset.seed(123)  \n\nsplit &lt;- createDataPartition(df_sales$ID, p = 0.8, list = FALSE)\ntrain_data &lt;- df_sales[split, ]\ntest_data &lt;- df_sales[-split, ]\n\n\n\nTrain the Linear Regression Model\n\n# Fit a linear regression model\nmodel &lt;- lm(sales_2023 ~ sales_2020 + Age, data = df_sales)  # Predict mpg using weight (wt) and horsepower (hp)\n\n# View model summary\nsummary(model)\n\n\nCall:\nlm(formula = sales_2023 ~ sales_2020 + Age, data = df_sales)\n\nResiduals:\n    Min      1Q  Median      3Q     Max \n-55.606 -17.731   4.598  18.331  50.456 \n\nCoefficients:\n            Estimate Std. Error t value Pr(&gt;|t|)    \n(Intercept) 50.66793   62.42929   0.812    0.448    \nsales_2020   1.00656    0.09643  10.438 4.53e-05 ***\nAge         -1.34372    2.12363  -0.633    0.550    \n---\nSignif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1\n\nResidual standard error: 35.77 on 6 degrees of freedom\n  (1 observation deleted due to missingness)\nMultiple R-squared:  0.9498,    Adjusted R-squared:  0.933 \nF-statistic:  56.7 on 2 and 6 DF,  p-value: 0.0001269"
   },
   {
-    "objectID": "presentations/presentation2.html#long-format",
-    "href": "presentations/presentation2.html#long-format",
-    "title": "Presentation 2: Advanced Tidyverse / Pivot longer, wider, and nesting",
-    "section": "Long format",
-    "text": "Long format\nThe data set is in wide format. The data can be restructured to long format such that there is one line per year per person. For this we use the pivot_longer function.\n\ndf_sales_longer &lt;- df_sales %&gt;% \n  pivot_longer(cols = starts_with(\"sales_\"),\n               names_to = \"year\",\n               values_to = \"sales\"\n               )\n\nhead(df_sales_longer)\n\n# A tibble: 6 × 10\n     ID Name    Age Sex    mood  raise group        City  year       sales\n  &lt;dbl&gt; &lt;chr&gt; &lt;dbl&gt; &lt;chr&gt;  &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;        &lt;chr&gt; &lt;chr&gt;      &lt;dbl&gt;\n1     1 Alice    25 Female happy no    young_female Miami sales_2020   100\n2     1 Alice    25 Female happy no    young_female Miami sales_2021   110\n3     1 Alice    25 Female happy no    young_female Miami sales_2022   120\n4     1 Alice    25 Female happy no    young_female Miami sales_2023   100\n5     2 Bob      30 Male   happy yes   mature_male  Miami sales_2020   200\n6     2 Bob      30 Male   happy yes   mature_male  Miami sales_2021   210\n\n\nWe can transform the year to integer.\n\ndf_sales_longer &lt;- df_sales_longer %&gt;% \n  mutate(year = str_remove(year, 'sales_') %&gt;% as.integer()) \n\nhead(df_sales_longer)\n\n# A tibble: 6 × 10\n     ID Name    Age Sex    mood  raise group        City   year sales\n  &lt;dbl&gt; &lt;chr&gt; &lt;dbl&gt; &lt;chr&gt;  &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;        &lt;chr&gt; &lt;int&gt; &lt;dbl&gt;\n1     1 Alice    25 Female happy no    young_female Miami  2020   100\n2     1 Alice    25 Female happy no    young_female Miami  2021   110\n3     1 Alice    25 Female happy no    young_female Miami  2022   120\n4     1 Alice    25 Female happy no    young_female Miami  2023   100\n5     2 Bob      30 Male   happy yes   mature_male  Miami  2020   200\n6     2 Bob      30 Male   happy yes   mature_male  Miami  2021   210\n\n\nMake the plot explained above (scatter and line plot over the sales development over the years for each person).\n\ndf_sales_longer %&gt;% \n  ggplot(aes(x = year, \n             y = sales, \n             color = Name)) + \n  geom_point() + \n  geom_line() + \n  theme_bw()\n\n\n\n\n\n\n\n# Saving the plot\n# ggsave('../out/sales_2_plot.png', width = 10.37, height = 7.55, units = 'in')",
-    "crumbs": [
-      "Course Material",
-      "Presentations",
-      "Presentation 2: Advanced Tidyverse"
-    ]
+    "objectID": "presentations/presentation5.html#regression-with-categorical-features",
+    "href": "presentations/presentation5.html#regression-with-categorical-features",
+    "title": "Presentation 5: Modelling in R",
+    "section": "Regression with categorical features",
+    "text": "Regression with categorical features"
   },
   {
-    "objectID": "presentations/presentation2.html#wide-format",
-    "href": "presentations/presentation2.html#wide-format",
-    "title": "Presentation 2: Advanced Tidyverse / Pivot longer, wider, and nesting",
-    "section": "Wide format",
-    "text": "Wide format\nThe pivot_wider function is used to get data to wide format.\n\ndf_sales_wider &lt;- df_sales_longer %&gt;% \n  pivot_wider(names_from = year, \n              values_from = sales,\n              names_prefix = 'sales_')\n\n# Same content\nhead(df_sales)\n\n# A tibble: 6 × 12\n     ID Name      Age Sex    sales_2020 sales_2021 sales_2022 sales_2023 mood \n  &lt;dbl&gt; &lt;chr&gt;   &lt;dbl&gt; &lt;chr&gt;       &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt; &lt;chr&gt;\n1     1 Alice      25 Female        100        110        120        100 happy\n2     2 Bob        30 Male          200        210        220        230 happy\n3     3 Charlie    22 Male          150        160        170        200 happy\n4     4 Sophie     35 Female        300        320        340        250 happy\n5     5 Eve        28 Female        250        240        250        270 happy\n6     6 Frank      NA Male           NA        260        270        280 happy\n# ℹ 3 more variables: raise &lt;chr&gt;, group &lt;chr&gt;, City &lt;chr&gt;\n\nhead(df_sales_wider)\n\n# A tibble: 6 × 12\n     ID Name      Age Sex    mood  raise group       City  sales_2020 sales_2021\n  &lt;dbl&gt; &lt;chr&gt;   &lt;dbl&gt; &lt;chr&gt;  &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;       &lt;chr&gt;      &lt;dbl&gt;      &lt;dbl&gt;\n1     1 Alice      25 Female happy no    young_fema… Miami        100        110\n2     2 Bob        30 Male   happy yes   mature_male Miami        200        210\n3     3 Charlie    22 Male   happy yes   young_male  LA           150        160\n4     4 Sophie     35 Female happy no    mature_fem… New …        300        320\n5     5 Eve        28 Female happy yes   young_fema… LA           250        240\n6     6 Frank      NA Male   happy yes   &lt;NA&gt;        New …         NA        260\n# ℹ 2 more variables: sales_2022 &lt;dbl&gt;, sales_2023 &lt;dbl&gt;",
-    "crumbs": [
-      "Course Material",
-      "Presentations",
-      "Presentation 2: Advanced Tidyverse"
-    ]
+    "objectID": "presentations/presentation5.html#decision-tree",
+    "href": "presentations/presentation5.html#decision-tree",
+    "title": "Presentation 5: Modelling in R",
+    "section": "Decision tree",
+    "text": "Decision tree"
   },
   {
-    "objectID": "presentations/presentation2.html#nesting",
-    "href": "presentations/presentation2.html#nesting",
-    "title": "Presentation 2: Advanced Tidyverse / Pivot longer, wider, and nesting",
-    "section": "Nesting",
-    "text": "Nesting\nThe long format can contain many repetitions e.g. information on the sales employee in df_sales_longer. Group data by Name and nest year and sales into a single column that we will name sales_data.\n\ndf_sales_longer_nested &lt;- df_sales_longer %&gt;%  \n  group_by(Name) %&gt;% \n  nest(sales_data = c(year, sales)) %&gt;% \n  ungroup()\n\nhead(df_sales_longer_nested)\n\n# A tibble: 6 × 9\n     ID Name      Age Sex    mood  raise group         City     sales_data      \n  &lt;dbl&gt; &lt;chr&gt;   &lt;dbl&gt; &lt;chr&gt;  &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;         &lt;chr&gt;    &lt;list&gt;          \n1     1 Alice      25 Female happy no    young_female  Miami    &lt;tibble [4 × 2]&gt;\n2     2 Bob        30 Male   happy yes   mature_male   Miami    &lt;tibble [4 × 2]&gt;\n3     3 Charlie    22 Male   happy yes   young_male    LA       &lt;tibble [4 × 2]&gt;\n4     4 Sophie     35 Female happy no    mature_female New York &lt;tibble [4 × 2]&gt;\n5     5 Eve        28 Female happy yes   young_female  LA       &lt;tibble [4 × 2]&gt;\n6     6 Frank      NA Male   happy yes   &lt;NA&gt;          New York &lt;tibble [4 × 2]&gt;\n\n\nNote: Nested data cannot be exported as an Excel or CSV file. Instead, you need to export it as an RDS file, a format specifically designed to save R objects.\nWe can extract the sales information from an employee using the pull function.\n\ndf_sales_longer_nested %&gt;% \n  filter(Name == 'Bob') %&gt;% \n  pull(sales_data)\n\n[[1]]\n# A tibble: 4 × 2\n   year sales\n  &lt;int&gt; &lt;dbl&gt;\n1  2020   200\n2  2021   210\n3  2022   220\n4  2023   230",
-    "crumbs": [
-      "Course Material",
-      "Presentations",
-      "Presentation 2: Advanced Tidyverse"
-    ]
+    "objectID": "presentations/presentation5.html#clustering-k-means",
+    "href": "presentations/presentation5.html#clustering-k-means",
+    "title": "Presentation 5: Modelling in R",
+    "section": "Clustering: K-means",
+    "text": "Clustering: K-means"
   },
   {
     "objectID": "exercises/exercise1.html",

@@ -1,5 +1,5 @@
 ---
-title: "Exercise 3 - Solutions: ggplot2"
+title: "Exercise 3 - Solutions: Exploratory Data Analysis (EDA)"
 format: html
 project:
  type: website

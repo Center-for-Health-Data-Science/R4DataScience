@@ -17,10 +17,19 @@ library(tidyverse)
 Here we load a dataframe that contains sales data for employees (in thousands DKK) from 2020 to 2023. We load the data as `df_baseR` which we will use to demonstrate base R commands. A copy of the same dataframe, `df_tidyverse`, is used to demonstrate tidyverse commands.
 
 ```{r}
-df_baseR <- readxl::read_excel('../data/df_sales_1.xlsx')
-df_tidyverse <- df_baseR
+df_baseR <- readxl::read_excel('../data/df_sales_1.xlsx') %>% as.data.frame()
+df_tidyverse <- readxl::read_excel('../data/df_sales_1.xlsx') %>% as_tibble()
 ```
 
+Table format in baseR is called data.frame. Have a look at the object in the terminal. It is very simple. 
+```{r}
+class(df_baseR)
+```
+
+Table format in tidyverse is called tibble. Have a look at the object in the terminal. The dimensions of the tibble is provided together with the classes of each column. 
+```{r}
+class(df_tidyverse)
+```
 
 ## Base R and Tidyverse
 
@@ -277,10 +286,11 @@ str_detect('Alice', 'A')
 str_detect('Alice', 'B')
 ```
 
-Check is "A" or "a" in `Name`.
+Add column that check if "A" or "a" in `Name` and place it after the `Name` column. 
 ```{r}
 df_tidyverse_join %>% 
-  mutate(A_in_name = str_detect(Name, 'A|a')) %>% 
+  mutate(A_in_name = str_detect(Name, 'A|a'),
+         .after = Name) %>% 
   head()
 ```
 

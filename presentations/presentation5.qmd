@@ -1,0 +1,51 @@
+---
+title: "Presentation 5: Modelling in R"
+format: html
+project:
+ type: website
+ output-dir: ../docs
+---
+
+## Load packages
+```{r}
+library(tidyverse)
+library(caret)
+```
+
+## Load data
+```{r}
+df_sales <- readxl::read_xlsx('../data/df_sales_1.xlsx')
+# data <- mtcars
+```
+
+## Linear Regression 
+
+### Split Data into Traning and Test Set
+Create an 80/20 train-test split using the `createDataPartition` function. 
+```{r}
+# Set seed to ensure reproducibility
+set.seed(123)  
+
+split <- createDataPartition(df_sales$ID, p = 0.8, list = FALSE)
+train_data <- df_sales[split, ]
+test_data <- df_sales[-split, ]
+```
+
+### Train the Linear Regression Model
+
+```{r}
+# Fit a linear regression model
+model <- lm(sales_2023 ~ sales_2020 + Age, data = df_sales)  # Predict mpg using weight (wt) and horsepower (hp)
+
+# View model summary
+summary(model)
+```
+
+
+## Regression with categorical features 
+
+## Decision tree
+
+## Clustering: K-means
+
+
