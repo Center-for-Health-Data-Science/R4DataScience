@@ -1,5 +1,5 @@
 ---
-title: "Exercise 2 - Solutions: Advanced Tidyveres"
+title: "Exercise 2 - Solutions: Data Clean Up"
 format: html
 project:
  type: website

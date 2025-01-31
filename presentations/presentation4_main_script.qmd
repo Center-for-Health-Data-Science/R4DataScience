@@ -6,53 +6,150 @@ project:
  output-dir: ../docs
 ---
 
-## Load packages 
+## If-else statments 
 
-## Source script
-All global variables (including functions) in the functions.R script will be loaded and appear in the Global environment in the top left corner. 
+Define variables.  
 ```{r}
-source('./presentation4_functions.R')
+num1 <- 8
+num2 <- 5
 ```
 
-## Function calls 
-Calculate BMI.
+Logical: 8 is larger than 5. 
+```{r}
+num1 > num2
+```
+
+Logical: 8 is not smaller than 5. 
+```{r}
+num1 < num2
+```
+
+A logical statement is used in an `if` statement to define a condition.
+```{r}
+if (num1 > num2){
+  statement <- paste(num1, 'is larger than', num2)
+}
+
+print(statement)
+```
+
+Redefine variables.  
+```{r}
+num2 <- 10
+
+num2 <- 3
+
+num2 <- 8
+```
+
+Use `else if` and `else` statements to test multiple conditions.
+```{r}
+if (num1 > num2){
+  statement <- paste(num1, 'is larger than', num2)
+} else if (num1 < num2) {
+  statement <- paste(num1, 'is smaller than', num2)
+} else {
+  statement <- paste(num1, 'is equal to', num2)
+} 
+
+print(statement)
+```
+
+## For-loops
+
+We first define a vector containing both numeric and character elements.
+```{r}
+vector1 <- c(1, 2, 6, 3, 2, 'hello', 'world', 'yes', 7, 8, 12, 15)
+```
+
+To loop through `vector1`, we define a loop variable (here called `element`), which takes the value of each item in the vector, one at a time. 
+```{r}
+for (element in vector1) {
+  print(element)
+}
+```
+
+The loop variable name is arbitrary - you can call it anything. For example, we can use `THIS_VARIABLE` and get the same result. Point is, it does not matter what you call the variable, just avoid overwriting an important variable of your script.
+```{r}
+for (THIS_VARIABLE in vector1) {
+  print(THIS_VARIABLE)
+}
+```
+
+After you loop through a vector or a list, the variable is always the last element of your vector. The variable is hence a global variable. 
+```{r}
+THIS_VARIABLE
+```
+
+## User defined Functions
+
+We will use BMI calculation as an example for this part. 
+
+Define variables.
 ```{r}
 weight_kg <- 70
 height_m <- 1.80
-
-calculate_bmi(weight_kg, height_m)
-
-calculate_bmi(weight_kg = 70, height_m = 1.80)
 ```
+
+Calculate BMI. 
+```{r}
+bmi <- weight_kg/height_m^2
+bmi
+```
+
+If we plan to calculate BMI for multiple individuals it is convenient to write the calculation into a function.
+
+- Function name:  `calculate_bmi`.
+
+- Function parameters: `weight_kg` and `height_m`. 
+
+- The return value: `bmi`. 
+
+The return statement specifies the value that the function will return when called.
 
 ```{r}
-calculate_bmi(70, 1.80)
+calculate_bmi <- function(weight_kg, height_m){
+  
+  bmi <- weight_kg/height_m^2
+  
+  return(bmi)
+  
+}
 ```
 
+We can call the function using previously defined variables.
 ```{r}
-calculate_bmi(1.80, 70)
+calculate_bmi(weight_kg = weight_kg, 
+              height_m = height_m)
 ```
 
+We can also pass numbers directly to the function. 
 ```{r}
-calculate_bmi(height_m = 1.80, weight_kg = 70)
+calculate_bmi(weight_kg = 100, 
+              height_m = 1.90)
 ```
 
-Estimate birth year of 50 year old person.
+**Argument Order in Function Calls**
+
+If we specify the parameter names, the order can be changed.
 ```{r}
-estimate_birth_year(age = 50)
+calculate_bmi(height_m = 1.90, 
+              weight_kg = 100)
 ```
 
-Estimate birth year of a person that was 50 years old in 2005. 
+If we do not specify the parameter names, the arguments will be matched according to the position - so be careful with this. 
 ```{r}
-estimate_birth_year(age = 50, currect_year = 2005)
+calculate_bmi(1.90, 
+              100)
 ```
 
-## If-statements 
-Data on person 1.
+## Combining function call with if-statement
+
+Data on a single individual.
 ```{r}
 age <- 45
-weight_kg = 85
-height_m = 1.75
+weight_kg <- 85
+height_m <- 1.75
 ```
 
 BMI should only be calculated for individuals over the age of 18. 
@@ -62,65 +159,87 @@ if (age >= 18){
 }
 ```
 
-## For-loops 
-Data on 5 people 
+## Combining function call with for-loops
+Data on 5 individuals.   
 ```{r}
 df <- data.frame(row.names = 1:5, 
                  age = c(45, 16, 31, 56, 19), 
-                 weight_kg = c(85, 65, 81, 53, 76), 
-                 height_m = c(1.75, 1.55, 1.95, 1.51, 1.89)
+                 weight_kg = c(85, 65, 100, 45, 76), 
+                 height_m = c(1.75, 1.45, 1.95, 1.51, 1.89)
                  )
 ```
 
-Print ID of individuals
+Print ID, weight, and height of all individuals. 
 ```{r}
 for (id in rownames(df)){
-  print(id)
+  
+  weight <- df[id, 'weight_kg']
+  
+  height <- df[id, 'height_m']
+  
+  print(c(id, weight, height))
+  
 }
 ```
 
-## Combination of function call, if-statement and for-loops. 
+Call function to calculate BMI for all individuals.
+```{r}
+for (id in rownames(df)) {
+  
+  weight <- df[id, 'weight_kg']
+  
+  height <- df[id, 'height_m']
+  
+  bmi <- calculate_bmi(weight, height)
+  
+  print(c(id, bmi))
+  
+}
+```
+
+### Combination of function call, if-statement and for-loops. 
 Print BMI for individuals that are 18 years old or older. 
 ```{r}
 for (id in rownames(df)) {
   
   if (df[id, 'age'] >= 18) {
     
-    bmi <- calculate_bmi(df[id, 'weight_kg'], df[id, 'height_m'])
-    print(bmi)
+    weight <- df[id, 'weight_kg']
+  
+    height <- df[id, 'height_m']
+    
+    bmi <- calculate_bmi(weight, height)
+    
+    print(c(id, bmi))
 
+  } else {
+    
+    print(paste(id, 'is under 18.'))
+    
   }
   
 }
 ```
 
-Use `mapply` for alternative to calling function in for-loop. 
-```{r}
-mapply(FUN = calculate_bmi, 
-       weight_kg = df$weight_kg, 
-       height_m = df$height_m)
-```
-
-
-Add BMI and estimated birth year to data frame. 
+Add BMI to the data frame. 
 ```{r}
 for (id in rownames(df)){
   
-  # Add BMI to data frame
   if (df[id, 'age'] >= 18) {
     
-    bmi <- calculate_bmi(df[id, 'weight_kg'], df[id, 'height_m'])
-    df[id, 'bmi'] <- bmi
+    weight <- df[id, 'weight_kg']
+  
+    height <- df[id, 'height_m']
     
+    bmi <- calculate_bmi(weight, height)
+
   } else {
     
-    df[id, 'bmi'] <- NA
+    bmi <- NA
     
   }
   
-  # Add birth year to data frame 
-  birth_year <- estimate_birth_year(age = df[id, 'age'])
-  df[id, 'birth_year'] <- birth_year
+  df[id, 'bmi'] <- bmi
   
 }
 ```
@@ -130,7 +249,34 @@ Have a look at the data frame.
 df
 ```
 
-## Advanced functions 
+## Out-sourcing functions to an Rscript you source
+
+Remove `calculate_bmi` from the global environment. 
+```{r}
+rm(list = "calculate_bmi")
+```
+
+By sourcing a script, all global variables (including functions) in script will be loaded and appear in the Global environment in the top left corner. Here we source the functions.R script. 
+```{r}
+source('./presentation4_functions.R')
+```
+
+After we sourced the functions script the `calculate_bmi` function can be used just like if it was defined in the main script. If you work on a larger project and write multiple functions, it is best practice to have a function script and source it in your main script. 
+```{r}
+calculate_bmi(weight_kg = 67, 
+              height_m = 1.70)
+```
+
+Use `mapply` for alternative to calling function in for-loop. 
+```{r}
+mapply(FUN = calculate_bmi, 
+       weight_kg = df$weight_kg, 
+       height_m = df$height_m)
+```
+
+## Functions with error handling. 
+
+The function is in the functions script. 
 
 The BMI function with out error handling returns a meaningless BMI value if given a negative weight.
 ```{r}
@@ -145,21 +291,5 @@ calculate_bmi_2(weight_kg = -50, height_m = 1.80)
 The BMI function with error handling returns an warning if a BMI outside the normal range is calculated. 
 ```{r}
 calculate_bmi_2(weight_kg = 25, height_m = 1.80)
-```
-
-
-```{r}
-names <- c('Thilde', 'Diana', 'Henrike', 'Helene', 'Chelsea', 'Signe')
-
-for (name in names){
-  print(name)
-}
-```
-
-
-```{r}
-for (i in seq_along(names)){
-  print(names[i])
-}
 ```
 

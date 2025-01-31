@@ -26,7 +26,7 @@ website:
           - href: presentations/presentation1.qmd
             text: "Presentation 1: Base R and Tidyverse"
           - href: presentations/presentation2.qmd
-            text: "Presentation 2: Advanced Tidyverse" 
+            text: "Presentation 2: Data Clean Up" 
           - href: presentations/presentation3.qmd
             text: "Presentation 3: Exploratory Data Analysis" 
           - href: presentations/presentation4_main_script.qmd
