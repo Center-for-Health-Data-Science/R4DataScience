@@ -145,7 +145,7 @@ ul.task-list li input[type="checkbox"] {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../presentations/presentation2.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Presentation 2: Advanced Tidyverse</span></a>
+ <span class="menu-text">Presentation 2: Data Clean Up</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -315,7 +315,6 @@ ul.task-list li input[type="checkbox"] {
 <pre><code># Packages should be loaded in the main script.
 
 # Function to calculate BMI
-# Required packages: none
 calculate_bmi &lt;- function(weight_kg, height_m){
   
   bmi &lt;- weight_kg/height_m^2
@@ -324,20 +323,32 @@ calculate_bmi &lt;- function(weight_kg, height_m){
   
 }
 
-# Function to estimate birth year
-# Required packages: none
-estimate_birth_year &lt;- function(currect_year = 2025, age){
-  
-  birth_year &lt;- currect_year - age
-  
-  return(birth_year)
-  
-}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 # Function to calculate BMI, with control points and error checking. 
-# Required packages: none
 calculate_bmi_2 &lt;- function(weight_kg, height_m) {
+  
   # Check if weight and height are numeric
   if (!is.numeric(weight_kg) | !is.numeric(height_m)) {
     stop("Both weight_kg and height_m must be numeric values.")

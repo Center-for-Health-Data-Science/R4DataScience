@@ -124,85 +124,85 @@
   {
     "objectID": "presentations/presentation2.html",
     "href": "presentations/presentation2.html",
-    "title": "Presentation 2: Advanced Tidyverse / Pivot longer, wider, and nesting",
+    "title": "Presentation 2: Advanced Data Wrangling",
     "section": "",
     "text": "library(readxl)\nlibrary(tidyverse)",
     "crumbs": [
       "Course Material",
       "Presentations",
-      "Presentation 2: Advanced Tidyverse"
+      "Presentation 2: Data Clean Up"
     ]
   },
   {
     "objectID": "presentations/presentation2.html#load-packages",
     "href": "presentations/presentation2.html#load-packages",
-    "title": "Presentation 2: Advanced Tidyverse / Pivot longer, wider, and nesting",
+    "title": "Presentation 2: Advanced Data Wrangling",
     "section": "",
     "text": "library(readxl)\nlibrary(tidyverse)",
     "crumbs": [
       "Course Material",
       "Presentations",
-      "Presentation 2: Advanced Tidyverse"
+      "Presentation 2: Data Clean Up"
     ]
   },
   {
     "objectID": "presentations/presentation2.html#load-data",
     "href": "presentations/presentation2.html#load-data",
-    "title": "Presentation 2: Advanced Tidyverse / Pivot longer, wider, and nesting",
+    "title": "Presentation 2: Advanced Data Wrangling",
     "section": "Load data",
     "text": "Load data\n\ndf_sales &lt;- read_excel('../out/sales_data_2.xlsx')",
     "crumbs": [
       "Course Material",
       "Presentations",
-      "Presentation 2: Advanced Tidyverse"
+      "Presentation 2: Data Clean Up"
     ]
   },
   {
-    "objectID": "presentations/presentation2.html#goal",
-    "href": "presentations/presentation2.html#goal",
-    "title": "Presentation 2: Advanced Tidyverse / Pivot longer, wider, and nesting",
-    "section": "Goal",
-    "text": "Goal\nThe goal is to make a plot like this where we visualize the sales for each year across each employee.\n\n\n\n\n\nThe data is now in wide format. Can we make the plot in the way the data is formatted now?\n\n Hint \n\nNo. To create the plot, we need a column for the years to use on the x-axis, a column for sales in thousands DKK, and a column for Names. While the Names column is already present, the sales data is spread across four separate columns, and there is no column for the year.\n\n\n\nhead(df_sales)\n\n# A tibble: 6 × 12\n     ID Name      Age Sex    sales_2020 sales_2021 sales_2022 sales_2023 mood \n  &lt;dbl&gt; &lt;chr&gt;   &lt;dbl&gt; &lt;chr&gt;       &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt; &lt;chr&gt;\n1     1 Alice      25 Female        100        110        120        100 happy\n2     2 Bob        30 Male          200        210        220        230 happy\n3     3 Charlie    22 Male          150        160        170        200 happy\n4     4 Sophie     35 Female        300        320        340        250 happy\n5     5 Eve        28 Female        250        240        250        270 happy\n6     6 Frank      NA Male           NA        260        270        280 happy\n# ℹ 3 more variables: raise &lt;chr&gt;, group &lt;chr&gt;, City &lt;chr&gt;",
+    "objectID": "presentations/presentation2.html#formats-pivot-long-and-wider",
+    "href": "presentations/presentation2.html#formats-pivot-long-and-wider",
+    "title": "Presentation 2: Advanced Data Wrangling",
+    "section": "Formats: Pivot long and wider",
+    "text": "Formats: Pivot long and wider\nIn tidyverse we primarily use two different formats: long and wide. The wide format is how you are probably used to seeing data presented with one column for each measured variable. However, when we need to plot, analyse or model data, we will often need them to be in the long format instead. It is therefore important that we know how to switch between them.\n\nPivot into long format\nThe goal of this section is to make a plot like this where we visualize the sales for each year across each employee.\n\n\n\n\n\nThe data is now in wide format. Can we make the plot in the way the data is formatted now?\n\n Hint \n\nNo. To create the plot, we need a column for the years to use on the x-axis, a column for sales in thousands DKK, and a column for Names. While the Names column is already present, the sales data is spread across four separate columns, and there is no column for the year.\n\n\n\nhead(df_sales)\n\n# A tibble: 6 × 12\n     ID Name      Age Sex    sales_2020 sales_2021 sales_2022 sales_2023 mood \n  &lt;dbl&gt; &lt;chr&gt;   &lt;dbl&gt; &lt;chr&gt;       &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt; &lt;chr&gt;\n1     1 Alice      25 Female        100        110        120        100 happy\n2     2 Bob        30 Male          200        210        220        230 happy\n3     3 Charlie    22 Male          150        160        170        200 happy\n4     4 Sophie     35 Female        300        320        340        250 happy\n5     5 Eve        28 Female        250        240        250        270 happy\n6     6 Frank      NA Male           NA        260        270        280 happy\n# ℹ 3 more variables: raise &lt;chr&gt;, group &lt;chr&gt;, City &lt;chr&gt;\n\n\nThe data set is in wide format. The data can be restructured to long format such that there is one line per year per person. For this we use the pivot_longer function.\n\ndf_sales_longer &lt;- df_sales %&gt;% \n  pivot_longer(cols = starts_with(\"sales_\"),\n               names_to = \"year\",\n               values_to = \"sales\"\n               )\n\nhead(df_sales_longer)\n\n# A tibble: 6 × 10\n     ID Name    Age Sex    mood  raise group        City  year       sales\n  &lt;dbl&gt; &lt;chr&gt; &lt;dbl&gt; &lt;chr&gt;  &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;        &lt;chr&gt; &lt;chr&gt;      &lt;dbl&gt;\n1     1 Alice    25 Female happy no    young_female Miami sales_2020   100\n2     1 Alice    25 Female happy no    young_female Miami sales_2021   110\n3     1 Alice    25 Female happy no    young_female Miami sales_2022   120\n4     1 Alice    25 Female happy no    young_female Miami sales_2023   100\n5     2 Bob      30 Male   happy yes   mature_male  Miami sales_2020   200\n6     2 Bob      30 Male   happy yes   mature_male  Miami sales_2021   210\n\n\nWe can transform the year to integer.\n\ndf_sales_longer &lt;- df_sales_longer %&gt;% \n  mutate(year = str_remove(year, 'sales_') %&gt;% as.integer()) \n\nhead(df_sales_longer)\n\n# A tibble: 6 × 10\n     ID Name    Age Sex    mood  raise group        City   year sales\n  &lt;dbl&gt; &lt;chr&gt; &lt;dbl&gt; &lt;chr&gt;  &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;        &lt;chr&gt; &lt;int&gt; &lt;dbl&gt;\n1     1 Alice    25 Female happy no    young_female Miami  2020   100\n2     1 Alice    25 Female happy no    young_female Miami  2021   110\n3     1 Alice    25 Female happy no    young_female Miami  2022   120\n4     1 Alice    25 Female happy no    young_female Miami  2023   100\n5     2 Bob      30 Male   happy yes   mature_male  Miami  2020   200\n6     2 Bob      30 Male   happy yes   mature_male  Miami  2021   210\n\n\nMake the plot explained above (scatter and line plot over the sales development over the years for each person).\n\ndf_sales_longer %&gt;% \n  ggplot(aes(x = year, \n             y = sales, \n             color = Name)) + \n  geom_point() + \n  geom_line() + \n  theme_bw()\n\n\n\n\n\n\n\n# Saving the plot\n# ggsave('../out/sales_2_plot.png', width = 10.37, height = 7.55, units = 'in')\n\n\n\nPivot back into wide format\nThe pivot_wider function is used to get data to wide format.\n\ndf_sales_wider &lt;- df_sales_longer %&gt;% \n  pivot_wider(names_from = year, \n              values_from = sales,\n              names_prefix = 'sales_')\n\n# Same content\nhead(df_sales)\n\n# A tibble: 6 × 12\n     ID Name      Age Sex    sales_2020 sales_2021 sales_2022 sales_2023 mood \n  &lt;dbl&gt; &lt;chr&gt;   &lt;dbl&gt; &lt;chr&gt;       &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt; &lt;chr&gt;\n1     1 Alice      25 Female        100        110        120        100 happy\n2     2 Bob        30 Male          200        210        220        230 happy\n3     3 Charlie    22 Male          150        160        170        200 happy\n4     4 Sophie     35 Female        300        320        340        250 happy\n5     5 Eve        28 Female        250        240        250        270 happy\n6     6 Frank      NA Male           NA        260        270        280 happy\n# ℹ 3 more variables: raise &lt;chr&gt;, group &lt;chr&gt;, City &lt;chr&gt;\n\nhead(df_sales_wider)\n\n# A tibble: 6 × 12\n     ID Name      Age Sex    mood  raise group       City  sales_2020 sales_2021\n  &lt;dbl&gt; &lt;chr&gt;   &lt;dbl&gt; &lt;chr&gt;  &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;       &lt;chr&gt;      &lt;dbl&gt;      &lt;dbl&gt;\n1     1 Alice      25 Female happy no    young_fema… Miami        100        110\n2     2 Bob        30 Male   happy yes   mature_male Miami        200        210\n3     3 Charlie    22 Male   happy yes   young_male  LA           150        160\n4     4 Sophie     35 Female happy no    mature_fem… New …        300        320\n5     5 Eve        28 Female happy yes   young_fema… LA           250        240\n6     6 Frank      NA Male   happy yes   &lt;NA&gt;        New …         NA        260\n# ℹ 2 more variables: sales_2022 &lt;dbl&gt;, sales_2023 &lt;dbl&gt;",
     "crumbs": [
       "Course Material",
       "Presentations",
-      "Presentation 2: Advanced Tidyverse"
-    ]
-  },
-  {
-    "objectID": "presentations/presentation2.html#long-format",
-    "href": "presentations/presentation2.html#long-format",
-    "title": "Presentation 2: Advanced Tidyverse / Pivot longer, wider, and nesting",
-    "section": "Long format",
-    "text": "Long format\nThe data set is in wide format. The data can be restructured to long format such that there is one line per year per person. For this we use the pivot_longer function.\n\ndf_sales_longer &lt;- df_sales %&gt;% \n  pivot_longer(cols = starts_with(\"sales_\"),\n               names_to = \"year\",\n               values_to = \"sales\"\n               )\n\nhead(df_sales_longer)\n\n# A tibble: 6 × 10\n     ID Name    Age Sex    mood  raise group        City  year       sales\n  &lt;dbl&gt; &lt;chr&gt; &lt;dbl&gt; &lt;chr&gt;  &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;        &lt;chr&gt; &lt;chr&gt;      &lt;dbl&gt;\n1     1 Alice    25 Female happy no    young_female Miami sales_2020   100\n2     1 Alice    25 Female happy no    young_female Miami sales_2021   110\n3     1 Alice    25 Female happy no    young_female Miami sales_2022   120\n4     1 Alice    25 Female happy no    young_female Miami sales_2023   100\n5     2 Bob      30 Male   happy yes   mature_male  Miami sales_2020   200\n6     2 Bob      30 Male   happy yes   mature_male  Miami sales_2021   210\n\n\nWe can transform the year to integer.\n\ndf_sales_longer &lt;- df_sales_longer %&gt;% \n  mutate(year = str_remove(year, 'sales_') %&gt;% as.integer()) \n\nhead(df_sales_longer)\n\n# A tibble: 6 × 10\n     ID Name    Age Sex    mood  raise group        City   year sales\n  &lt;dbl&gt; &lt;chr&gt; &lt;dbl&gt; &lt;chr&gt;  &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;        &lt;chr&gt; &lt;int&gt; &lt;dbl&gt;\n1     1 Alice    25 Female happy no    young_female Miami  2020   100\n2     1 Alice    25 Female happy no    young_female Miami  2021   110\n3     1 Alice    25 Female happy no    young_female Miami  2022   120\n4     1 Alice    25 Female happy no    young_female Miami  2023   100\n5     2 Bob      30 Male   happy yes   mature_male  Miami  2020   200\n6     2 Bob      30 Male   happy yes   mature_male  Miami  2021   210\n\n\nMake the plot explained above (scatter and line plot over the sales development over the years for each person).\n\ndf_sales_longer %&gt;% \n  ggplot(aes(x = year, \n             y = sales, \n             color = Name)) + \n  geom_point() + \n  geom_line() + \n  theme_bw()\n\n\n\n\n\n\n\n# Saving the plot\n# ggsave('../out/sales_2_plot.png', width = 10.37, height = 7.55, units = 'in')",
-    "crumbs": [
-      "Course Material",
-      "Presentations",
-      "Presentation 2: Advanced Tidyverse"
-    ]
-  },
-  {
-    "objectID": "presentations/presentation2.html#wide-format",
-    "href": "presentations/presentation2.html#wide-format",
-    "title": "Presentation 2: Advanced Tidyverse / Pivot longer, wider, and nesting",
-    "section": "Wide format",
-    "text": "Wide format\nThe pivot_wider function is used to get data to wide format.\n\ndf_sales_wider &lt;- df_sales_longer %&gt;% \n  pivot_wider(names_from = year, \n              values_from = sales,\n              names_prefix = 'sales_')\n\n# Same content\nhead(df_sales)\n\n# A tibble: 6 × 12\n     ID Name      Age Sex    sales_2020 sales_2021 sales_2022 sales_2023 mood \n  &lt;dbl&gt; &lt;chr&gt;   &lt;dbl&gt; &lt;chr&gt;       &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt; &lt;chr&gt;\n1     1 Alice      25 Female        100        110        120        100 happy\n2     2 Bob        30 Male          200        210        220        230 happy\n3     3 Charlie    22 Male          150        160        170        200 happy\n4     4 Sophie     35 Female        300        320        340        250 happy\n5     5 Eve        28 Female        250        240        250        270 happy\n6     6 Frank      NA Male           NA        260        270        280 happy\n# ℹ 3 more variables: raise &lt;chr&gt;, group &lt;chr&gt;, City &lt;chr&gt;\n\nhead(df_sales_wider)\n\n# A tibble: 6 × 12\n     ID Name      Age Sex    mood  raise group       City  sales_2020 sales_2021\n  &lt;dbl&gt; &lt;chr&gt;   &lt;dbl&gt; &lt;chr&gt;  &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;       &lt;chr&gt;      &lt;dbl&gt;      &lt;dbl&gt;\n1     1 Alice      25 Female happy no    young_fema… Miami        100        110\n2     2 Bob        30 Male   happy yes   mature_male Miami        200        210\n3     3 Charlie    22 Male   happy yes   young_male  LA           150        160\n4     4 Sophie     35 Female happy no    mature_fem… New …        300        320\n5     5 Eve        28 Female happy yes   young_fema… LA           250        240\n6     6 Frank      NA Male   happy yes   &lt;NA&gt;        New …         NA        260\n# ℹ 2 more variables: sales_2022 &lt;dbl&gt;, sales_2023 &lt;dbl&gt;",
-    "crumbs": [
-      "Course Material",
-      "Presentations",
-      "Presentation 2: Advanced Tidyverse"
+      "Presentation 2: Data Clean Up"
     ]
   },
   {
     "objectID": "presentations/presentation2.html#nesting",
     "href": "presentations/presentation2.html#nesting",
-    "title": "Presentation 2: Advanced Tidyverse / Pivot longer, wider, and nesting",
+    "title": "Presentation 2: Advanced Data Wrangling",
     "section": "Nesting",
-    "text": "Nesting\nThe long format can contain many repetitions e.g. information on the sales employee in df_sales_longer. Group data by Name and nest year and sales into a single column that we will name sales_data.\n\ndf_sales_longer_nested &lt;- df_sales_longer %&gt;%  \n  group_by(Name) %&gt;% \n  nest(sales_data = c(year, sales)) %&gt;% \n  ungroup()\n\nhead(df_sales_longer_nested)\n\n# A tibble: 6 × 9\n     ID Name      Age Sex    mood  raise group         City     sales_data      \n  &lt;dbl&gt; &lt;chr&gt;   &lt;dbl&gt; &lt;chr&gt;  &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;         &lt;chr&gt;    &lt;list&gt;          \n1     1 Alice      25 Female happy no    young_female  Miami    &lt;tibble [4 × 2]&gt;\n2     2 Bob        30 Male   happy yes   mature_male   Miami    &lt;tibble [4 × 2]&gt;\n3     3 Charlie    22 Male   happy yes   young_male    LA       &lt;tibble [4 × 2]&gt;\n4     4 Sophie     35 Female happy no    mature_female New York &lt;tibble [4 × 2]&gt;\n5     5 Eve        28 Female happy yes   young_female  LA       &lt;tibble [4 × 2]&gt;\n6     6 Frank      NA Male   happy yes   &lt;NA&gt;          New York &lt;tibble [4 × 2]&gt;\n\n\nNote: Nested data cannot be exported as an Excel or CSV file. Instead, you need to export it as an RDS file, a format specifically designed to save R objects.\nWe can extract the sales information from an employee using the pull function.\n\ndf_sales_longer_nested %&gt;% \n  filter(Name == 'Bob') %&gt;% \n  pull(sales_data)\n\n[[1]]\n# A tibble: 4 × 2\n   year sales\n  &lt;int&gt; &lt;dbl&gt;\n1  2020   200\n2  2021   210\n3  2022   220\n4  2023   230",
+    "text": "Nesting\nThe long format can contain many repetitions e.g. information on the sales employee in df_sales_longer is repeated for every year. Instead of having many nearly identical rows we can use nesting to have just one row with the employee information and the associated sales data in its own ‘mini-tibble’.\nWe’ll group data by Name and nest year and sales into a single column that we will name sales_data.\n\ndf_sales_longer_nested &lt;- df_sales_longer %&gt;%  \n  group_by(Name) %&gt;% \n  nest(sales_data = c(year, sales)) %&gt;% \n  ungroup()\n\nhead(df_sales_longer_nested)\n\n# A tibble: 6 × 9\n     ID Name      Age Sex    mood  raise group         City     sales_data      \n  &lt;dbl&gt; &lt;chr&gt;   &lt;dbl&gt; &lt;chr&gt;  &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;         &lt;chr&gt;    &lt;list&gt;          \n1     1 Alice      25 Female happy no    young_female  Miami    &lt;tibble [4 × 2]&gt;\n2     2 Bob        30 Male   happy yes   mature_male   Miami    &lt;tibble [4 × 2]&gt;\n3     3 Charlie    22 Male   happy yes   young_male    LA       &lt;tibble [4 × 2]&gt;\n4     4 Sophie     35 Female happy no    mature_female New York &lt;tibble [4 × 2]&gt;\n5     5 Eve        28 Female happy yes   young_female  LA       &lt;tibble [4 × 2]&gt;\n6     6 Frank      NA Male   happy yes   &lt;NA&gt;          New York &lt;tibble [4 × 2]&gt;\n\n\nNow we have a structured dataset which is more readable.\nNote: Nested data cannot be exported as an Excel or CSV file. Instead, you need to export it as an RDS file, a format specifically designed to save R objects.\nWe can extract the sales information for a particular employee using the pull function.\n\ndf_sales_longer_nested %&gt;% \n  filter(Name == 'Bob') %&gt;% \n  pull(sales_data)\n\n[[1]]\n# A tibble: 4 × 2\n   year sales\n  &lt;int&gt; &lt;dbl&gt;\n1  2020   200\n2  2021   210\n3  2022   220\n4  2023   230",
     "crumbs": [
       "Course Material",
       "Presentations",
-      "Presentation 2: Advanced Tidyverse"
+      "Presentation 2: Data Clean Up"
+    ]
+  },
+  {
+    "objectID": "presentations/presentation2.html#tidyverse-helpers-across-and-where",
+    "href": "presentations/presentation2.html#tidyverse-helpers-across-and-where",
+    "title": "Presentation 2: Advanced Data Wrangling",
+    "section": "Tidyverse helpers: across() and where()",
+    "text": "Tidyverse helpers: across() and where()\n\nUsing across() to select columns\nYou probably noticed that we used a function to help us to summarise() all columns in Presentation 1:\n\ndf_tidyverse %&gt;% summarise(across(everything(), ~ sum(is.na(.))))\n\nIn this section we will say a bit more about the so called tidyverse helpers such as across(), where(), and starts_with(). These helpers are useful when we want to apply a functions, i.e. summarise(), or mutate() to several columns.\nLet’s have an example. We know we can calculate the mean of each sales column like so:\n\ndf_sales %&gt;%\n  summarise(mean(sales_2020),\n            mean(sales_2021),\n            mean(sales_2022),\n            mean(sales_2023))\n\n# A tibble: 1 × 4\n  `mean(sales_2020)` `mean(sales_2021)` `mean(sales_2022)` `mean(sales_2023)`\n               &lt;dbl&gt;              &lt;dbl&gt;              &lt;dbl&gt;              &lt;dbl&gt;\n1                 NA                300                 NA                305\n\n\nNote: We got some NAs because sales_2020 and 2022 contain NA values and we didn’t specify na.rm=TRUE. We will continue to see these in the below examples. Don’t worry about them for now, we will show you how to deal with them later!\nBut then we need to name every column we want to apply summarise to. across() instead lets us select the columns across which we want to apply summarise in a dynamic fashion:\n\ndf_sales %&gt;%\n  summarise(across(everything(), mean))\n\n# A tibble: 1 × 12\n     ID  Name   Age   Sex sales_2020 sales_2021 sales_2022 sales_2023  mood\n  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt; &lt;dbl&gt;\n1   5.5    NA    NA    NA         NA        300         NA        305    NA\n# ℹ 3 more variables: raise &lt;dbl&gt;, group &lt;dbl&gt;, City &lt;dbl&gt;\n\n\nWe put the columns we want to select inside the brackets of across(). everything(), as you have probably guessed means all columns.\nWe will probably not want to calculate means on non-numeric columns, so let’s select only numeric columns. For that we need another helper caller where() that lets us select columns based on their properties, like data type.\n\ndf_sales %&gt;%\n  summarise(across(where(is.numeric), mean))\n\n# A tibble: 1 × 6\n     ID   Age sales_2020 sales_2021 sales_2022 sales_2023\n  &lt;dbl&gt; &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt;\n1   5.5    NA         NA        300         NA        305\n\n\nThere is another group of helpers that refers to column names:\n\nstarts_with()\nends_with()\ncontains()\n\nAnd we can use them to select only columns starting with ‘sales’:\n\ndf_sales %&gt;%\n  summarise(across(starts_with('sales'), mean))\n\n# A tibble: 1 × 4\n  sales_2020 sales_2021 sales_2022 sales_2023\n       &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt;\n1         NA        300         NA        305\n\n\nIf the column names follow some pattern like ‘sales_XXXX’ we can also employ num_range to specify them:\n\ndf_sales %&gt;%\n  summarise(across(num_range('sales_', 2020:2023), mean))\n\n# A tibble: 1 × 4\n  sales_2020 sales_2021 sales_2022 sales_2023\n       &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt;\n1         NA        300         NA        305\n\n\nLastly, we can always straight up supply the names of the columns we want to select in a vector:\n\ndf_sales %&gt;%\n  summarise(across(c(sales_2020, sales_2021), mean))\n\n# A tibble: 1 × 2\n  sales_2020 sales_2021\n       &lt;dbl&gt;      &lt;dbl&gt;\n1         NA        300\n\n\nAll these ways can be used to select columns in tidyverse, also outside of across(). As an example, you’ve already see starts_with() in the Long Format section when we selected the columns to convert with pivot_longer():\n\ndf_sales %&gt;% \n  pivot_longer(cols = starts_with(\"sales_\"),\n               names_to = \"year\",\n               values_to = \"sales\")\n\n\n\nsummarise() becomes more powerful!\nAlright, so we now know how save ourselves from having to name every column we want to operate on, but what if we want to calculate several summary stats? There’s more to numbers than means!\nNow that we have across() we can supply summarise with a list of summary functions to execute:\n\ndf_sales %&gt;%\n  summarise(across(starts_with(\"sales\"), list(mean, sd, min, max)))\n\n# A tibble: 1 × 16\n  sales_2020_1 sales_2020_2 sales_2020_3 sales_2020_4 sales_2021_1 sales_2021_2\n         &lt;dbl&gt;        &lt;dbl&gt;        &lt;dbl&gt;        &lt;dbl&gt;        &lt;dbl&gt;        &lt;dbl&gt;\n1           NA           NA           NA           NA          300         131.\n# ℹ 10 more variables: sales_2021_3 &lt;dbl&gt;, sales_2021_4 &lt;dbl&gt;,\n#   sales_2022_1 &lt;dbl&gt;, sales_2022_2 &lt;dbl&gt;, sales_2022_3 &lt;dbl&gt;,\n#   sales_2022_4 &lt;dbl&gt;, sales_2023_1 &lt;dbl&gt;, sales_2023_2 &lt;dbl&gt;,\n#   sales_2023_3 &lt;dbl&gt;, sales_2023_4 &lt;dbl&gt;\n\n\nNow we get one long row with mean, sd, min and max for every column starting with sales. We’re probably not super happy with the column names sales_2020_1, sales_2020_2, ect, so let’s add names that contain the function we’re executing (mean, ect). In order for this to work we must also name the functions:\n\ndf_sales %&gt;%\n  summarise(across(starts_with(\"sales\"), \n                   list(mean = mean, sd = sd, min = min, max = max),\n                   .names = \"{.col}-{.fn}\"))\n\n# A tibble: 1 × 16\n  `sales_2020-mean` `sales_2020-sd` `sales_2020-min` `sales_2020-max`\n              &lt;dbl&gt;           &lt;dbl&gt;            &lt;dbl&gt;            &lt;dbl&gt;\n1                NA              NA               NA               NA\n# ℹ 12 more variables: `sales_2021-mean` &lt;dbl&gt;, `sales_2021-sd` &lt;dbl&gt;,\n#   `sales_2021-min` &lt;dbl&gt;, `sales_2021-max` &lt;dbl&gt;, `sales_2022-mean` &lt;dbl&gt;,\n#   `sales_2022-sd` &lt;dbl&gt;, `sales_2022-min` &lt;dbl&gt;, `sales_2022-max` &lt;dbl&gt;,\n#   `sales_2023-mean` &lt;dbl&gt;, `sales_2023-sd` &lt;dbl&gt;, `sales_2023-min` &lt;dbl&gt;,\n#   `sales_2023-max` &lt;dbl&gt;\n\n\nStill not your preferred format? You can probably pivot your way out of that!\n\ndf_sales %&gt;%\n  #run summarise on all sales columns\n  summarise(across(starts_with(\"sales\"), \n                   list(mean = mean, sd = sd, min = min, max = max),\n                   .names = \"{.col}-{.fn}\")) %&gt;%\n  #add reformating\n  pivot_longer(cols = everything(), \n               names_to = c(\"variable\", \"statistic\"), \n               names_sep = \"-\") %&gt;%\n  pivot_wider(names_from = statistic, values_from = value)\n\n# A tibble: 4 × 5\n  variable    mean    sd   min   max\n  &lt;chr&gt;      &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;\n1 sales_2020    NA   NA     NA    NA\n2 sales_2021   300  131.   110   510\n3 sales_2022    NA   NA     NA    NA\n4 sales_2023   305  131.   100   500",
+    "crumbs": [
+      "Course Material",
+      "Presentations",
+      "Presentation 2: Data Clean Up"
+    ]
+  },
+  {
+    "objectID": "presentations/presentation2.html#the-anonymous-function-and-.",
+    "href": "presentations/presentation2.html#the-anonymous-function-and-.",
+    "title": "Presentation 2: Advanced Data Wrangling",
+    "section": "The anonymous function: ~ and .",
+    "text": "The anonymous function: ~ and .\nBut wait! We still have those pesky NAs in our summary stats. Let’s just add the na.rm=TRUE argument. To not have too many things going on at once we’ll only do mean() for now:\n\ndf_sales %&gt;%\n  summarise(across(starts_with(\"sales\"), \n                   list(mean = mean(na.rm = TRUE)),\n                   .names = \"{.col}-{.fn}\"))\n\nError in `summarise()`:\nℹ In argument: `across(...)`.\nCaused by error in `mean.default()`:\n! argument \"x\" is missing, with no default\n\n\nBrrrtt! We may not.\n\n\n\n\n\nWhy? We are requesting a function call across several columns and we’re doing it in shorthand. This is only permitted is there are no arguments to the function (mean(), sd(), ect). You will also notice that we didn’t use brackets after their names, which is part of using the function short hand.\nIf we need to pass arguments to functions inside another function call (i.e. calling mean inside summarise) we need to invoke the anonymous function. Don’t worry, it is much less ominous than it sounds! It is written as a ~ and looks like this:\n\ndf_sales %&gt;%\n  summarise(across(starts_with(\"sales\"), \n                   list(mean = ~ mean(., na.rm = TRUE)),\n                   .names = \"{.col}-{.fn}\"))\n\n# A tibble: 1 × 4\n  `sales_2020-mean` `sales_2021-mean` `sales_2022-mean` `sales_2023-mean`\n              &lt;dbl&gt;             &lt;dbl&gt;             &lt;dbl&gt;             &lt;dbl&gt;\n1              294.               300              288.               305\n\n\nThe observant reader will also have noticed that a . has appeared in the brackets behind mean(). It simply means ‘the data previously referred to’, in this case every column starting with ‘sales’. We need to use the . because mean when called as a proper function needs to have an argument (a vector of numbers) to work on:\n\nmean(df_sales$sales_2020,na.rm=TRUE)\n\n[1] 294.4444\n\n\nSo this is it, we invoke the anonymous function for every statistic we want to calculate and now we may pass arguments:\n\ndf_sales %&gt;%\n  #across and starts_with selects columns\n  summarise(across(starts_with(\"sales\"), \n                   #list the functions to execute\n                   list(mean = ~ mean(., na.rm=T),\n                        sd = ~ sd(., na.rm=T), \n                        min = ~ min(., na.rm=T), \n                        max = ~ max(., na.rm=T)),\n                   #specify names of output columns\n                   .names = \"{.col}-{.fn}\")) %&gt;%\n  \n  #add reformating\n  pivot_longer(cols = everything(), \n               names_to = c(\"variable\", \"statistic\"), \n               names_sep = \"-\") %&gt;%\n  pivot_wider(names_from = statistic, values_from = value)\n\n# A tibble: 4 × 5\n  variable    mean    sd   min   max\n  &lt;chr&gt;      &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;\n1 sales_2020  294.  136.   100   500\n2 sales_2021  300   131.   110   510\n3 sales_2022  288.  115.   120   470\n4 sales_2023  305   131.   100   500\n\n\n\nOther usage examples\nThe anonymous function and across are also useful inside mutate()! Our data has sales in thousands DKK, so lets multiply every value in every sales column with 1000:\n\ndf_sales %&gt;% head(n=3)\n\n# A tibble: 3 × 12\n     ID Name      Age Sex    sales_2020 sales_2021 sales_2022 sales_2023 mood \n  &lt;dbl&gt; &lt;chr&gt;   &lt;dbl&gt; &lt;chr&gt;       &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt; &lt;chr&gt;\n1     1 Alice      25 Female        100        110        120        100 happy\n2     2 Bob        30 Male          200        210        220        230 happy\n3     3 Charlie    22 Male          150        160        170        200 happy\n# ℹ 3 more variables: raise &lt;chr&gt;, group &lt;chr&gt;, City &lt;chr&gt;\n\n\n\ndf_sales %&gt;%\n  mutate(across(starts_with(\"sales\"), ~ . * 1000)) %&gt;%\n  head(n=3)\n\n# A tibble: 3 × 12\n     ID Name      Age Sex    sales_2020 sales_2021 sales_2022 sales_2023 mood \n  &lt;dbl&gt; &lt;chr&gt;   &lt;dbl&gt; &lt;chr&gt;       &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt; &lt;chr&gt;\n1     1 Alice      25 Female     100000     110000     120000     100000 happy\n2     2 Bob        30 Male       200000     210000     220000     230000 happy\n3     3 Charlie    22 Male       150000     160000     170000     200000 happy\n# ℹ 3 more variables: raise &lt;chr&gt;, group &lt;chr&gt;, City &lt;chr&gt;\n\n\n\nWhat is happening here is we first select all columns starting with ‘sales’ by using across() and starts_with(). Then we say that we want to execute a function on each of these columns. The function shall be ‘multiply this column by 1000’. Multiplying by 1000 is written as * 1000 in R, ‘this column’ is . as we discussed before and ~ tells R that we’re executing a function.\nThis is it for now but there will be user-defined functions later!",
+    "crumbs": [
+      "Course Material",
+      "Presentations",
+      "Presentation 2: Data Clean Up"
     ]
   },
   {
@@ -290,11 +290,11 @@
     ]
   },
   {
-    "objectID": "presentations/presentation4_main_script.html#source-script",
-    "href": "presentations/presentation4_main_script.html#source-script",
+    "objectID": "presentations/presentation4_main_script.html",
+    "href": "presentations/presentation4_main_script.html",
     "title": "Presentation 4: Main Script",
-    "section": "Source script",
-    "text": "Source script\nAll global variables (including functions) in the functions.R script will be loaded and appear in the Global environment in the top left corner.\n\nsource('./presentation4_functions.R')",
+    "section": "",
+    "text": "Define variables.\n\nnum1 &lt;- 8\nnum2 &lt;- 5\n\nLogical: 8 is larger than 5.\n\nnum1 &gt; num2\n\n[1] TRUE\n\n\nLogical: 8 is not smaller than 5.\n\nnum1 &lt; num2\n\n[1] FALSE\n\n\nA logical statement is used in an if statement to define a condition.\n\nif (num1 &gt; num2){\n  statement &lt;- paste(num1, 'is larger than', num2)\n}\n\nprint(statement)\n\n[1] \"8 is larger than 5\"\n\n\nRedefine variables.\n\nnum2 &lt;- 10\n\nnum2 &lt;- 3\n\nnum2 &lt;- 8\n\nUse else if and else statements to test multiple conditions.\n\nif (num1 &gt; num2){\n  statement &lt;- paste(num1, 'is larger than', num2)\n} else if (num1 &lt; num2) {\n  statement &lt;- paste(num1, 'is smaller than', num2)\n} else {\n  statement &lt;- paste(num1, 'is equal to', num2)\n} \n\nprint(statement)\n\n[1] \"8 is equal to 8\"",
     "crumbs": [
       "Course Material",
       "Presentations",
@@ -302,23 +302,11 @@
     ]
   },
   {
-    "objectID": "presentations/presentation4_main_script.html#function-calls",
-    "href": "presentations/presentation4_main_script.html#function-calls",
+    "objectID": "presentations/presentation4_main_script.html#if-else-statments",
+    "href": "presentations/presentation4_main_script.html#if-else-statments",
     "title": "Presentation 4: Main Script",
-    "section": "Function calls",
-    "text": "Function calls\nCalculate BMI.\n\nweight_kg &lt;- 70\nheight_m &lt;- 1.80\n\ncalculate_bmi(weight_kg, height_m)\n\n[1] 21.60494\n\ncalculate_bmi(weight_kg = 70, height_m = 1.80)\n\n[1] 21.60494\n\n\n\ncalculate_bmi(70, 1.80)\n\n[1] 21.60494\n\n\n\ncalculate_bmi(1.80, 70)\n\n[1] 0.0003673469\n\n\n\ncalculate_bmi(height_m = 1.80, weight_kg = 70)\n\n[1] 21.60494\n\n\nEstimate birth year of 50 year old person.\n\nestimate_birth_year(age = 50)\n\n[1] 1975\n\n\nEstimate birth year of a person that was 50 years old in 2005.\n\nestimate_birth_year(age = 50, currect_year = 2005)\n\n[1] 1955",
-    "crumbs": [
-      "Course Material",
-      "Presentations",
-      "Presentation 4: Scripting in R"
-    ]
-  },
-  {
-    "objectID": "presentations/presentation4_main_script.html#if-statements",
-    "href": "presentations/presentation4_main_script.html#if-statements",
-    "title": "Presentation 4: Main Script",
-    "section": "If-statements",
-    "text": "If-statements\nData on person 1.\n\nage &lt;- 45\nweight_kg = 85\nheight_m = 1.75\n\nBMI should only be calculated for individuals over the age of 18.\n\nif (age &gt;= 18){\n  calculate_bmi(weight_kg, height_m)\n}\n\n[1] 27.7551",
+    "section": "",
+    "text": "Define variables.\n\nnum1 &lt;- 8\nnum2 &lt;- 5\n\nLogical: 8 is larger than 5.\n\nnum1 &gt; num2\n\n[1] TRUE\n\n\nLogical: 8 is not smaller than 5.\n\nnum1 &lt; num2\n\n[1] FALSE\n\n\nA logical statement is used in an if statement to define a condition.\n\nif (num1 &gt; num2){\n  statement &lt;- paste(num1, 'is larger than', num2)\n}\n\nprint(statement)\n\n[1] \"8 is larger than 5\"\n\n\nRedefine variables.\n\nnum2 &lt;- 10\n\nnum2 &lt;- 3\n\nnum2 &lt;- 8\n\nUse else if and else statements to test multiple conditions.\n\nif (num1 &gt; num2){\n  statement &lt;- paste(num1, 'is larger than', num2)\n} else if (num1 &lt; num2) {\n  statement &lt;- paste(num1, 'is smaller than', num2)\n} else {\n  statement &lt;- paste(num1, 'is equal to', num2)\n} \n\nprint(statement)\n\n[1] \"8 is equal to 8\"",
     "crumbs": [
       "Course Material",
       "Presentations",
@@ -338,11 +326,11 @@
     ]
   },
   {
-    "objectID": "presentations/presentation4_main_script.html#combination-of-function-call-if-statement-and-for-loops.",
-    "href": "presentations/presentation4_main_script.html#combination-of-function-call-if-statement-and-for-loops.",
+    "objectID": "presentations/presentation4_main_script.html#user-defined-functions",
+    "href": "presentations/presentation4_main_script.html#user-defined-functions",
     "title": "Presentation 4: Main Script",
-    "section": "Combination of function call, if-statement and for-loops.",
-    "text": "Combination of function call, if-statement and for-loops.\nPrint BMI for individuals that are 18 years old or older.\n\nfor (id in rownames(df)) {\n  \n  if (df[id, 'age'] &gt;= 18) {\n    \n    bmi &lt;- calculate_bmi(df[id, 'weight_kg'], df[id, 'height_m'])\n    print(bmi)\n\n  }\n  \n}\n\n[1] 27.7551\n[1] 21.30178\n[1] 23.24459\n[1] 21.276\n\n\nUse mapply for alternative to calling function in for-loop.\n\nmapply(FUN = calculate_bmi, \n       weight_kg = df$weight_kg, \n       height_m = df$height_m)\n\n[1] 27.75510 27.05515 21.30178 23.24459 21.27600\n\n\nAdd BMI and estimated birth year to data frame.\n\nfor (id in rownames(df)){\n  \n  # Add BMI to data frame\n  if (df[id, 'age'] &gt;= 18) {\n    \n    bmi &lt;- calculate_bmi(df[id, 'weight_kg'], df[id, 'height_m'])\n    df[id, 'bmi'] &lt;- bmi\n    \n  } else {\n    \n    df[id, 'bmi'] &lt;- NA\n    \n  }\n  \n  # Add birth year to data frame \n  birth_year &lt;- estimate_birth_year(age = df[id, 'age'])\n  df[id, 'birth_year'] &lt;- birth_year\n  \n}\n\nHave a look at the data frame.\n\ndf\n\n  age weight_kg height_m      bmi birth_year\n1  45        85     1.75 27.75510       1980\n2  16        65     1.55       NA       2009\n3  31        81     1.95 21.30178       1994\n4  56        53     1.51 23.24459       1969\n5  19        76     1.89 21.27600       2006",
+    "section": "User defined Functions",
+    "text": "User defined Functions\nWe will use BMI calculation as an example for this part.\nDefine variables.\n\nweight_kg &lt;- 70\nheight_m &lt;- 1.80\n\nCalculate BMI.\n\nbmi &lt;- weight_kg/height_m^2\nbmi\n\n[1] 21.60494\n\n\nIf we plan to calculate BMI for multiple individuals it is convenient to write the calculation into a function.\n\nFunction name: calculate_bmi.\nFunction parameters: weight_kg and height_m.\nThe return value: bmi.\n\nThe return statement specifies the value that the function will return when called.\n\ncalculate_bmi &lt;- function(weight_kg, height_m){\n  \n  bmi &lt;- weight_kg/height_m^2\n  \n  return(bmi)\n  \n}\n\nWe can call the function using previously defined variables.\n\ncalculate_bmi(weight_kg = weight_kg, \n              height_m = height_m)\n\n[1] 21.60494\n\n\nWe can also pass numbers directly to the function.\n\ncalculate_bmi(weight_kg = 100, \n              height_m = 1.90)\n\n[1] 27.70083\n\n\nArgument Order in Function Calls\nIf we specify the parameter names, the order can be changed.\n\ncalculate_bmi(height_m = 1.90, \n              weight_kg = 100)\n\n[1] 27.70083\n\n\nIf we do not specify the parameter names, the arguments will be matched according to the position - so be careful with this.\n\ncalculate_bmi(1.90, \n              100)\n\n[1] 0.00019",
     "crumbs": [
       "Course Material",
       "Presentations",
@@ -350,11 +338,47 @@
     ]
   },
   {
-    "objectID": "presentations/presentation4_main_script.html#advanced-functions",
-    "href": "presentations/presentation4_main_script.html#advanced-functions",
+    "objectID": "presentations/presentation4_main_script.html#combining-function-call-with-if-statement",
+    "href": "presentations/presentation4_main_script.html#combining-function-call-with-if-statement",
     "title": "Presentation 4: Main Script",
-    "section": "Advanced functions",
-    "text": "Advanced functions\nThe BMI function with out error handling returns a meaningless BMI value if given a negative weight.\n\ncalculate_bmi(weight_kg = -50, height_m = 1.80)\n\n[1] -15.4321\n\n\nThe BMI function with error handling returns an error if given a negative weight.\n\ncalculate_bmi_2(weight_kg = -50, height_m = 1.80)\n\nThe BMI function with error handling returns an warning if a BMI outside the normal range is calculated.\n\ncalculate_bmi_2(weight_kg = 25, height_m = 1.80)\n\nWarning in calculate_bmi_2(weight_kg = 25, height_m = 1.8): The calculated BMI\nis outside the normal range. Please check your input values.\n\n\n[1] 7.716049\n\n\n\nnames &lt;- c('Thilde', 'Diana', 'Henrike', 'Helene', 'Chelsea', 'Signe')\n\nfor (name in names){\n  print(name)\n}\n\n[1] \"Thilde\"\n[1] \"Diana\"\n[1] \"Henrike\"\n[1] \"Helene\"\n[1] \"Chelsea\"\n[1] \"Signe\"\n\n\n\nfor (i in seq_along(names)){\n  print(names[i])\n}\n\n[1] \"Thilde\"\n[1] \"Diana\"\n[1] \"Henrike\"\n[1] \"Helene\"\n[1] \"Chelsea\"\n[1] \"Signe\"",
+    "section": "Combining function call with if-statement",
+    "text": "Combining function call with if-statement\nData on a single individual.\n\nage &lt;- 45\nweight_kg &lt;- 85\nheight_m &lt;- 1.75\n\nBMI should only be calculated for individuals over the age of 18.\n\nif (age &gt;= 18){\n  calculate_bmi(weight_kg, height_m)\n}\n\n[1] 27.7551",
+    "crumbs": [
+      "Course Material",
+      "Presentations",
+      "Presentation 4: Scripting in R"
+    ]
+  },
+  {
+    "objectID": "presentations/presentation4_main_script.html#combining-function-call-with-for-loops",
+    "href": "presentations/presentation4_main_script.html#combining-function-call-with-for-loops",
+    "title": "Presentation 4: Main Script",
+    "section": "Combining function call with for-loops",
+    "text": "Combining function call with for-loops\nData on 5 individuals.\n\ndf &lt;- data.frame(row.names = 1:5, \n                 age = c(45, 16, 31, 56, 19), \n                 weight_kg = c(85, 65, 100, 45, 76), \n                 height_m = c(1.75, 1.45, 1.95, 1.51, 1.89)\n                 )\n\nPrint ID, weight, and height of all individuals.\n\nfor (id in rownames(df)){\n  \n  weight &lt;- df[id, 'weight_kg']\n  \n  height &lt;- df[id, 'height_m']\n  \n  print(c(id, weight, height))\n  \n}\n\n[1] \"1\"    \"85\"   \"1.75\"\n[1] \"2\"    \"65\"   \"1.45\"\n[1] \"3\"    \"100\"  \"1.95\"\n[1] \"4\"    \"45\"   \"1.51\"\n[1] \"5\"    \"76\"   \"1.89\"\n\n\nCall function to calculate BMI for all individuals.\n\nfor (id in rownames(df)) {\n  \n  weight &lt;- df[id, 'weight_kg']\n  \n  height &lt;- df[id, 'height_m']\n  \n  bmi &lt;- calculate_bmi(weight, height)\n  \n  print(c(id, bmi))\n  \n}\n\n[1] \"1\"                \"27.7551020408163\"\n[1] \"2\"                \"30.9155766944114\"\n[1] \"3\"                \"26.2984878369494\"\n[1] \"4\"                \"19.7359764922591\"\n[1] \"5\"                \"21.2760001119789\"\n\n\n\nCombination of function call, if-statement and for-loops.\nPrint BMI for individuals that are 18 years old or older.\n\nfor (id in rownames(df)) {\n  \n  if (df[id, 'age'] &gt;= 18) {\n    \n    weight &lt;- df[id, 'weight_kg']\n  \n    height &lt;- df[id, 'height_m']\n    \n    bmi &lt;- calculate_bmi(weight, height)\n    \n    print(c(id, bmi))\n\n  } else {\n    \n    print(paste(id, 'is under 18.'))\n    \n  }\n  \n}\n\n[1] \"1\"                \"27.7551020408163\"\n[1] \"2 is under 18.\"\n[1] \"3\"                \"26.2984878369494\"\n[1] \"4\"                \"19.7359764922591\"\n[1] \"5\"                \"21.2760001119789\"\n\n\nAdd BMI to the data frame.\n\nfor (id in rownames(df)){\n  \n  if (df[id, 'age'] &gt;= 18) {\n    \n    weight &lt;- df[id, 'weight_kg']\n  \n    height &lt;- df[id, 'height_m']\n    \n    bmi &lt;- calculate_bmi(weight, height)\n\n  } else {\n    \n    bmi &lt;- NA\n    \n  }\n  \n  df[id, 'bmi'] &lt;- bmi\n  \n}\n\nHave a look at the data frame.\n\ndf\n\n  age weight_kg height_m      bmi\n1  45        85     1.75 27.75510\n2  16        65     1.45       NA\n3  31       100     1.95 26.29849\n4  56        45     1.51 19.73598\n5  19        76     1.89 21.27600",
+    "crumbs": [
+      "Course Material",
+      "Presentations",
+      "Presentation 4: Scripting in R"
+    ]
+  },
+  {
+    "objectID": "presentations/presentation4_main_script.html#out-sourcing-functions-to-an-rscript-you-source",
+    "href": "presentations/presentation4_main_script.html#out-sourcing-functions-to-an-rscript-you-source",
+    "title": "Presentation 4: Main Script",
+    "section": "Out-sourcing functions to an Rscript you source",
+    "text": "Out-sourcing functions to an Rscript you source\nRemove calculate_bmi from the global environment.\n\nrm(list = \"calculate_bmi\")\n\nBy sourcing a script, all global variables (including functions) in script will be loaded and appear in the Global environment in the top left corner. Here we source the functions.R script.\n\nsource('./presentation4_functions.R')\n\nAfter we sourced the functions script the calculate_bmi function can be used just like if it was defined in the main script. If you work on a larger project and write multiple functions, it is best practice to have a function script and source it in your main script.\n\ncalculate_bmi(weight_kg = 67, \n              height_m = 1.70)\n\n[1] 23.18339\n\n\nUse mapply for alternative to calling function in for-loop.\n\nmapply(FUN = calculate_bmi, \n       weight_kg = df$weight_kg, \n       height_m = df$height_m)\n\n[1] 27.75510 30.91558 26.29849 19.73598 21.27600",
+    "crumbs": [
+      "Course Material",
+      "Presentations",
+      "Presentation 4: Scripting in R"
+    ]
+  },
+  {
+    "objectID": "presentations/presentation4_main_script.html#functions-with-error-handling.",
+    "href": "presentations/presentation4_main_script.html#functions-with-error-handling.",
+    "title": "Presentation 4: Main Script",
+    "section": "Functions with error handling.",
+    "text": "Functions with error handling.\nThe function is in the functions script.\nThe BMI function with out error handling returns a meaningless BMI value if given a negative weight.\n\ncalculate_bmi(weight_kg = -50, height_m = 1.80)\n\n[1] -15.4321\n\n\nThe BMI function with error handling returns an error if given a negative weight.\n\ncalculate_bmi_2(weight_kg = -50, height_m = 1.80)\n\nThe BMI function with error handling returns an warning if a BMI outside the normal range is calculated.\n\ncalculate_bmi_2(weight_kg = 25, height_m = 1.80)\n\nWarning in calculate_bmi_2(weight_kg = 25, height_m = 1.8): The calculated BMI\nis outside the normal range. Please check your input values.\n\n\n[1] 7.716049",
     "crumbs": [
       "Course Material",
       "Presentations",
@@ -392,7 +416,7 @@
   {
     "objectID": "solutions/solution2.html",
     "href": "solutions/solution2.html",
-    "title": "Exercise 2 - Solutions: Advanced Tidyveres",
+    "title": "Exercise 2 - Solutions: Data Clean Up",
     "section": "",
     "text": "In this exercise you will do some more advance tidyverse operations such as pivoting and nesting, as well as create plots to brush up on your ggplot skills.",
     "crumbs": [
@@ -404,7 +428,7 @@
   {
     "objectID": "solutions/solution2.html#introduction",
     "href": "solutions/solution2.html#introduction",
-    "title": "Exercise 2 - Solutions: Advanced Tidyveres",
+    "title": "Exercise 2 - Solutions: Data Clean Up",
     "section": "",
     "text": "In this exercise you will do some more advance tidyverse operations such as pivoting and nesting, as well as create plots to brush up on your ggplot skills.",
     "crumbs": [
@@ -416,7 +440,7 @@
   {
     "objectID": "solutions/solution2.html#first-steps",
     "href": "solutions/solution2.html#first-steps",
-    "title": "Exercise 2 - Solutions: Advanced Tidyveres",
+    "title": "Exercise 2 - Solutions: Data Clean Up",
     "section": "First steps",
     "text": "First steps\n\nLoad packages.\n\n\nlibrary(tidyverse)\n\n\nLoad the joined diabetes data set you created in exercise 1 and the glucose dataset from the data folder.\n\n\ndiabetes_join &lt;- readxl::read_excel('../out/diabetes_join.xlsx')\ndf_glucose &lt;- readxl::read_excel('../data/df_glucose.xlsx')\n\n\nHave a look at the glucose dataset. The OGTT column contains measurements from a Oral Glucose Tolerance Test where blood glucose is measured at fasting (Glucose_0), 6 hours after glucose intake (Glucose_6), and 12 hours after (Glucose_12).\n\n\nhead(df_glucose)\n\n# A tibble: 6 × 4\n  Glucose_0 Glucose_60 Glucose_120    ID\n      &lt;dbl&gt;      &lt;dbl&gt;       &lt;dbl&gt; &lt;dbl&gt;\n1      6.65       8.04       10.0   9046\n2      4.49       5.40        6.22 51676\n3      5.76       6.52        7.22  1665\n4      6.13       6.94        8.09 12095\n5      6.84       6.92        7.01 12175\n6      6.84       7.62        8.42  8213\n\n\n\nRestructure the glucose dataset into a long format. How many rows are there per ID? Does that make sense?\n\n\n\n\n\n\n\nHint\n\n\n\n\n\nRemember the flow:\n\npivot_longer(cols = LIST_WITH_COLUMNS_TO_PIVOT,\n             names_to = \"NEW_COLUMN_CONTAINING_COLUMN_NAMES\",\n             values_to = \"NEW_COLUMN_CONTAINING_COLUMN_VALUES\")\n\nHave a look at slide 16 for a visual overview.\n\n\n\n\ndf_glucose_long &lt;- df_glucose %&gt;% \n  pivot_longer(cols = starts_with(\"Glucose\"),\n               names_to = \"Measurement\",\n               values_to = \"Glucose (mmol/L)\"\n               )\n\nhead(df_glucose_long)\n\n# A tibble: 6 × 3\n     ID Measurement `Glucose (mmol/L)`\n  &lt;dbl&gt; &lt;chr&gt;                    &lt;dbl&gt;\n1  9046 Glucose_0                 6.65\n2  9046 Glucose_60                8.04\n3  9046 Glucose_120              10.0 \n4 51676 Glucose_0                 4.49\n5 51676 Glucose_60                5.40\n6 51676 Glucose_120               6.22\n\n\n\nChange the glucose measurements to numeric variable.\n\n\n\n\n\n\n\nHint\n\n\n\n\n\nThe stringr packages is a part of tidyverse and has many functions for manipulating strings. Find a function that can split the string so you can extract the numbers on the other side of the underscore.\n\n\n\n\ndf_glucose_long &lt;- df_glucose_long %&gt;% \n  mutate(Measurement = str_split_i(Measurement, '_', 2) %&gt;% as.numeric())\n\nhead(df_glucose_long)\n\n# A tibble: 6 × 3\n     ID Measurement `Glucose (mmol/L)`\n  &lt;dbl&gt;       &lt;dbl&gt;              &lt;dbl&gt;\n1  9046           0               6.65\n2  9046          60               8.04\n3  9046         120              10.0 \n4 51676           0               4.49\n5 51676          60               5.40\n6 51676         120               6.22\n\n\n\nNest the glucose measurements and values such that there is only one row per ID.\n\n\n\n\n\n\n\nHint\n\n\n\n\n\nRemember the flow:\n\ngroup_by() %&gt;% \n  nest() %&gt;% \n  ungroup()\n\n\n\n\n\ndf_glucose_nested &lt;- df_glucose_long %&gt;% \n  group_by(ID) %&gt;% \n  nest(OGTT = c(Measurement, `Glucose (mmol/L)`)) %&gt;% \n  ungroup()\n  \nhead(df_glucose_nested)\n\n# A tibble: 6 × 2\n     ID OGTT            \n  &lt;dbl&gt; &lt;list&gt;          \n1  9046 &lt;tibble [3 × 2]&gt;\n2 51676 &lt;tibble [3 × 2]&gt;\n3  1665 &lt;tibble [3 × 2]&gt;\n4 12095 &lt;tibble [3 × 2]&gt;\n5 12175 &lt;tibble [3 × 2]&gt;\n6  8213 &lt;tibble [3 × 2]&gt;\n\n\n\nMerge the nested glucose dataset with the joined diabetes.\n\n\ndiabetes_glucose &lt;- diabetes_join %&gt;% \n  left_join(df_glucose_nested, by = 'ID')\n\nhead(diabetes_glucose)\n\n# A tibble: 6 × 12\n     ID Sex      Age BloodPressure GeneticRisk   BMI PhysicalActivity Smoker \n  &lt;dbl&gt; &lt;chr&gt;  &lt;dbl&gt;         &lt;dbl&gt;       &lt;dbl&gt; &lt;dbl&gt;            &lt;dbl&gt; &lt;chr&gt;  \n1  9046 Male      34            84       0.619  24.7               93 Unknown\n2 51676 Male      25            74       0.591  22.5              102 Unknown\n3 60182 Male      50            80       0.178  34.5               98 Unknown\n4  1665 Female    27            60       0.206  26.3               82 Never  \n5 56669 Male      35            84       0.286  35                 58 Smoker \n6 53882 Female    31            78       1.22   43.3               59 Smoker \n# ℹ 4 more variables: Diabetes &lt;chr&gt;, Married &lt;chr&gt;, Work &lt;chr&gt;, OGTT &lt;list&gt;\n\n\n\nPull the glucose measurements (OGTT) from your favorite ID.\n\n\n\n\n\n\n\nHint\n\n\n\n\n\nFirst filter for your favorite ID and then pull the nested column.\n\n\n\n\ndiabetes_glucose %&gt;% \n  filter(ID == 9046) %&gt;% \n  pull(OGTT)\n\n[[1]]\n# A tibble: 3 × 2\n  Measurement `Glucose (mmol/L)`\n        &lt;dbl&gt;              &lt;dbl&gt;\n1           0               6.65\n2          60               8.04\n3         120              10.0 \n\n\n\nExport the final dataset. Since the dataset is nested, you cannot export it as an excel file. Export the dataset as an .rds file. Have a guess at what the function is called.\n\n\nwrite_rds(diabetes_glucose, '../out/diabetes_glucose.rds')",
     "crumbs": [
@@ -657,7 +681,7 @@
     "href": "presentations/presentation4_functions.html",
     "title": "Presentation 4, Functions",
     "section": "",
-    "text": "Here is the solution4_functions.R showed:\n\n\n# Packages should be loaded in the main script.\n\n# Function to calculate BMI\n# Required packages: none\ncalculate_bmi &lt;- function(weight_kg, height_m){\n  \n  bmi &lt;- weight_kg/height_m^2\n  \n  return(bmi)\n  \n}\n\n# Function to estimate birth year\n# Required packages: none\nestimate_birth_year &lt;- function(currect_year = 2025, age){\n  \n  birth_year &lt;- currect_year - age\n  \n  return(birth_year)\n  \n}\n\n\n# Function to calculate BMI, with control points and error checking. \n# Required packages: none\ncalculate_bmi_2 &lt;- function(weight_kg, height_m) {\n  # Check if weight and height are numeric\n  if (!is.numeric(weight_kg) | !is.numeric(height_m)) {\n    stop(\"Both weight_kg and height_m must be numeric values.\")\n  }\n  \n  # Check if weight and height are positive\n  if (weight_kg &lt;= 0) {\n    stop(\"Weight must be a positive value.\")\n  }\n  if (height_m &lt;= 0) {\n    stop(\"Height must be a positive value.\")\n  }\n  \n  # Calculate BMI\n  bmi &lt;- weight_kg / height_m^2\n  \n  # Check if BMI is within a reasonable range\n  if (bmi &lt; 10 | bmi &gt; 60) {\n    warning(\"The calculated BMI is outside the normal range. Please check your input values.\")\n  }\n  \n  return(bmi)\n  \n}",
+    "text": "Here is the solution4_functions.R showed:\n\n\n# Packages should be loaded in the main script.\n\n# Function to calculate BMI\ncalculate_bmi &lt;- function(weight_kg, height_m){\n  \n  bmi &lt;- weight_kg/height_m^2\n  \n  return(bmi)\n  \n}\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n# Function to calculate BMI, with control points and error checking. \ncalculate_bmi_2 &lt;- function(weight_kg, height_m) {\n  \n  # Check if weight and height are numeric\n  if (!is.numeric(weight_kg) | !is.numeric(height_m)) {\n    stop(\"Both weight_kg and height_m must be numeric values.\")\n  }\n  \n  # Check if weight and height are positive\n  if (weight_kg &lt;= 0) {\n    stop(\"Weight must be a positive value.\")\n  }\n  if (height_m &lt;= 0) {\n    stop(\"Height must be a positive value.\")\n  }\n  \n  # Calculate BMI\n  bmi &lt;- weight_kg / height_m^2\n  \n  # Check if BMI is within a reasonable range\n  if (bmi &lt; 10 | bmi &gt; 60) {\n    warning(\"The calculated BMI is outside the normal range. Please check your input values.\")\n  }\n  \n  return(bmi)\n  \n}",
     "crumbs": [
       "Course Material",
       "Presentations",
@@ -828,90 +852,6 @@
     "crumbs": [
       "Course Material",
       "Data️"
-    ]
-  },
-  {
-    "objectID": "presentations/presentation4_main_script.html",
-    "href": "presentations/presentation4_main_script.html",
-    "title": "Presentation 4: Main Script",
-    "section": "",
-    "text": "Define variables.\n\nnum1 &lt;- 8\nnum2 &lt;- 5\n\nLogical: 8 is larger than 5.\n\nnum1 &gt; num2\n\n[1] TRUE\n\n\nLogical: 8 is not smaller than 5.\n\nnum1 &lt; num2\n\n[1] FALSE\n\n\nA logical statement is used in an if statement to define a condition.\n\nif (num1 &gt; num2){\n  statement &lt;- paste(num1, 'is larger than', num2)\n}\n\nprint(statement)\n\n[1] \"8 is larger than 5\"\n\n\nRedefine variables.\n\nnum2 &lt;- 10\n\nnum2 &lt;- 3\n\nnum2 &lt;- 8\n\nUse else if and else statements to test multiple conditions.\n\nif (num1 &gt; num2){\n  statement &lt;- paste(num1, 'is larger than', num2)\n} else if (num1 &lt; num2) {\n  statement &lt;- paste(num1, 'is smaller than', num2)\n} else {\n  statement &lt;- paste(num1, 'is equal to', num2)\n} \n\nprint(statement)\n\n[1] \"8 is equal to 8\"",
-    "crumbs": [
-      "Course Material",
-      "Presentations",
-      "Presentation 4: Scripting in R"
-    ]
-  },
-  {
-    "objectID": "presentations/presentation4_main_script.html#if-else-statments",
-    "href": "presentations/presentation4_main_script.html#if-else-statments",
-    "title": "Presentation 4: Main Script",
-    "section": "",
-    "text": "Define variables.\n\nnum1 &lt;- 8\nnum2 &lt;- 5\n\nLogical: 8 is larger than 5.\n\nnum1 &gt; num2\n\n[1] TRUE\n\n\nLogical: 8 is not smaller than 5.\n\nnum1 &lt; num2\n\n[1] FALSE\n\n\nA logical statement is used in an if statement to define a condition.\n\nif (num1 &gt; num2){\n  statement &lt;- paste(num1, 'is larger than', num2)\n}\n\nprint(statement)\n\n[1] \"8 is larger than 5\"\n\n\nRedefine variables.\n\nnum2 &lt;- 10\n\nnum2 &lt;- 3\n\nnum2 &lt;- 8\n\nUse else if and else statements to test multiple conditions.\n\nif (num1 &gt; num2){\n  statement &lt;- paste(num1, 'is larger than', num2)\n} else if (num1 &lt; num2) {\n  statement &lt;- paste(num1, 'is smaller than', num2)\n} else {\n  statement &lt;- paste(num1, 'is equal to', num2)\n} \n\nprint(statement)\n\n[1] \"8 is equal to 8\"",
-    "crumbs": [
-      "Course Material",
-      "Presentations",
-      "Presentation 4: Scripting in R"
-    ]
-  },
-  {
-    "objectID": "presentations/presentation4_main_script.html#user-defined-functions",
-    "href": "presentations/presentation4_main_script.html#user-defined-functions",
-    "title": "Presentation 4: Main Script",
-    "section": "User defined Functions",
-    "text": "User defined Functions\nWe will use BMI calculation as an example for this part.\nDefine variables.\n\nweight_kg &lt;- 70\nheight_m &lt;- 1.80\n\nCalculate BMI.\n\nbmi &lt;- weight_kg/height_m^2\nbmi\n\n[1] 21.60494\n\n\nIf we plan to calculate BMI for multiple individuals it is convenient to write the calculation into a function.\n\nFunction name: calculate_bmi.\nFunction parameters: weight_kg and height_m.\nThe return value: bmi.\n\nThe return statement specifies the value that the function will return when called.\n\ncalculate_bmi &lt;- function(weight_kg, height_m){\n  \n  bmi &lt;- weight_kg/height_m^2\n  \n  return(bmi)\n  \n}\n\nWe can call the function using previously defined variables.\n\ncalculate_bmi(weight_kg = weight_kg, \n              height_m = height_m)\n\n[1] 21.60494\n\n\nWe can also pass numbers directly to the function.\n\ncalculate_bmi(weight_kg = 100, \n              height_m = 1.90)\n\n[1] 27.70083\n\n\nArgument Order in Function Calls\nIf we specify the parameter names, the order can be changed.\n\ncalculate_bmi(height_m = 1.90, \n              weight_kg = 100)\n\n[1] 27.70083\n\n\nIf we do not specify the parameter names, the arguments will be matched according to the position - so be careful with this.\n\ncalculate_bmi(1.90, \n              100)\n\n[1] 0.00019",
-    "crumbs": [
-      "Course Material",
-      "Presentations",
-      "Presentation 4: Scripting in R"
-    ]
-  },
-  {
-    "objectID": "presentations/presentation4_main_script.html#combining-function-call-with-if-statement",
-    "href": "presentations/presentation4_main_script.html#combining-function-call-with-if-statement",
-    "title": "Presentation 4: Main Script",
-    "section": "Combining function call with if-statement",
-    "text": "Combining function call with if-statement\nData on a single individual.\n\nage &lt;- 45\nweight_kg &lt;- 85\nheight_m &lt;- 1.75\n\nBMI should only be calculated for individuals over the age of 18.\n\nif (age &gt;= 18){\n  calculate_bmi(weight_kg, height_m)\n}\n\n[1] 27.7551",
-    "crumbs": [
-      "Course Material",
-      "Presentations",
-      "Presentation 4: Scripting in R"
-    ]
-  },
-  {
-    "objectID": "presentations/presentation4_main_script.html#combining-function-call-with-for-loops",
-    "href": "presentations/presentation4_main_script.html#combining-function-call-with-for-loops",
-    "title": "Presentation 4: Main Script",
-    "section": "Combining function call with for-loops",
-    "text": "Combining function call with for-loops\nData on 5 individuals.\n\ndf &lt;- data.frame(row.names = 1:5, \n                 age = c(45, 16, 31, 56, 19), \n                 weight_kg = c(85, 65, 100, 45, 76), \n                 height_m = c(1.75, 1.45, 1.95, 1.51, 1.89)\n                 )\n\nPrint ID, weight, and height of all individuals.\n\nfor (id in rownames(df)){\n  \n  weight &lt;- df[id, 'weight_kg']\n  \n  height &lt;- df[id, 'height_m']\n  \n  print(c(id, weight, height))\n  \n}\n\n[1] \"1\"    \"85\"   \"1.75\"\n[1] \"2\"    \"65\"   \"1.45\"\n[1] \"3\"    \"100\"  \"1.95\"\n[1] \"4\"    \"45\"   \"1.51\"\n[1] \"5\"    \"76\"   \"1.89\"\n\n\nCall function to calculate BMI for all individuals.\n\nfor (id in rownames(df)) {\n  \n  weight &lt;- df[id, 'weight_kg']\n  \n  height &lt;- df[id, 'height_m']\n  \n  bmi &lt;- calculate_bmi(weight, height)\n  \n  print(c(id, bmi))\n  \n}\n\n[1] \"1\"                \"27.7551020408163\"\n[1] \"2\"                \"30.9155766944114\"\n[1] \"3\"                \"26.2984878369494\"\n[1] \"4\"                \"19.7359764922591\"\n[1] \"5\"                \"21.2760001119789\"\n\n\n\nCombination of function call, if-statement and for-loops.\nPrint BMI for individuals that are 18 years old or older.\n\nfor (id in rownames(df)) {\n  \n  if (df[id, 'age'] &gt;= 18) {\n    \n    weight &lt;- df[id, 'weight_kg']\n  \n    height &lt;- df[id, 'height_m']\n    \n    bmi &lt;- calculate_bmi(weight, height)\n    \n    print(c(id, bmi))\n\n  } else {\n    \n    print(paste(id, 'is under 18.'))\n    \n  }\n  \n}\n\n[1] \"1\"                \"27.7551020408163\"\n[1] \"2 is under 18.\"\n[1] \"3\"                \"26.2984878369494\"\n[1] \"4\"                \"19.7359764922591\"\n[1] \"5\"                \"21.2760001119789\"\n\n\nAdd BMI to the data frame.\n\nfor (id in rownames(df)){\n  \n  if (df[id, 'age'] &gt;= 18) {\n    \n    weight &lt;- df[id, 'weight_kg']\n  \n    height &lt;- df[id, 'height_m']\n    \n    bmi &lt;- calculate_bmi(weight, height)\n\n  } else {\n    \n    bmi &lt;- NA\n    \n  }\n  \n  df[id, 'bmi'] &lt;- bmi\n  \n}\n\nHave a look at the data frame.\n\ndf\n\n  age weight_kg height_m      bmi\n1  45        85     1.75 27.75510\n2  16        65     1.45       NA\n3  31       100     1.95 26.29849\n4  56        45     1.51 19.73598\n5  19        76     1.89 21.27600",
-    "crumbs": [
-      "Course Material",
-      "Presentations",
-      "Presentation 4: Scripting in R"
-    ]
-  },
-  {
-    "objectID": "presentations/presentation4_main_script.html#out-sourcing-functions-to-an-rscript-you-source",
-    "href": "presentations/presentation4_main_script.html#out-sourcing-functions-to-an-rscript-you-source",
-    "title": "Presentation 4: Main Script",
-    "section": "Out-sourcing functions to an Rscript you source",
-    "text": "Out-sourcing functions to an Rscript you source\nRemove calculate_bmi from the global environment.\n\nrm(list = \"calculate_bmi\")\n\nBy sourcing a script, all global variables (including functions) in script will be loaded and appear in the Global environment in the top left corner. Here we source the functions.R script.\n\nsource('./presentation4_functions.R')\n\nAfter we sourced the functions script the calculate_bmi function can be used just like if it was defined in the main script. If you work on a larger project and write multiple functions, it is best practice to have a function script and source it in your main script.\n\ncalculate_bmi(weight_kg = 67, \n              height_m = 1.70)\n\n[1] 23.18339\n\n\nUse mapply for alternative to calling function in for-loop.\n\nmapply(FUN = calculate_bmi, \n       weight_kg = df$weight_kg, \n       height_m = df$height_m)\n\n[1] 27.75510 30.91558 26.29849 19.73598 21.27600",
-    "crumbs": [
-      "Course Material",
-      "Presentations",
-      "Presentation 4: Scripting in R"
-    ]
-  },
-  {
-    "objectID": "presentations/presentation4_main_script.html#functions-with-error-handling.",
-    "href": "presentations/presentation4_main_script.html#functions-with-error-handling.",
-    "title": "Presentation 4: Main Script",
-    "section": "Functions with error handling.",
-    "text": "Functions with error handling.\nThe function is in the functions script.\nThe BMI function with out error handling returns a meaningless BMI value if given a negative weight.\n\ncalculate_bmi(weight_kg = -50, height_m = 1.80)\n\n[1] -15.4321\n\n\nThe BMI function with error handling returns an error if given a negative weight.\n\ncalculate_bmi_2(weight_kg = -50, height_m = 1.80)\n\nThe BMI function with error handling returns an warning if a BMI outside the normal range is calculated.\n\ncalculate_bmi_2(weight_kg = 25, height_m = 1.80)\n\nWarning in calculate_bmi_2(weight_kg = 25, height_m = 1.8): The calculated BMI\nis outside the normal range. Please check your input values.\n\n\n[1] 7.716049",
-    "crumbs": [
-      "Course Material",
-      "Presentations",
-      "Presentation 4: Scripting in R"
     ]
   }
 ]

@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Presentation 2: Advanced Tidyverse / Pivot longer, wider, and nesting – R for Data Science</title>
+<title>Presentation 2: Advanced Data Wrangling – R for Data Science</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -143,7 +143,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../presentations/presentation1.html">Presentations</a></li><li class="breadcrumb-item"><a href="../presentations/presentation2.html">Presentation 2: Advanced Tidyverse</a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../presentations/presentation1.html">Presentations</a></li><li class="breadcrumb-item"><a href="../presentations/presentation2.html">Presentation 2: Data Clean Up</a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
     </div>
@@ -179,7 +179,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../presentations/presentation2.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text">Presentation 2: Advanced Tidyverse</span></a>
+ <span class="menu-text">Presentation 2: Data Clean Up</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -325,19 +325,30 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <ul>
   <li><a href="#load-packages" id="toc-load-packages" class="nav-link active" data-scroll-target="#load-packages">Load packages</a></li>
   <li><a href="#load-data" id="toc-load-data" class="nav-link" data-scroll-target="#load-data">Load data</a></li>
-  <li><a href="#goal" id="toc-goal" class="nav-link" data-scroll-target="#goal">Goal</a></li>
-  <li><a href="#long-format" id="toc-long-format" class="nav-link" data-scroll-target="#long-format">Long format</a></li>
-  <li><a href="#wide-format" id="toc-wide-format" class="nav-link" data-scroll-target="#wide-format">Wide format</a></li>
+  <li><a href="#formats-pivot-long-and-wider" id="toc-formats-pivot-long-and-wider" class="nav-link" data-scroll-target="#formats-pivot-long-and-wider">Formats: Pivot long and wider</a>
+  <ul class="collapse">
+  <li><a href="#pivot-into-long-format" id="toc-pivot-into-long-format" class="nav-link" data-scroll-target="#pivot-into-long-format">Pivot into long format</a></li>
+  <li><a href="#pivot-back-into-wide-format" id="toc-pivot-back-into-wide-format" class="nav-link" data-scroll-target="#pivot-back-into-wide-format">Pivot back into wide format</a></li>
+  </ul></li>
   <li><a href="#nesting" id="toc-nesting" class="nav-link" data-scroll-target="#nesting">Nesting</a></li>
+  <li><a href="#tidyverse-helpers-across-and-where" id="toc-tidyverse-helpers-across-and-where" class="nav-link" data-scroll-target="#tidyverse-helpers-across-and-where">Tidyverse helpers: <code>across()</code> and <code>where()</code></a>
+  <ul class="collapse">
+  <li><a href="#using-across-to-select-columns" id="toc-using-across-to-select-columns" class="nav-link" data-scroll-target="#using-across-to-select-columns">Using <code>across()</code> to select columns</a></li>
+  <li><a href="#summarise-becomes-more-powerful" id="toc-summarise-becomes-more-powerful" class="nav-link" data-scroll-target="#summarise-becomes-more-powerful"><code>summarise()</code> becomes more powerful!</a></li>
+  </ul></li>
+  <li><a href="#the-anonymous-function-and-." id="toc-the-anonymous-function-and-." class="nav-link" data-scroll-target="#the-anonymous-function-and-.">The anonymous function: <code>~</code> and <code>.</code></a>
+  <ul class="collapse">
+  <li><a href="#other-usage-examples" id="toc-other-usage-examples" class="nav-link" data-scroll-target="#other-usage-examples">Other usage examples</a></li>
+  </ul></li>
   </ul>
 </nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../presentations/presentation1.html">Presentations</a></li><li class="breadcrumb-item"><a href="../presentations/presentation2.html">Presentation 2: Advanced Tidyverse</a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../presentations/presentation1.html">Presentations</a></li><li class="breadcrumb-item"><a href="../presentations/presentation2.html">Presentation 2: Data Clean Up</a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title">Presentation 2: Advanced Tidyverse / Pivot longer, wider, and nesting</h1>
+<h1 class="title">Presentation 2: Advanced Data Wrangling</h1>
 </div>
 
 
@@ -367,9 +378,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>df_sales <span class="ot">&lt;-</span> <span class="fu">read_excel</span>(<span class="st">'../out/sales_data_2.xlsx'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
-<section id="goal" class="level2">
-<h2 class="anchored" data-anchor-id="goal">Goal</h2>
-<p>The goal is to make a plot like this where we visualize the sales for each year across each employee.</p>
+<section id="formats-pivot-long-and-wider" class="level2">
+<h2 class="anchored" data-anchor-id="formats-pivot-long-and-wider">Formats: Pivot long and wider</h2>
+<p>In tidyverse we primarily use two different formats: long and wide. The wide format is how you are probably used to seeing data presented with one column for each measured variable. However, when we need to plot, analyse or model data, we will often need them to be in the long format instead. It is therefore important that we know how to switch between them.</p>
+<section id="pivot-into-long-format" class="level3">
+<h3 class="anchored" data-anchor-id="pivot-into-long-format">Pivot into long format</h3>
+<p>The goal of this section is to make a plot like this where we visualize the sales for each year across each employee.</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="../out/sales_2_plot.png" class="img-fluid quarto-figure quarto-figure-center figure-img"></p>
@@ -397,9 +411,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 # ℹ 3 more variables: raise &lt;chr&gt;, group &lt;chr&gt;, City &lt;chr&gt;</code></pre>
 </div>
 </div>
-</section>
-<section id="long-format" class="level2">
-<h2 class="anchored" data-anchor-id="long-format">Long format</h2>
 <p>The data set is in wide format. The data can be restructured to long format such that there is one line per year per person. For this we use the <code>pivot_longer</code> function.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>df_sales_longer <span class="ot">&lt;-</span> df_sales <span class="sc">%&gt;%</span> </span>
@@ -459,8 +470,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="co"># ggsave('../out/sales_2_plot.png', width = 10.37, height = 7.55, units = 'in')</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
-<section id="wide-format" class="level2">
-<h2 class="anchored" data-anchor-id="wide-format">Wide format</h2>
+<section id="pivot-back-into-wide-format" class="level3">
+<h3 class="anchored" data-anchor-id="pivot-back-into-wide-format">Pivot back into wide format</h3>
 <p>The <code>pivot_wider</code> function is used to get data to wide format.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>df_sales_wider <span class="ot">&lt;-</span> df_sales_longer <span class="sc">%&gt;%</span> </span>
@@ -497,9 +508,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </section>
+</section>
 <section id="nesting" class="level2">
 <h2 class="anchored" data-anchor-id="nesting">Nesting</h2>
-<p>The long format can contain many repetitions e.g.&nbsp;information on the sales employee in <code>df_sales_longer</code>. Group data by <code>Name</code> and nest <code>year</code> and <code>sales</code> into a single column that we will name <code>sales_data</code>.</p>
+<p>The long format can contain many repetitions e.g.&nbsp;information on the sales employee in <code>df_sales_longer</code> is repeated for every year. Instead of having many nearly identical rows we can use <em>nesting</em> to have just one row with the employee information and the associated sales data in its own ‘mini-tibble’.</p>
+<p>We’ll group data by <code>Name</code> and nest <code>year</code> and <code>sales</code> into a single column that we will name <code>sales_data</code>.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>df_sales_longer_nested <span class="ot">&lt;-</span> df_sales_longer <span class="sc">%&gt;%</span>  </span>
 <span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Name) <span class="sc">%&gt;%</span> </span>
@@ -519,8 +532,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 6     6 Frank      NA Male   happy yes   &lt;NA&gt;          New York &lt;tibble [4 × 2]&gt;</code></pre>
 </div>
 </div>
+<p>Now we have a structured dataset which is more readable.</p>
 <p><strong>Note:</strong> Nested data cannot be exported as an Excel or CSV file. Instead, you need to export it as an RDS file, a format specifically designed to save R objects.</p>
-<p>We can extract the sales information from an employee using the <code>pull</code> function.</p>
+<p>We can extract the sales information for a particular employee using the <code>pull</code> function.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>df_sales_longer_nested <span class="sc">%&gt;%</span> </span>
 <span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(Name <span class="sc">==</span> <span class="st">'Bob'</span>) <span class="sc">%&gt;%</span> </span>
@@ -536,8 +550,268 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 4  2023   230</code></pre>
 </div>
 </div>
+</section>
+<section id="tidyverse-helpers-across-and-where" class="level2">
+<h2 class="anchored" data-anchor-id="tidyverse-helpers-across-and-where">Tidyverse helpers: <code>across()</code> and <code>where()</code></h2>
+<section id="using-across-to-select-columns" class="level3">
+<h3 class="anchored" data-anchor-id="using-across-to-select-columns">Using <code>across()</code> to select columns</h3>
+<p>You probably noticed that we used a function to help us to <code>summarise()</code> all columns in Presentation 1:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>df_tidyverse <span class="sc">%&gt;%</span> <span class="fu">summarise</span>(<span class="fu">across</span>(<span class="fu">everything</span>(), <span class="sc">~</span> <span class="fu">sum</span>(<span class="fu">is.na</span>(.))))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>In this section we will say a bit more about the so called tidyverse helpers such as <code>across()</code>, <code>where()</code>, and <code>starts_with()</code>. These helpers are useful when we want to apply a functions, i.e.&nbsp;<code>summarise()</code>, or <code>mutate()</code> to several columns.</p>
+<p>Let’s have an example. We know we can calculate the mean of each sales column like so:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>df_sales <span class="sc">%&gt;%</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="fu">mean</span>(sales_2020),</span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>            <span class="fu">mean</span>(sales_2021),</span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>            <span class="fu">mean</span>(sales_2022),</span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>            <span class="fu">mean</span>(sales_2023))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 1 × 4
+  `mean(sales_2020)` `mean(sales_2021)` `mean(sales_2022)` `mean(sales_2023)`
+               &lt;dbl&gt;              &lt;dbl&gt;              &lt;dbl&gt;              &lt;dbl&gt;
+1                 NA                300                 NA                305</code></pre>
+</div>
+</div>
+<p><em>Note</em>: We got some <code>NA</code>s because sales_2020 and 2022 contain <code>NA</code> values and we didn’t specify <code>na.rm=TRUE</code>. We will continue to see these in the below examples. Don’t worry about them for now, we will show you how to deal with them later!</p>
+<p>But then we need to name every column we want to apply <code>summarise</code> to. <code>across()</code> instead lets us select the columns <strong>across</strong> which we want to apply summarise in a dynamic fashion:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>df_sales <span class="sc">%&gt;%</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="fu">across</span>(<span class="fu">everything</span>(), mean))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 1 × 12
+     ID  Name   Age   Sex sales_2020 sales_2021 sales_2022 sales_2023  mood
+  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt; &lt;dbl&gt;
+1   5.5    NA    NA    NA         NA        300         NA        305    NA
+# ℹ 3 more variables: raise &lt;dbl&gt;, group &lt;dbl&gt;, City &lt;dbl&gt;</code></pre>
+</div>
+</div>
+<p>We put the columns we want to select inside the brackets of <code>across()</code>. <code>everything()</code>, as you have probably guessed means all columns.</p>
+<p>We will probably not want to calculate means on non-numeric columns, so let’s select only numeric columns. For that we need another helper caller <code>where()</code> that lets us select columns based on their properties, like data type.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>df_sales <span class="sc">%&gt;%</span></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="fu">across</span>(<span class="fu">where</span>(is.numeric), mean))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 1 × 6
+     ID   Age sales_2020 sales_2021 sales_2022 sales_2023
+  &lt;dbl&gt; &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt;
+1   5.5    NA         NA        300         NA        305</code></pre>
+</div>
+</div>
+<p>There is another group of helpers that refers to column names:</p>
+<ul>
+<li><code>starts_with()</code></li>
+<li><code>ends_with()</code></li>
+<li><code>contains()</code></li>
+</ul>
+<p>And we can use them to select only columns starting with ‘sales’:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>df_sales <span class="sc">%&gt;%</span></span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="fu">across</span>(<span class="fu">starts_with</span>(<span class="st">'sales'</span>), mean))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 1 × 4
+  sales_2020 sales_2021 sales_2022 sales_2023
+       &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt;
+1         NA        300         NA        305</code></pre>
+</div>
+</div>
+<p>If the column names follow some pattern like ‘sales_XXXX’ we can also employ <code>num_range</code> to specify them:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>df_sales <span class="sc">%&gt;%</span></span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="fu">across</span>(<span class="fu">num_range</span>(<span class="st">'sales_'</span>, <span class="dv">2020</span><span class="sc">:</span><span class="dv">2023</span>), mean))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 1 × 4
+  sales_2020 sales_2021 sales_2022 sales_2023
+       &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt;
+1         NA        300         NA        305</code></pre>
+</div>
+</div>
+<p>Lastly, we can always straight up supply the names of the columns we want to select in a vector:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>df_sales <span class="sc">%&gt;%</span></span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="fu">across</span>(<span class="fu">c</span>(sales_2020, sales_2021), mean))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 1 × 2
+  sales_2020 sales_2021
+       &lt;dbl&gt;      &lt;dbl&gt;
+1         NA        300</code></pre>
+</div>
+</div>
+<p>All these ways can be used to select columns in tidyverse, also outside of <code>across()</code>. As an example, you’ve already see <code>starts_with()</code> in the Long Format section when we selected the columns to convert with <code>pivot_longer()</code>:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>df_sales <span class="sc">%&gt;%</span> </span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="at">cols =</span> <span class="fu">starts_with</span>(<span class="st">"sales_"</span>),</span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a>               <span class="at">names_to =</span> <span class="st">"year"</span>,</span>
+<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a>               <span class="at">values_to =</span> <span class="st">"sales"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="summarise-becomes-more-powerful" class="level3">
+<h3 class="anchored" data-anchor-id="summarise-becomes-more-powerful"><code>summarise()</code> becomes more powerful!</h3>
+<p>Alright, so we now know how save ourselves from having to name every column we want to operate on, but what if we want to calculate several summary stats? There’s more to numbers than means!</p>
+<p>Now that we have <code>across()</code> we can supply <code>summarise</code> with a list of summary functions to execute:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>df_sales <span class="sc">%&gt;%</span></span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="fu">across</span>(<span class="fu">starts_with</span>(<span class="st">"sales"</span>), <span class="fu">list</span>(mean, sd, min, max)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 1 × 16
+  sales_2020_1 sales_2020_2 sales_2020_3 sales_2020_4 sales_2021_1 sales_2021_2
+         &lt;dbl&gt;        &lt;dbl&gt;        &lt;dbl&gt;        &lt;dbl&gt;        &lt;dbl&gt;        &lt;dbl&gt;
+1           NA           NA           NA           NA          300         131.
+# ℹ 10 more variables: sales_2021_3 &lt;dbl&gt;, sales_2021_4 &lt;dbl&gt;,
+#   sales_2022_1 &lt;dbl&gt;, sales_2022_2 &lt;dbl&gt;, sales_2022_3 &lt;dbl&gt;,
+#   sales_2022_4 &lt;dbl&gt;, sales_2023_1 &lt;dbl&gt;, sales_2023_2 &lt;dbl&gt;,
+#   sales_2023_3 &lt;dbl&gt;, sales_2023_4 &lt;dbl&gt;</code></pre>
+</div>
+</div>
+<p>Now we get one long row with mean, sd, min and max for every column starting with sales. We’re probably not super happy with the column names <code>sales_2020_1</code>, <code>sales_2020_2</code>, ect, so let’s add names that contain the function we’re executing (mean, ect). In order for this to work we must also name the functions:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>df_sales <span class="sc">%&gt;%</span></span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="fu">across</span>(<span class="fu">starts_with</span>(<span class="st">"sales"</span>), </span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a>                   <span class="fu">list</span>(<span class="at">mean =</span> mean, <span class="at">sd =</span> sd, <span class="at">min =</span> min, <span class="at">max =</span> max),</span>
+<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a>                   <span class="at">.names =</span> <span class="st">"{.col}-{.fn}"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 1 × 16
+  `sales_2020-mean` `sales_2020-sd` `sales_2020-min` `sales_2020-max`
+              &lt;dbl&gt;           &lt;dbl&gt;            &lt;dbl&gt;            &lt;dbl&gt;
+1                NA              NA               NA               NA
+# ℹ 12 more variables: `sales_2021-mean` &lt;dbl&gt;, `sales_2021-sd` &lt;dbl&gt;,
+#   `sales_2021-min` &lt;dbl&gt;, `sales_2021-max` &lt;dbl&gt;, `sales_2022-mean` &lt;dbl&gt;,
+#   `sales_2022-sd` &lt;dbl&gt;, `sales_2022-min` &lt;dbl&gt;, `sales_2022-max` &lt;dbl&gt;,
+#   `sales_2023-mean` &lt;dbl&gt;, `sales_2023-sd` &lt;dbl&gt;, `sales_2023-min` &lt;dbl&gt;,
+#   `sales_2023-max` &lt;dbl&gt;</code></pre>
+</div>
+</div>
+<p>Still not your preferred format? You can probably pivot your way out of that!</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a>df_sales <span class="sc">%&gt;%</span></span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a>  <span class="co">#run summarise on all sales columns</span></span>
+<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="fu">across</span>(<span class="fu">starts_with</span>(<span class="st">"sales"</span>), </span>
+<span id="cb37-4"><a href="#cb37-4" aria-hidden="true" tabindex="-1"></a>                   <span class="fu">list</span>(<span class="at">mean =</span> mean, <span class="at">sd =</span> sd, <span class="at">min =</span> min, <span class="at">max =</span> max),</span>
+<span id="cb37-5"><a href="#cb37-5" aria-hidden="true" tabindex="-1"></a>                   <span class="at">.names =</span> <span class="st">"{.col}-{.fn}"</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb37-6"><a href="#cb37-6" aria-hidden="true" tabindex="-1"></a>  <span class="co">#add reformating</span></span>
+<span id="cb37-7"><a href="#cb37-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="at">cols =</span> <span class="fu">everything</span>(), </span>
+<span id="cb37-8"><a href="#cb37-8" aria-hidden="true" tabindex="-1"></a>               <span class="at">names_to =</span> <span class="fu">c</span>(<span class="st">"variable"</span>, <span class="st">"statistic"</span>), </span>
+<span id="cb37-9"><a href="#cb37-9" aria-hidden="true" tabindex="-1"></a>               <span class="at">names_sep =</span> <span class="st">"-"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb37-10"><a href="#cb37-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_wider</span>(<span class="at">names_from =</span> statistic, <span class="at">values_from =</span> value)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 4 × 5
+  variable    mean    sd   min   max
+  &lt;chr&gt;      &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+1 sales_2020    NA   NA     NA    NA
+2 sales_2021   300  131.   110   510
+3 sales_2022    NA   NA     NA    NA
+4 sales_2023   305  131.   100   500</code></pre>
+</div>
+</div>
+<p><img src="../figures/satisfying_meme.jpg" class="img-fluid" width="200"></p>
+</section>
+</section>
+<section id="the-anonymous-function-and-." class="level2">
+<h2 class="anchored" data-anchor-id="the-anonymous-function-and-.">The anonymous function: <code>~</code> and <code>.</code></h2>
+<p>But wait! We still have those pesky <code>NA</code>s in our summary stats. Let’s just add the <code>na.rm=TRUE</code> argument. To not have too many things going on at once we’ll only do <code>mean()</code> for now:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a>df_sales <span class="sc">%&gt;%</span></span>
+<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="fu">across</span>(<span class="fu">starts_with</span>(<span class="st">"sales"</span>), </span>
+<span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a>                   <span class="fu">list</span>(<span class="at">mean =</span> <span class="fu">mean</span>(<span class="at">na.rm =</span> <span class="cn">TRUE</span>)),</span>
+<span id="cb39-4"><a href="#cb39-4" aria-hidden="true" tabindex="-1"></a>                   <span class="at">.names =</span> <span class="st">"{.col}-{.fn}"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-error">
+<pre><code>Error in `summarise()`:
+ℹ In argument: `across(...)`.
+Caused by error in `mean.default()`:
+! argument "x" is missing, with no default</code></pre>
+</div>
+</div>
+<p>Brrrtt! We may not.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../figures/meme_disappointment.png" class="img-fluid quarto-figure quarto-figure-center figure-img"></p>
+</figure>
+</div>
+<p>Why? We are requesting a function call across several columns and we’re doing it in shorthand. This is only permitted is there are no arguments to the function (<code>mean()</code>, <code>sd()</code>, ect). You will also notice that we didn’t use brackets after their names, which is part of using the function short hand.</p>
+<p>If we need to pass arguments to functions inside another function call (i.e.&nbsp;calling <code>mean</code> inside <code>summarise</code>) we need to invoke the <strong>anonymous function</strong>. Don’t worry, it is much less ominous than it sounds! It is written as a <code>~</code> and looks like this:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a>df_sales <span class="sc">%&gt;%</span></span>
+<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="fu">across</span>(<span class="fu">starts_with</span>(<span class="st">"sales"</span>), </span>
+<span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a>                   <span class="fu">list</span>(<span class="at">mean =</span> <span class="sc">~</span> <span class="fu">mean</span>(., <span class="at">na.rm =</span> <span class="cn">TRUE</span>)),</span>
+<span id="cb41-4"><a href="#cb41-4" aria-hidden="true" tabindex="-1"></a>                   <span class="at">.names =</span> <span class="st">"{.col}-{.fn}"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 1 × 4
+  `sales_2020-mean` `sales_2021-mean` `sales_2022-mean` `sales_2023-mean`
+              &lt;dbl&gt;             &lt;dbl&gt;             &lt;dbl&gt;             &lt;dbl&gt;
+1              294.               300              288.               305</code></pre>
+</div>
+</div>
+<p>The observant reader will also have noticed that a <code>.</code> has appeared in the brackets behind <code>mean()</code>. It simply means ‘the data previously referred to’, in this case every column starting with ‘sales’. We need to use the <code>.</code> because <code>mean</code> when called as a proper function needs to have an argument (a vector of numbers) to work on:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(df_sales<span class="sc">$</span>sales_2020,<span class="at">na.rm=</span><span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 294.4444</code></pre>
+</div>
+</div>
+<p>So this is it, we invoke the anonymous function for every statistic we want to calculate and now we may pass arguments:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a>df_sales <span class="sc">%&gt;%</span></span>
+<span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a>  <span class="co">#across and starts_with selects columns</span></span>
+<span id="cb45-3"><a href="#cb45-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="fu">across</span>(<span class="fu">starts_with</span>(<span class="st">"sales"</span>), </span>
+<span id="cb45-4"><a href="#cb45-4" aria-hidden="true" tabindex="-1"></a>                   <span class="co">#list the functions to execute</span></span>
+<span id="cb45-5"><a href="#cb45-5" aria-hidden="true" tabindex="-1"></a>                   <span class="fu">list</span>(<span class="at">mean =</span> <span class="sc">~</span> <span class="fu">mean</span>(., <span class="at">na.rm=</span>T),</span>
+<span id="cb45-6"><a href="#cb45-6" aria-hidden="true" tabindex="-1"></a>                        <span class="at">sd =</span> <span class="sc">~</span> <span class="fu">sd</span>(., <span class="at">na.rm=</span>T), </span>
+<span id="cb45-7"><a href="#cb45-7" aria-hidden="true" tabindex="-1"></a>                        <span class="at">min =</span> <span class="sc">~</span> <span class="fu">min</span>(., <span class="at">na.rm=</span>T), </span>
+<span id="cb45-8"><a href="#cb45-8" aria-hidden="true" tabindex="-1"></a>                        <span class="at">max =</span> <span class="sc">~</span> <span class="fu">max</span>(., <span class="at">na.rm=</span>T)),</span>
+<span id="cb45-9"><a href="#cb45-9" aria-hidden="true" tabindex="-1"></a>                   <span class="co">#specify names of output columns</span></span>
+<span id="cb45-10"><a href="#cb45-10" aria-hidden="true" tabindex="-1"></a>                   <span class="at">.names =</span> <span class="st">"{.col}-{.fn}"</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb45-11"><a href="#cb45-11" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb45-12"><a href="#cb45-12" aria-hidden="true" tabindex="-1"></a>  <span class="co">#add reformating</span></span>
+<span id="cb45-13"><a href="#cb45-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="at">cols =</span> <span class="fu">everything</span>(), </span>
+<span id="cb45-14"><a href="#cb45-14" aria-hidden="true" tabindex="-1"></a>               <span class="at">names_to =</span> <span class="fu">c</span>(<span class="st">"variable"</span>, <span class="st">"statistic"</span>), </span>
+<span id="cb45-15"><a href="#cb45-15" aria-hidden="true" tabindex="-1"></a>               <span class="at">names_sep =</span> <span class="st">"-"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb45-16"><a href="#cb45-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_wider</span>(<span class="at">names_from =</span> statistic, <span class="at">values_from =</span> value)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 4 × 5
+  variable    mean    sd   min   max
+  &lt;chr&gt;      &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+1 sales_2020  294.  136.   100   500
+2 sales_2021  300   131.   110   510
+3 sales_2022  288.  115.   120   470
+4 sales_2023  305   131.   100   500</code></pre>
+</div>
+</div>
+<section id="other-usage-examples" class="level3">
+<h3 class="anchored" data-anchor-id="other-usage-examples">Other usage examples</h3>
+<p>The anonymous function and <code>across</code> are also useful inside <code>mutate()</code>! Our data has sales in thousands DKK, so lets multiply every value in every sales column with 1000:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb47"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a>df_sales <span class="sc">%&gt;%</span> <span class="fu">head</span>(<span class="at">n=</span><span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 3 × 12
+     ID Name      Age Sex    sales_2020 sales_2021 sales_2022 sales_2023 mood 
+  &lt;dbl&gt; &lt;chr&gt;   &lt;dbl&gt; &lt;chr&gt;       &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt; &lt;chr&gt;
+1     1 Alice      25 Female        100        110        120        100 happy
+2     2 Bob        30 Male          200        210        220        230 happy
+3     3 Charlie    22 Male          150        160        170        200 happy
+# ℹ 3 more variables: raise &lt;chr&gt;, group &lt;chr&gt;, City &lt;chr&gt;</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb49"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a>df_sales <span class="sc">%&gt;%</span></span>
+<span id="cb49-2"><a href="#cb49-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="fu">across</span>(<span class="fu">starts_with</span>(<span class="st">"sales"</span>), <span class="sc">~</span> . <span class="sc">*</span> <span class="dv">1000</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb49-3"><a href="#cb49-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">head</span>(<span class="at">n=</span><span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 3 × 12
+     ID Name      Age Sex    sales_2020 sales_2021 sales_2022 sales_2023 mood 
+  &lt;dbl&gt; &lt;chr&gt;   &lt;dbl&gt; &lt;chr&gt;       &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt; &lt;chr&gt;
+1     1 Alice      25 Female     100000     110000     120000     100000 happy
+2     2 Bob        30 Male       200000     210000     220000     230000 happy
+3     3 Charlie    22 Male       150000     160000     170000     200000 happy
+# ℹ 3 more variables: raise &lt;chr&gt;, group &lt;chr&gt;, City &lt;chr&gt;</code></pre>
+</div>
+</div>
+<p><img src="../figures/meme_move.png" class="img-fluid" width="400"></p>
+<p>What is happening here is we first select all columns starting with ‘sales’ by using <code>across()</code> and <code>starts_with()</code>. Then we say that we want to execute a function on each of these columns. The function shall be ‘multiply this column by 1000’. Multiplying by 1000 is written as <code>* 1000</code> in R, ‘this column’ is <code>.</code> as we discussed before and <code>~</code> tells R that we’re executing a function.</p>
+<p>This is it for now but there will be user-defined functions later!</p>
 
 
+</section>
 </section>
 
 </main> <!-- /main -->
