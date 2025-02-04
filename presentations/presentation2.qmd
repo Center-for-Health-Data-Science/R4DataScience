@@ -306,4 +306,12 @@ df_sales %>%
 
 What is happening here is we first select all columns starting with 'sales' by using `across()` and `starts_with()`. Then we say that we want to execute a function on each of these columns. The function shall be 'multiply this column by 1000'. Multiplying by 1000 is written as `* 1000` in R, 'this column' is `.` as we discussed before and `~` tells R that we're executing a function. 
 
+Another cool example: Replacing `NA`s with `0`s only in the columns starting with 'sales':
+
+```{r}
+df_sales %>%
+  mutate(across(starts_with("sales"), ~ replace_na(.,0)))
+```
+
+
 This is it for now but there will be user-defined functions later! 
