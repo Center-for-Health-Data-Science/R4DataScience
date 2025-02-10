@@ -1,48 +1,172 @@
 ---
-title: "Presentation 5: Modelling in R"
+title: "Presentation 5: Intro to Modelling in R"
 format: html
 project:
  type: website
  output-dir: ../docs
 ---
 
+In this section we'll look at how to define and fit a model in R.
+
 ## Load packages
-```{r}
+```{r warning=FALSE, message=FALSE}
 library(tidyverse)
 library(caret)
+library(ModelMetrics)
 ```
 
 ## Load data
+
+In order to focus on the technical aspects we'll use a very simple toy dataset. It contains the number of cigarettes smoked per day and how long the person lived. It is inspired by [this paper](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC2598467/) if you want to take a look. 
+
 ```{r}
-df_sales <- readxl::read_xlsx('../data/df_sales_1.xlsx')
-# data <- mtcars
+df_smoke <- read.csv('../data/smoking.csv')
+head(df_smoke)
 ```
+
+
+We will use this to perform a linear regression.
+
+![](../figures/lin_reg.jpg){fig-align="center"}
 
 ## Linear Regression 
 
-### Split Data into Traning and Test Set
-Create an 80/20 train-test split using the `createDataPartition` function. 
+### Split Data into Training and Test Set
+
+First, we will split our data into a test and a training set. There are numerous ways to do this. We here show `sample_frac` from `dplyr`:
+
+
 ```{r}
 # Set seed to ensure reproducibility
 set.seed(123)  
 
-split <- createDataPartition(df_sales$ID, p = 0.8, list = FALSE)
-train_data <- df_sales[split, ]
-test_data <- df_sales[-split, ]
+#add an ID column to keep track of observations
+df_smoke$ID <- 1:nrow(df_smoke)
+
+train <- df_smoke %>% sample_frac(.75)
+nrow(train)
+head(train)
+
 ```
 
-### Train the Linear Regression Model
+As you can see, the ID's in `train` are shuffled and it only has 75 rows since we asked for 75% of the data. Now all we have to do is identify the other 25%, i.e. the observations not in train. `dpylr` has a neat function called `anti_join` for that:
 
 ```{r}
-# Fit a linear regression model
-model <- lm(sales_2023 ~ sales_2020 + Age, data = df_sales)  # Predict mpg using weight (wt) and horsepower (hp)
+#from df_smoke remove what is in train by checking the ID column
+test  <- anti_join(df_smoke, train, by = 'ID') 
+nrow(test)
+head(test)
+```
 
+### Defining the model
+
+As stated above, a linear regression model generally has the form of: 
+
+$$y=b_0+b_1*x_i$$
+
+Where we refer to $b_0$ as the intercept and $b_1$ as the coefficient. There will typically be one coefficient for each predictor. The goal of modelling is to estimate the values of $b_0$ and all $b_i$. 
+
+We need to tell R which of our variables is the outcome, $y$ and which predictors $x_i$ we want to include in the model. This is referred to in documentation as the model's **formula**. Have a look:
+
+```{r eval=FALSE}
+#the formula is written like so:
+lm(y ~ x_1 + x_2 + ...)
+#see the help
+?lm
+```
+
+In our case, $y$ is the number of years lived and we have a singular predictor $x_1$, the number of cigarettes smoked per day. So that will be our model formulation:
+
+```{r}
+#remember to select the training data subset we defined above! 
+model <- lm(life ~ daily_cigarettes, data = train)
+```
+
+
+### Modelling results
+
+By calling `lm` we have already trained our model! Lets have a look at the results. The summary gives us a lot of information about the model we trained:
+
+```{r}
 # View model summary
 summary(model)
 ```
 
+It beings with **Call** which displays the formula used to fit the model. 
+
+The **Residuals** section summarizes the distribution of the residuals, which is the difference between the actual observed $y$ values and the fitted $y$ values.  
+
+The **Coefficients** table shows the estimated values for each coefficient including the intercept, along with their standard errors, t-values, and p-values. These help to determine the significance of each predictor. Smaller p-values indicate stronger evidence against the null hypothesis that the true coefficient is zero. 
+
+
+In the bottom section we have some information about how well model fits the training data. The **Residual Standard Error (RSE)** provides a measure of accuracy as it represents the average size of the residuals. The **R-squared** value indicates the proportion of variance explained by the model, with the Adjusted R-squared accounting for the number of predictors to prevent overfitting. Finally, the **F-statistic** and its p-value test whether the model as a whole explains a significant portion of the variance in the response variable (the outcome $y$). 
+
+Overall, the `summary` helps us to assess the model fit and identify significant predictors and their effect size (size of the coefficient). 
+
+We can extract the `model` object's components with `$`:
+
+```{r}
+model$coefficients
+
+hist(model$residuals, breaks = 30, main = 'Histogram of residuals', 
+     xlab = 'Residual')
+
+```
+
+### Model interpretation
+
+What do these results mean? Our model formulation is: 
+
+$$life=b_0+b_1*cigarettes$$
+
+And we estimated these values:
+
+```{r}
+model$coefficients
+```
+
+
+Therefore:
+
+* The intercept $b_0$ is the number of years we estimated a person in this dataset will live if they smoke 0 cigarettes. It is 78.7 years
+
+* The coefficient of cigarettes per day is -0.28. This means for every 1 unit increase in cigarettes (one additional cigarette per day) the life expectancy decreases by 0.28 years.  
+
+### Model performance
+
+We now use our held out test data to evaluate the model performance. For that we will predict life expectancy for the 25 observations in `test` and compare with the actual values.
+
+```{r}
+#use the fitted model to make predictions for the test data
+y_pred <- predict(model, test)
+y_pred
+```
+
+Let's see how that fits with the known values.
+
+```{r}
+pred <- tibble(pred = y_pred, real = test$life)
+
+ggplot(pred, aes(x=real, y=pred)) +
+  geom_point()
+```
+
+Not too bad! Formally we usually calculate the mean square error (mse) between predictions and the known true values.
+
+```{r}
+mse(pred$real,pred$pred)
+```
+
+Our predictions are on average 1.7 years wrong. 
 
 ## Regression with categorical features 
+
+Now that we know how to make a simple linear model, how can we include categorical variables and what is the interpretation of their coefficients? To investigate this we will load a second version of the dataset that contains an additional variable: Exercise level.
+
+```{r}
+
+```
+
 
 ## Decision tree
 
