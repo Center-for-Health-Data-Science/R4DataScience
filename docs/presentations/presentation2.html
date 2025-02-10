@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.5.57">
+<meta name="generator" content="quarto-1.6.40">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -69,12 +69,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-549806ee2085284f45b00abea8c6df48.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark-8ea72dc5fed832574809a9c94082fbbb.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="../site_libs/bootstrap/bootstrap-dark.min.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../site_libs/bootstrap/bootstrap-04036d7ca062c87eb51b7d53d6467559.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-dark-d0e44dc943948f2bb6610a3a265026c7.min.css" rel="prefetch" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -198,6 +198,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <div class="sidebar-item-container"> 
   <a href="../presentations/presentation4_functions.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Presentation 4, Functions: Scripting in R</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../presentations/presentation5.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Presentation 5: Intro to Modelling in R</span></a>
   </div>
 </li>
       </ul>
@@ -808,6 +814,27 @@ Caused by error in `mean.default()`:
 </div>
 <p><img src="../figures/meme_move.png" class="img-fluid" width="400"></p>
 <p>What is happening here is we first select all columns starting with ‘sales’ by using <code>across()</code> and <code>starts_with()</code>. Then we say that we want to execute a function on each of these columns. The function shall be ‘multiply this column by 1000’. Multiplying by 1000 is written as <code>* 1000</code> in R, ‘this column’ is <code>.</code> as we discussed before and <code>~</code> tells R that we’re executing a function.</p>
+<p>Another cool example: Replacing <code>NA</code>s with <code>0</code>s only in the columns starting with ‘sales’:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb51"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a>df_sales <span class="sc">%&gt;%</span></span>
+<span id="cb51-2"><a href="#cb51-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="fu">across</span>(<span class="fu">starts_with</span>(<span class="st">"sales"</span>), <span class="sc">~</span> <span class="fu">replace_na</span>(.,<span class="dv">0</span>)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 10 × 12
+      ID Name      Age Sex    sales_2020 sales_2021 sales_2022 sales_2023 mood 
+   &lt;dbl&gt; &lt;chr&gt;   &lt;dbl&gt; &lt;chr&gt;       &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt; &lt;chr&gt;
+ 1     1 Alice      25 Female        100        110        120        100 happy
+ 2     2 Bob        30 Male          200        210        220        230 happy
+ 3     3 Charlie    22 Male          150        160        170        200 happy
+ 4     4 Sophie     35 Female        300        320        340        250 happy
+ 5     5 Eve        28 Female        250        240        250        270 happy
+ 6     6 Frank      NA Male            0        260        270        280 happy
+ 7     7 Grace      40 Female        400        420        430        450 happy
+ 8     8 Hannah     29 Female        500        510          0        500 happy
+ 9     9 Ian        21 Male          450        460        470        480 happy
+10    10 Jack       33 Male          300        310        320        290 happy
+# ℹ 3 more variables: raise &lt;chr&gt;, group &lt;chr&gt;, City &lt;chr&gt;</code></pre>
+</div>
+</div>
 <p>This is it for now but there will be user-defined functions later!</p>
 
 
@@ -1041,8 +1068,6 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   });
   clipboard.on('success', onCopySuccess);
   if (window.document.getElementById('quarto-embedded-source-code-modal')) {
-    // For code content inside modals, clipBoardJS needs to be initialized with a container option
-    // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
     const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
       text: getTextToCopy,
       container: window.document.getElementById('quarto-embedded-source-code-modal')
@@ -1153,7 +1178,6 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       if (window.Quarto?.typesetMath) {
         window.Quarto.typesetMath(note);
       }
-      // TODO in 1.5, we should make sure this works without a callout special case
       if (note.classList.contains("callout")) {
         return note.outerHTML;
       } else {

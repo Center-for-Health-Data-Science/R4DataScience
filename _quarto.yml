@@ -33,6 +33,8 @@ website:
             text: "Presentation 4: Scripting in R" 
           - href: presentations/presentation4_functions.qmd
             text: "Presentation 4, Functions: Scripting in R"
+          - href: presentations/presentation5.qmd
+            text: "Presentation 5: Intro to Modelling in R" 
 
       - href: data/data.qmd
         text: "Data️"

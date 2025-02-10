@@ -14,7 +14,7 @@ library(readxl)
 ## Load Data
 
 ```{r}
-diabetes <- read_excel('~/Desktop/DataLab/R4DataScience/data/diabetes_clinical_toy_messy.xlsx')
+diabetes <- read_excel('../data/diabetes_clinical_toy_messy.xlsx')
 ```
 
 ## Inspect Data

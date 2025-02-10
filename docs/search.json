@@ -1,17 +1,321 @@
 [
   {
-    "objectID": "about_heads.html",
-    "href": "about_heads.html",
-    "title": "About HeaDS",
+    "objectID": "solutions/solution_not_up.html",
+    "href": "solutions/solution_not_up.html",
+    "title": "Solution not up yet!",
     "section": "",
-    "text": "In the Center for Health Data Science (HeaDS) we do both research and in the DataLab and Sandbox we develop and host course. Read more about all the cool stuff we do on our website.\n\n\nThe DataLab offers a range of services to support SUND employees in their data science analyses. Here’s an overview:\n\nCourses: We offer data science and bioinformatics courses for all SUND staff (researchers, administrative staff, technical staff, etc.). Our most popular courses include “From Excel to R,” “Python Tsunami,” and “Introduction to Bulk RNA-seq Analysis.”\nConsultations: We host drop-in sessions every Thursday from 13:00 to 15:00, where we assist with data science-related challenges and questions. Alternatively, you can reach out to arrange a one-on-one meeting on another day.\nCommissions: We conduct commissioned research, such as bioinformatics and data science analyses tailored to your needs. Additionally, we offer a commissioned supervision scheme if you would like to learn how to perform the analysis yourself.\nEvents: We host various data science events. Join us for our seminar series, “Talking HeaDS.” Our next session is in the spring (date and speeker TBA), and you can sign up here: https://eventsignup.ku.dk/talkingheadsspring2025."
+    "text": "Solutions will be available only after you’ve had a chance to work through the exercises on your own. If you’re unsure how to proceed, check the slides, cheat sheets, ask a peer, or reach out to a TA.\n\nEnjoy!"
   },
   {
-    "objectID": "about_heads.html#center-for-health-data-science",
-    "href": "about_heads.html#center-for-health-data-science",
-    "title": "About HeaDS",
+    "objectID": "solutions/solution4.html",
+    "href": "solutions/solution4.html",
+    "title": "Exercise 4 - Solutions",
     "section": "",
-    "text": "In the Center for Health Data Science (HeaDS) we do both research and in the DataLab and Sandbox we develop and host course. Read more about all the cool stuff we do on our website.\n\n\nThe DataLab offers a range of services to support SUND employees in their data science analyses. Here’s an overview:\n\nCourses: We offer data science and bioinformatics courses for all SUND staff (researchers, administrative staff, technical staff, etc.). Our most popular courses include “From Excel to R,” “Python Tsunami,” and “Introduction to Bulk RNA-seq Analysis.”\nConsultations: We host drop-in sessions every Thursday from 13:00 to 15:00, where we assist with data science-related challenges and questions. Alternatively, you can reach out to arrange a one-on-one meeting on another day.\nCommissions: We conduct commissioned research, such as bioinformatics and data science analyses tailored to your needs. Additionally, we offer a commissioned supervision scheme if you would like to learn how to perform the analysis yourself.\nEvents: We host various data science events. Join us for our seminar series, “Talking HeaDS.” Our next session is in the spring (date and speeker TBA), and you can sign up here: https://eventsignup.ku.dk/talkingheadsspring2025."
+    "text": "Create a file that will contain your functions.\nIn the file, write a function that takes a dataframe and a numerical value and returns a boxplot. Do not worry about error or warning handling yet. NB If you modify the function script, be sure to save it and source it again so that your updates are reflected in the main script.\n\n\n\n\n\n\n\nHint\n\n\n\n\n\naes_string allows the function to dynamically reference a column name from the dataframe.\nExample: aes_string(\"colname\")",
+    "crumbs": [
+      "Course Material",
+      "Solutions",
+      "Exercise 4 - Solution"
+    ]
+  },
+  {
+    "objectID": "solutions/solution4.html#functions",
+    "href": "solutions/solution4.html#functions",
+    "title": "Exercise 4 - Solutions",
+    "section": "",
+    "text": "Create a file that will contain your functions.\nIn the file, write a function that takes a dataframe and a numerical value and returns a boxplot. Do not worry about error or warning handling yet. NB If you modify the function script, be sure to save it and source it again so that your updates are reflected in the main script.\n\n\n\n\n\n\n\nHint\n\n\n\n\n\naes_string allows the function to dynamically reference a column name from the dataframe.\nExample: aes_string(\"colname\")",
+    "crumbs": [
+      "Course Material",
+      "Solutions",
+      "Exercise 4 - Solution"
+    ]
+  },
+  {
+    "objectID": "solutions/solution4.html#main-script",
+    "href": "solutions/solution4.html#main-script",
+    "title": "Exercise 4 - Solutions",
+    "section": "Main script",
+    "text": "Main script\n\nCreate a Quarto document and start by loading relevant packages.\n\n\nlibrary(tidyverse)\n\nWarning: pakke 'ggplot2' blev bygget under R version 4.2.3\n\n\nWarning: pakke 'tibble' blev bygget under R version 4.2.3\n\n\nWarning: pakke 'dplyr' blev bygget under R version 4.2.3\n\nlibrary(glue)\n\n\nSource the function script into the Quarto document.\n\n\nsource('solution4_functions.R')\n\n\nLoad data from the .rds you created in Exercise 2.\n\n\ndiabetes_glucose &lt;- read_rds('../out/diabetes_glucose.rds')\n\n\nRun the boxplot function for the diabetes dataset and the Age variable.\n\n\nboxplot(df = diabetes_glucose, var_num = 'Age')\n\nWarning: `aes_string()` was deprecated in ggplot2 3.0.0.\nℹ Please use tidy evaluation idioms with `aes()`.\nℹ See also `vignette(\"ggplot2-in-packages\")` for more information.\n\n\nWarning in grid.Call(C_stringMetric, as.graphicsAnnot(x$label)): font family\nnot found in Windows font database\nWarning in grid.Call(C_stringMetric, as.graphicsAnnot(x$label)): font family\nnot found in Windows font database\nWarning in grid.Call(C_stringMetric, as.graphicsAnnot(x$label)): font family\nnot found in Windows font database\n\n\nWarning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font\nfamily not found in Windows font database\nWarning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font\nfamily not found in Windows font database\n\n\nWarning in grid.Call.graphics(C_text, as.graphicsAnnot(x$label), x$x, x$y, :\nfont family not found in Windows font database\nWarning in grid.Call.graphics(C_text, as.graphicsAnnot(x$label), x$x, x$y, :\nfont family not found in Windows font database\nWarning in grid.Call.graphics(C_text, as.graphicsAnnot(x$label), x$x, x$y, :\nfont family not found in Windows font database\nWarning in grid.Call.graphics(C_text, as.graphicsAnnot(x$label), x$x, x$y, :\nfont family not found in Windows font database\n\n\n\n\n\n\n\n\n\n\nIn a for-loop, run the boxplot function for the diabetes dataset and each of the numerical variables in the script.\n\n\nnumerical_columns &lt;- sapply(diabetes_glucose, is.numeric)\nnumerical_colnames &lt;- names(diabetes_glucose)[numerical_columns]\n\n\nfor (var_num in numerical_colnames){\n  \n  p &lt;- boxplot(df = diabetes_glucose, var_num = var_num)\n  print(p)\n  # ggsave(paste0(\"../out/boxplot_\", var_num,\".png\"))\n  \n}\n\nWarning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font\nfamily not found in Windows font database\nWarning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font\nfamily not found in Windows font database\nWarning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font\nfamily not found in Windows font database\n\n\nWarning in grid.Call.graphics(C_text, as.graphicsAnnot(x$label), x$x, x$y, :\nfont family not found in Windows font database\nWarning in grid.Call.graphics(C_text, as.graphicsAnnot(x$label), x$x, x$y, :\nfont family not found in Windows font database\nWarning in grid.Call.graphics(C_text, as.graphicsAnnot(x$label), x$x, x$y, :\nfont family not found in Windows font database\nWarning in grid.Call.graphics(C_text, as.graphicsAnnot(x$label), x$x, x$y, :\nfont family not found in Windows font database\n\n\n\n\n\n\n\n\n\nWarning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font\nfamily not found in Windows font database\n\n\nWarning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font\nfamily not found in Windows font database\nWarning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font\nfamily not found in Windows font database\n\n\nWarning in grid.Call.graphics(C_text, as.graphicsAnnot(x$label), x$x, x$y, :\nfont family not found in Windows font database\nWarning in grid.Call.graphics(C_text, as.graphicsAnnot(x$label), x$x, x$y, :\nfont family not found in Windows font database\nWarning in grid.Call.graphics(C_text, as.graphicsAnnot(x$label), x$x, x$y, :\nfont family not found in Windows font database\nWarning in grid.Call.graphics(C_text, as.graphicsAnnot(x$label), x$x, x$y, :\nfont family not found in Windows font database\n\n\n\n\n\n\n\n\n\nWarning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font\nfamily not found in Windows font database\n\n\nWarning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font\nfamily not found in Windows font database\nWarning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font\nfamily not found in Windows font database\n\n\nWarning in grid.Call.graphics(C_text, as.graphicsAnnot(x$label), x$x, x$y, :\nfont family not found in Windows font database\nWarning in grid.Call.graphics(C_text, as.graphicsAnnot(x$label), x$x, x$y, :\nfont family not found in Windows font database\nWarning in grid.Call.graphics(C_text, as.graphicsAnnot(x$label), x$x, x$y, :\nfont family not found in Windows font database\nWarning in grid.Call.graphics(C_text, as.graphicsAnnot(x$label), x$x, x$y, :\nfont family not found in Windows font database\n\n\n\n\n\n\n\n\n\nWarning: Removed 5 rows containing non-finite outside the scale range\n(`stat_boxplot()`).\n\n\nWarning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font\nfamily not found in Windows font database\nWarning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font\nfamily not found in Windows font database\nWarning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font\nfamily not found in Windows font database\n\n\nWarning in grid.Call.graphics(C_text, as.graphicsAnnot(x$label), x$x, x$y, :\nfont family not found in Windows font database\nWarning in grid.Call.graphics(C_text, as.graphicsAnnot(x$label), x$x, x$y, :\nfont family not found in Windows font database\nWarning in grid.Call.graphics(C_text, as.graphicsAnnot(x$label), x$x, x$y, :\nfont family not found in Windows font database\nWarning in grid.Call.graphics(C_text, as.graphicsAnnot(x$label), x$x, x$y, :\nfont family not found in Windows font database\n\n\n\n\n\n\n\n\n\nWarning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font\nfamily not found in Windows font database\n\n\nWarning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font\nfamily not found in Windows font database\nWarning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font\nfamily not found in Windows font database\n\n\nWarning in grid.Call.graphics(C_text, as.graphicsAnnot(x$label), x$x, x$y, :\nfont family not found in Windows font database\nWarning in grid.Call.graphics(C_text, as.graphicsAnnot(x$label), x$x, x$y, :\nfont family not found in Windows font database\nWarning in grid.Call.graphics(C_text, as.graphicsAnnot(x$label), x$x, x$y, :\nfont family not found in Windows font database\nWarning in grid.Call.graphics(C_text, as.graphicsAnnot(x$label), x$x, x$y, :\nfont family not found in Windows font database\n\n\n\n\n\n\n\n\n\nWarning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font\nfamily not found in Windows font database\n\n\nWarning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font\nfamily not found in Windows font database\nWarning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font\nfamily not found in Windows font database\n\n\nWarning in grid.Call.graphics(C_text, as.graphicsAnnot(x$label), x$x, x$y, :\nfont family not found in Windows font database\nWarning in grid.Call.graphics(C_text, as.graphicsAnnot(x$label), x$x, x$y, :\nfont family not found in Windows font database\nWarning in grid.Call.graphics(C_text, as.graphicsAnnot(x$label), x$x, x$y, :\nfont family not found in Windows font database\nWarning in grid.Call.graphics(C_text, as.graphicsAnnot(x$label), x$x, x$y, :\nfont family not found in Windows font database\n\n\n\n\n\n\n\n\n\n\nGo back to your function script. Create a function that takes a dataframe and a categorical value and returns a bar plot.\nRun the function on the Sex variable.\n\n\nbar_plot(df = diabetes_glucose, var_cat = 'Sex')\n\nWarning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font\nfamily not found in Windows font database\nWarning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font\nfamily not found in Windows font database\nWarning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font\nfamily not found in Windows font database\nWarning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font\nfamily not found in Windows font database\n\n\nWarning in grid.Call.graphics(C_text, as.graphicsAnnot(x$label), x$x, x$y, :\nfont family not found in Windows font database\nWarning in grid.Call.graphics(C_text, as.graphicsAnnot(x$label), x$x, x$y, :\nfont family not found in Windows font database\nWarning in grid.Call.graphics(C_text, as.graphicsAnnot(x$label), x$x, x$y, :\nfont family not found in Windows font database\nWarning in grid.Call.graphics(C_text, as.graphicsAnnot(x$label), x$x, x$y, :\nfont family not found in Windows font database\n\n\n\n\n\n\n\n\n\n\nIn a for-loop, run the bar plot function for the diabetes dataset and each of the categorical variables in the script.\n\n\ncategorical_columns &lt;- sapply(diabetes_glucose, is.character)\ncategorical_colnames &lt;- names(diabetes_glucose)[categorical_columns]\n\n\nfor (var_cat in categorical_colnames){\n  \n  p &lt;- bar_plot(df = diabetes_glucose, var_cat = var_cat)\n  print(p)\n  # ggsave(paste0(\"../out/bar_plot_\", var_cat,\".png\"))\n  \n}\n\nWarning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font\nfamily not found in Windows font database\nWarning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font\nfamily not found in Windows font database\nWarning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font\nfamily not found in Windows font database\nWarning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font\nfamily not found in Windows font database\n\n\nWarning in grid.Call.graphics(C_text, as.graphicsAnnot(x$label), x$x, x$y, :\nfont family not found in Windows font database\nWarning in grid.Call.graphics(C_text, as.graphicsAnnot(x$label), x$x, x$y, :\nfont family not found in Windows font database\nWarning in grid.Call.graphics(C_text, as.graphicsAnnot(x$label), x$x, x$y, :\nfont family not found in Windows font database\nWarning in grid.Call.graphics(C_text, as.graphicsAnnot(x$label), x$x, x$y, :\nfont family not found in Windows font database\n\n\n\n\n\n\n\n\n\nWarning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font\nfamily not found in Windows font database\n\n\nWarning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font\nfamily not found in Windows font database\nWarning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font\nfamily not found in Windows font database\nWarning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font\nfamily not found in Windows font database\n\n\nWarning in grid.Call.graphics(C_text, as.graphicsAnnot(x$label), x$x, x$y, :\nfont family not found in Windows font database\nWarning in grid.Call.graphics(C_text, as.graphicsAnnot(x$label), x$x, x$y, :\nfont family not found in Windows font database\nWarning in grid.Call.graphics(C_text, as.graphicsAnnot(x$label), x$x, x$y, :\nfont family not found in Windows font database\nWarning in grid.Call.graphics(C_text, as.graphicsAnnot(x$label), x$x, x$y, :\nfont family not found in Windows font database\n\n\n\n\n\n\n\n\n\nWarning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font\nfamily not found in Windows font database\n\n\nWarning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font\nfamily not found in Windows font database\nWarning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font\nfamily not found in Windows font database\nWarning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font\nfamily not found in Windows font database\n\n\nWarning in grid.Call.graphics(C_text, as.graphicsAnnot(x$label), x$x, x$y, :\nfont family not found in Windows font database\nWarning in grid.Call.graphics(C_text, as.graphicsAnnot(x$label), x$x, x$y, :\nfont family not found in Windows font database\nWarning in grid.Call.graphics(C_text, as.graphicsAnnot(x$label), x$x, x$y, :\nfont family not found in Windows font database\nWarning in grid.Call.graphics(C_text, as.graphicsAnnot(x$label), x$x, x$y, :\nfont family not found in Windows font database\n\n\n\n\n\n\n\n\n\nWarning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font\nfamily not found in Windows font database\n\n\nWarning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font\nfamily not found in Windows font database\nWarning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font\nfamily not found in Windows font database\nWarning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font\nfamily not found in Windows font database\n\n\nWarning in grid.Call.graphics(C_text, as.graphicsAnnot(x$label), x$x, x$y, :\nfont family not found in Windows font database\nWarning in grid.Call.graphics(C_text, as.graphicsAnnot(x$label), x$x, x$y, :\nfont family not found in Windows font database\nWarning in grid.Call.graphics(C_text, as.graphicsAnnot(x$label), x$x, x$y, :\nfont family not found in Windows font database\nWarning in grid.Call.graphics(C_text, as.graphicsAnnot(x$label), x$x, x$y, :\nfont family not found in Windows font database\n\n\n\n\n\n\n\n\n\nWarning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font\nfamily not found in Windows font database\n\n\nWarning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font\nfamily not found in Windows font database\nWarning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font\nfamily not found in Windows font database\nWarning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font\nfamily not found in Windows font database\n\n\nWarning in grid.Call.graphics(C_text, as.graphicsAnnot(x$label), x$x, x$y, :\nfont family not found in Windows font database\nWarning in grid.Call.graphics(C_text, as.graphicsAnnot(x$label), x$x, x$y, :\nfont family not found in Windows font database\nWarning in grid.Call.graphics(C_text, as.graphicsAnnot(x$label), x$x, x$y, :\nfont family not found in Windows font database\nWarning in grid.Call.graphics(C_text, as.graphicsAnnot(x$label), x$x, x$y, :\nfont family not found in Windows font database\n\n\n\n\n\n\n\n\n\n\nIt’s time for a fun exercise! Customize your plot functions by adding a theme, colors and labels. Add a ggsave statement in your for-loops to recreate and save your plots.",
+    "crumbs": [
+      "Course Material",
+      "Solutions",
+      "Exercise 4 - Solution"
+    ]
+  },
+  {
+    "objectID": "solutions/solution4.html#functions-and-error-handling",
+    "href": "solutions/solution4.html#functions-and-error-handling",
+    "title": "Exercise 4 - Solutions",
+    "section": "Functions and error handling",
+    "text": "Functions and error handling\n\nIn your function script, copy the function you created in Exercise 2 and modify it so that it generates an error if var_num is assigned a non-numerical argument.\n\n\n\n\n\n\n\nHint\n\n\n\n\n\nWhen checking the class of the variables, make sure that they are in vector format. Have a look at Presentation 1 if you are unsure of how to access a variable in a data frame as a vector.\n\nis.numeric(vector)\n\n\n\n\n\nTest the function by using Sex as the numerical variable argument.\n\n\nboxplot_2(df = diabetes_glucose, var_num = 'Sex')\n# Gives an error.\n\n\nUse the same logic for the function you created in Exercise 8.\nTest the function by using Age as the categorical variable argument.\n\n\nbar_plot_2(df = diabetes_glucose, var_cat = 'Age')\n# Gives an error.\n\n\nIn Exercise 7, a boxplot have made for the ID variable if you simply looped over all the numcerical values. Avoid this using an if-statement.\n\n\nfor (var_num in numerical_colnames){\n  \n  if (var_num != 'ID'){\n    \n    p &lt;- boxplot(df = diabetes_glucose, var_num = var_num)\n    print(p)\n    \n  }\n  \n}\n\nWarning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font\nfamily not found in Windows font database\nWarning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font\nfamily not found in Windows font database\nWarning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font\nfamily not found in Windows font database\n\n\nWarning in grid.Call.graphics(C_text, as.graphicsAnnot(x$label), x$x, x$y, :\nfont family not found in Windows font database\nWarning in grid.Call.graphics(C_text, as.graphicsAnnot(x$label), x$x, x$y, :\nfont family not found in Windows font database\nWarning in grid.Call.graphics(C_text, as.graphicsAnnot(x$label), x$x, x$y, :\nfont family not found in Windows font database\nWarning in grid.Call.graphics(C_text, as.graphicsAnnot(x$label), x$x, x$y, :\nfont family not found in Windows font database\n\n\n\n\n\n\n\n\n\nWarning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font\nfamily not found in Windows font database\n\n\nWarning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font\nfamily not found in Windows font database\nWarning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font\nfamily not found in Windows font database\n\n\nWarning in grid.Call.graphics(C_text, as.graphicsAnnot(x$label), x$x, x$y, :\nfont family not found in Windows font database\nWarning in grid.Call.graphics(C_text, as.graphicsAnnot(x$label), x$x, x$y, :\nfont family not found in Windows font database\nWarning in grid.Call.graphics(C_text, as.graphicsAnnot(x$label), x$x, x$y, :\nfont family not found in Windows font database\nWarning in grid.Call.graphics(C_text, as.graphicsAnnot(x$label), x$x, x$y, :\nfont family not found in Windows font database\n\n\n\n\n\n\n\n\n\nWarning: Removed 5 rows containing non-finite outside the scale range\n(`stat_boxplot()`).\n\n\nWarning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font\nfamily not found in Windows font database\nWarning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font\nfamily not found in Windows font database\nWarning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font\nfamily not found in Windows font database\n\n\nWarning in grid.Call.graphics(C_text, as.graphicsAnnot(x$label), x$x, x$y, :\nfont family not found in Windows font database\nWarning in grid.Call.graphics(C_text, as.graphicsAnnot(x$label), x$x, x$y, :\nfont family not found in Windows font database\nWarning in grid.Call.graphics(C_text, as.graphicsAnnot(x$label), x$x, x$y, :\nfont family not found in Windows font database\nWarning in grid.Call.graphics(C_text, as.graphicsAnnot(x$label), x$x, x$y, :\nfont family not found in Windows font database\n\n\n\n\n\n\n\n\n\nWarning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font\nfamily not found in Windows font database\n\n\nWarning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font\nfamily not found in Windows font database\nWarning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font\nfamily not found in Windows font database\n\n\nWarning in grid.Call.graphics(C_text, as.graphicsAnnot(x$label), x$x, x$y, :\nfont family not found in Windows font database\nWarning in grid.Call.graphics(C_text, as.graphicsAnnot(x$label), x$x, x$y, :\nfont family not found in Windows font database\nWarning in grid.Call.graphics(C_text, as.graphicsAnnot(x$label), x$x, x$y, :\nfont family not found in Windows font database\nWarning in grid.Call.graphics(C_text, as.graphicsAnnot(x$label), x$x, x$y, :\nfont family not found in Windows font database\n\n\n\n\n\n\n\n\n\nWarning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font\nfamily not found in Windows font database\n\n\nWarning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font\nfamily not found in Windows font database\nWarning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font\nfamily not found in Windows font database\n\n\nWarning in grid.Call.graphics(C_text, as.graphicsAnnot(x$label), x$x, x$y, :\nfont family not found in Windows font database\nWarning in grid.Call.graphics(C_text, as.graphicsAnnot(x$label), x$x, x$y, :\nfont family not found in Windows font database\nWarning in grid.Call.graphics(C_text, as.graphicsAnnot(x$label), x$x, x$y, :\nfont family not found in Windows font database\nWarning in grid.Call.graphics(C_text, as.graphicsAnnot(x$label), x$x, x$y, :\nfont family not found in Windows font database\n\n\n\n\n\n\n\n\n\n\nMake a function that takes an ID and outputs a graph of the glucose measurement over time. There are several way to do this depending on how generalized your function is. The more generalized, the more difficult.\n\n\n\n\n\n\n\nHint\n\n\n\n\n\nRemember that you need to put backticks when you access a colname with spaces.\nWhen using aes_string, you need backticks and quotation marks: aes_string(\"`colname with spaces`\").\n\n\n\n\nRun the function on your favorite ID.\n\n\ndf &lt;- diabetes_glucose %&gt;% unnest(OGTT)\n\nglucose_measurement_id_plot(df = df, id = \"12109\")\n\nWarning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font\nfamily not found in Windows font database\nWarning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font\nfamily not found in Windows font database\nWarning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font\nfamily not found in Windows font database\nWarning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font\nfamily not found in Windows font database\n\n\nWarning in grid.Call.graphics(C_text, as.graphicsAnnot(x$label), x$x, x$y, :\nfont family not found in Windows font database\nWarning in grid.Call.graphics(C_text, as.graphicsAnnot(x$label), x$x, x$y, :\nfont family not found in Windows font database\nWarning in grid.Call.graphics(C_text, as.graphicsAnnot(x$label), x$x, x$y, :\nfont family not found in Windows font database\nWarning in grid.Call.graphics(C_text, as.graphicsAnnot(x$label), x$x, x$y, :\nfont family not found in Windows font database\n\n\n\n\n\n\n\n\n\n\nInspired by Exercise 3.13, create a function that takes a dataframe and a categorical variable as input, calculates the mean glucose levels over time for each category, and produces a line plot showing the mean glucose measurements across time points.\n\n\n\n\n\n\n\nHint\n\n\n\n\n\nThe function requires the column name to be passed as a string. However, not all tidyverse functions can directly handle column names in this format. Fortunately, there is a workaround. For example, the group_by() function can dynamically reference a column name provided as a string using .data[[...]]:\n\nvar_cat &lt;- \"Age\"\n\ndf %&gt;% \n    group_by(Measurement, .data[[var_cat]])\n\nHere, .data refers to the data frame being used — in this case, df.\nAlso, you might get a warning like this You can override using the .groups argument. This can be solved adding .groups = \"drop\" to the summerize function.\n\n\n\n\nRun the function with Sex as input.\n\n\nglucose_measurement_mean_plot(df = df, var_cat = 'Sex')\n\nWarning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font\nfamily not found in Windows font database\nWarning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font\nfamily not found in Windows font database\nWarning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font\nfamily not found in Windows font database\nWarning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font\nfamily not found in Windows font database\n\n\nWarning in grid.Call.graphics(C_text, as.graphicsAnnot(x$label), x$x, x$y, :\nfont family not found in Windows font database\nWarning in grid.Call.graphics(C_text, as.graphicsAnnot(x$label), x$x, x$y, :\nfont family not found in Windows font database\nWarning in grid.Call.graphics(C_text, as.graphicsAnnot(x$label), x$x, x$y, :\nfont family not found in Windows font database\nWarning in grid.Call.graphics(C_text, as.graphicsAnnot(x$label), x$x, x$y, :\nfont family not found in Windows font database\nWarning in grid.Call.graphics(C_text, as.graphicsAnnot(x$label), x$x, x$y, :\nfont family not found in Windows font database\nWarning in grid.Call.graphics(C_text, as.graphicsAnnot(x$label), x$x, x$y, :\nfont family not found in Windows font database\n\n\n\n\n\n\n\n\n\n\nIn a for-loop, run the function on all categorical variables in the data frame. Between which groups do you visually notice the largest differences in the mean OGTT?\n\n\nfor (var_cat in categorical_colnames){\n  \n  p &lt;- glucose_measurement_mean_plot(df = df, var_cat = var_cat)\n  print(p)\n  \n}\n\nWarning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font\nfamily not found in Windows font database\nWarning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font\nfamily not found in Windows font database\nWarning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font\nfamily not found in Windows font database\nWarning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font\nfamily not found in Windows font database\n\n\nWarning in grid.Call.graphics(C_text, as.graphicsAnnot(x$label), x$x, x$y, :\nfont family not found in Windows font database\nWarning in grid.Call.graphics(C_text, as.graphicsAnnot(x$label), x$x, x$y, :\nfont family not found in Windows font database\nWarning in grid.Call.graphics(C_text, as.graphicsAnnot(x$label), x$x, x$y, :\nfont family not found in Windows font database\nWarning in grid.Call.graphics(C_text, as.graphicsAnnot(x$label), x$x, x$y, :\nfont family not found in Windows font database\nWarning in grid.Call.graphics(C_text, as.graphicsAnnot(x$label), x$x, x$y, :\nfont family not found in Windows font database\nWarning in grid.Call.graphics(C_text, as.graphicsAnnot(x$label), x$x, x$y, :\nfont family not found in Windows font database\n\n\n\n\n\n\n\n\n\nWarning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font\nfamily not found in Windows font database\n\n\nWarning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font\nfamily not found in Windows font database\nWarning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font\nfamily not found in Windows font database\nWarning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font\nfamily not found in Windows font database\n\n\nWarning in grid.Call.graphics(C_text, as.graphicsAnnot(x$label), x$x, x$y, :\nfont family not found in Windows font database\nWarning in grid.Call.graphics(C_text, as.graphicsAnnot(x$label), x$x, x$y, :\nfont family not found in Windows font database\nWarning in grid.Call.graphics(C_text, as.graphicsAnnot(x$label), x$x, x$y, :\nfont family not found in Windows font database\nWarning in grid.Call.graphics(C_text, as.graphicsAnnot(x$label), x$x, x$y, :\nfont family not found in Windows font database\nWarning in grid.Call.graphics(C_text, as.graphicsAnnot(x$label), x$x, x$y, :\nfont family not found in Windows font database\nWarning in grid.Call.graphics(C_text, as.graphicsAnnot(x$label), x$x, x$y, :\nfont family not found in Windows font database\n\n\n\n\n\n\n\n\n\nWarning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font\nfamily not found in Windows font database\n\n\nWarning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font\nfamily not found in Windows font database\nWarning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font\nfamily not found in Windows font database\nWarning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font\nfamily not found in Windows font database\n\n\nWarning in grid.Call.graphics(C_text, as.graphicsAnnot(x$label), x$x, x$y, :\nfont family not found in Windows font database\nWarning in grid.Call.graphics(C_text, as.graphicsAnnot(x$label), x$x, x$y, :\nfont family not found in Windows font database\nWarning in grid.Call.graphics(C_text, as.graphicsAnnot(x$label), x$x, x$y, :\nfont family not found in Windows font database\nWarning in grid.Call.graphics(C_text, as.graphicsAnnot(x$label), x$x, x$y, :\nfont family not found in Windows font database\nWarning in grid.Call.graphics(C_text, as.graphicsAnnot(x$label), x$x, x$y, :\nfont family not found in Windows font database\nWarning in grid.Call.graphics(C_text, as.graphicsAnnot(x$label), x$x, x$y, :\nfont family not found in Windows font database\n\n\n\n\n\n\n\n\n\nWarning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font\nfamily not found in Windows font database\n\n\nWarning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font\nfamily not found in Windows font database\nWarning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font\nfamily not found in Windows font database\nWarning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font\nfamily not found in Windows font database\n\n\nWarning in grid.Call.graphics(C_text, as.graphicsAnnot(x$label), x$x, x$y, :\nfont family not found in Windows font database\nWarning in grid.Call.graphics(C_text, as.graphicsAnnot(x$label), x$x, x$y, :\nfont family not found in Windows font database\nWarning in grid.Call.graphics(C_text, as.graphicsAnnot(x$label), x$x, x$y, :\nfont family not found in Windows font database\nWarning in grid.Call.graphics(C_text, as.graphicsAnnot(x$label), x$x, x$y, :\nfont family not found in Windows font database\nWarning in grid.Call.graphics(C_text, as.graphicsAnnot(x$label), x$x, x$y, :\nfont family not found in Windows font database\nWarning in grid.Call.graphics(C_text, as.graphicsAnnot(x$label), x$x, x$y, :\nfont family not found in Windows font database\n\n\n\n\n\n\n\n\n\nWarning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font\nfamily not found in Windows font database\n\n\nWarning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font\nfamily not found in Windows font database\nWarning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font\nfamily not found in Windows font database\nWarning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font\nfamily not found in Windows font database\n\n\nWarning in grid.Call.graphics(C_text, as.graphicsAnnot(x$label), x$x, x$y, :\nfont family not found in Windows font database\nWarning in grid.Call.graphics(C_text, as.graphicsAnnot(x$label), x$x, x$y, :\nfont family not found in Windows font database\nWarning in grid.Call.graphics(C_text, as.graphicsAnnot(x$label), x$x, x$y, :\nfont family not found in Windows font database\nWarning in grid.Call.graphics(C_text, as.graphicsAnnot(x$label), x$x, x$y, :\nfont family not found in Windows font database\nWarning in grid.Call.graphics(C_text, as.graphicsAnnot(x$label), x$x, x$y, :\nfont family not found in Windows font database\nWarning in grid.Call.graphics(C_text, as.graphicsAnnot(x$label), x$x, x$y, :\nfont family not found in Windows font database\n\n\n\n\n\n\n\n\n\nLast. Render you document and review the generated html. If you get errors, correct them and re-render.",
+    "crumbs": [
+      "Course Material",
+      "Solutions",
+      "Exercise 4 - Solution"
+    ]
+  },
+  {
+    "objectID": "solutions/solution2.html",
+    "href": "solutions/solution2.html",
+    "title": "Exercise 2 - Solutions: Data Clean Up",
+    "section": "",
+    "text": "In this exercise you will do some more advance tidyverse operations such as pivoting and nesting, as well as create plots to brush up on your ggplot skills.",
+    "crumbs": [
+      "Course Material",
+      "Solutions",
+      "Exercise 2 - Solution"
+    ]
+  },
+  {
+    "objectID": "solutions/solution2.html#introduction",
+    "href": "solutions/solution2.html#introduction",
+    "title": "Exercise 2 - Solutions: Data Clean Up",
+    "section": "",
+    "text": "In this exercise you will do some more advance tidyverse operations such as pivoting and nesting, as well as create plots to brush up on your ggplot skills.",
+    "crumbs": [
+      "Course Material",
+      "Solutions",
+      "Exercise 2 - Solution"
+    ]
+  },
+  {
+    "objectID": "solutions/solution2.html#first-steps",
+    "href": "solutions/solution2.html#first-steps",
+    "title": "Exercise 2 - Solutions: Data Clean Up",
+    "section": "First steps",
+    "text": "First steps\n\nLoad packages.\n\n\nlibrary(tidyverse)\n\nWarning: pakke 'ggplot2' blev bygget under R version 4.2.3\n\n\nWarning: pakke 'tibble' blev bygget under R version 4.2.3\n\n\nWarning: pakke 'dplyr' blev bygget under R version 4.2.3\n\n\n\nLoad the joined diabetes data set you created in exercise 1 and the glucose dataset from the data folder.\n\n\ndiabetes_join &lt;- readxl::read_excel('../out/diabetes_join.xlsx')\ndf_glucose &lt;- readxl::read_excel('../data/df_glucose.xlsx')\n\n\nHave a look at the glucose dataset. The OGTT column contains measurements from a Oral Glucose Tolerance Test where blood glucose is measured at fasting (Glucose_0), 6 hours after glucose intake (Glucose_6), and 12 hours after (Glucose_12).\n\n\nhead(df_glucose)\n\n# A tibble: 6 × 4\n  Glucose_0 Glucose_60 Glucose_120    ID\n      &lt;dbl&gt;      &lt;dbl&gt;       &lt;dbl&gt; &lt;dbl&gt;\n1      6.65       8.04       10.0   9046\n2      4.49       5.40        6.22 51676\n3      5.76       6.52        7.22  1665\n4      6.13       6.94        8.09 12095\n5      6.84       6.92        7.01 12175\n6      6.84       7.62        8.42  8213\n\n\n\nRestructure the glucose dataset into a long format. How many rows are there per ID? Does that make sense?\n\n\n\n\n\n\n\nHint\n\n\n\n\n\nRemember the flow:\n\npivot_longer(cols = LIST_WITH_COLUMNS_TO_PIVOT,\n             names_to = \"NEW_COLUMN_CONTAINING_COLUMN_NAMES\",\n             values_to = \"NEW_COLUMN_CONTAINING_COLUMN_VALUES\")\n\nHave a look at slide 16 for a visual overview.\n\n\n\n\ndf_glucose_long &lt;- df_glucose %&gt;% \n  pivot_longer(cols = starts_with(\"Glucose\"),\n               names_to = \"Measurement\",\n               values_to = \"Glucose (mmol/L)\"\n               )\n\nhead(df_glucose_long)\n\n# A tibble: 6 × 3\n     ID Measurement `Glucose (mmol/L)`\n  &lt;dbl&gt; &lt;chr&gt;                    &lt;dbl&gt;\n1  9046 Glucose_0                 6.65\n2  9046 Glucose_60                8.04\n3  9046 Glucose_120              10.0 \n4 51676 Glucose_0                 4.49\n5 51676 Glucose_60                5.40\n6 51676 Glucose_120               6.22\n\n\n\nChange the glucose measurements to numeric variable.\n\n\n\n\n\n\n\nHint\n\n\n\n\n\nThe stringr packages is a part of tidyverse and has many functions for manipulating strings. Find a function that can split the string so you can extract the numbers on the other side of the underscore.\n\n\n\n\ndf_glucose_long &lt;- df_glucose_long %&gt;% \n  mutate(Measurement = str_split_i(Measurement, '_', 2) %&gt;% as.numeric())\n\nhead(df_glucose_long)\n\n# A tibble: 6 × 3\n     ID Measurement `Glucose (mmol/L)`\n  &lt;dbl&gt;       &lt;dbl&gt;              &lt;dbl&gt;\n1  9046           0               6.65\n2  9046          60               8.04\n3  9046         120              10.0 \n4 51676           0               4.49\n5 51676          60               5.40\n6 51676         120               6.22\n\n\n\nNest the glucose measurements and values such that there is only one row per ID.\n\n\n\n\n\n\n\nHint\n\n\n\n\n\nRemember the flow:\n\ngroup_by() %&gt;% \n  nest() %&gt;% \n  ungroup()\n\n\n\n\n\ndf_glucose_nested &lt;- df_glucose_long %&gt;% \n  group_by(ID) %&gt;% \n  nest(OGTT = c(Measurement, `Glucose (mmol/L)`)) %&gt;% \n  ungroup()\n  \nhead(df_glucose_nested)\n\n# A tibble: 6 × 2\n     ID OGTT            \n  &lt;dbl&gt; &lt;list&gt;          \n1  9046 &lt;tibble [3 × 2]&gt;\n2 51676 &lt;tibble [3 × 2]&gt;\n3  1665 &lt;tibble [3 × 2]&gt;\n4 12095 &lt;tibble [3 × 2]&gt;\n5 12175 &lt;tibble [3 × 2]&gt;\n6  8213 &lt;tibble [3 × 2]&gt;\n\n\n\nMerge the nested glucose dataset with the joined diabetes.\n\n\ndiabetes_glucose &lt;- diabetes_join %&gt;% \n  left_join(df_glucose_nested, by = 'ID')\n\nhead(diabetes_glucose)\n\n# A tibble: 6 × 12\n     ID Sex      Age BloodPressure GeneticRisk   BMI PhysicalActivity Smoker \n  &lt;dbl&gt; &lt;chr&gt;  &lt;dbl&gt;         &lt;dbl&gt;       &lt;dbl&gt; &lt;dbl&gt;            &lt;dbl&gt; &lt;chr&gt;  \n1  9046 Male      34            84       0.619  24.7               93 Unknown\n2 51676 Male      25            74       0.591  22.5              102 Unknown\n3 60182 Male      50            80       0.178  34.5               98 Unknown\n4  1665 Female    27            60       0.206  26.3               82 Never  \n5 56669 Male      35            84       0.286  35                 58 Smoker \n6 53882 Female    31            78       1.22   43.3               59 Smoker \n# ℹ 4 more variables: Diabetes &lt;chr&gt;, Married &lt;chr&gt;, Work &lt;chr&gt;, OGTT &lt;list&gt;\n\n\n\nPull the glucose measurements (OGTT) from your favorite ID.\n\n\n\n\n\n\n\nHint\n\n\n\n\n\nFirst filter for your favorite ID and then pull the nested column.\n\n\n\n\ndiabetes_glucose %&gt;% \n  filter(ID == 9046) %&gt;% \n  pull(OGTT)\n\n[[1]]\n# A tibble: 3 × 2\n  Measurement `Glucose (mmol/L)`\n        &lt;dbl&gt;              &lt;dbl&gt;\n1           0               6.65\n2          60               8.04\n3         120              10.0 \n\n\n\nExport the final dataset. Since the dataset is nested, you cannot export it as an excel file. Export the dataset as an .rds file. Have a guess at what the function is called.\n\n\nwrite_rds(diabetes_glucose, '../out/diabetes_glucose.rds')",
+    "crumbs": [
+      "Course Material",
+      "Solutions",
+      "Exercise 2 - Solution"
+    ]
+  },
+  {
+    "objectID": "slides/Quarto_example.html",
+    "href": "slides/Quarto_example.html",
+    "title": "R for Data Science - How to Quarto",
+    "section": "",
+    "text": "library(tidyverse)\nlibrary(readxl)"
+  },
+  {
+    "objectID": "slides/Quarto_example.html#load-packages",
+    "href": "slides/Quarto_example.html#load-packages",
+    "title": "R for Data Science - How to Quarto",
+    "section": "",
+    "text": "library(tidyverse)\nlibrary(readxl)"
+  },
+  {
+    "objectID": "slides/Quarto_example.html#load-data",
+    "href": "slides/Quarto_example.html#load-data",
+    "title": "R for Data Science - How to Quarto",
+    "section": "Load Data",
+    "text": "Load Data\n\ndiabetes &lt;- read_excel('../data/diabetes_clinical_toy_messy.xlsx')"
+  },
+  {
+    "objectID": "slides/Quarto_example.html#inspect-data",
+    "href": "slides/Quarto_example.html#inspect-data",
+    "title": "R for Data Science - How to Quarto",
+    "section": "Inspect Data",
+    "text": "Inspect Data\nCheck dimensions of data\n\ndim(diabetes)\n\n[1] 532   9\n\n\nCheck structure of data\n\nstr(diabetes)\n\ntibble [532 × 9] (S3: tbl_df/tbl/data.frame)\n $ ID              : num [1:532] 9046 51676 31112 60182 1665 ...\n $ Sex             : chr [1:532] \"Male\" \"Male\" \"Male\" \"Male\" ...\n $ Age             : num [1:532] 34 25 30 50 27 35 31 52 54 41 ...\n $ BloodPressure   : num [1:532] 84 74 0 80 60 84 78 86 78 90 ...\n $ GeneticRisk     : num [1:532] 0.619 0.591 0.839 0.178 0.206 ...\n $ BMI             : num [1:532] 24.7 22.5 32.3 34.5 26.3 35 43.3 33.3 35.2 39.8 ...\n $ PhysicalActivity: num [1:532] 93 102 75 98 82 58 59 58 74 67 ...\n $ Smoker          : chr [1:532] \"Unknown\" \"Unknown\" \"Former\" \"Unknown\" ...\n $ Diabetes        : num [1:532] 0 0 1 1 0 1 1 1 1 1 ...\n\n\nCheck for NA’s in each column\n\ncolSums(is.na(diabetes))\n\n              ID              Sex              Age    BloodPressure \n               0                0                0                0 \n     GeneticRisk              BMI PhysicalActivity           Smoker \n               5                0                0                0 \n        Diabetes \n               0"
+  },
+  {
+    "objectID": "slides/Quarto_example.html#exploratory-data-analysis",
+    "href": "slides/Quarto_example.html#exploratory-data-analysis",
+    "title": "R for Data Science - How to Quarto",
+    "section": "Exploratory Data Analysis",
+    "text": "Exploratory Data Analysis\nPlot distribution of BMI\n\ndiabetes %&gt;% \n  ggplot(aes(x = BMI)) + \n  geom_histogram(bins = 10)"
+  },
+  {
+    "objectID": "presentations/presentation4_main_script.html",
+    "href": "presentations/presentation4_main_script.html",
+    "title": "Presentation 4: Main Script",
+    "section": "",
+    "text": "Define variables.\n\nnum1 &lt;- 8\nnum2 &lt;- 5\n\nLogical: 8 is larger than 5.\n\nnum1 &gt; num2\n\n[1] TRUE\n\n\nLogical: 8 is not smaller than 5.\n\nnum1 &lt; num2\n\n[1] FALSE\n\n\nA logical statement is used in an if statement to define a condition.\n\nif (num1 &gt; num2){\n  statement &lt;- paste(num1, 'is larger than', num2)\n}\n\nprint(statement)\n\n[1] \"8 is larger than 5\"\n\n\nRedefine variables.\n\nnum2 &lt;- 10\n\nnum2 &lt;- 3\n\nnum2 &lt;- 8\n\nUse else if and else statements to test multiple conditions.\n\nif (num1 &gt; num2){\n  statement &lt;- paste(num1, 'is larger than', num2)\n} else if (num1 &lt; num2) {\n  statement &lt;- paste(num1, 'is smaller than', num2)\n} else {\n  statement &lt;- paste(num1, 'is equal to', num2)\n} \n\nprint(statement)\n\n[1] \"8 is equal to 8\"",
+    "crumbs": [
+      "Course Material",
+      "Presentations",
+      "Presentation 4: Scripting in R"
+    ]
+  },
+  {
+    "objectID": "presentations/presentation4_main_script.html#if-else-statments",
+    "href": "presentations/presentation4_main_script.html#if-else-statments",
+    "title": "Presentation 4: Main Script",
+    "section": "",
+    "text": "Define variables.\n\nnum1 &lt;- 8\nnum2 &lt;- 5\n\nLogical: 8 is larger than 5.\n\nnum1 &gt; num2\n\n[1] TRUE\n\n\nLogical: 8 is not smaller than 5.\n\nnum1 &lt; num2\n\n[1] FALSE\n\n\nA logical statement is used in an if statement to define a condition.\n\nif (num1 &gt; num2){\n  statement &lt;- paste(num1, 'is larger than', num2)\n}\n\nprint(statement)\n\n[1] \"8 is larger than 5\"\n\n\nRedefine variables.\n\nnum2 &lt;- 10\n\nnum2 &lt;- 3\n\nnum2 &lt;- 8\n\nUse else if and else statements to test multiple conditions.\n\nif (num1 &gt; num2){\n  statement &lt;- paste(num1, 'is larger than', num2)\n} else if (num1 &lt; num2) {\n  statement &lt;- paste(num1, 'is smaller than', num2)\n} else {\n  statement &lt;- paste(num1, 'is equal to', num2)\n} \n\nprint(statement)\n\n[1] \"8 is equal to 8\"",
+    "crumbs": [
+      "Course Material",
+      "Presentations",
+      "Presentation 4: Scripting in R"
+    ]
+  },
+  {
+    "objectID": "presentations/presentation4_main_script.html#for-loops",
+    "href": "presentations/presentation4_main_script.html#for-loops",
+    "title": "Presentation 4: Main Script",
+    "section": "For-loops",
+    "text": "For-loops\nWe first define a vector containing both numeric and character elements.\n\nvector1 &lt;- c(1, 2, 6, 3, 2, 'hello', 'world', 'yes', 7, 8, 12, 15)\n\nTo loop through vector1, we define a loop variable (here called element), which takes the value of each item in the vector, one at a time.\n\nfor (element in vector1) {\n  print(element)\n}\n\n[1] \"1\"\n[1] \"2\"\n[1] \"6\"\n[1] \"3\"\n[1] \"2\"\n[1] \"hello\"\n[1] \"world\"\n[1] \"yes\"\n[1] \"7\"\n[1] \"8\"\n[1] \"12\"\n[1] \"15\"\n\n\nThe loop variable name is arbitrary - you can call it anything. For example, we can use THIS_VARIABLE and get the same result. Point is, it does not matter what you call the variable, just avoid overwriting an important variable of your script.\n\nfor (THIS_VARIABLE in vector1) {\n  print(THIS_VARIABLE)\n}\n\n[1] \"1\"\n[1] \"2\"\n[1] \"6\"\n[1] \"3\"\n[1] \"2\"\n[1] \"hello\"\n[1] \"world\"\n[1] \"yes\"\n[1] \"7\"\n[1] \"8\"\n[1] \"12\"\n[1] \"15\"\n\n\nAfter you loop through a vector or a list, the variable is always the last element of your vector. The variable is hence a global variable.\n\nTHIS_VARIABLE\n\n[1] \"15\"",
+    "crumbs": [
+      "Course Material",
+      "Presentations",
+      "Presentation 4: Scripting in R"
+    ]
+  },
+  {
+    "objectID": "presentations/presentation4_main_script.html#user-defined-functions",
+    "href": "presentations/presentation4_main_script.html#user-defined-functions",
+    "title": "Presentation 4: Main Script",
+    "section": "User defined Functions",
+    "text": "User defined Functions\nWe will use BMI calculation as an example for this part.\nDefine variables.\n\nweight_kg &lt;- 70\nheight_m &lt;- 1.80\n\nCalculate BMI.\n\nbmi &lt;- weight_kg/height_m^2\nbmi\n\n[1] 21.60494\n\n\nIf we plan to calculate BMI for multiple individuals it is convenient to write the calculation into a function.\n\nFunction name: calculate_bmi.\nFunction parameters: weight_kg and height_m.\nThe return value: bmi.\n\nThe return statement specifies the value that the function will return when called.\n\ncalculate_bmi &lt;- function(weight_kg, height_m){\n  \n  bmi &lt;- weight_kg/height_m^2\n  \n  return(bmi)\n  \n}\n\nWe can call the function using previously defined variables.\n\ncalculate_bmi(weight_kg = weight_kg, \n              height_m = height_m)\n\n[1] 21.60494\n\n\nWe can also pass numbers directly to the function.\n\ncalculate_bmi(weight_kg = 100, \n              height_m = 1.90)\n\n[1] 27.70083\n\n\nArgument Order in Function Calls\nIf we specify the parameter names, the order can be changed.\n\ncalculate_bmi(height_m = 1.90, \n              weight_kg = 100)\n\n[1] 27.70083\n\n\nIf we do not specify the parameter names, the arguments will be matched according to the position - so be careful with this.\n\ncalculate_bmi(1.90, \n              100)\n\n[1] 0.00019",
+    "crumbs": [
+      "Course Material",
+      "Presentations",
+      "Presentation 4: Scripting in R"
+    ]
+  },
+  {
+    "objectID": "presentations/presentation4_main_script.html#combining-function-call-with-if-statement",
+    "href": "presentations/presentation4_main_script.html#combining-function-call-with-if-statement",
+    "title": "Presentation 4: Main Script",
+    "section": "Combining function call with if-statement",
+    "text": "Combining function call with if-statement\nData on a single individual.\n\nage &lt;- 45\nweight_kg &lt;- 85\nheight_m &lt;- 1.75\n\nBMI should only be calculated for individuals over the age of 18.\n\nif (age &gt;= 18){\n  calculate_bmi(weight_kg, height_m)\n}\n\n[1] 27.7551",
+    "crumbs": [
+      "Course Material",
+      "Presentations",
+      "Presentation 4: Scripting in R"
+    ]
+  },
+  {
+    "objectID": "presentations/presentation4_main_script.html#combining-function-call-with-for-loops",
+    "href": "presentations/presentation4_main_script.html#combining-function-call-with-for-loops",
+    "title": "Presentation 4: Main Script",
+    "section": "Combining function call with for-loops",
+    "text": "Combining function call with for-loops\nData on 5 individuals.\n\ndf &lt;- data.frame(row.names = 1:5, \n                 age = c(45, 16, 31, 56, 19), \n                 weight_kg = c(85, 65, 100, 45, 76), \n                 height_m = c(1.75, 1.45, 1.95, 1.51, 1.89)\n                 )\n\nPrint ID, weight, and height of all individuals.\n\nfor (id in rownames(df)){\n  \n  weight &lt;- df[id, 'weight_kg']\n  \n  height &lt;- df[id, 'height_m']\n  \n  print(c(id, weight, height))\n  \n}\n\n[1] \"1\"    \"85\"   \"1.75\"\n[1] \"2\"    \"65\"   \"1.45\"\n[1] \"3\"    \"100\"  \"1.95\"\n[1] \"4\"    \"45\"   \"1.51\"\n[1] \"5\"    \"76\"   \"1.89\"\n\n\nCall function to calculate BMI for all individuals.\n\nfor (id in rownames(df)) {\n  \n  weight &lt;- df[id, 'weight_kg']\n  \n  height &lt;- df[id, 'height_m']\n  \n  bmi &lt;- calculate_bmi(weight, height)\n  \n  print(c(id, bmi))\n  \n}\n\n[1] \"1\"                \"27.7551020408163\"\n[1] \"2\"                \"30.9155766944114\"\n[1] \"3\"                \"26.2984878369494\"\n[1] \"4\"                \"19.7359764922591\"\n[1] \"5\"                \"21.2760001119789\"\n\n\n\nCombination of function call, if-statement and for-loops.\nPrint BMI for individuals that are 18 years old or older.\n\nfor (id in rownames(df)) {\n  \n  if (df[id, 'age'] &gt;= 18) {\n    \n    weight &lt;- df[id, 'weight_kg']\n  \n    height &lt;- df[id, 'height_m']\n    \n    bmi &lt;- calculate_bmi(weight, height)\n    \n    print(c(id, bmi))\n\n  } else {\n    \n    print(paste(id, 'is under 18.'))\n    \n  }\n  \n}\n\n[1] \"1\"                \"27.7551020408163\"\n[1] \"2 is under 18.\"\n[1] \"3\"                \"26.2984878369494\"\n[1] \"4\"                \"19.7359764922591\"\n[1] \"5\"                \"21.2760001119789\"\n\n\nAdd BMI to the data frame.\n\nfor (id in rownames(df)){\n  \n  if (df[id, 'age'] &gt;= 18) {\n    \n    weight &lt;- df[id, 'weight_kg']\n  \n    height &lt;- df[id, 'height_m']\n    \n    bmi &lt;- calculate_bmi(weight, height)\n\n  } else {\n    \n    bmi &lt;- NA\n    \n  }\n  \n  df[id, 'bmi'] &lt;- bmi\n  \n}\n\nHave a look at the data frame.\n\ndf\n\n  age weight_kg height_m      bmi\n1  45        85     1.75 27.75510\n2  16        65     1.45       NA\n3  31       100     1.95 26.29849\n4  56        45     1.51 19.73598\n5  19        76     1.89 21.27600",
+    "crumbs": [
+      "Course Material",
+      "Presentations",
+      "Presentation 4: Scripting in R"
+    ]
+  },
+  {
+    "objectID": "presentations/presentation4_main_script.html#out-sourcing-functions-to-an-rscript-you-source",
+    "href": "presentations/presentation4_main_script.html#out-sourcing-functions-to-an-rscript-you-source",
+    "title": "Presentation 4: Main Script",
+    "section": "Out-sourcing functions to an Rscript you source",
+    "text": "Out-sourcing functions to an Rscript you source\nRemove calculate_bmi from the global environment.\n\nrm(list = \"calculate_bmi\")\n\nBy sourcing a script, all global variables (including functions) in script will be loaded and appear in the Global environment in the top left corner. Here we source the functions.R script.\n\nsource('./presentation4_functions.R')\n\nAfter we sourced the functions script the calculate_bmi function can be used just like if it was defined in the main script. If you work on a larger project and write multiple functions, it is best practice to have a function script and source it in your main script.\n\ncalculate_bmi(weight_kg = 67, \n              height_m = 1.70)\n\n[1] 23.18339\n\n\nUse mapply for alternative to calling function in for-loop.\n\nmapply(FUN = calculate_bmi, \n       weight_kg = df$weight_kg, \n       height_m = df$height_m)\n\n[1] 27.75510 30.91558 26.29849 19.73598 21.27600",
+    "crumbs": [
+      "Course Material",
+      "Presentations",
+      "Presentation 4: Scripting in R"
+    ]
+  },
+  {
+    "objectID": "presentations/presentation4_main_script.html#functions-with-error-handling.",
+    "href": "presentations/presentation4_main_script.html#functions-with-error-handling.",
+    "title": "Presentation 4: Main Script",
+    "section": "Functions with error handling.",
+    "text": "Functions with error handling.\nThe function is in the functions script.\nThe BMI function with out error handling returns a meaningless BMI value if given a negative weight.\n\ncalculate_bmi(weight_kg = -50, height_m = 1.80)\n\n[1] -15.4321\n\n\nThe BMI function with error handling returns an error if given a negative weight.\n\ncalculate_bmi_2(weight_kg = -50, height_m = 1.80)\n\nThe BMI function with error handling returns an warning if a BMI outside the normal range is calculated.\n\ncalculate_bmi_2(weight_kg = 25, height_m = 1.80)\n\nWarning in calculate_bmi_2(weight_kg = 25, height_m = 1.8): The calculated BMI\nis outside the normal range. Please check your input values.\n\n\n[1] 7.716049",
+    "crumbs": [
+      "Course Material",
+      "Presentations",
+      "Presentation 4: Scripting in R"
+    ]
+  },
+  {
+    "objectID": "presentations/presentation3.html",
+    "href": "presentations/presentation3.html",
+    "title": "Presentation 3 - Exploratory Data Analysis (EDA)",
+    "section": "",
+    "text": "We will not be going through any presentation for this part.\nFor Exercise 3-13 we refer to the FromExceltoR material: https://center-for-health-data-science.github.io/FromExceltoR/Presentations/presentation3.html.\nFor Exercise 14-19 we refer to the this tutorial about Principal Component Analysis (PCA): https://cran.r-project.org/web/packages/ggfortify/vignettes/plot_pca.html.\nFor theory about PCA have a look at this video: https://www.youtube.com/watch?v=FgakZw6K1QQ&t=799s. NB: This video structures samples/mice as features and genes as observations, where as the usual structure is genes as features and samples/mice as observations.",
+    "crumbs": [
+      "Course Material",
+      "Presentations",
+      "Presentation 3: Exploratory Data Analysis"
+    ]
+  },
+  {
+    "objectID": "presentations/presentation1.html",
+    "href": "presentations/presentation1.html",
+    "title": "Presentation 1: Base R and Tidyverse",
+    "section": "",
+    "text": "library(tidyverse)",
+    "crumbs": [
+      "Course Material",
+      "Presentations",
+      "Presentation 1: Base R and Tidyverse"
+    ]
+  },
+  {
+    "objectID": "presentations/presentation1.html#load-packages",
+    "href": "presentations/presentation1.html#load-packages",
+    "title": "Presentation 1: Base R and Tidyverse",
+    "section": "",
+    "text": "library(tidyverse)",
+    "crumbs": [
+      "Course Material",
+      "Presentations",
+      "Presentation 1: Base R and Tidyverse"
+    ]
+  },
+  {
+    "objectID": "presentations/presentation1.html#load-dataset",
+    "href": "presentations/presentation1.html#load-dataset",
+    "title": "Presentation 1: Base R and Tidyverse",
+    "section": "Load Dataset",
+    "text": "Load Dataset\nHere we load a dataframe that contains sales data for employees (in thousands DKK) from 2020 to 2023. We load the data as df_baseR which we will use to demonstrate base R commands. A copy of the same dataframe, df_tidyverse, is used to demonstrate tidyverse commands.\n\ndf_baseR &lt;- readxl::read_excel('../data/df_sales_1.xlsx') %&gt;% as.data.frame()\ndf_tidyverse &lt;- readxl::read_excel('../data/df_sales_1.xlsx') %&gt;% as_tibble()\n\nTable format in baseR is called data.frame. Have a look at the object in the terminal. It is very simple.\n\nclass(df_baseR)\n\n[1] \"data.frame\"\n\n\nTable format in tidyverse is called tibble. Have a look at the object in the terminal. The dimensions of the tibble is provided together with the classes of each column.\n\nclass(df_tidyverse)\n\n[1] \"tbl_df\"     \"tbl\"        \"data.frame\"",
+    "crumbs": [
+      "Course Material",
+      "Presentations",
+      "Presentation 1: Base R and Tidyverse"
+    ]
+  },
+  {
+    "objectID": "presentations/presentation1.html#base-r-and-tidyverse",
+    "href": "presentations/presentation1.html#base-r-and-tidyverse",
+    "title": "Presentation 1: Base R and Tidyverse",
+    "section": "Base R and Tidyverse",
+    "text": "Base R and Tidyverse\nAccess the Age column:\n\n# Base R \ndf_baseR['Age']\n\n# Tidyverse \ndf_tidyverse %&gt;% select(Age)\n\nAccess the Age column as a vector:\n\n# Base R \ndf_baseR[['Age']]\ndf_tidyverse$Age\n\n# Tidyverse \ndf_tidyverse %&gt;% pull(Age)\n\nAdd a column containing the difference in sales in 2022 and 2022.\n\n# Base R \ndf_baseR$sales_diff &lt;- df_baseR$sales_2022 - df_baseR$sales_2020\n\n# Tidyverse \ndf_tidyverse &lt;- df_tidyverse %&gt;% \n  mutate(sales_diff = sales_2022 - sales_2020)\n\nRemove the sales_diff column.\n\n# Base R \ndf_baseR$sales_diff &lt;- NULL\n\n# Tidyverse \ndf_tidyverse &lt;- df_tidyverse %&gt;% \n  select(!sales_diff)\n\nSelect columns with sales numbers.\n\n# Base R \ndf_baseR[, startsWith(colnames(df_baseR), 'sales_')]\n\n# Tidyverse \ndf_tidyverse %&gt;% \n  select(starts_with('sales_'))\n\nFilter rows for people older than 25.\n\n# Base R \ndf_baseR[df_baseR$Age &gt; 25 ,]\n\n# Tidyverse \ndf_tidyverse %&gt;% \n  filter(Age &gt; 25)\n\nFilter row for people that are 30 years old or younger and have sales in 2022 over 200.\n\n# Base R \ndf_baseR[!is.na(df_baseR$Age) & !is.na(df_baseR$sales_2022) &\n         df_baseR$Age &lt;= 30 & df_baseR$sales_2022 &gt; 200 ,]\n\n# Tidyverse \ndf_tidyverse %&gt;% \n  filter(Age &lt;= 30, sales_2022 &gt; 200)\n\nAdd column.\n\n# Base R \ndf_baseR$mood &lt;- \"happy\"\n\n# Tidyverse \ndf_tidyverse &lt;- df_tidyverse %&gt;% \n  mutate(mood = \"happy\")\n\nConditions using ifelse.\n\n# Base R \ndf_baseR$raise &lt;- ifelse(df_baseR$sales_2023 &gt; df_baseR$sales_2022, \"yes\", \"no\")\n\n# Tidyverse \ndf_tidyverse &lt;- df_tidyverse %&gt;% \n  mutate(raise = ifelse(sales_2023 &gt; sales_2022, \"yes\", \"no\"))\n\nConditions using case_when.\n\n# Base R \ndf_baseR$group &lt;- ifelse(df_baseR$Age &lt; 30 & df_baseR$Sex == \"Female\", \"young_female\",\n                  ifelse(df_baseR$Age &lt; 30 & df_baseR$Sex == \"Male\", \"young_male\",\n                  ifelse(df_baseR$Age &gt;= 30 & df_baseR$Sex == \"Female\", \"mature_female\",\n                  ifelse(df_baseR$Age &gt;= 30 & df_baseR$Sex == \"Male\", \"mature_male\", NA))))\n\n# Tidyverse \ndf_tidyverse &lt;- df_tidyverse %&gt;% \n  mutate(group = case_when(Age &lt; 30 & Sex == \"Female\" ~ \"young_female\",\n                           Age &lt; 30 & Sex == \"Male\" ~ \"young_male\",\n                           Age &gt;= 30 & Sex == \"Female\" ~ \"mature_female\",\n                           Age &gt;= 30 & Sex == \"Male\" ~ \"mature_male\", \n                           .default = NA))\n\nCheck which columns have NAs.\n\n# Base R\ncolSums(is.na(df_baseR))\n\n# Tidyverse\ndf_tidyverse %&gt;% summarise(across(everything(), ~ sum(is.na(.))))\n\nRemove rows with any NAs.\n\n# Base R\ndf_baseR_no_na &lt;- df_baseR[complete.cases(df_baseR), ]\n\n# Tidyverse\ndf_tidyverse_no_na &lt;- df_tidyverse %&gt;% drop_na()\n\nSort data based on sales in 2022 in descending order.\n\n# Base R \ndf_baseR[order(-df_baseR$sales_2022) ,]\n\n# Tidyverse \ndf_tidyverse %&gt;% arrange(desc(sales_2022))\n\nDo the filtering in 4. and select the Name and Sex column. This far, do you prefer the base R or tidyverse way? Do you see pros and cons with both?\n\n# Base R, NAs not removed\ndf_baseR[!is.na(df_baseR$Age) & !is.na(df_baseR$sales_2022) &\n         df_baseR$Age &lt;= 30 & df_baseR$sales_2022 &gt; 200 , c('Age', 'Sex')]\n\n# Base R, NAs removed\ndf_baseR_no_na[df_baseR_no_na$Age &lt;= 30 & df_baseR_no_na$sales_2022 &gt; 200 , c('Age', 'Sex')]\n\n# Tidyverse \ndf_tidyverse %&gt;% \n  filter(Age &lt;= 30, sales_2022 &gt; 200) %&gt;% \n  select(Age, Sex)\n\nThe df_location data frame contains information about the cities of the sales people.\n\nset.seed(101)\n\ndf_location &lt;- data.frame(\n  ID = sample(10),\n  City = c(\"New York\", \"LA\", \"New York\", \"Chicago\", \"Miami\", \"Miami\", \"LA\", \"Chicago\", \"LA\", \"New York\")\n)\n\nhead(df_location)\n\nJoin df and df_location. For base R we use merge and for tidyverse we use left_join.\n\n# Base R \ndf_baseR_merged &lt;- merge(df_baseR, df_location, by = 'ID')\nhead(df_baseR_merged)\n\n# Tidyverse \ndf_tidyverse_join &lt;- df_tidyverse %&gt;% left_join(df_location, by = 'ID')\nhead(df_tidyverse_join)\n\nCount the number of people in each of the unique cities.\n\n# Base R\ntable(df_baseR_merged$City)\n\n# Tidyverse\ndf_tidyverse_join %&gt;% count(City)",
+    "crumbs": [
+      "Course Material",
+      "Presentations",
+      "Presentation 1: Base R and Tidyverse"
+    ]
+  },
+  {
+    "objectID": "presentations/presentation1.html#string-manipulation",
+    "href": "presentations/presentation1.html#string-manipulation",
+    "title": "Presentation 1: Base R and Tidyverse",
+    "section": "String manipulation",
+    "text": "String manipulation\nWe will do string manipulation the tidyverse way.\nThe paste function concatenates two strings to one.\n\npaste('Alice', 'Hansen')\n\n[1] \"Alice Hansen\"\n\n\nThe sep argument is a space by default, but can be changed to any character.\n\npaste('Alice', 'Hansen', sep = \"_\")\n\n[1] \"Alice_Hansen\"\n\n\nThe paste0 function concatenates two strings to one without adding any separator between them.\n\npaste0('Alice', 'Hansen')\n\n[1] \"AliceHansen\"\n\n\nLet’s give all the employees the last name Hansen.\n\ndf_tidyverse_join &lt;- df_tidyverse_join %&gt;% \n  mutate(Name = paste(Name, 'Hansen'))\n\nhead(df_tidyverse_join)\n\n# A tibble: 6 × 12\n     ID Name         Age Sex   sales_2020 sales_2021 sales_2022 sales_2023 mood \n  &lt;dbl&gt; &lt;chr&gt;      &lt;dbl&gt; &lt;chr&gt;      &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt; &lt;chr&gt;\n1     1 Alice Han…    25 Fema…        100        110        120        100 happy\n2     2 Bob Hansen    30 Male         200        210        220        230 happy\n3     3 Charlie H…    22 Male         150        160        170        200 happy\n4     4 Sophie Ha…    35 Fema…        300        320        340        250 happy\n5     5 Eve Hansen    28 Fema…        250        240        250        270 happy\n6     6 Frank Han…    NA Male          NA        260        270        280 happy\n# ℹ 3 more variables: raise &lt;chr&gt;, group &lt;chr&gt;, City &lt;chr&gt;\n\n\nWe use the str_split function to split a string into multiple parts in a list.\n\nstr_split('Alice Hansen', pattern = ' ')\n\n[[1]]\n[1] \"Alice\"  \"Hansen\"\n\n\n\nstr_split('Alice_Hansen_Jensen', pattern = '_')\n\n[[1]]\n[1] \"Alice\"  \"Hansen\" \"Jensen\"\n\n\nIndexing one of the strings in the list using the str_split_i function.\n\nstr_split_i('Alice_Hansen_Jensen', pattern = '_', i = 2)\n\n[1] \"Hansen\"\n\n\nLet’s remove the last name we just gave the employees.\n\ndf_tidyverse_join &lt;- df_tidyverse_join %&gt;% \n  mutate(Name = str_split_i(Name, pattern = ' ', i = 1))\n\nhead(df_tidyverse_join)\n\n# A tibble: 6 × 12\n     ID Name      Age Sex    sales_2020 sales_2021 sales_2022 sales_2023 mood \n  &lt;dbl&gt; &lt;chr&gt;   &lt;dbl&gt; &lt;chr&gt;       &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt; &lt;chr&gt;\n1     1 Alice      25 Female        100        110        120        100 happy\n2     2 Bob        30 Male          200        210        220        230 happy\n3     3 Charlie    22 Male          150        160        170        200 happy\n4     4 Sophie     35 Female        300        320        340        250 happy\n5     5 Eve        28 Female        250        240        250        270 happy\n6     6 Frank      NA Male           NA        260        270        280 happy\n# ℹ 3 more variables: raise &lt;chr&gt;, group &lt;chr&gt;, City &lt;chr&gt;\n\n\nDetect substring in main string using str_detect.\n\nstr_detect('Alice', 'A')\n\n[1] TRUE\n\n\n\nstr_detect('Alice', 'B')\n\n[1] FALSE\n\n\nAdd column that check if “A” or “a” in Name and place it after the Name column.\n\ndf_tidyverse_join %&gt;% \n  mutate(A_in_name = str_detect(Name, 'A|a'),\n         .after = Name) %&gt;% \n  head()\n\n# A tibble: 6 × 13\n     ID Name   A_in_name   Age Sex   sales_2020 sales_2021 sales_2022 sales_2023\n  &lt;dbl&gt; &lt;chr&gt;  &lt;lgl&gt;     &lt;dbl&gt; &lt;chr&gt;      &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt;\n1     1 Alice  TRUE         25 Fema…        100        110        120        100\n2     2 Bob    FALSE        30 Male         200        210        220        230\n3     3 Charl… TRUE         22 Male         150        160        170        200\n4     4 Sophie FALSE        35 Fema…        300        320        340        250\n5     5 Eve    FALSE        28 Fema…        250        240        250        270\n6     6 Frank  TRUE         NA Male          NA        260        270        280\n# ℹ 4 more variables: mood &lt;chr&gt;, raise &lt;chr&gt;, group &lt;chr&gt;, City &lt;chr&gt;",
+    "crumbs": [
+      "Course Material",
+      "Presentations",
+      "Presentation 1: Base R and Tidyverse"
+    ]
+  },
+  {
+    "objectID": "presentations/presentation1.html#whitespace",
+    "href": "presentations/presentation1.html#whitespace",
+    "title": "Presentation 1: Base R and Tidyverse",
+    "section": "Whitespace",
+    "text": "Whitespace\nWhitespace includes spaces, newlines, and other blank characters in text. It can cause errors or inconsistencies in data, so removing unnecessary whitespace is an important step in cleaning data.\nLet’s have a look at a version of the sales data frame with whitespaces. In the tibble format it cannot be spotted.\n\ndf_sales_messy &lt;- read_delim('../data/df_sales_messy.csv')\nhead(df_sales_messy)\n\n# A tibble: 6 × 8\n     ID Name      Age Sex    sales_2020 sales_2021 sales_2022 sales_2023\n  &lt;dbl&gt; &lt;chr&gt;   &lt;dbl&gt; &lt;chr&gt;       &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt;\n1     1 Alice      25 Female        100        110        120        100\n2     2 Bob        30 Male          200        210        220        230\n3     3 Charlie    22 Male          150        160        170        200\n4     4 Sophie     35 Female        300        320        340        250\n5     5 Eve        28 Female        250        240        250        270\n6     6 Frank      NA Male           NA        260        270        280\n\n\nAccessing the unique sexes of the Sex column before cleaning.\n\ndf_sales_messy$Sex %&gt;% unique()\n\n[1] \"Female\"  \"Male\"    \"Female \" \"Male \"  \n\n\nUse the str_trim function to remove whitespace.\n\ndf_sales_messy$Sex %&gt;% str_trim() %&gt;% unique()\n\n[1] \"Female\" \"Male\"  \n\n\nLike other function, the str_trim function can also be used inside the mutate function to alter the data frame.\n\ndf_sales_clean &lt;- df_sales_messy %&gt;% \n  mutate(Sex = str_trim(Sex))\n\nAccessing the unique sexes of the Sex column after cleaning.\n\ndf_sales_clean$Sex %&gt;% unique()\n\n[1] \"Female\" \"Male\"",
+    "crumbs": [
+      "Course Material",
+      "Presentations",
+      "Presentation 1: Base R and Tidyverse"
+    ]
+  },
+  {
+    "objectID": "presentations/presentation1.html#export-dataset",
+    "href": "presentations/presentation1.html#export-dataset",
+    "title": "Presentation 1: Base R and Tidyverse",
+    "section": "Export Dataset",
+    "text": "Export Dataset\nExport tidyverse dataset\n\nwritexl::write_xlsx(df_tidyverse_join, '../out/sales_data_2.xlsx')",
+    "crumbs": [
+      "Course Material",
+      "Presentations",
+      "Presentation 1: Base R and Tidyverse"
+    ]
   },
   {
     "objectID": "exercises/exercise2.html",
@@ -122,6 +426,146 @@
     ]
   },
   {
+    "objectID": "about_heads.html",
+    "href": "about_heads.html",
+    "title": "About HeaDS",
+    "section": "",
+    "text": "In the Center for Health Data Science (HeaDS) we do both research and in the DataLab and Sandbox we develop and host course. Read more about all the cool stuff we do on our website.\n\n\nThe DataLab offers a range of services to support SUND employees in their data science analyses. Here’s an overview:\n\nCourses: We offer data science and bioinformatics courses for all SUND staff (researchers, administrative staff, technical staff, etc.). Our most popular courses include “From Excel to R,” “Python Tsunami,” and “Introduction to Bulk RNA-seq Analysis.”\nConsultations: We host drop-in sessions every Thursday from 13:00 to 15:00, where we assist with data science-related challenges and questions. Alternatively, you can reach out to arrange a one-on-one meeting on another day.\nCommissions: We conduct commissioned research, such as bioinformatics and data science analyses tailored to your needs. Additionally, we offer a commissioned supervision scheme if you would like to learn how to perform the analysis yourself.\nEvents: We host various data science events. Join us for our seminar series, “Talking HeaDS.” Our next session is in the spring (date and speeker TBA), and you can sign up here: https://eventsignup.ku.dk/talkingheadsspring2025."
+  },
+  {
+    "objectID": "about_heads.html#center-for-health-data-science",
+    "href": "about_heads.html#center-for-health-data-science",
+    "title": "About HeaDS",
+    "section": "",
+    "text": "In the Center for Health Data Science (HeaDS) we do both research and in the DataLab and Sandbox we develop and host course. Read more about all the cool stuff we do on our website.\n\n\nThe DataLab offers a range of services to support SUND employees in their data science analyses. Here’s an overview:\n\nCourses: We offer data science and bioinformatics courses for all SUND staff (researchers, administrative staff, technical staff, etc.). Our most popular courses include “From Excel to R,” “Python Tsunami,” and “Introduction to Bulk RNA-seq Analysis.”\nConsultations: We host drop-in sessions every Thursday from 13:00 to 15:00, where we assist with data science-related challenges and questions. Alternatively, you can reach out to arrange a one-on-one meeting on another day.\nCommissions: We conduct commissioned research, such as bioinformatics and data science analyses tailored to your needs. Additionally, we offer a commissioned supervision scheme if you would like to learn how to perform the analysis yourself.\nEvents: We host various data science events. Join us for our seminar series, “Talking HeaDS.” Our next session is in the spring (date and speeker TBA), and you can sign up here: https://eventsignup.ku.dk/talkingheadsspring2025."
+  },
+  {
+    "objectID": "data/data.html",
+    "href": "data/data.html",
+    "title": "Data",
+    "section": "",
+    "text": "DOWNLOAD DATA  \n\nAfter download, unzip the data folder and place it somewhere you can find it again.",
+    "crumbs": [
+      "Course Material",
+      "Data️"
+    ]
+  },
+  {
+    "objectID": "data/data.html#download-data",
+    "href": "data/data.html#download-data",
+    "title": "Data",
+    "section": "",
+    "text": "DOWNLOAD DATA  \n\nAfter download, unzip the data folder and place it somewhere you can find it again.",
+    "crumbs": [
+      "Course Material",
+      "Data️"
+    ]
+  },
+  {
+    "objectID": "data/data.html#download-presentations",
+    "href": "data/data.html#download-presentations",
+    "title": "Data",
+    "section": "Download presentations",
+    "text": "Download presentations\nIt can be nice to follow along the presentation scripts as we go through them.\n\n  DOWNLOAD PRESENTATIONS",
+    "crumbs": [
+      "Course Material",
+      "Data️"
+    ]
+  },
+  {
+    "objectID": "exercises/exercise1.html",
+    "href": "exercises/exercise1.html",
+    "title": "Presentation 1: Base R and Tidyverse / Data Clean-up and Wrangling",
+    "section": "",
+    "text": "Load packages.\nLoad in the diabetes_clinical_toy_messy.xlsx data set.",
+    "crumbs": [
+      "Course Material",
+      "Exercises",
+      "Exercise 1: Data Clean Up"
+    ]
+  },
+  {
+    "objectID": "exercises/exercise1.html#getting-started",
+    "href": "exercises/exercise1.html#getting-started",
+    "title": "Presentation 1: Base R and Tidyverse / Data Clean-up and Wrangling",
+    "section": "",
+    "text": "Load packages.\nLoad in the diabetes_clinical_toy_messy.xlsx data set.",
+    "crumbs": [
+      "Course Material",
+      "Exercises",
+      "Exercise 1: Data Clean Up"
+    ]
+  },
+  {
+    "objectID": "exercises/exercise1.html#explore-the-data",
+    "href": "exercises/exercise1.html#explore-the-data",
+    "title": "Presentation 1: Base R and Tidyverse / Data Clean-up and Wrangling",
+    "section": "Explore the data",
+    "text": "Explore the data\nUse can you either base R or/and tidyverse to solve the exercises.\n\nHow many missing values (NA’s) are there in each column.\nCheck the distribution of each of the variables. Consider that they are of different classes. Do any of the distributions seam odd to you?",
+    "crumbs": [
+      "Course Material",
+      "Exercises",
+      "Exercise 1: Data Clean Up"
+    ]
+  },
+  {
+    "objectID": "exercises/exercise1.html#clean-up-the-data",
+    "href": "exercises/exercise1.html#clean-up-the-data",
+    "title": "Presentation 1: Base R and Tidyverse / Data Clean-up and Wrangling",
+    "section": "Clean up the data",
+    "text": "Clean up the data\nNow that we have had a look at the data, it is time to correct fixable mistakes and remove observations that cannot be corrected.\nConsider the following:\n\nWhat should we do with the rows that contain NAs? Do we remove them or keep them?\nWhich mistakes in the data can be corrected, and which cannot?\nAre there zeros in the data? Are they true zeros or errors?\nDo you want to change any of the classes of the variables?\n\n\nClean the data according to your considerations.\n\n\n\n\n\n\n\nHint\n\n\n\n\n\nHave a look at BloodPressure, BMI, Sex, and Diabetes.",
+    "crumbs": [
+      "Course Material",
+      "Exercises",
+      "Exercise 1: Data Clean Up"
+    ]
+  },
+  {
+    "objectID": "exercises/exercise1.html#meta-data",
+    "href": "exercises/exercise1.html#meta-data",
+    "title": "Presentation 1: Base R and Tidyverse / Data Clean-up and Wrangling",
+    "section": "Meta Data",
+    "text": "Meta Data\n\nPerform step 2-5 from above and do data exploration and cleaning workflow for the diabetes_meta_toy_messy.xlsx data set.",
+    "crumbs": [
+      "Course Material",
+      "Exercises",
+      "Exercise 1: Data Clean Up"
+    ]
+  },
+  {
+    "objectID": "exercises/exercise1.html#join-the-datasets",
+    "href": "exercises/exercise1.html#join-the-datasets",
+    "title": "Presentation 1: Base R and Tidyverse / Data Clean-up and Wrangling",
+    "section": "Join the datasets",
+    "text": "Join the datasets\n\nConsider what variable the datasets should be joined on.\n\n\n\n\n\n\n\nHint\n\n\n\n\n\nThe joining variable must be the same type in both datasets.\n\n\n\n\nJoin the datasets by the variable you selected above.\nHow many rows does the joined dataset have? Explain why.\n\n\n\n\n\n\n\nHint\n\n\n\n\n\nBecause we used left_join, only the IDs that are in diabetes_clinical_clean are kept.\n\n\n\n\nExport the joined dataset. Think about which directory you want to save the file in.",
+    "crumbs": [
+      "Course Material",
+      "Exercises",
+      "Exercise 1: Data Clean Up"
+    ]
+  },
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "R for Data Science",
+    "section": "",
+    "text": "This 3 day course is a continuation of our 2 day course FromExceltoR and the material of that course is a prerequisite to this course. If you have not used R since you took the course, please go through the course material again (link to course). R for Data Science is an advanced course in R-programming for researchers at the Faculty of Health and Medical Sciences (SUND), University of Copenhagen. The course is build on code-along presentations and exercises in Quarto documents.\n\nThe course goes through the following topics:\n\nScript formats\nAdvanced tidyverse using real world data (build on material from our introduction to R course, FromExceltoR)\nScripting in R using functions, for-loops, if-else statements.\nModelling in R.\n\nThe material in this repository is for teaching purposes only and not to be distributed commercially.\nFinally… Dear course participants, it would greatly help us if you could complete our UPDATE LINK feedback form."
+  },
+  {
+    "objectID": "index.html#welcome-to-the-main-page-of-r-for-data-science",
+    "href": "index.html#welcome-to-the-main-page-of-r-for-data-science",
+    "title": "R for Data Science",
+    "section": "",
+    "text": "This 3 day course is a continuation of our 2 day course FromExceltoR and the material of that course is a prerequisite to this course. If you have not used R since you took the course, please go through the course material again (link to course). R for Data Science is an advanced course in R-programming for researchers at the Faculty of Health and Medical Sciences (SUND), University of Copenhagen. The course is build on code-along presentations and exercises in Quarto documents.\n\nThe course goes through the following topics:\n\nScript formats\nAdvanced tidyverse using real world data (build on material from our introduction to R course, FromExceltoR)\nScripting in R using functions, for-loops, if-else statements.\nModelling in R.\n\nThe material in this repository is for teaching purposes only and not to be distributed commercially.\nFinally… Dear course participants, it would greatly help us if you could complete our UPDATE LINK feedback form."
+  },
+  {
+    "objectID": "index.html#program",
+    "href": "index.html#program",
+    "title": "R for Data Science",
+    "section": "Program",
+    "text": "Program"
+  },
+  {
     "objectID": "presentations/presentation2.html",
     "href": "presentations/presentation2.html",
     "title": "Presentation 2: Advanced Data Wrangling",
@@ -198,7 +642,7 @@
     "href": "presentations/presentation2.html#the-anonymous-function-and-.",
     "title": "Presentation 2: Advanced Data Wrangling",
     "section": "The anonymous function: ~ and .",
-    "text": "The anonymous function: ~ and .\nBut wait! We still have those pesky NAs in our summary stats. Let’s just add the na.rm=TRUE argument. To not have too many things going on at once we’ll only do mean() for now:\n\ndf_sales %&gt;%\n  summarise(across(starts_with(\"sales\"), \n                   list(mean = mean(na.rm = TRUE)),\n                   .names = \"{.col}-{.fn}\"))\n\nError in `summarise()`:\nℹ In argument: `across(...)`.\nCaused by error in `mean.default()`:\n! argument \"x\" is missing, with no default\n\n\nBrrrtt! We may not.\n\n\n\n\n\nWhy? We are requesting a function call across several columns and we’re doing it in shorthand. This is only permitted is there are no arguments to the function (mean(), sd(), ect). You will also notice that we didn’t use brackets after their names, which is part of using the function short hand.\nIf we need to pass arguments to functions inside another function call (i.e. calling mean inside summarise) we need to invoke the anonymous function. Don’t worry, it is much less ominous than it sounds! It is written as a ~ and looks like this:\n\ndf_sales %&gt;%\n  summarise(across(starts_with(\"sales\"), \n                   list(mean = ~ mean(., na.rm = TRUE)),\n                   .names = \"{.col}-{.fn}\"))\n\n# A tibble: 1 × 4\n  `sales_2020-mean` `sales_2021-mean` `sales_2022-mean` `sales_2023-mean`\n              &lt;dbl&gt;             &lt;dbl&gt;             &lt;dbl&gt;             &lt;dbl&gt;\n1              294.               300              288.               305\n\n\nThe observant reader will also have noticed that a . has appeared in the brackets behind mean(). It simply means ‘the data previously referred to’, in this case every column starting with ‘sales’. We need to use the . because mean when called as a proper function needs to have an argument (a vector of numbers) to work on:\n\nmean(df_sales$sales_2020,na.rm=TRUE)\n\n[1] 294.4444\n\n\nSo this is it, we invoke the anonymous function for every statistic we want to calculate and now we may pass arguments:\n\ndf_sales %&gt;%\n  #across and starts_with selects columns\n  summarise(across(starts_with(\"sales\"), \n                   #list the functions to execute\n                   list(mean = ~ mean(., na.rm=T),\n                        sd = ~ sd(., na.rm=T), \n                        min = ~ min(., na.rm=T), \n                        max = ~ max(., na.rm=T)),\n                   #specify names of output columns\n                   .names = \"{.col}-{.fn}\")) %&gt;%\n  \n  #add reformating\n  pivot_longer(cols = everything(), \n               names_to = c(\"variable\", \"statistic\"), \n               names_sep = \"-\") %&gt;%\n  pivot_wider(names_from = statistic, values_from = value)\n\n# A tibble: 4 × 5\n  variable    mean    sd   min   max\n  &lt;chr&gt;      &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;\n1 sales_2020  294.  136.   100   500\n2 sales_2021  300   131.   110   510\n3 sales_2022  288.  115.   120   470\n4 sales_2023  305   131.   100   500\n\n\n\nOther usage examples\nThe anonymous function and across are also useful inside mutate()! Our data has sales in thousands DKK, so lets multiply every value in every sales column with 1000:\n\ndf_sales %&gt;% head(n=3)\n\n# A tibble: 3 × 12\n     ID Name      Age Sex    sales_2020 sales_2021 sales_2022 sales_2023 mood \n  &lt;dbl&gt; &lt;chr&gt;   &lt;dbl&gt; &lt;chr&gt;       &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt; &lt;chr&gt;\n1     1 Alice      25 Female        100        110        120        100 happy\n2     2 Bob        30 Male          200        210        220        230 happy\n3     3 Charlie    22 Male          150        160        170        200 happy\n# ℹ 3 more variables: raise &lt;chr&gt;, group &lt;chr&gt;, City &lt;chr&gt;\n\n\n\ndf_sales %&gt;%\n  mutate(across(starts_with(\"sales\"), ~ . * 1000)) %&gt;%\n  head(n=3)\n\n# A tibble: 3 × 12\n     ID Name      Age Sex    sales_2020 sales_2021 sales_2022 sales_2023 mood \n  &lt;dbl&gt; &lt;chr&gt;   &lt;dbl&gt; &lt;chr&gt;       &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt; &lt;chr&gt;\n1     1 Alice      25 Female     100000     110000     120000     100000 happy\n2     2 Bob        30 Male       200000     210000     220000     230000 happy\n3     3 Charlie    22 Male       150000     160000     170000     200000 happy\n# ℹ 3 more variables: raise &lt;chr&gt;, group &lt;chr&gt;, City &lt;chr&gt;\n\n\n\nWhat is happening here is we first select all columns starting with ‘sales’ by using across() and starts_with(). Then we say that we want to execute a function on each of these columns. The function shall be ‘multiply this column by 1000’. Multiplying by 1000 is written as * 1000 in R, ‘this column’ is . as we discussed before and ~ tells R that we’re executing a function.\nThis is it for now but there will be user-defined functions later!",
+    "text": "The anonymous function: ~ and .\nBut wait! We still have those pesky NAs in our summary stats. Let’s just add the na.rm=TRUE argument. To not have too many things going on at once we’ll only do mean() for now:\n\ndf_sales %&gt;%\n  summarise(across(starts_with(\"sales\"), \n                   list(mean = mean(na.rm = TRUE)),\n                   .names = \"{.col}-{.fn}\"))\n\nError in `summarise()`:\nℹ In argument: `across(...)`.\nCaused by error in `mean.default()`:\n! argument \"x\" is missing, with no default\n\n\nBrrrtt! We may not.\n\n\n\n\n\nWhy? We are requesting a function call across several columns and we’re doing it in shorthand. This is only permitted is there are no arguments to the function (mean(), sd(), ect). You will also notice that we didn’t use brackets after their names, which is part of using the function short hand.\nIf we need to pass arguments to functions inside another function call (i.e. calling mean inside summarise) we need to invoke the anonymous function. Don’t worry, it is much less ominous than it sounds! It is written as a ~ and looks like this:\n\ndf_sales %&gt;%\n  summarise(across(starts_with(\"sales\"), \n                   list(mean = ~ mean(., na.rm = TRUE)),\n                   .names = \"{.col}-{.fn}\"))\n\n# A tibble: 1 × 4\n  `sales_2020-mean` `sales_2021-mean` `sales_2022-mean` `sales_2023-mean`\n              &lt;dbl&gt;             &lt;dbl&gt;             &lt;dbl&gt;             &lt;dbl&gt;\n1              294.               300              288.               305\n\n\nThe observant reader will also have noticed that a . has appeared in the brackets behind mean(). It simply means ‘the data previously referred to’, in this case every column starting with ‘sales’. We need to use the . because mean when called as a proper function needs to have an argument (a vector of numbers) to work on:\n\nmean(df_sales$sales_2020,na.rm=TRUE)\n\n[1] 294.4444\n\n\nSo this is it, we invoke the anonymous function for every statistic we want to calculate and now we may pass arguments:\n\ndf_sales %&gt;%\n  #across and starts_with selects columns\n  summarise(across(starts_with(\"sales\"), \n                   #list the functions to execute\n                   list(mean = ~ mean(., na.rm=T),\n                        sd = ~ sd(., na.rm=T), \n                        min = ~ min(., na.rm=T), \n                        max = ~ max(., na.rm=T)),\n                   #specify names of output columns\n                   .names = \"{.col}-{.fn}\")) %&gt;%\n  \n  #add reformating\n  pivot_longer(cols = everything(), \n               names_to = c(\"variable\", \"statistic\"), \n               names_sep = \"-\") %&gt;%\n  pivot_wider(names_from = statistic, values_from = value)\n\n# A tibble: 4 × 5\n  variable    mean    sd   min   max\n  &lt;chr&gt;      &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;\n1 sales_2020  294.  136.   100   500\n2 sales_2021  300   131.   110   510\n3 sales_2022  288.  115.   120   470\n4 sales_2023  305   131.   100   500\n\n\n\nOther usage examples\nThe anonymous function and across are also useful inside mutate()! Our data has sales in thousands DKK, so lets multiply every value in every sales column with 1000:\n\ndf_sales %&gt;% head(n=3)\n\n# A tibble: 3 × 12\n     ID Name      Age Sex    sales_2020 sales_2021 sales_2022 sales_2023 mood \n  &lt;dbl&gt; &lt;chr&gt;   &lt;dbl&gt; &lt;chr&gt;       &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt; &lt;chr&gt;\n1     1 Alice      25 Female        100        110        120        100 happy\n2     2 Bob        30 Male          200        210        220        230 happy\n3     3 Charlie    22 Male          150        160        170        200 happy\n# ℹ 3 more variables: raise &lt;chr&gt;, group &lt;chr&gt;, City &lt;chr&gt;\n\n\n\ndf_sales %&gt;%\n  mutate(across(starts_with(\"sales\"), ~ . * 1000)) %&gt;%\n  head(n=3)\n\n# A tibble: 3 × 12\n     ID Name      Age Sex    sales_2020 sales_2021 sales_2022 sales_2023 mood \n  &lt;dbl&gt; &lt;chr&gt;   &lt;dbl&gt; &lt;chr&gt;       &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt; &lt;chr&gt;\n1     1 Alice      25 Female     100000     110000     120000     100000 happy\n2     2 Bob        30 Male       200000     210000     220000     230000 happy\n3     3 Charlie    22 Male       150000     160000     170000     200000 happy\n# ℹ 3 more variables: raise &lt;chr&gt;, group &lt;chr&gt;, City &lt;chr&gt;\n\n\n\nWhat is happening here is we first select all columns starting with ‘sales’ by using across() and starts_with(). Then we say that we want to execute a function on each of these columns. The function shall be ‘multiply this column by 1000’. Multiplying by 1000 is written as * 1000 in R, ‘this column’ is . as we discussed before and ~ tells R that we’re executing a function.\nAnother cool example: Replacing NAs with 0s only in the columns starting with ‘sales’:\n\ndf_sales %&gt;%\n  mutate(across(starts_with(\"sales\"), ~ replace_na(.,0)))\n\n# A tibble: 10 × 12\n      ID Name      Age Sex    sales_2020 sales_2021 sales_2022 sales_2023 mood \n   &lt;dbl&gt; &lt;chr&gt;   &lt;dbl&gt; &lt;chr&gt;       &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt; &lt;chr&gt;\n 1     1 Alice      25 Female        100        110        120        100 happy\n 2     2 Bob        30 Male          200        210        220        230 happy\n 3     3 Charlie    22 Male          150        160        170        200 happy\n 4     4 Sophie     35 Female        300        320        340        250 happy\n 5     5 Eve        28 Female        250        240        250        270 happy\n 6     6 Frank      NA Male            0        260        270        280 happy\n 7     7 Grace      40 Female        400        420        430        450 happy\n 8     8 Hannah     29 Female        500        510          0        500 happy\n 9     9 Ian        21 Male          450        460        470        480 happy\n10    10 Jack       33 Male          300        310        320        290 happy\n# ℹ 3 more variables: raise &lt;chr&gt;, group &lt;chr&gt;, City &lt;chr&gt;\n\n\nThis is it for now but there will be user-defined functions later!",
     "crumbs": [
       "Course Material",
       "Presentations",
@@ -206,295 +650,99 @@
     ]
   },
   {
-    "objectID": "presentations/presentation1.html",
-    "href": "presentations/presentation1.html",
-    "title": "Presentation 1: Base R and Tidyverse",
+    "objectID": "presentations/presentation4_functions.html",
+    "href": "presentations/presentation4_functions.html",
+    "title": "Presentation 4, Functions",
     "section": "",
-    "text": "library(tidyverse)",
+    "text": "Here is the solution4_functions.R showed:\n\n\n# Packages should be loaded in the main script.\n\n# Function to calculate BMI\ncalculate_bmi &lt;- function(weight_kg, height_m){\n  \n  bmi &lt;- weight_kg/height_m^2\n  \n  return(bmi)\n  \n}\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n# Function to calculate BMI, with control points and error checking. \ncalculate_bmi_2 &lt;- function(weight_kg, height_m) {\n  \n  # Check if weight and height are numeric\n  if (!is.numeric(weight_kg) | !is.numeric(height_m)) {\n    stop(\"Both weight_kg and height_m must be numeric values.\")\n  }\n  \n  # Check if weight and height are positive\n  if (weight_kg &lt;= 0) {\n    stop(\"Weight must be a positive value.\")\n  }\n  if (height_m &lt;= 0) {\n    stop(\"Height must be a positive value.\")\n  }\n  \n  # Calculate BMI\n  bmi &lt;- weight_kg / height_m^2\n  \n  # Check if BMI is within a reasonable range\n  if (bmi &lt; 10 | bmi &gt; 60) {\n    warning(\"The calculated BMI is outside the normal range. Please check your input values.\")\n  }\n  \n  return(bmi)\n  \n}",
     "crumbs": [
       "Course Material",
       "Presentations",
-      "Presentation 1: Base R and Tidyverse"
+      "Presentation 4, Functions: Scripting in R"
     ]
   },
   {
-    "objectID": "presentations/presentation1.html#load-packages",
-    "href": "presentations/presentation1.html#load-packages",
-    "title": "Presentation 1: Base R and Tidyverse",
+    "objectID": "presentations/presentation5.html",
+    "href": "presentations/presentation5.html",
+    "title": "Presentation 5: Modelling in R",
     "section": "",
-    "text": "library(tidyverse)",
+    "text": "library(tidyverse)\n\nWarning: pakke 'ggplot2' blev bygget under R version 4.2.3\n\n\nWarning: pakke 'tibble' blev bygget under R version 4.2.3\n\n\nWarning: pakke 'dplyr' blev bygget under R version 4.2.3\n\n\n── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──\n✔ dplyr     1.1.2     ✔ readr     2.1.4\n✔ forcats   1.0.0     ✔ stringr   1.5.0\n✔ ggplot2   3.5.1     ✔ tibble    3.2.1\n✔ lubridate 1.9.2     ✔ tidyr     1.3.0\n✔ purrr     1.0.1     \n── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──\n✖ dplyr::filter() masks stats::filter()\n✖ dplyr::lag()    masks stats::lag()\nℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors\n\nlibrary(caret)\n\nWarning: pakke 'caret' blev bygget under R version 4.2.3\n\n\nIndlæser krævet pakke: lattice\n\n\nWarning: pakke 'lattice' blev bygget under R version 4.2.3\n\n\n\nVedhæfter pakke: 'caret'\n\nDet følgende objekt er maskeret fra 'package:purrr':\n\n    lift",
     "crumbs": [
       "Course Material",
       "Presentations",
-      "Presentation 1: Base R and Tidyverse"
+      "Presentation 5: Intro to Modelling in R"
     ]
   },
   {
-    "objectID": "presentations/presentation1.html#load-dataset",
-    "href": "presentations/presentation1.html#load-dataset",
-    "title": "Presentation 1: Base R and Tidyverse",
-    "section": "Load Dataset",
-    "text": "Load Dataset\nHere we load a dataframe that contains sales data for employees (in thousands DKK) from 2020 to 2023. We load the data as df_baseR which we will use to demonstrate base R commands. A copy of the same dataframe, df_tidyverse, is used to demonstrate tidyverse commands.\n\ndf_baseR &lt;- readxl::read_excel('../data/df_sales_1.xlsx') %&gt;% as.data.frame()\ndf_tidyverse &lt;- readxl::read_excel('../data/df_sales_1.xlsx') %&gt;% as_tibble()\n\nTable format in baseR is called data.frame. Have a look at the object in the terminal. It is very simple.\n\nclass(df_baseR)\n\n[1] \"data.frame\"\n\n\nTable format in tidyverse is called tibble. Have a look at the object in the terminal. The dimensions of the tibble is provided together with the classes of each column.\n\nclass(df_tidyverse)\n\n[1] \"tbl_df\"     \"tbl\"        \"data.frame\"",
-    "crumbs": [
-      "Course Material",
-      "Presentations",
-      "Presentation 1: Base R and Tidyverse"
-    ]
-  },
-  {
-    "objectID": "presentations/presentation1.html#base-r-and-tidyverse",
-    "href": "presentations/presentation1.html#base-r-and-tidyverse",
-    "title": "Presentation 1: Base R and Tidyverse",
-    "section": "Base R and Tidyverse",
-    "text": "Base R and Tidyverse\nAccess the Age column:\n\n# Base R \ndf_baseR['Age']\n\n# Tidyverse \ndf_tidyverse %&gt;% select(Age)\n\nAccess the Age column as a vector:\n\n# Base R \ndf_baseR[['Age']]\ndf_tidyverse$Age\n\n# Tidyverse \ndf_tidyverse %&gt;% pull(Age)\n\nAdd a column containing the difference in sales in 2022 and 2022.\n\n# Base R \ndf_baseR$sales_diff &lt;- df_baseR$sales_2022 - df_baseR$sales_2020\n\n# Tidyverse \ndf_tidyverse &lt;- df_tidyverse %&gt;% \n  mutate(sales_diff = sales_2022 - sales_2020)\n\nRemove the sales_diff column.\n\n# Base R \ndf_baseR$sales_diff &lt;- NULL\n\n# Tidyverse \ndf_tidyverse &lt;- df_tidyverse %&gt;% \n  select(!sales_diff)\n\nSelect columns with sales numbers.\n\n# Base R \ndf_baseR[, startsWith(colnames(df_baseR), 'sales_')]\n\n# Tidyverse \ndf_tidyverse %&gt;% \n  select(starts_with('sales_'))\n\nFilter rows for people older than 25.\n\n# Base R \ndf_baseR[df_baseR$Age &gt; 25 ,]\n\n# Tidyverse \ndf_tidyverse %&gt;% \n  filter(Age &gt; 25)\n\nFilter row for people that are 30 years old or younger and have sales in 2022 over 200.\n\n# Base R \ndf_baseR[!is.na(df_baseR$Age) & !is.na(df_baseR$sales_2022) &\n         df_baseR$Age &lt;= 30 & df_baseR$sales_2022 &gt; 200 ,]\n\n# Tidyverse \ndf_tidyverse %&gt;% \n  filter(Age &lt;= 30, sales_2022 &gt; 200)\n\nAdd column.\n\n# Base R \ndf_baseR$mood &lt;- \"happy\"\n\n# Tidyverse \ndf_tidyverse &lt;- df_tidyverse %&gt;% \n  mutate(mood = \"happy\")\n\nConditions using ifelse.\n\n# Base R \ndf_baseR$raise &lt;- ifelse(df_baseR$sales_2023 &gt; df_baseR$sales_2022, \"yes\", \"no\")\n\n# Tidyverse \ndf_tidyverse &lt;- df_tidyverse %&gt;% \n  mutate(raise = ifelse(sales_2023 &gt; sales_2022, \"yes\", \"no\"))\n\nConditions using case_when.\n\n# Base R \ndf_baseR$group &lt;- ifelse(df_baseR$Age &lt; 30 & df_baseR$Sex == \"Female\", \"young_female\",\n                  ifelse(df_baseR$Age &lt; 30 & df_baseR$Sex == \"Male\", \"young_male\",\n                  ifelse(df_baseR$Age &gt;= 30 & df_baseR$Sex == \"Female\", \"mature_female\",\n                  ifelse(df_baseR$Age &gt;= 30 & df_baseR$Sex == \"Male\", \"mature_male\", NA))))\n\n# Tidyverse \ndf_tidyverse &lt;- df_tidyverse %&gt;% \n  mutate(group = case_when(Age &lt; 30 & Sex == \"Female\" ~ \"young_female\",\n                           Age &lt; 30 & Sex == \"Male\" ~ \"young_male\",\n                           Age &gt;= 30 & Sex == \"Female\" ~ \"mature_female\",\n                           Age &gt;= 30 & Sex == \"Male\" ~ \"mature_male\", \n                           .default = NA))\n\nCheck which columns have NAs.\n\n# Base R\ncolSums(is.na(df_baseR))\n\n# Tidyverse\ndf_tidyverse %&gt;% summarise(across(everything(), ~ sum(is.na(.))))\n\nRemove rows with any NAs.\n\n# Base R\ndf_baseR_no_na &lt;- df_baseR[complete.cases(df_baseR), ]\n\n# Tidyverse\ndf_tidyverse_no_na &lt;- df_tidyverse %&gt;% drop_na()\n\nSort data based on sales in 2022 in descending order.\n\n# Base R \ndf_baseR[order(-df_baseR$sales_2022) ,]\n\n# Tidyverse \ndf_tidyverse %&gt;% arrange(desc(sales_2022))\n\nDo the filtering in 4. and select the Name and Sex column. This far, do you prefer the base R or tidyverse way? Do you see pros and cons with both?\n\n# Base R, NAs not removed\ndf_baseR[!is.na(df_baseR$Age) & !is.na(df_baseR$sales_2022) &\n         df_baseR$Age &lt;= 30 & df_baseR$sales_2022 &gt; 200 , c('Age', 'Sex')]\n\n# Base R, NAs removed\ndf_baseR_no_na[df_baseR_no_na$Age &lt;= 30 & df_baseR_no_na$sales_2022 &gt; 200 , c('Age', 'Sex')]\n\n# Tidyverse \ndf_tidyverse %&gt;% \n  filter(Age &lt;= 30, sales_2022 &gt; 200) %&gt;% \n  select(Age, Sex)\n\nThe df_location data frame contains information about the cities of the sales people.\n\nset.seed(101)\n\ndf_location &lt;- data.frame(\n  ID = sample(10),\n  City = c(\"New York\", \"LA\", \"New York\", \"Chicago\", \"Miami\", \"Miami\", \"LA\", \"Chicago\", \"LA\", \"New York\")\n)\n\nhead(df_location)\n\nJoin df and df_location. For base R we use merge and for tidyverse we use left_join.\n\n# Base R \ndf_baseR_merged &lt;- merge(df_baseR, df_location, by = 'ID')\nhead(df_baseR_merged)\n\n# Tidyverse \ndf_tidyverse_join &lt;- df_tidyverse %&gt;% left_join(df_location, by = 'ID')\nhead(df_tidyverse_join)\n\nCount the number of people in each of the unique cities.\n\n# Base R\ntable(df_baseR_merged$City)\n\n# Tidyverse\ndf_tidyverse_join %&gt;% count(City)",
-    "crumbs": [
-      "Course Material",
-      "Presentations",
-      "Presentation 1: Base R and Tidyverse"
-    ]
-  },
-  {
-    "objectID": "presentations/presentation1.html#string-manipulation",
-    "href": "presentations/presentation1.html#string-manipulation",
-    "title": "Presentation 1: Base R and Tidyverse",
-    "section": "String manipulation",
-    "text": "String manipulation\nWe will do string manipulation the tidyverse way.\nThe paste function concatenates two strings to one.\n\npaste('Alice', 'Hansen')\n\n[1] \"Alice Hansen\"\n\n\nThe sep argument is a space by default, but can be changed to any character.\n\npaste('Alice', 'Hansen', sep = \"_\")\n\n[1] \"Alice_Hansen\"\n\n\nThe paste0 function concatenates two strings to one without adding any separator between them.\n\npaste0('Alice', 'Hansen')\n\n[1] \"AliceHansen\"\n\n\nLet’s give all the employees the last name Hansen.\n\ndf_tidyverse_join &lt;- df_tidyverse_join %&gt;% \n  mutate(Name = paste(Name, 'Hansen'))\n\nhead(df_tidyverse_join)\n\n# A tibble: 6 × 12\n     ID Name         Age Sex   sales_2020 sales_2021 sales_2022 sales_2023 mood \n  &lt;dbl&gt; &lt;chr&gt;      &lt;dbl&gt; &lt;chr&gt;      &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt; &lt;chr&gt;\n1     1 Alice Han…    25 Fema…        100        110        120        100 happy\n2     2 Bob Hansen    30 Male         200        210        220        230 happy\n3     3 Charlie H…    22 Male         150        160        170        200 happy\n4     4 Sophie Ha…    35 Fema…        300        320        340        250 happy\n5     5 Eve Hansen    28 Fema…        250        240        250        270 happy\n6     6 Frank Han…    NA Male          NA        260        270        280 happy\n# ℹ 3 more variables: raise &lt;chr&gt;, group &lt;chr&gt;, City &lt;chr&gt;\n\n\nWe use the str_split function to split a string into multiple parts in a list.\n\nstr_split('Alice Hansen', pattern = ' ')\n\n[[1]]\n[1] \"Alice\"  \"Hansen\"\n\n\n\nstr_split('Alice_Hansen_Jensen', pattern = '_')\n\n[[1]]\n[1] \"Alice\"  \"Hansen\" \"Jensen\"\n\n\nIndexing one of the strings in the list using the str_split_i function.\n\nstr_split_i('Alice_Hansen_Jensen', pattern = '_', i = 2)\n\n[1] \"Hansen\"\n\n\nLet’s remove the last name we just gave the employees.\n\ndf_tidyverse_join &lt;- df_tidyverse_join %&gt;% \n  mutate(Name = str_split_i(Name, pattern = ' ', i = 1))\n\nhead(df_tidyverse_join)\n\n# A tibble: 6 × 12\n     ID Name      Age Sex    sales_2020 sales_2021 sales_2022 sales_2023 mood \n  &lt;dbl&gt; &lt;chr&gt;   &lt;dbl&gt; &lt;chr&gt;       &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt; &lt;chr&gt;\n1     1 Alice      25 Female        100        110        120        100 happy\n2     2 Bob        30 Male          200        210        220        230 happy\n3     3 Charlie    22 Male          150        160        170        200 happy\n4     4 Sophie     35 Female        300        320        340        250 happy\n5     5 Eve        28 Female        250        240        250        270 happy\n6     6 Frank      NA Male           NA        260        270        280 happy\n# ℹ 3 more variables: raise &lt;chr&gt;, group &lt;chr&gt;, City &lt;chr&gt;\n\n\nDetect substring in main string using str_detect.\n\nstr_detect('Alice', 'A')\n\n[1] TRUE\n\n\n\nstr_detect('Alice', 'B')\n\n[1] FALSE\n\n\nAdd column that check if “A” or “a” in Name and place it after the Name column.\n\ndf_tidyverse_join %&gt;% \n  mutate(A_in_name = str_detect(Name, 'A|a'),\n         .after = Name) %&gt;% \n  head()\n\n# A tibble: 6 × 13\n     ID Name   A_in_name   Age Sex   sales_2020 sales_2021 sales_2022 sales_2023\n  &lt;dbl&gt; &lt;chr&gt;  &lt;lgl&gt;     &lt;dbl&gt; &lt;chr&gt;      &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt;\n1     1 Alice  TRUE         25 Fema…        100        110        120        100\n2     2 Bob    FALSE        30 Male         200        210        220        230\n3     3 Charl… TRUE         22 Male         150        160        170        200\n4     4 Sophie FALSE        35 Fema…        300        320        340        250\n5     5 Eve    FALSE        28 Fema…        250        240        250        270\n6     6 Frank  TRUE         NA Male          NA        260        270        280\n# ℹ 4 more variables: mood &lt;chr&gt;, raise &lt;chr&gt;, group &lt;chr&gt;, City &lt;chr&gt;",
-    "crumbs": [
-      "Course Material",
-      "Presentations",
-      "Presentation 1: Base R and Tidyverse"
-    ]
-  },
-  {
-    "objectID": "presentations/presentation1.html#whitespace",
-    "href": "presentations/presentation1.html#whitespace",
-    "title": "Presentation 1: Base R and Tidyverse",
-    "section": "Whitespace",
-    "text": "Whitespace\nWhitespace includes spaces, newlines, and other blank characters in text. It can cause errors or inconsistencies in data, so removing unnecessary whitespace is an important step in cleaning data.\nLet’s have a look at a version of the sales data frame with whitespaces. In the tibble format it cannot be spotted.\n\ndf_sales_messy &lt;- read_delim('../data/df_sales_messy.csv')\nhead(df_sales_messy)\n\n# A tibble: 6 × 8\n     ID Name      Age Sex    sales_2020 sales_2021 sales_2022 sales_2023\n  &lt;dbl&gt; &lt;chr&gt;   &lt;dbl&gt; &lt;chr&gt;       &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt;\n1     1 Alice      25 Female        100        110        120        100\n2     2 Bob        30 Male          200        210        220        230\n3     3 Charlie    22 Male          150        160        170        200\n4     4 Sophie     35 Female        300        320        340        250\n5     5 Eve        28 Female        250        240        250        270\n6     6 Frank      NA Male           NA        260        270        280\n\n\nAccessing the unique sexes of the Sex column before cleaning.\n\ndf_sales_messy$Sex %&gt;% unique()\n\n[1] \"Female\"  \"Male\"    \"Female \" \"Male \"  \n\n\nUse the str_trim function to remove whitespace.\n\ndf_sales_messy$Sex %&gt;% str_trim() %&gt;% unique()\n\n[1] \"Female\" \"Male\"  \n\n\nLike other function, the str_trim function can also be used inside the mutate function to alter the data frame.\n\ndf_sales_clean &lt;- df_sales_messy %&gt;% \n  mutate(Sex = str_trim(Sex))\n\nAccessing the unique sexes of the Sex column after cleaning.\n\ndf_sales_clean$Sex %&gt;% unique()\n\n[1] \"Female\" \"Male\"",
-    "crumbs": [
-      "Course Material",
-      "Presentations",
-      "Presentation 1: Base R and Tidyverse"
-    ]
-  },
-  {
-    "objectID": "presentations/presentation1.html#export-dataset",
-    "href": "presentations/presentation1.html#export-dataset",
-    "title": "Presentation 1: Base R and Tidyverse",
-    "section": "Export Dataset",
-    "text": "Export Dataset\nExport tidyverse dataset\n\nwritexl::write_xlsx(df_tidyverse_join, '../out/sales_data_2.xlsx')",
-    "crumbs": [
-      "Course Material",
-      "Presentations",
-      "Presentation 1: Base R and Tidyverse"
-    ]
-  },
-  {
-    "objectID": "presentations/presentation4_main_script.html",
-    "href": "presentations/presentation4_main_script.html",
-    "title": "Presentation 4: Main Script",
+    "objectID": "presentations/presentation5.html#load-packages",
+    "href": "presentations/presentation5.html#load-packages",
+    "title": "Presentation 5: Modelling in R",
     "section": "",
-    "text": "Define variables.\n\nnum1 &lt;- 8\nnum2 &lt;- 5\n\nLogical: 8 is larger than 5.\n\nnum1 &gt; num2\n\n[1] TRUE\n\n\nLogical: 8 is not smaller than 5.\n\nnum1 &lt; num2\n\n[1] FALSE\n\n\nA logical statement is used in an if statement to define a condition.\n\nif (num1 &gt; num2){\n  statement &lt;- paste(num1, 'is larger than', num2)\n}\n\nprint(statement)\n\n[1] \"8 is larger than 5\"\n\n\nRedefine variables.\n\nnum2 &lt;- 10\n\nnum2 &lt;- 3\n\nnum2 &lt;- 8\n\nUse else if and else statements to test multiple conditions.\n\nif (num1 &gt; num2){\n  statement &lt;- paste(num1, 'is larger than', num2)\n} else if (num1 &lt; num2) {\n  statement &lt;- paste(num1, 'is smaller than', num2)\n} else {\n  statement &lt;- paste(num1, 'is equal to', num2)\n} \n\nprint(statement)\n\n[1] \"8 is equal to 8\"",
+    "text": "library(tidyverse)\n\nWarning: pakke 'ggplot2' blev bygget under R version 4.2.3\n\n\nWarning: pakke 'tibble' blev bygget under R version 4.2.3\n\n\nWarning: pakke 'dplyr' blev bygget under R version 4.2.3\n\n\n── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──\n✔ dplyr     1.1.2     ✔ readr     2.1.4\n✔ forcats   1.0.0     ✔ stringr   1.5.0\n✔ ggplot2   3.5.1     ✔ tibble    3.2.1\n✔ lubridate 1.9.2     ✔ tidyr     1.3.0\n✔ purrr     1.0.1     \n── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──\n✖ dplyr::filter() masks stats::filter()\n✖ dplyr::lag()    masks stats::lag()\nℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors\n\nlibrary(caret)\n\nWarning: pakke 'caret' blev bygget under R version 4.2.3\n\n\nIndlæser krævet pakke: lattice\n\n\nWarning: pakke 'lattice' blev bygget under R version 4.2.3\n\n\n\nVedhæfter pakke: 'caret'\n\nDet følgende objekt er maskeret fra 'package:purrr':\n\n    lift",
     "crumbs": [
       "Course Material",
       "Presentations",
-      "Presentation 4: Scripting in R"
+      "Presentation 5: Intro to Modelling in R"
     ]
   },
   {
-    "objectID": "presentations/presentation4_main_script.html#if-else-statments",
-    "href": "presentations/presentation4_main_script.html#if-else-statments",
-    "title": "Presentation 4: Main Script",
-    "section": "",
-    "text": "Define variables.\n\nnum1 &lt;- 8\nnum2 &lt;- 5\n\nLogical: 8 is larger than 5.\n\nnum1 &gt; num2\n\n[1] TRUE\n\n\nLogical: 8 is not smaller than 5.\n\nnum1 &lt; num2\n\n[1] FALSE\n\n\nA logical statement is used in an if statement to define a condition.\n\nif (num1 &gt; num2){\n  statement &lt;- paste(num1, 'is larger than', num2)\n}\n\nprint(statement)\n\n[1] \"8 is larger than 5\"\n\n\nRedefine variables.\n\nnum2 &lt;- 10\n\nnum2 &lt;- 3\n\nnum2 &lt;- 8\n\nUse else if and else statements to test multiple conditions.\n\nif (num1 &gt; num2){\n  statement &lt;- paste(num1, 'is larger than', num2)\n} else if (num1 &lt; num2) {\n  statement &lt;- paste(num1, 'is smaller than', num2)\n} else {\n  statement &lt;- paste(num1, 'is equal to', num2)\n} \n\nprint(statement)\n\n[1] \"8 is equal to 8\"",
+    "objectID": "presentations/presentation5.html#load-data",
+    "href": "presentations/presentation5.html#load-data",
+    "title": "Presentation 5: Modelling in R",
+    "section": "Load data",
+    "text": "Load data\n\ndf_sales &lt;- readxl::read_xlsx('../data/df_sales_1.xlsx')\n# data &lt;- mtcars",
     "crumbs": [
       "Course Material",
       "Presentations",
-      "Presentation 4: Scripting in R"
+      "Presentation 5: Intro to Modelling in R"
     ]
   },
   {
-    "objectID": "presentations/presentation4_main_script.html#for-loops",
-    "href": "presentations/presentation4_main_script.html#for-loops",
-    "title": "Presentation 4: Main Script",
-    "section": "For-loops",
-    "text": "For-loops\nWe first define a vector containing both numeric and character elements.\n\nvector1 &lt;- c(1, 2, 6, 3, 2, 'hello', 'world', 'yes', 7, 8, 12, 15)\n\nTo loop through vector1, we define a loop variable (here called element), which takes the value of each item in the vector, one at a time.\n\nfor (element in vector1) {\n  print(element)\n}\n\n[1] \"1\"\n[1] \"2\"\n[1] \"6\"\n[1] \"3\"\n[1] \"2\"\n[1] \"hello\"\n[1] \"world\"\n[1] \"yes\"\n[1] \"7\"\n[1] \"8\"\n[1] \"12\"\n[1] \"15\"\n\n\nThe loop variable name is arbitrary - you can call it anything. For example, we can use THIS_VARIABLE and get the same result. Point is, it does not matter what you call the variable, just avoid overwriting an important variable of your script.\n\nfor (THIS_VARIABLE in vector1) {\n  print(THIS_VARIABLE)\n}\n\n[1] \"1\"\n[1] \"2\"\n[1] \"6\"\n[1] \"3\"\n[1] \"2\"\n[1] \"hello\"\n[1] \"world\"\n[1] \"yes\"\n[1] \"7\"\n[1] \"8\"\n[1] \"12\"\n[1] \"15\"\n\n\nAfter you loop through a vector or a list, the variable is always the last element of your vector. The variable is hence a global variable.\n\nTHIS_VARIABLE\n\n[1] \"15\"",
+    "objectID": "presentations/presentation5.html#linear-regression",
+    "href": "presentations/presentation5.html#linear-regression",
+    "title": "Presentation 5: Modelling in R",
+    "section": "Linear Regression",
+    "text": "Linear Regression\n\nSplit Data into Traning and Test Set\nCreate an 80/20 train-test split using the createDataPartition function.\n\n# Set seed to ensure reproducibility\nset.seed(123)  \n\nsplit &lt;- createDataPartition(df_sales$ID, p = 0.8, list = FALSE)\ntrain_data &lt;- df_sales[split, ]\ntest_data &lt;- df_sales[-split, ]\n\n\n\nTrain the Linear Regression Model\n\n# Fit a linear regression model\nmodel &lt;- lm(sales_2023 ~ sales_2020 + Age, data = df_sales)  # Predict mpg using weight (wt) and horsepower (hp)\n\n# View model summary\nsummary(model)\n\n\nCall:\nlm(formula = sales_2023 ~ sales_2020 + Age, data = df_sales)\n\nResiduals:\n    Min      1Q  Median      3Q     Max \n-55.606 -17.731   4.598  18.331  50.456 \n\nCoefficients:\n            Estimate Std. Error t value Pr(&gt;|t|)    \n(Intercept) 50.66793   62.42929   0.812    0.448    \nsales_2020   1.00656    0.09643  10.438 4.53e-05 ***\nAge         -1.34372    2.12363  -0.633    0.550    \n---\nSignif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1\n\nResidual standard error: 35.77 on 6 degrees of freedom\n  (1 observation deleted due to missingness)\nMultiple R-squared:  0.9498,    Adjusted R-squared:  0.933 \nF-statistic:  56.7 on 2 and 6 DF,  p-value: 0.0001269",
     "crumbs": [
       "Course Material",
       "Presentations",
-      "Presentation 4: Scripting in R"
+      "Presentation 5: Intro to Modelling in R"
     ]
   },
   {
-    "objectID": "presentations/presentation4_main_script.html#user-defined-functions",
-    "href": "presentations/presentation4_main_script.html#user-defined-functions",
-    "title": "Presentation 4: Main Script",
-    "section": "User defined Functions",
-    "text": "User defined Functions\nWe will use BMI calculation as an example for this part.\nDefine variables.\n\nweight_kg &lt;- 70\nheight_m &lt;- 1.80\n\nCalculate BMI.\n\nbmi &lt;- weight_kg/height_m^2\nbmi\n\n[1] 21.60494\n\n\nIf we plan to calculate BMI for multiple individuals it is convenient to write the calculation into a function.\n\nFunction name: calculate_bmi.\nFunction parameters: weight_kg and height_m.\nThe return value: bmi.\n\nThe return statement specifies the value that the function will return when called.\n\ncalculate_bmi &lt;- function(weight_kg, height_m){\n  \n  bmi &lt;- weight_kg/height_m^2\n  \n  return(bmi)\n  \n}\n\nWe can call the function using previously defined variables.\n\ncalculate_bmi(weight_kg = weight_kg, \n              height_m = height_m)\n\n[1] 21.60494\n\n\nWe can also pass numbers directly to the function.\n\ncalculate_bmi(weight_kg = 100, \n              height_m = 1.90)\n\n[1] 27.70083\n\n\nArgument Order in Function Calls\nIf we specify the parameter names, the order can be changed.\n\ncalculate_bmi(height_m = 1.90, \n              weight_kg = 100)\n\n[1] 27.70083\n\n\nIf we do not specify the parameter names, the arguments will be matched according to the position - so be careful with this.\n\ncalculate_bmi(1.90, \n              100)\n\n[1] 0.00019",
+    "objectID": "presentations/presentation5.html#regression-with-categorical-features",
+    "href": "presentations/presentation5.html#regression-with-categorical-features",
+    "title": "Presentation 5: Modelling in R",
+    "section": "Regression with categorical features",
+    "text": "Regression with categorical features",
     "crumbs": [
       "Course Material",
       "Presentations",
-      "Presentation 4: Scripting in R"
+      "Presentation 5: Intro to Modelling in R"
     ]
   },
   {
-    "objectID": "presentations/presentation4_main_script.html#combining-function-call-with-if-statement",
-    "href": "presentations/presentation4_main_script.html#combining-function-call-with-if-statement",
-    "title": "Presentation 4: Main Script",
-    "section": "Combining function call with if-statement",
-    "text": "Combining function call with if-statement\nData on a single individual.\n\nage &lt;- 45\nweight_kg &lt;- 85\nheight_m &lt;- 1.75\n\nBMI should only be calculated for individuals over the age of 18.\n\nif (age &gt;= 18){\n  calculate_bmi(weight_kg, height_m)\n}\n\n[1] 27.7551",
+    "objectID": "presentations/presentation5.html#decision-tree",
+    "href": "presentations/presentation5.html#decision-tree",
+    "title": "Presentation 5: Modelling in R",
+    "section": "Decision tree",
+    "text": "Decision tree",
     "crumbs": [
       "Course Material",
       "Presentations",
-      "Presentation 4: Scripting in R"
+      "Presentation 5: Intro to Modelling in R"
     ]
   },
   {
-    "objectID": "presentations/presentation4_main_script.html#combining-function-call-with-for-loops",
-    "href": "presentations/presentation4_main_script.html#combining-function-call-with-for-loops",
-    "title": "Presentation 4: Main Script",
-    "section": "Combining function call with for-loops",
-    "text": "Combining function call with for-loops\nData on 5 individuals.\n\ndf &lt;- data.frame(row.names = 1:5, \n                 age = c(45, 16, 31, 56, 19), \n                 weight_kg = c(85, 65, 100, 45, 76), \n                 height_m = c(1.75, 1.45, 1.95, 1.51, 1.89)\n                 )\n\nPrint ID, weight, and height of all individuals.\n\nfor (id in rownames(df)){\n  \n  weight &lt;- df[id, 'weight_kg']\n  \n  height &lt;- df[id, 'height_m']\n  \n  print(c(id, weight, height))\n  \n}\n\n[1] \"1\"    \"85\"   \"1.75\"\n[1] \"2\"    \"65\"   \"1.45\"\n[1] \"3\"    \"100\"  \"1.95\"\n[1] \"4\"    \"45\"   \"1.51\"\n[1] \"5\"    \"76\"   \"1.89\"\n\n\nCall function to calculate BMI for all individuals.\n\nfor (id in rownames(df)) {\n  \n  weight &lt;- df[id, 'weight_kg']\n  \n  height &lt;- df[id, 'height_m']\n  \n  bmi &lt;- calculate_bmi(weight, height)\n  \n  print(c(id, bmi))\n  \n}\n\n[1] \"1\"                \"27.7551020408163\"\n[1] \"2\"                \"30.9155766944114\"\n[1] \"3\"                \"26.2984878369494\"\n[1] \"4\"                \"19.7359764922591\"\n[1] \"5\"                \"21.2760001119789\"\n\n\n\nCombination of function call, if-statement and for-loops.\nPrint BMI for individuals that are 18 years old or older.\n\nfor (id in rownames(df)) {\n  \n  if (df[id, 'age'] &gt;= 18) {\n    \n    weight &lt;- df[id, 'weight_kg']\n  \n    height &lt;- df[id, 'height_m']\n    \n    bmi &lt;- calculate_bmi(weight, height)\n    \n    print(c(id, bmi))\n\n  } else {\n    \n    print(paste(id, 'is under 18.'))\n    \n  }\n  \n}\n\n[1] \"1\"                \"27.7551020408163\"\n[1] \"2 is under 18.\"\n[1] \"3\"                \"26.2984878369494\"\n[1] \"4\"                \"19.7359764922591\"\n[1] \"5\"                \"21.2760001119789\"\n\n\nAdd BMI to the data frame.\n\nfor (id in rownames(df)){\n  \n  if (df[id, 'age'] &gt;= 18) {\n    \n    weight &lt;- df[id, 'weight_kg']\n  \n    height &lt;- df[id, 'height_m']\n    \n    bmi &lt;- calculate_bmi(weight, height)\n\n  } else {\n    \n    bmi &lt;- NA\n    \n  }\n  \n  df[id, 'bmi'] &lt;- bmi\n  \n}\n\nHave a look at the data frame.\n\ndf\n\n  age weight_kg height_m      bmi\n1  45        85     1.75 27.75510\n2  16        65     1.45       NA\n3  31       100     1.95 26.29849\n4  56        45     1.51 19.73598\n5  19        76     1.89 21.27600",
+    "objectID": "presentations/presentation5.html#clustering-k-means",
+    "href": "presentations/presentation5.html#clustering-k-means",
+    "title": "Presentation 5: Modelling in R",
+    "section": "Clustering: K-means",
+    "text": "Clustering: K-means",
     "crumbs": [
       "Course Material",
       "Presentations",
-      "Presentation 4: Scripting in R"
-    ]
-  },
-  {
-    "objectID": "presentations/presentation4_main_script.html#out-sourcing-functions-to-an-rscript-you-source",
-    "href": "presentations/presentation4_main_script.html#out-sourcing-functions-to-an-rscript-you-source",
-    "title": "Presentation 4: Main Script",
-    "section": "Out-sourcing functions to an Rscript you source",
-    "text": "Out-sourcing functions to an Rscript you source\nRemove calculate_bmi from the global environment.\n\nrm(list = \"calculate_bmi\")\n\nBy sourcing a script, all global variables (including functions) in script will be loaded and appear in the Global environment in the top left corner. Here we source the functions.R script.\n\nsource('./presentation4_functions.R')\n\nAfter we sourced the functions script the calculate_bmi function can be used just like if it was defined in the main script. If you work on a larger project and write multiple functions, it is best practice to have a function script and source it in your main script.\n\ncalculate_bmi(weight_kg = 67, \n              height_m = 1.70)\n\n[1] 23.18339\n\n\nUse mapply for alternative to calling function in for-loop.\n\nmapply(FUN = calculate_bmi, \n       weight_kg = df$weight_kg, \n       height_m = df$height_m)\n\n[1] 27.75510 30.91558 26.29849 19.73598 21.27600",
-    "crumbs": [
-      "Course Material",
-      "Presentations",
-      "Presentation 4: Scripting in R"
-    ]
-  },
-  {
-    "objectID": "presentations/presentation4_main_script.html#functions-with-error-handling.",
-    "href": "presentations/presentation4_main_script.html#functions-with-error-handling.",
-    "title": "Presentation 4: Main Script",
-    "section": "Functions with error handling.",
-    "text": "Functions with error handling.\nThe function is in the functions script.\nThe BMI function with out error handling returns a meaningless BMI value if given a negative weight.\n\ncalculate_bmi(weight_kg = -50, height_m = 1.80)\n\n[1] -15.4321\n\n\nThe BMI function with error handling returns an error if given a negative weight.\n\ncalculate_bmi_2(weight_kg = -50, height_m = 1.80)\n\nThe BMI function with error handling returns an warning if a BMI outside the normal range is calculated.\n\ncalculate_bmi_2(weight_kg = 25, height_m = 1.80)\n\nWarning in calculate_bmi_2(weight_kg = 25, height_m = 1.8): The calculated BMI\nis outside the normal range. Please check your input values.\n\n\n[1] 7.716049",
-    "crumbs": [
-      "Course Material",
-      "Presentations",
-      "Presentation 4: Scripting in R"
-    ]
-  },
-  {
-    "objectID": "index.html",
-    "href": "index.html",
-    "title": "R for Data Science",
-    "section": "",
-    "text": "This 3 day course is a continuation of our 2 day course FromExceltoR and the material of that course is a prerequisite to this course. If you have not used R since you took the course, please go through the course material again (link to course). R for Data Science is an advanced course in R-programming for researchers at the Faculty of Health and Medical Sciences (SUND), University of Copenhagen. The course is build on code-along presentations and exercises in Quarto documents.\n\nThe course goes through the following topics:\n\nScript formats\nAdvanced tidyverse using real world data (build on material from our introduction to R course, FromExceltoR)\nScripting in R using functions, for-loops, if-else statements.\nModelling in R.\n\nThe material in this repository is for teaching purposes only and not to be distributed commercially.\nFinally… Dear course participants, it would greatly help us if you could complete our UPDATE LINK feedback form."
-  },
-  {
-    "objectID": "index.html#welcome-to-the-main-page-of-r-for-data-science",
-    "href": "index.html#welcome-to-the-main-page-of-r-for-data-science",
-    "title": "R for Data Science",
-    "section": "",
-    "text": "This 3 day course is a continuation of our 2 day course FromExceltoR and the material of that course is a prerequisite to this course. If you have not used R since you took the course, please go through the course material again (link to course). R for Data Science is an advanced course in R-programming for researchers at the Faculty of Health and Medical Sciences (SUND), University of Copenhagen. The course is build on code-along presentations and exercises in Quarto documents.\n\nThe course goes through the following topics:\n\nScript formats\nAdvanced tidyverse using real world data (build on material from our introduction to R course, FromExceltoR)\nScripting in R using functions, for-loops, if-else statements.\nModelling in R.\n\nThe material in this repository is for teaching purposes only and not to be distributed commercially.\nFinally… Dear course participants, it would greatly help us if you could complete our UPDATE LINK feedback form."
-  },
-  {
-    "objectID": "index.html#program",
-    "href": "index.html#program",
-    "title": "R for Data Science",
-    "section": "Program",
-    "text": "Program"
-  },
-  {
-    "objectID": "solutions/solution_not_up.html",
-    "href": "solutions/solution_not_up.html",
-    "title": "Solution not up yet!",
-    "section": "",
-    "text": "Solutions will be available only after you’ve had a chance to work through the exercises on your own. If you’re unsure how to proceed, check the slides, cheat sheets, ask a peer, or reach out to a TA.\n\nEnjoy!"
-  },
-  {
-    "objectID": "solutions/solution2.html",
-    "href": "solutions/solution2.html",
-    "title": "Exercise 2 - Solutions: Data Clean Up",
-    "section": "",
-    "text": "In this exercise you will do some more advance tidyverse operations such as pivoting and nesting, as well as create plots to brush up on your ggplot skills.",
-    "crumbs": [
-      "Course Material",
-      "Solutions",
-      "Exercise 2 - Solution"
-    ]
-  },
-  {
-    "objectID": "solutions/solution2.html#introduction",
-    "href": "solutions/solution2.html#introduction",
-    "title": "Exercise 2 - Solutions: Data Clean Up",
-    "section": "",
-    "text": "In this exercise you will do some more advance tidyverse operations such as pivoting and nesting, as well as create plots to brush up on your ggplot skills.",
-    "crumbs": [
-      "Course Material",
-      "Solutions",
-      "Exercise 2 - Solution"
-    ]
-  },
-  {
-    "objectID": "solutions/solution2.html#first-steps",
-    "href": "solutions/solution2.html#first-steps",
-    "title": "Exercise 2 - Solutions: Data Clean Up",
-    "section": "First steps",
-    "text": "First steps\n\nLoad packages.\n\n\nlibrary(tidyverse)\n\n\nLoad the joined diabetes data set you created in exercise 1 and the glucose dataset from the data folder.\n\n\ndiabetes_join &lt;- readxl::read_excel('../out/diabetes_join.xlsx')\ndf_glucose &lt;- readxl::read_excel('../data/df_glucose.xlsx')\n\n\nHave a look at the glucose dataset. The OGTT column contains measurements from a Oral Glucose Tolerance Test where blood glucose is measured at fasting (Glucose_0), 6 hours after glucose intake (Glucose_6), and 12 hours after (Glucose_12).\n\n\nhead(df_glucose)\n\n# A tibble: 6 × 4\n  Glucose_0 Glucose_60 Glucose_120    ID\n      &lt;dbl&gt;      &lt;dbl&gt;       &lt;dbl&gt; &lt;dbl&gt;\n1      6.65       8.04       10.0   9046\n2      4.49       5.40        6.22 51676\n3      5.76       6.52        7.22  1665\n4      6.13       6.94        8.09 12095\n5      6.84       6.92        7.01 12175\n6      6.84       7.62        8.42  8213\n\n\n\nRestructure the glucose dataset into a long format. How many rows are there per ID? Does that make sense?\n\n\n\n\n\n\n\nHint\n\n\n\n\n\nRemember the flow:\n\npivot_longer(cols = LIST_WITH_COLUMNS_TO_PIVOT,\n             names_to = \"NEW_COLUMN_CONTAINING_COLUMN_NAMES\",\n             values_to = \"NEW_COLUMN_CONTAINING_COLUMN_VALUES\")\n\nHave a look at slide 16 for a visual overview.\n\n\n\n\ndf_glucose_long &lt;- df_glucose %&gt;% \n  pivot_longer(cols = starts_with(\"Glucose\"),\n               names_to = \"Measurement\",\n               values_to = \"Glucose (mmol/L)\"\n               )\n\nhead(df_glucose_long)\n\n# A tibble: 6 × 3\n     ID Measurement `Glucose (mmol/L)`\n  &lt;dbl&gt; &lt;chr&gt;                    &lt;dbl&gt;\n1  9046 Glucose_0                 6.65\n2  9046 Glucose_60                8.04\n3  9046 Glucose_120              10.0 \n4 51676 Glucose_0                 4.49\n5 51676 Glucose_60                5.40\n6 51676 Glucose_120               6.22\n\n\n\nChange the glucose measurements to numeric variable.\n\n\n\n\n\n\n\nHint\n\n\n\n\n\nThe stringr packages is a part of tidyverse and has many functions for manipulating strings. Find a function that can split the string so you can extract the numbers on the other side of the underscore.\n\n\n\n\ndf_glucose_long &lt;- df_glucose_long %&gt;% \n  mutate(Measurement = str_split_i(Measurement, '_', 2) %&gt;% as.numeric())\n\nhead(df_glucose_long)\n\n# A tibble: 6 × 3\n     ID Measurement `Glucose (mmol/L)`\n  &lt;dbl&gt;       &lt;dbl&gt;              &lt;dbl&gt;\n1  9046           0               6.65\n2  9046          60               8.04\n3  9046         120              10.0 \n4 51676           0               4.49\n5 51676          60               5.40\n6 51676         120               6.22\n\n\n\nNest the glucose measurements and values such that there is only one row per ID.\n\n\n\n\n\n\n\nHint\n\n\n\n\n\nRemember the flow:\n\ngroup_by() %&gt;% \n  nest() %&gt;% \n  ungroup()\n\n\n\n\n\ndf_glucose_nested &lt;- df_glucose_long %&gt;% \n  group_by(ID) %&gt;% \n  nest(OGTT = c(Measurement, `Glucose (mmol/L)`)) %&gt;% \n  ungroup()\n  \nhead(df_glucose_nested)\n\n# A tibble: 6 × 2\n     ID OGTT            \n  &lt;dbl&gt; &lt;list&gt;          \n1  9046 &lt;tibble [3 × 2]&gt;\n2 51676 &lt;tibble [3 × 2]&gt;\n3  1665 &lt;tibble [3 × 2]&gt;\n4 12095 &lt;tibble [3 × 2]&gt;\n5 12175 &lt;tibble [3 × 2]&gt;\n6  8213 &lt;tibble [3 × 2]&gt;\n\n\n\nMerge the nested glucose dataset with the joined diabetes.\n\n\ndiabetes_glucose &lt;- diabetes_join %&gt;% \n  left_join(df_glucose_nested, by = 'ID')\n\nhead(diabetes_glucose)\n\n# A tibble: 6 × 12\n     ID Sex      Age BloodPressure GeneticRisk   BMI PhysicalActivity Smoker \n  &lt;dbl&gt; &lt;chr&gt;  &lt;dbl&gt;         &lt;dbl&gt;       &lt;dbl&gt; &lt;dbl&gt;            &lt;dbl&gt; &lt;chr&gt;  \n1  9046 Male      34            84       0.619  24.7               93 Unknown\n2 51676 Male      25            74       0.591  22.5              102 Unknown\n3 60182 Male      50            80       0.178  34.5               98 Unknown\n4  1665 Female    27            60       0.206  26.3               82 Never  \n5 56669 Male      35            84       0.286  35                 58 Smoker \n6 53882 Female    31            78       1.22   43.3               59 Smoker \n# ℹ 4 more variables: Diabetes &lt;chr&gt;, Married &lt;chr&gt;, Work &lt;chr&gt;, OGTT &lt;list&gt;\n\n\n\nPull the glucose measurements (OGTT) from your favorite ID.\n\n\n\n\n\n\n\nHint\n\n\n\n\n\nFirst filter for your favorite ID and then pull the nested column.\n\n\n\n\ndiabetes_glucose %&gt;% \n  filter(ID == 9046) %&gt;% \n  pull(OGTT)\n\n[[1]]\n# A tibble: 3 × 2\n  Measurement `Glucose (mmol/L)`\n        &lt;dbl&gt;              &lt;dbl&gt;\n1           0               6.65\n2          60               8.04\n3         120              10.0 \n\n\n\nExport the final dataset. Since the dataset is nested, you cannot export it as an excel file. Export the dataset as an .rds file. Have a guess at what the function is called.\n\n\nwrite_rds(diabetes_glucose, '../out/diabetes_glucose.rds')",
-    "crumbs": [
-      "Course Material",
-      "Solutions",
-      "Exercise 2 - Solution"
-    ]
-  },
-  {
-    "objectID": "solutions/solution4.html",
-    "href": "solutions/solution4.html",
-    "title": "Exercise 4 - Solutions",
-    "section": "",
-    "text": "Create a file that will contain your functions.\nIn the file, write a function that takes a dataframe and a numerical value and returns a boxplot. Do not worry about error or warning handling yet. NB If you modify the function script, be sure to save it and source it again so that your updates are reflected in the main script.\n\n\n\n\n\n\n\nHint\n\n\n\n\n\naes_string allows the function to dynamically reference a column name from the dataframe.\nExample: aes_string(\"colname\")",
-    "crumbs": [
-      "Course Material",
-      "Solutions",
-      "Exercise 4 - Solution"
-    ]
-  },
-  {
-    "objectID": "solutions/solution4.html#functions",
-    "href": "solutions/solution4.html#functions",
-    "title": "Exercise 4 - Solutions",
-    "section": "",
-    "text": "Create a file that will contain your functions.\nIn the file, write a function that takes a dataframe and a numerical value and returns a boxplot. Do not worry about error or warning handling yet. NB If you modify the function script, be sure to save it and source it again so that your updates are reflected in the main script.\n\n\n\n\n\n\n\nHint\n\n\n\n\n\naes_string allows the function to dynamically reference a column name from the dataframe.\nExample: aes_string(\"colname\")",
-    "crumbs": [
-      "Course Material",
-      "Solutions",
-      "Exercise 4 - Solution"
-    ]
-  },
-  {
-    "objectID": "solutions/solution4.html#main-script",
-    "href": "solutions/solution4.html#main-script",
-    "title": "Exercise 4 - Solutions",
-    "section": "Main script",
-    "text": "Main script\n\nCreate a Quarto document and start by loading relevant packages.\n\n\nlibrary(tidyverse)\nlibrary(glue)\n\n\nSource the function script into the Quarto document.\n\n\nsource('solution4_functions.R')\n\n\nLoad data from the .rds you created in Exercise 2.\n\n\ndiabetes_glucose &lt;- read_rds('../out/diabetes_glucose.rds')\n\n\nRun the boxplot function for the diabetes dataset and the Age variable.\n\n\nboxplot(df = diabetes_glucose, var_num = 'Age')\n\nWarning: `aes_string()` was deprecated in ggplot2 3.0.0.\nℹ Please use tidy evaluation idioms with `aes()`.\nℹ See also `vignette(\"ggplot2-in-packages\")` for more information.\n\n\n\n\n\n\n\n\n\n\nIn a for-loop, run the boxplot function for the diabetes dataset and each of the numerical variables in the script.\n\n\nnumerical_columns &lt;- sapply(diabetes_glucose, is.numeric)\nnumerical_colnames &lt;- names(diabetes_glucose)[numerical_columns]\n\n\nfor (var_num in numerical_colnames){\n  \n  p &lt;- boxplot(df = diabetes_glucose, var_num = var_num)\n  print(p)\n  # ggsave(paste0(\"../out/boxplot_\", var_num,\".png\"))\n  \n}\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nWarning: Removed 5 rows containing non-finite outside the scale range\n(`stat_boxplot()`).\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nGo back to your function script. Create a function that takes a dataframe and a categorical value and returns a bar plot.\nRun the function on the Sex variable.\n\n\nbar_plot(df = diabetes_glucose, var_cat = 'Sex')\n\n\n\n\n\n\n\n\n\nIn a for-loop, run the bar plot function for the diabetes dataset and each of the categorical variables in the script.\n\n\ncategorical_columns &lt;- sapply(diabetes_glucose, is.character)\ncategorical_colnames &lt;- names(diabetes_glucose)[categorical_columns]\n\n\nfor (var_cat in categorical_colnames){\n  \n  p &lt;- bar_plot(df = diabetes_glucose, var_cat = var_cat)\n  print(p)\n  # ggsave(paste0(\"../out/bar_plot_\", var_cat,\".png\"))\n  \n}\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nIt’s time for a fun exercise! Customize your plot functions by adding a theme, colors and labels. Add a ggsave statement in your for-loops to recreate and save your plots.",
-    "crumbs": [
-      "Course Material",
-      "Solutions",
-      "Exercise 4 - Solution"
-    ]
-  },
-  {
-    "objectID": "solutions/solution4.html#functions-and-error-handling",
-    "href": "solutions/solution4.html#functions-and-error-handling",
-    "title": "Exercise 4 - Solutions",
-    "section": "Functions and error handling",
-    "text": "Functions and error handling\n\nIn your function script, copy the function you created in Exercise 2 and modify it so that it generates an error if var_num is assigned a non-numerical argument.\n\n\n\n\n\n\n\nHint\n\n\n\n\n\nWhen checking the class of the variables, make sure that they are in vector format. Have a look at Presentation 1 if you are unsure of how to access a variable in a data frame as a vector.\n\nis.numeric(vector)\n\n\n\n\n\nTest the function by using Sex as the numerical variable argument.\n\n\nboxplot_2(df = diabetes_glucose, var_num = 'Sex')\n# Gives an error.\n\n\nUse the same logic for the function you created in Exercise 8.\nTest the function by using Age as the categorical variable argument.\n\n\nbar_plot_2(df = diabetes_glucose, var_cat = 'Age')\n# Gives an error.\n\n\nIn Exercise 7, a boxplot have made for the ID variable if you simply looped over all the numcerical values. Avoid this using an if-statement.\n\n\nfor (var_num in numerical_colnames){\n  \n  if (var_num != 'ID'){\n    \n    p &lt;- boxplot(df = diabetes_glucose, var_num = var_num)\n    print(p)\n    \n  }\n  \n}\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nWarning: Removed 5 rows containing non-finite outside the scale range\n(`stat_boxplot()`).\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nMake a function that takes an ID and outputs a graph of the glucose measurement over time. There are several way to do this depending on how generalized your function is. The more generalized, the more difficult.\n\n\n\n\n\n\n\nHint\n\n\n\n\n\nRemember that you need to put backticks when you access a colname with spaces.\nWhen using aes_string, you need backticks and quotation marks: aes_string(\"`colname with spaces`\").\n\n\n\n\nRun the function on your favorite ID.\n\n\ndf &lt;- diabetes_glucose %&gt;% unnest(OGTT)\n\nglucose_measurement_id_plot(df = df, id = \"12109\")\n\n\n\n\n\n\n\n\n\nInspired by Exercise 3.13, create a function that takes a dataframe and a categorical variable as input, calculates the mean glucose levels over time for each category, and produces a line plot showing the mean glucose measurements across time points.\n\n\n\n\n\n\n\nHint\n\n\n\n\n\nThe function requires the column name to be passed as a string. However, not all tidyverse functions can directly handle column names in this format. Fortunately, there is a workaround. For example, the group_by() function can dynamically reference a column name provided as a string using .data[[...]]:\n\nvar_cat &lt;- \"Age\"\n\ndf %&gt;% \n    group_by(Measurement, .data[[var_cat]])\n\nHere, .data refers to the data frame being used — in this case, df.\nAlso, you might get a warning like this You can override using the .groups argument. This can be solved adding .groups = \"drop\" to the summerize function.\n\n\n\n\nRun the function with Sex as input.\n\n\nglucose_measurement_mean_plot(df = df, var_cat = 'Sex')\n\n\n\n\n\n\n\n\n\nIn a for-loop, run the function on all categorical variables in the data frame. Between which groups do you visually notice the largest differences in the mean OGTT?\n\n\nfor (var_cat in categorical_colnames){\n  \n  p &lt;- glucose_measurement_mean_plot(df = df, var_cat = var_cat)\n  print(p)\n  \n}\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nLast. Render you document and review the generated html. If you get errors, correct them and re-render.",
-    "crumbs": [
-      "Course Material",
-      "Solutions",
-      "Exercise 4 - Solution"
+      "Presentation 5: Intro to Modelling in R"
     ]
   },
   {
@@ -502,7 +750,7 @@
     "href": "solutions/solution1.html",
     "title": "Presentation 1 - Solutions: Base R and Tidyverse / Data Clean-up and Wrangling",
     "section": "",
-    "text": "Load packages.\n\n\nlibrary(tidyverse)\nlibrary(readxl)\n\n\nLoad in the diabetes_clinical_toy_messy.xlsx data set.\n\n\ndiabetes_clinical &lt;- read_excel('../data/diabetes_clinical_toy_messy.xlsx')\nhead(diabetes_clinical)\n\n# A tibble: 6 × 9\n     ID Sex      Age BloodPressure GeneticRisk   BMI PhysicalActivity Smoker \n  &lt;dbl&gt; &lt;chr&gt;  &lt;dbl&gt;         &lt;dbl&gt;       &lt;dbl&gt; &lt;dbl&gt;            &lt;dbl&gt; &lt;chr&gt;  \n1  9046 Male      34            84       0.619  24.7               93 Unknown\n2 51676 Male      25            74       0.591  22.5              102 Unknown\n3 31112 Male      30             0       0.839  32.3               75 Former \n4 60182 Male      50            80       0.178  34.5               98 Unknown\n5  1665 Female    27            60       0.206  26.3               82 Never  \n6 56669 Male      35            84       0.286  35                 58 Smoker \n# ℹ 1 more variable: Diabetes &lt;dbl&gt;",
+    "text": "Load packages.\n\n\nlibrary(tidyverse)\n\nWarning: pakke 'ggplot2' blev bygget under R version 4.2.3\n\n\nWarning: pakke 'tibble' blev bygget under R version 4.2.3\n\n\nWarning: pakke 'dplyr' blev bygget under R version 4.2.3\n\nlibrary(readxl)\n\nWarning: pakke 'readxl' blev bygget under R version 4.2.3\n\n\n\nLoad in the diabetes_clinical_toy_messy.xlsx data set.\n\n\ndiabetes_clinical &lt;- read_excel('../data/diabetes_clinical_toy_messy.xlsx')\nhead(diabetes_clinical)\n\n# A tibble: 6 × 9\n     ID Sex      Age BloodPressure GeneticRisk   BMI PhysicalActivity Smoker \n  &lt;dbl&gt; &lt;chr&gt;  &lt;dbl&gt;         &lt;dbl&gt;       &lt;dbl&gt; &lt;dbl&gt;            &lt;dbl&gt; &lt;chr&gt;  \n1  9046 Male      34            84       0.619  24.7               93 Unknown\n2 51676 Male      25            74       0.591  22.5              102 Unknown\n3 31112 Male      30             0       0.839  32.3               75 Former \n4 60182 Male      50            80       0.178  34.5               98 Unknown\n5  1665 Female    27            60       0.206  26.3               82 Never  \n6 56669 Male      35            84       0.286  35                 58 Smoker \n# ℹ 1 more variable: Diabetes &lt;dbl&gt;",
     "crumbs": [
       "Course Material",
       "Solutions",
@@ -514,7 +762,7 @@
     "href": "solutions/solution1.html#getting-started",
     "title": "Presentation 1 - Solutions: Base R and Tidyverse / Data Clean-up and Wrangling",
     "section": "",
-    "text": "Load packages.\n\n\nlibrary(tidyverse)\nlibrary(readxl)\n\n\nLoad in the diabetes_clinical_toy_messy.xlsx data set.\n\n\ndiabetes_clinical &lt;- read_excel('../data/diabetes_clinical_toy_messy.xlsx')\nhead(diabetes_clinical)\n\n# A tibble: 6 × 9\n     ID Sex      Age BloodPressure GeneticRisk   BMI PhysicalActivity Smoker \n  &lt;dbl&gt; &lt;chr&gt;  &lt;dbl&gt;         &lt;dbl&gt;       &lt;dbl&gt; &lt;dbl&gt;            &lt;dbl&gt; &lt;chr&gt;  \n1  9046 Male      34            84       0.619  24.7               93 Unknown\n2 51676 Male      25            74       0.591  22.5              102 Unknown\n3 31112 Male      30             0       0.839  32.3               75 Former \n4 60182 Male      50            80       0.178  34.5               98 Unknown\n5  1665 Female    27            60       0.206  26.3               82 Never  \n6 56669 Male      35            84       0.286  35                 58 Smoker \n# ℹ 1 more variable: Diabetes &lt;dbl&gt;",
+    "text": "Load packages.\n\n\nlibrary(tidyverse)\n\nWarning: pakke 'ggplot2' blev bygget under R version 4.2.3\n\n\nWarning: pakke 'tibble' blev bygget under R version 4.2.3\n\n\nWarning: pakke 'dplyr' blev bygget under R version 4.2.3\n\nlibrary(readxl)\n\nWarning: pakke 'readxl' blev bygget under R version 4.2.3\n\n\n\nLoad in the diabetes_clinical_toy_messy.xlsx data set.\n\n\ndiabetes_clinical &lt;- read_excel('../data/diabetes_clinical_toy_messy.xlsx')\nhead(diabetes_clinical)\n\n# A tibble: 6 × 9\n     ID Sex      Age BloodPressure GeneticRisk   BMI PhysicalActivity Smoker \n  &lt;dbl&gt; &lt;chr&gt;  &lt;dbl&gt;         &lt;dbl&gt;       &lt;dbl&gt; &lt;dbl&gt;            &lt;dbl&gt; &lt;chr&gt;  \n1  9046 Male      34            84       0.619  24.7               93 Unknown\n2 51676 Male      25            74       0.591  22.5              102 Unknown\n3 31112 Male      30             0       0.839  32.3               75 Former \n4 60182 Male      50            80       0.178  34.5               98 Unknown\n5  1665 Female    27            60       0.206  26.3               82 Never  \n6 56669 Male      35            84       0.286  35                 58 Smoker \n# ℹ 1 more variable: Diabetes &lt;dbl&gt;",
     "crumbs": [
       "Course Material",
       "Solutions",
@@ -526,7 +774,7 @@
     "href": "solutions/solution1.html#explore-the-data",
     "title": "Presentation 1 - Solutions: Base R and Tidyverse / Data Clean-up and Wrangling",
     "section": "Explore the data",
-    "text": "Explore the data\nUse can you either base R or/and tidyverse to solve the exercises.\n\nHow many missing values (NA’s) are there in each column.\n\n\ncolSums(is.na(diabetes_clinical))\n\n              ID              Sex              Age    BloodPressure \n               0                0                0                0 \n     GeneticRisk              BMI PhysicalActivity           Smoker \n               5                0                0                0 \n        Diabetes \n               0 \n\n\n\nCheck the distribution of each of the variables. Consider that the variables are of different classes. Do any of the distributions seem odd to you?\n\nFor the categorical variables:\nThe Sex values are not consistent.\n\ntable(diabetes_clinical$Sex)\n\n\nFEMALE Female   Male   male \n     2    291    237      2 \n\ntable(diabetes_clinical$Smoker)\n\n\n Former   Never  Smoker Unknown \n    132     159     162      79 \n\ntable(diabetes_clinical$Diabetes)\n\n\n  0   1 \n267 265 \n\n\nFor the numerical variables:\n\ndiabetes_clinical %&gt;% \n  ggplot(aes(y = Age)) + \n  geom_boxplot()\n\n\n\n\n\n\n\n\nOdd: Some BloodPressure values are 0.\n\ndiabetes_clinical %&gt;% \n  ggplot(aes(y = BloodPressure)) + \n  geom_boxplot()\n\n\n\n\n\n\n\n\n\ndiabetes_clinical %&gt;% \n  ggplot(aes(y = GeneticRisk)) + \n  geom_boxplot()\n\nWarning: Removed 5 rows containing non-finite outside the scale range\n(`stat_boxplot()`).\n\n\n\n\n\n\n\n\n\nOdd: Some BMI values are 0.\n\ndiabetes_clinical %&gt;% \n  ggplot(aes(y = BMI)) + \n  geom_boxplot()\n\n\n\n\n\n\n\n\n\ndiabetes_clinical %&gt;% \n  ggplot(aes(y = PhysicalActivity)) + \n  geom_boxplot()",
+    "text": "Explore the data\nUse can you either base R or/and tidyverse to solve the exercises.\n\nHow many missing values (NA’s) are there in each column.\n\n\ncolSums(is.na(diabetes_clinical))\n\n              ID              Sex              Age    BloodPressure \n               0                0                0                0 \n     GeneticRisk              BMI PhysicalActivity           Smoker \n               5                0                0                0 \n        Diabetes \n               0 \n\n\n\nCheck the distribution of each of the variables. Consider that the variables are of different classes. Do any of the distributions seem odd to you?\n\nFor the categorical variables:\nThe Sex values are not consistent.\n\ntable(diabetes_clinical$Sex)\n\n\nFemale FEMALE   male   Male \n   291      2      2    237 \n\ntable(diabetes_clinical$Smoker)\n\n\n Former   Never  Smoker Unknown \n    132     159     162      79 \n\ntable(diabetes_clinical$Diabetes)\n\n\n  0   1 \n267 265 \n\n\nFor the numerical variables:\n\ndiabetes_clinical %&gt;% \n  ggplot(aes(y = Age)) + \n  geom_boxplot()\n\n\n\n\n\n\n\n\nOdd: Some BloodPressure values are 0.\n\ndiabetes_clinical %&gt;% \n  ggplot(aes(y = BloodPressure)) + \n  geom_boxplot()\n\n\n\n\n\n\n\n\n\ndiabetes_clinical %&gt;% \n  ggplot(aes(y = GeneticRisk)) + \n  geom_boxplot()\n\nWarning: Removed 5 rows containing non-finite outside the scale range\n(`stat_boxplot()`).\n\n\n\n\n\n\n\n\n\nOdd: Some BMI values are 0.\n\ndiabetes_clinical %&gt;% \n  ggplot(aes(y = BMI)) + \n  geom_boxplot()\n\n\n\n\n\n\n\n\n\ndiabetes_clinical %&gt;% \n  ggplot(aes(y = PhysicalActivity)) + \n  geom_boxplot()",
     "crumbs": [
       "Course Material",
       "Solutions",
@@ -574,7 +822,7 @@
     "href": "solutions/solution3.html",
     "title": "Exercise 3 - Solutions: Exploratory Data Analysis (EDA)",
     "section": "",
-    "text": "Load packages.\n\n\nlibrary(tidyverse)\n\n\nLoad data from the .rds file you created in Exercise 2. Have a guess at what the function is called.\n\n\ndiabetes_glucose &lt;- read_rds('../out/diabetes_glucose.rds')",
+    "text": "Load packages.\n\n\nlibrary(tidyverse)\n\nWarning: pakke 'ggplot2' blev bygget under R version 4.2.3\n\n\nWarning: pakke 'tibble' blev bygget under R version 4.2.3\n\n\nWarning: pakke 'dplyr' blev bygget under R version 4.2.3\n\n\n\nLoad data from the .rds file you created in Exercise 2. Have a guess at what the function is called.\n\n\ndiabetes_glucose &lt;- read_rds('../out/diabetes_glucose.rds')",
     "crumbs": [
       "Course Material",
       "Solutions",
@@ -586,7 +834,7 @@
     "href": "solutions/solution3.html#getting-started",
     "title": "Exercise 3 - Solutions: Exploratory Data Analysis (EDA)",
     "section": "",
-    "text": "Load packages.\n\n\nlibrary(tidyverse)\n\n\nLoad data from the .rds file you created in Exercise 2. Have a guess at what the function is called.\n\n\ndiabetes_glucose &lt;- read_rds('../out/diabetes_glucose.rds')",
+    "text": "Load packages.\n\n\nlibrary(tidyverse)\n\nWarning: pakke 'ggplot2' blev bygget under R version 4.2.3\n\n\nWarning: pakke 'tibble' blev bygget under R version 4.2.3\n\n\nWarning: pakke 'dplyr' blev bygget under R version 4.2.3\n\n\n\nLoad data from the .rds file you created in Exercise 2. Have a guess at what the function is called.\n\n\ndiabetes_glucose &lt;- read_rds('../out/diabetes_glucose.rds')",
     "crumbs": [
       "Course Material",
       "Solutions",
@@ -622,7 +870,7 @@
     "href": "solutions/solution3.html#plotting---part-3-pca",
     "title": "Exercise 3 - Solutions: Exploratory Data Analysis (EDA)",
     "section": "Plotting - Part 3: PCA",
-    "text": "Plotting - Part 3: PCA\nFor this part we will use a tutorial to make a principal component analysis (PCA): https://cran.r-project.org/web/packages/ggfortify/vignettes/plot_pca.html. First, we perform some reprocessing to get the data in the right format.\n\nHave a look at your diabetes data set. Can you use all the variables to perform PCA? Subset the dataset to only include the relevant variables.\n\n\n\n\n\n\n\nHint\n\n\n\n\n\nPCA can only be performed on numerical values. Extract these (except ID) from the dataset. It is up to you to decide whether to include the OGTT measurements. If you include them, unnest the data and convert it to wide format using pivot_wider, ensuring only glucose measurements (not time points) are included as variables in the PCA.\n\n\n\nExtract the numerical columns, excluding the OGTT measurements.\n\nnumerical_columns &lt;- sapply(diabetes_glucose, is.numeric)\nnumerical_columns['ID'] &lt;- FALSE\ndiabetes_glucose_numerical &lt;- diabetes_glucose[numerical_columns]\nhead(diabetes_glucose_numerical)\n\nExtract the numerical columns, including the OGTT measurements.\n\ndiabetes_glucose_unnest_wide &lt;- diabetes_glucose %&gt;% \n  unnest(OGTT) %&gt;% \n  pivot_wider(names_from = Measurement, \n              values_from = `Glucose (mmol/L)`, \n              names_prefix = \"Measurement_\"\n              )\n\nnumerical_columns &lt;- sapply(diabetes_glucose_unnest_wide, is.numeric)\nnumerical_columns['ID'] &lt;- FALSE\ndiabetes_glucose_numerical &lt;- diabetes_glucose_unnest_wide[numerical_columns]\n\nhead(diabetes_glucose_numerical)\n\n# A tibble: 6 × 8\n    Age BloodPressure GeneticRisk   BMI PhysicalActivity Measurement_0\n  &lt;dbl&gt;         &lt;dbl&gt;       &lt;dbl&gt; &lt;dbl&gt;            &lt;dbl&gt;         &lt;dbl&gt;\n1    34            84       0.619  24.7               93          6.65\n2    25            74       0.591  22.5              102          4.49\n3    50            80       0.178  34.5               98         12.9 \n4    27            60       0.206  26.3               82          5.76\n5    35            84       0.286  35                 58         10.8 \n6    31            78       1.22   43.3               59         11.1 \n# ℹ 2 more variables: Measurement_60 &lt;dbl&gt;, Measurement_120 &lt;dbl&gt;\n\n\n\nPCA cannot handle NA’s in the dataset. Remove all rows with NA in any column. Perform this operation on both the original dataset (with all columns) and the numerical subset you created in Exercise 13.\n\n\ndiabetes_glucose_numerical_remove_NA &lt;- drop_na(diabetes_glucose_numerical)\ndiabetes_glucose_remove_NA &lt;- drop_na(diabetes_glucose, any_of(colnames(diabetes_glucose_numerical)))\n\n\nPerform the Plotting PCA (Principal Component Analysis) part of the tutorial on your diabetes data. Think about which variables to color by.\n\n\n\n\n\n\n\nHint\n\n\n\n\n\n\nRemember to install and load the ggfortify package.\nNotice how you can use the arguments color and colour interchangeably.\n\n\n\n\n\nlibrary(ggfortify)\n\npca_res &lt;- prcomp(diabetes_glucose_numerical_remove_NA, scale. = TRUE)\n\nautoplot(pca_res, data = diabetes_glucose_remove_NA, color = \"Diabetes\")\n\n\n\n\n\n\n\n\n\nautoplot(pca_res, data = diabetes_glucose_remove_NA, colour = 'Diabetes', label = TRUE, label.size = 3)\n\n\n\n\n\n\n\n\n\nautoplot(pca_res, data = diabetes_glucose_remove_NA, colour = 'Diabetes', shape = FALSE, label.size = 3)\n\n\n\n\n\n\n\n\n\nautoplot(pca_res, data = diabetes_glucose_remove_NA, colour = 'Diabetes', loadings = TRUE)\n\n\n\n\n\n\n\n\n\nautoplot(pca_res, data = diabetes_glucose_remove_NA, colour = 'Diabetes',\n         loadings = TRUE, loadings.colour = 'blue',\n         loadings.label = TRUE, loadings.label.size = 3)\n\n\n\n\n\n\n\n\n\nMake your last plot personal by adding a ggplot theme, title and whatever else you would like.\n\n\n\n\n\n\n\nTip\n\n\n\n\n\nWant to change the size of your plot:\n\nCopy-paste the plot-code to the console.\nPress Export → Copy to Clipboard…\nDrag the plot in the bottom-right corner to adjust the size.\nNote down the width and the height and write the values to the width and height arguments of the ggsave function.\n\n\n\n\n\nautoplot(pca_res, data = diabetes_glucose_remove_NA, colour = \"Diabetes\",\n         loadings = TRUE, loadings.colour = \"grey30\", loadings.label.colour = \"black\",\n         loadings.label = TRUE, loadings.label.size = 3.5) + \n  theme_minimal() + \n  labs(title = \"PCA of Diabetes Dataset\")\n\n\n\n\n\n\n\n# ggsave('../figures/PCA_diabetes.png', width = 7, height = 5)\n\n\nCalculate the variance explained by each of the PC’s using the following function.\n\n\\[\n\\text{Variance Explained} = \\frac{\\text{sdev}^2}{\\sum \\text{sdev}^2} \\times 100\n\\]\n\n\n\n\n\n\nHint\n\n\n\n\n\nAccess the standard deviation from the PCA object like this: pca_res$sdev.\n\n\n\n\nvariance_explained &lt;- ((pca_res$sdev^2) / sum(pca_res$sdev^2)) * 100\n\n\nMake two-column-data-frame with names of the PC’s in one column and the variance explained in the other column.\n\n\ndf_variance_explained &lt;- tibble(PC = c(paste0('PC', 1:length(variance_explained))),\n                                variance_explained = variance_explained)\n\ndf_variance_explained\n\n# A tibble: 8 × 2\n  PC    variance_explained\n  &lt;chr&gt;              &lt;dbl&gt;\n1 PC1              47.8   \n2 PC2              15.5   \n3 PC3              11.6   \n4 PC4               8.45  \n5 PC5               7.51  \n6 PC6               5.14  \n7 PC7               4.02  \n8 PC8               0.0897\n\n\n\nUse the data frame you just made to create a column plot of the variances explained.\n\n\ndf_variance_explained %&gt;% \n  ggplot(aes(x = PC, \n             y = variance_explained))+ \n  geom_col() + \n  labs(title = \"Varinace explained for each PC\", \n       y = \"Variance Explained\")\n\n\n\n\n\n\n\n\n\nRender you document and review the html file.",
+    "text": "Plotting - Part 3: PCA\nFor this part we will use a tutorial to make a principal component analysis (PCA): https://cran.r-project.org/web/packages/ggfortify/vignettes/plot_pca.html. First, we perform some reprocessing to get the data in the right format.\n\nHave a look at your diabetes data set. Can you use all the variables to perform PCA? Subset the dataset to only include the relevant variables.\n\n\n\n\n\n\n\nHint\n\n\n\n\n\nPCA can only be performed on numerical values. Extract these (except ID) from the dataset. It is up to you to decide whether to include the OGTT measurements. If you include them, unnest the data and convert it to wide format using pivot_wider, ensuring only glucose measurements (not time points) are included as variables in the PCA.\n\n\n\nExtract the numerical columns, excluding the OGTT measurements.\n\nnumerical_columns &lt;- sapply(diabetes_glucose, is.numeric)\nnumerical_columns['ID'] &lt;- FALSE\ndiabetes_glucose_numerical &lt;- diabetes_glucose[numerical_columns]\nhead(diabetes_glucose_numerical)\n\nExtract the numerical columns, including the OGTT measurements.\n\ndiabetes_glucose_unnest_wide &lt;- diabetes_glucose %&gt;% \n  unnest(OGTT) %&gt;% \n  pivot_wider(names_from = Measurement, \n              values_from = `Glucose (mmol/L)`, \n              names_prefix = \"Measurement_\"\n              )\n\nnumerical_columns &lt;- sapply(diabetes_glucose_unnest_wide, is.numeric)\nnumerical_columns['ID'] &lt;- FALSE\ndiabetes_glucose_numerical &lt;- diabetes_glucose_unnest_wide[numerical_columns]\n\nhead(diabetes_glucose_numerical)\n\n# A tibble: 6 × 8\n    Age BloodPressure GeneticRisk   BMI PhysicalActivity Measurement_0\n  &lt;dbl&gt;         &lt;dbl&gt;       &lt;dbl&gt; &lt;dbl&gt;            &lt;dbl&gt;         &lt;dbl&gt;\n1    34            84       0.619  24.7               93          6.65\n2    25            74       0.591  22.5              102          4.49\n3    50            80       0.178  34.5               98         12.9 \n4    27            60       0.206  26.3               82          5.76\n5    35            84       0.286  35                 58         10.8 \n6    31            78       1.22   43.3               59         11.1 \n# ℹ 2 more variables: Measurement_60 &lt;dbl&gt;, Measurement_120 &lt;dbl&gt;\n\n\n\nPCA cannot handle NA’s in the dataset. Remove all rows with NA in any column. Perform this operation on both the original dataset (with all columns) and the numerical subset you created in Exercise 13.\n\n\ndiabetes_glucose_numerical_remove_NA &lt;- drop_na(diabetes_glucose_numerical)\ndiabetes_glucose_remove_NA &lt;- drop_na(diabetes_glucose, any_of(colnames(diabetes_glucose_numerical)))\n\n\nPerform the Plotting PCA (Principal Component Analysis) part of the tutorial on your diabetes data. Think about which variables to color by.\n\n\n\n\n\n\n\nHint\n\n\n\n\n\n\nRemember to install and load the ggfortify package.\nNotice how you can use the arguments color and colour interchangeably.\n\n\n\n\n\nlibrary(ggfortify)\n\nWarning: pakke 'ggfortify' blev bygget under R version 4.2.3\n\npca_res &lt;- prcomp(diabetes_glucose_numerical_remove_NA, scale. = TRUE)\n\nautoplot(pca_res, data = diabetes_glucose_remove_NA, color = \"Diabetes\")\n\n\n\n\n\n\n\n\n\nautoplot(pca_res, data = diabetes_glucose_remove_NA, colour = 'Diabetes', label = TRUE, label.size = 3)\n\n\n\n\n\n\n\n\n\nautoplot(pca_res, data = diabetes_glucose_remove_NA, colour = 'Diabetes', shape = FALSE, label.size = 3)\n\n\n\n\n\n\n\n\n\nautoplot(pca_res, data = diabetes_glucose_remove_NA, colour = 'Diabetes', loadings = TRUE)\n\n\n\n\n\n\n\n\n\nautoplot(pca_res, data = diabetes_glucose_remove_NA, colour = 'Diabetes',\n         loadings = TRUE, loadings.colour = 'blue',\n         loadings.label = TRUE, loadings.label.size = 3)\n\n\n\n\n\n\n\n\n\nMake your last plot personal by adding a ggplot theme, title and whatever else you would like.\n\n\n\n\n\n\n\nTip\n\n\n\n\n\nWant to change the size of your plot:\n\nCopy-paste the plot-code to the console.\nPress Export → Copy to Clipboard…\nDrag the plot in the bottom-right corner to adjust the size.\nNote down the width and the height and write the values to the width and height arguments of the ggsave function.\n\n\n\n\n\nautoplot(pca_res, data = diabetes_glucose_remove_NA, colour = \"Diabetes\",\n         loadings = TRUE, loadings.colour = \"grey30\", loadings.label.colour = \"black\",\n         loadings.label = TRUE, loadings.label.size = 3.5) + \n  theme_minimal() + \n  labs(title = \"PCA of Diabetes Dataset\")\n\n\n\n\n\n\n\n# ggsave('../figures/PCA_diabetes.png', width = 7, height = 5)\n\n\nCalculate the variance explained by each of the PC’s using the following function.\n\n\\[\n\\text{Variance Explained} = \\frac{\\text{sdev}^2}{\\sum \\text{sdev}^2} \\times 100\n\\]\n\n\n\n\n\n\nHint\n\n\n\n\n\nAccess the standard deviation from the PCA object like this: pca_res$sdev.\n\n\n\n\nvariance_explained &lt;- ((pca_res$sdev^2) / sum(pca_res$sdev^2)) * 100\n\n\nMake two-column-data-frame with names of the PC’s in one column and the variance explained in the other column.\n\n\ndf_variance_explained &lt;- tibble(PC = c(paste0('PC', 1:length(variance_explained))),\n                                variance_explained = variance_explained)\n\ndf_variance_explained\n\n# A tibble: 8 × 2\n  PC    variance_explained\n  &lt;chr&gt;              &lt;dbl&gt;\n1 PC1              47.8   \n2 PC2              15.5   \n3 PC3              11.6   \n4 PC4               8.45  \n5 PC5               7.51  \n6 PC6               5.14  \n7 PC7               4.02  \n8 PC8               0.0897\n\n\n\nUse the data frame you just made to create a column plot of the variances explained.\n\n\ndf_variance_explained %&gt;% \n  ggplot(aes(x = PC, \n             y = variance_explained))+ \n  geom_col() + \n  labs(title = \"Varinace explained for each PC\", \n       y = \"Variance Explained\")\n\n\n\n\n\n\n\n\n\nRender you document and review the html file.",
     "crumbs": [
       "Course Material",
       "Solutions",
@@ -639,219 +887,6 @@
       "Course Material",
       "Solutions",
       "Exercise 4, Function - Solution"
-    ]
-  },
-  {
-    "objectID": "slides/Quarto_example.html",
-    "href": "slides/Quarto_example.html",
-    "title": "R for Data Science - How to Quarto",
-    "section": "",
-    "text": "library(tidyverse)\nlibrary(readxl)"
-  },
-  {
-    "objectID": "slides/Quarto_example.html#load-packages",
-    "href": "slides/Quarto_example.html#load-packages",
-    "title": "R for Data Science - How to Quarto",
-    "section": "",
-    "text": "library(tidyverse)\nlibrary(readxl)"
-  },
-  {
-    "objectID": "slides/Quarto_example.html#load-data",
-    "href": "slides/Quarto_example.html#load-data",
-    "title": "R for Data Science - How to Quarto",
-    "section": "Load Data",
-    "text": "Load Data\n\ndiabetes &lt;- read_excel('~/Desktop/DataLab/R4DataScience/data/diabetes_clinical_toy_messy.xlsx')"
-  },
-  {
-    "objectID": "slides/Quarto_example.html#inspect-data",
-    "href": "slides/Quarto_example.html#inspect-data",
-    "title": "R for Data Science - How to Quarto",
-    "section": "Inspect Data",
-    "text": "Inspect Data\nCheck dimensions of data\n\ndim(diabetes)\n\n[1] 532   9\n\n\nCheck structure of data\n\nstr(diabetes)\n\ntibble [532 × 9] (S3: tbl_df/tbl/data.frame)\n $ ID              : num [1:532] 9046 51676 31112 60182 1665 ...\n $ Sex             : chr [1:532] \"Male\" \"Male\" \"Male\" \"Male\" ...\n $ Age             : num [1:532] 34 25 30 50 27 35 31 52 54 41 ...\n $ BloodPressure   : num [1:532] 84 74 0 80 60 84 78 86 78 90 ...\n $ GeneticRisk     : num [1:532] 0.619 0.591 0.839 0.178 0.206 ...\n $ BMI             : num [1:532] 24.7 22.5 32.3 34.5 26.3 35 43.3 33.3 35.2 39.8 ...\n $ PhysicalActivity: num [1:532] 93 102 75 98 82 58 59 58 74 67 ...\n $ Smoker          : chr [1:532] \"Unknown\" \"Unknown\" \"Former\" \"Unknown\" ...\n $ Diabetes        : num [1:532] 0 0 1 1 0 1 1 1 1 1 ...\n\n\nCheck for NA’s in each column\n\ncolSums(is.na(diabetes))\n\n              ID              Sex              Age    BloodPressure \n               0                0                0                0 \n     GeneticRisk              BMI PhysicalActivity           Smoker \n               5                0                0                0 \n        Diabetes \n               0"
-  },
-  {
-    "objectID": "slides/Quarto_example.html#exploratory-data-analysis",
-    "href": "slides/Quarto_example.html#exploratory-data-analysis",
-    "title": "R for Data Science - How to Quarto",
-    "section": "Exploratory Data Analysis",
-    "text": "Exploratory Data Analysis\nPlot distribution of BMI\n\ndiabetes %&gt;% \n  ggplot(aes(x = BMI)) + \n  geom_histogram(bins = 10)"
-  },
-  {
-    "objectID": "presentations/presentation4_functions.html",
-    "href": "presentations/presentation4_functions.html",
-    "title": "Presentation 4, Functions",
-    "section": "",
-    "text": "Here is the solution4_functions.R showed:\n\n\n# Packages should be loaded in the main script.\n\n# Function to calculate BMI\ncalculate_bmi &lt;- function(weight_kg, height_m){\n  \n  bmi &lt;- weight_kg/height_m^2\n  \n  return(bmi)\n  \n}\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n# Function to calculate BMI, with control points and error checking. \ncalculate_bmi_2 &lt;- function(weight_kg, height_m) {\n  \n  # Check if weight and height are numeric\n  if (!is.numeric(weight_kg) | !is.numeric(height_m)) {\n    stop(\"Both weight_kg and height_m must be numeric values.\")\n  }\n  \n  # Check if weight and height are positive\n  if (weight_kg &lt;= 0) {\n    stop(\"Weight must be a positive value.\")\n  }\n  if (height_m &lt;= 0) {\n    stop(\"Height must be a positive value.\")\n  }\n  \n  # Calculate BMI\n  bmi &lt;- weight_kg / height_m^2\n  \n  # Check if BMI is within a reasonable range\n  if (bmi &lt; 10 | bmi &gt; 60) {\n    warning(\"The calculated BMI is outside the normal range. Please check your input values.\")\n  }\n  \n  return(bmi)\n  \n}",
-    "crumbs": [
-      "Course Material",
-      "Presentations",
-      "Presentation 4, Functions: Scripting in R"
-    ]
-  },
-  {
-    "objectID": "presentations/presentation3.html",
-    "href": "presentations/presentation3.html",
-    "title": "Presentation 3 - Exploratory Data Analysis (EDA)",
-    "section": "",
-    "text": "We will not be going through any presentation for this part.\nFor Exercise 3-13 we refer to the FromExceltoR material: https://center-for-health-data-science.github.io/FromExceltoR/Presentations/presentation3.html.\nFor Exercise 14-19 we refer to the this tutorial about Principal Component Analysis (PCA): https://cran.r-project.org/web/packages/ggfortify/vignettes/plot_pca.html.\nFor theory about PCA have a look at this video: https://www.youtube.com/watch?v=FgakZw6K1QQ&t=799s. NB: This video structures samples/mice as features and genes as observations, where as the usual structure is genes as features and samples/mice as observations.",
-    "crumbs": [
-      "Course Material",
-      "Presentations",
-      "Presentation 3: Exploratory Data Analysis"
-    ]
-  },
-  {
-    "objectID": "presentations/presentation5.html",
-    "href": "presentations/presentation5.html",
-    "title": "Presentation 5: Modelling in R",
-    "section": "",
-    "text": "library(tidyverse)\n\n── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──\n✔ dplyr     1.1.4     ✔ readr     2.1.5\n✔ forcats   1.0.0     ✔ stringr   1.5.1\n✔ ggplot2   3.5.1     ✔ tibble    3.2.1\n✔ lubridate 1.9.3     ✔ tidyr     1.3.1\n✔ purrr     1.0.2     \n── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──\n✖ dplyr::filter() masks stats::filter()\n✖ dplyr::lag()    masks stats::lag()\nℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors\n\nlibrary(caret)\n\nIndlæser krævet pakke: lattice\n\nVedhæfter pakke: 'caret'\n\nDet følgende objekt er maskeret fra 'package:purrr':\n\n    lift"
-  },
-  {
-    "objectID": "presentations/presentation5.html#load-packages",
-    "href": "presentations/presentation5.html#load-packages",
-    "title": "Presentation 5: Modelling in R",
-    "section": "",
-    "text": "library(tidyverse)\n\n── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──\n✔ dplyr     1.1.4     ✔ readr     2.1.5\n✔ forcats   1.0.0     ✔ stringr   1.5.1\n✔ ggplot2   3.5.1     ✔ tibble    3.2.1\n✔ lubridate 1.9.3     ✔ tidyr     1.3.1\n✔ purrr     1.0.2     \n── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──\n✖ dplyr::filter() masks stats::filter()\n✖ dplyr::lag()    masks stats::lag()\nℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors\n\nlibrary(caret)\n\nIndlæser krævet pakke: lattice\n\nVedhæfter pakke: 'caret'\n\nDet følgende objekt er maskeret fra 'package:purrr':\n\n    lift"
-  },
-  {
-    "objectID": "presentations/presentation5.html#load-data",
-    "href": "presentations/presentation5.html#load-data",
-    "title": "Presentation 5: Modelling in R",
-    "section": "Load data",
-    "text": "Load data\n\ndf_sales &lt;- readxl::read_xlsx('../data/df_sales_1.xlsx')\n# data &lt;- mtcars"
-  },
-  {
-    "objectID": "presentations/presentation5.html#linear-regression",
-    "href": "presentations/presentation5.html#linear-regression",
-    "title": "Presentation 5: Modelling in R",
-    "section": "Linear Regression",
-    "text": "Linear Regression\n\nSplit Data into Traning and Test Set\nCreate an 80/20 train-test split using the createDataPartition function.\n\n# Set seed to ensure reproducibility\nset.seed(123)  \n\nsplit &lt;- createDataPartition(df_sales$ID, p = 0.8, list = FALSE)\ntrain_data &lt;- df_sales[split, ]\ntest_data &lt;- df_sales[-split, ]\n\n\n\nTrain the Linear Regression Model\n\n# Fit a linear regression model\nmodel &lt;- lm(sales_2023 ~ sales_2020 + Age, data = df_sales)  # Predict mpg using weight (wt) and horsepower (hp)\n\n# View model summary\nsummary(model)\n\n\nCall:\nlm(formula = sales_2023 ~ sales_2020 + Age, data = df_sales)\n\nResiduals:\n    Min      1Q  Median      3Q     Max \n-55.606 -17.731   4.598  18.331  50.456 \n\nCoefficients:\n            Estimate Std. Error t value Pr(&gt;|t|)    \n(Intercept) 50.66793   62.42929   0.812    0.448    \nsales_2020   1.00656    0.09643  10.438 4.53e-05 ***\nAge         -1.34372    2.12363  -0.633    0.550    \n---\nSignif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1\n\nResidual standard error: 35.77 on 6 degrees of freedom\n  (1 observation deleted due to missingness)\nMultiple R-squared:  0.9498,    Adjusted R-squared:  0.933 \nF-statistic:  56.7 on 2 and 6 DF,  p-value: 0.0001269"
-  },
-  {
-    "objectID": "presentations/presentation5.html#regression-with-categorical-features",
-    "href": "presentations/presentation5.html#regression-with-categorical-features",
-    "title": "Presentation 5: Modelling in R",
-    "section": "Regression with categorical features",
-    "text": "Regression with categorical features"
-  },
-  {
-    "objectID": "presentations/presentation5.html#decision-tree",
-    "href": "presentations/presentation5.html#decision-tree",
-    "title": "Presentation 5: Modelling in R",
-    "section": "Decision tree",
-    "text": "Decision tree"
-  },
-  {
-    "objectID": "presentations/presentation5.html#clustering-k-means",
-    "href": "presentations/presentation5.html#clustering-k-means",
-    "title": "Presentation 5: Modelling in R",
-    "section": "Clustering: K-means",
-    "text": "Clustering: K-means"
-  },
-  {
-    "objectID": "exercises/exercise1.html",
-    "href": "exercises/exercise1.html",
-    "title": "Presentation 1: Base R and Tidyverse / Data Clean-up and Wrangling",
-    "section": "",
-    "text": "Load packages.\nLoad in the diabetes_clinical_toy_messy.xlsx data set.",
-    "crumbs": [
-      "Course Material",
-      "Exercises",
-      "Exercise 1: Data Clean Up"
-    ]
-  },
-  {
-    "objectID": "exercises/exercise1.html#getting-started",
-    "href": "exercises/exercise1.html#getting-started",
-    "title": "Presentation 1: Base R and Tidyverse / Data Clean-up and Wrangling",
-    "section": "",
-    "text": "Load packages.\nLoad in the diabetes_clinical_toy_messy.xlsx data set.",
-    "crumbs": [
-      "Course Material",
-      "Exercises",
-      "Exercise 1: Data Clean Up"
-    ]
-  },
-  {
-    "objectID": "exercises/exercise1.html#explore-the-data",
-    "href": "exercises/exercise1.html#explore-the-data",
-    "title": "Presentation 1: Base R and Tidyverse / Data Clean-up and Wrangling",
-    "section": "Explore the data",
-    "text": "Explore the data\nUse can you either base R or/and tidyverse to solve the exercises.\n\nHow many missing values (NA’s) are there in each column.\nCheck the distribution of each of the variables. Consider that they are of different classes. Do any of the distributions seam odd to you?",
-    "crumbs": [
-      "Course Material",
-      "Exercises",
-      "Exercise 1: Data Clean Up"
-    ]
-  },
-  {
-    "objectID": "exercises/exercise1.html#clean-up-the-data",
-    "href": "exercises/exercise1.html#clean-up-the-data",
-    "title": "Presentation 1: Base R and Tidyverse / Data Clean-up and Wrangling",
-    "section": "Clean up the data",
-    "text": "Clean up the data\nNow that we have had a look at the data, it is time to correct fixable mistakes and remove observations that cannot be corrected.\nConsider the following:\n\nWhat should we do with the rows that contain NAs? Do we remove them or keep them?\nWhich mistakes in the data can be corrected, and which cannot?\nAre there zeros in the data? Are they true zeros or errors?\nDo you want to change any of the classes of the variables?\n\n\nClean the data according to your considerations.\n\n\n\n\n\n\n\nHint\n\n\n\n\n\nHave a look at BloodPressure, BMI, Sex, and Diabetes.",
-    "crumbs": [
-      "Course Material",
-      "Exercises",
-      "Exercise 1: Data Clean Up"
-    ]
-  },
-  {
-    "objectID": "exercises/exercise1.html#meta-data",
-    "href": "exercises/exercise1.html#meta-data",
-    "title": "Presentation 1: Base R and Tidyverse / Data Clean-up and Wrangling",
-    "section": "Meta Data",
-    "text": "Meta Data\n\nPerform step 2-5 from above and do data exploration and cleaning workflow for the diabetes_meta_toy_messy.xlsx data set.",
-    "crumbs": [
-      "Course Material",
-      "Exercises",
-      "Exercise 1: Data Clean Up"
-    ]
-  },
-  {
-    "objectID": "exercises/exercise1.html#join-the-datasets",
-    "href": "exercises/exercise1.html#join-the-datasets",
-    "title": "Presentation 1: Base R and Tidyverse / Data Clean-up and Wrangling",
-    "section": "Join the datasets",
-    "text": "Join the datasets\n\nConsider what variable the datasets should be joined on.\n\n\n\n\n\n\n\nHint\n\n\n\n\n\nThe joining variable must be the same type in both datasets.\n\n\n\n\nJoin the datasets by the variable you selected above.\nHow many rows does the joined dataset have? Explain why.\n\n\n\n\n\n\n\nHint\n\n\n\n\n\nBecause we used left_join, only the IDs that are in diabetes_clinical_clean are kept.\n\n\n\n\nExport the joined dataset. Think about which directory you want to save the file in.",
-    "crumbs": [
-      "Course Material",
-      "Exercises",
-      "Exercise 1: Data Clean Up"
-    ]
-  },
-  {
-    "objectID": "data/data.html",
-    "href": "data/data.html",
-    "title": "Data",
-    "section": "",
-    "text": "DOWNLOAD DATA  \n\nAfter download, unzip the data folder and place it somewhere you can find it again.",
-    "crumbs": [
-      "Course Material",
-      "Data️"
-    ]
-  },
-  {
-    "objectID": "data/data.html#download-data",
-    "href": "data/data.html#download-data",
-    "title": "Data",
-    "section": "",
-    "text": "DOWNLOAD DATA  \n\nAfter download, unzip the data folder and place it somewhere you can find it again.",
-    "crumbs": [
-      "Course Material",
-      "Data️"
-    ]
-  },
-  {
-    "objectID": "data/data.html#download-presentations",
-    "href": "data/data.html#download-presentations",
-    "title": "Data",
-    "section": "Download presentations",
-    "text": "Download presentations\nIt can be nice to follow along the presentation scripts as we go through them.\n\n  DOWNLOAD PRESENTATIONS",
-    "crumbs": [
-      "Course Material",
-      "Data️"
     ]
   }
 ]
