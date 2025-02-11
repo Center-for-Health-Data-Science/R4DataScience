@@ -1,0 +1,43 @@
+---
+title: "Exercise 5 - Linear regression"
+format: html
+project:
+ type: website
+ output-dir: ../docs
+---
+
+## Introduction
+
+In this exercise you will fit and interpret a linear regression model.
+
+### Getting started
+
+1. Load packages
+
+2. Load the data `boston.csv` 
+
+This dataset describes conditions surrounding the Boston housing market in the 1970s. Each row describes a zone in the Boston area (so there is more than one house in each row).
+
+The columns are:
+
+    crim - per capita crime rate
+    indus - proportion of non-retail businesses
+    nox - Nitrogen oxides concentration (air pollution)
+    rm - average number of rooms
+    neighborhood - the type of neighborhood the zone is in
+    medv - median value per house in 1000s
+
+
+### Explore the data
+
+3. Does the datatype of each column fit to it what it describes? Do you need to change any data types?
+
+
+### Making a model
+
+4. Split the dataset into test and training data.
+
+5. Fit a model of how well the number of rooms (`rm`), crime rate (`crim`) and neighborhood type (`neighborhood`) predict the value of the houses (`medv`).
+
+6. Describe what information you get from the model summary. 
+

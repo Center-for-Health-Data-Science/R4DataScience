@@ -270,6 +270,12 @@ window.Quarto = {
  <span class="menu-text">Exercise 2: Exploratory Data Analysis</span></a>
   </div>
 </li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../exercises/exercise5.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Exercise 5: Linear Regression</span></a>
+  </div>
+</li>
       </ul>
   </li>
         <li class="sidebar-item sidebar-item-section">
@@ -309,6 +315,12 @@ window.Quarto = {
   <div class="sidebar-item-container"> 
   <a href="../solutions/solution4_functions.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Exercise 4, Function - Solution</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../solutions/solution5.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Exercise 5 - Solution</span></a>
   </div>
 </li>
       </ul>
@@ -594,7 +606,7 @@ F-statistic: 431.5 on 1 and 73 DF,  p-value: &lt; 2.2e-16</code></pre>
 </div>
 </div>
 </div>
-<p>Not too bad! Formally we usually calculate the mean square error (mse) between predictions and the known true values.</p>
+<p>Not too bad! We usually calculate the mean square error (mse) between predictions and the known true values to numerically evaluate regression performance:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mse</span>(pred<span class="sc">$</span>real,pred<span class="sc">$</span>pred)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -607,6 +619,132 @@ F-statistic: 431.5 on 1 and 73 DF,  p-value: &lt; 2.2e-16</code></pre>
 <section id="regression-with-categorical-features" class="level2">
 <h2 class="anchored" data-anchor-id="regression-with-categorical-features">Regression with categorical features</h2>
 <p>Now that we know how to make a simple linear model, how can we include categorical variables and what is the interpretation of their coefficients? To investigate this we will load a second version of the dataset that contains an additional variable: Exercise level.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>df_smoke <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">'../data/smoking_cat.csv'</span>)</span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(df_smoke)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  daily_cigarettes life exercise
+1                7   76        0
+2               11   73        0
+3               27   72        1
+4               23   71        0
+5               13   74        0
+6               11   76        1</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="fu">distinct</span>(df_smoke, exercise)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  exercise
+1        0
+2        1
+3        2</code></pre>
+</div>
+</div>
+<p>Alright, we have three different levels of exercise. They are: low == 0, moderate == 1 and high == 2. Before we go on, let’s have a look if our data is represented correctly:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(df_smoke)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>'data.frame':   100 obs. of  3 variables:
+ $ daily_cigarettes: int  7 11 27 23 13 11 20 6 23 32 ...
+ $ life            : int  76 73 72 71 74 76 71 76 72 70 ...
+ $ exercise        : int  0 0 1 0 0 1 0 1 1 2 ...</code></pre>
+</div>
+</div>
+<p>We can see that the <code>exercise</code> column is interpreted as an integer. However, it is actually a category! In R categorical variables are known as <code>factors</code> and have their own datatype. Let’s convert exercise to a factor:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>df_smoke<span class="sc">$</span>exercise <span class="ot">&lt;-</span> <span class="fu">as.factor</span>(df_smoke<span class="sc">$</span>exercise)</span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(df_smoke)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>'data.frame':   100 obs. of  3 variables:
+ $ daily_cigarettes: int  7 11 27 23 13 11 20 6 23 32 ...
+ $ life            : int  76 73 72 71 74 76 71 76 72 70 ...
+ $ exercise        : Factor w/ 3 levels "0","1","2": 1 1 2 1 1 2 1 2 2 3 ...</code></pre>
+</div>
+</div>
+<p>As before, before fitting the model we’ll split up the data in train and test. Since we’re using the same seed we should get the same observations, i.e.&nbsp;rows into training and test as above.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Set seed to ensure reproducibility</span></span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)  </span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a><span class="co">#add an ID column to keep track of observations</span></span>
+<span id="cb34-5"><a href="#cb34-5" aria-hidden="true" tabindex="-1"></a>df_smoke<span class="sc">$</span>ID <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(df_smoke)</span>
+<span id="cb34-6"><a href="#cb34-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-7"><a href="#cb34-7" aria-hidden="true" tabindex="-1"></a>train <span class="ot">&lt;-</span> df_smoke <span class="sc">%&gt;%</span> <span class="fu">sample_frac</span>(.<span class="dv">75</span>)</span>
+<span id="cb34-8"><a href="#cb34-8" aria-hidden="true" tabindex="-1"></a>test  <span class="ot">&lt;-</span> <span class="fu">anti_join</span>(df_smoke, train, <span class="at">by =</span> <span class="st">'ID'</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>And now we extend our previous model formula with the new predictor:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>model2 <span class="ot">&lt;-</span> <span class="fu">lm</span>(life <span class="sc">~</span> daily_cigarettes <span class="sc">+</span> exercise, <span class="at">data =</span> train)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(model2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = life ~ daily_cigarettes + exercise, data = train)
+
+Residuals:
+     Min       1Q   Median       3Q      Max 
+-1.58295 -0.53972 -0.01596  0.53773  1.70257 
+
+Coefficients:
+                  Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)      77.582954   0.234237 331.216  &lt; 2e-16 ***
+daily_cigarettes -0.285521   0.009401 -30.372  &lt; 2e-16 ***
+exercise1         1.095475   0.249402   4.392 3.84e-05 ***
+exercise2         2.372227   0.260427   9.109 1.48e-13 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 0.8578 on 71 degrees of freedom
+Multiple R-squared:  0.9338,    Adjusted R-squared:  0.931 
+F-statistic: 333.7 on 3 and 71 DF,  p-value: &lt; 2.2e-16</code></pre>
+</div>
+</div>
+<p>When we check the summary we see that it has two additional coefficients, <code>exercise1</code> and <code>exercise2</code>. What are they?</p>
+<p>Because <code>exercise</code> is a categorical variable it is dummy coded. That means our model formula mathematically looks something like this:</p>
+<p><span class="math display">\[y=b_0+b_1*x_1 + b_2 *x_2 + b_3*x_3\]</span></p>
+<p>with:</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th style="text-align: center;">Exercise level</th>
+<th style="text-align: center;"><span class="math inline">\(x_2\)</span></th>
+<th style="text-align: right;"><span class="math inline">\(x_3\)</span></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">0</td>
+<td style="text-align: center;">0</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">1</td>
+<td style="text-align: center;">1</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">2</td>
+<td style="text-align: center;">0</td>
+<td style="text-align: right;">1</td>
+</tr>
+</tbody>
+</table>
+<p>And for our coefficients it means:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a>model2<span class="sc">$</span>coefficients</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>     (Intercept) daily_cigarettes        exercise1        exercise2 
+      77.5829543       -0.2855213        1.0954747        2.3722266 </code></pre>
+</div>
+</div>
+<ul>
+<li><p><code>Intercept</code> == <span class="math inline">\(b_0\)</span>: The life expectancy at 0 cigarettes and exercise level 0</p></li>
+<li><p><code>daily_cigerettes</code> == <span class="math inline">\(b_1\)</span>: The change in life expectancy for each additional cigarette.</p></li>
+<li><p><code>exercise1</code> == <span class="math inline">\(b_2\)</span>: The change in life expectancy if the exercise level is 1 (assuming the number of cigarettes stays constant).</p></li>
+<li><p><code>exercise2</code> == <span class="math inline">\(b_3\)</span>: The change in life expectancy if the exercise level is 2 (assuming the number of cigarettes stays constant).</p></li>
+</ul>
+<p>Why is there no coefficient for exercise level 0 (low amount of exercise)? This case is covered in the Intercept. It is referred to as the <strong>reference level</strong> of the categorical variable. You can change which level is regarded as the reference and the effect of having this level will always be modelled in the intercept.</p>
 </section>
 <section id="decision-tree" class="level2">
 <h2 class="anchored" data-anchor-id="decision-tree">Decision tree</h2>

@@ -1,0 +1,51 @@
+---
+title: "Exercise 5 - Solutions: Linear Regression"
+format: html
+project:
+  type: website
+  output-dir: ../docs
+---
+
+1. Load packages
+
+```{r}
+library(tidyverse)
+library(ModelMetrics)
+```
+
+
+2. Load the data `boston.csv` 
+
+```{r}
+df <- read.csv('../data/boston.csv')
+head(df)
+```
+
+3. `Neighborhood` is a categorical variable. We could make it a factor but it will also work as a character column (in the case of using `lm`). 
+
+4. Split the dataset into test and training data.
+
+```{r}
+# Set seed to ensure reproducibility
+set.seed(123)  
+
+#add an ID column to keep track of observations
+df$ID <- 1:nrow(df)
+
+train <- df %>% sample_frac(.75)
+test  <- anti_join(df, train, by = 'ID') 
+```
+
+5. Fit the model
+
+```{r}
+model <- lm(medv ~ rm + crim + neighborhood, data = train)
+```
+
+```{r}
+summary(model)
+```
+
+6. `rm` and `crim` have a significant influence on the house price. An increase in the number of rooms increases the price since the coefficient is positive, whereas an increase in crime rate reduces the price. There is a significant difference in price between Rural and Urban zones, but not between Rural and Suburban. Rural is the reference level. Lastly, houses with 0 rooms cost -25k dollar. Perhaps the predictors should be centered before fitting the model around 0 so `rm` == 0 is the average number of rooms for better interpretability. 
+
+

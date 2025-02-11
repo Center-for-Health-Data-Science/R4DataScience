@@ -47,7 +47,9 @@ website:
             text: "Exercise 1: Data Clean Up"
           - href: exercises/exercise2.qmd
             text: "Exercise 2: Exploratory Data Analysis"
-            
+          - href: exercises/exercise5.qmd
+            text: "Exercise 5: Linear Regression"
+
       - section: "Solutions"
         contents:
             - href: solutions/solution1.qmd # solutions/solution_not_up.qmd #
@@ -60,6 +62,8 @@ website:
               text: "Exercise 4 - Solution"
             - href: solutions/solution4_functions.qmd # solutions/solution_not_up.qmd #
               text: "Exercise 4, Function - Solution"
+            - href: solutions/solution5.qmd # solutions/solution_not_up.qmd #
+              text: "Exercise 5 - Solution"
 
       - section: "Cheat Sheets"
         contents:

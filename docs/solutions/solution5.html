@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Presentation 1 - Solutions: Base R and Tidyverse / Data Clean-up and Wrangling – R for Data Science</title>
+<title>Exercise 5 - Solutions: Linear Regression – R for Data Science</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -143,7 +143,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../solutions/solution1.html">Solutions</a></li><li class="breadcrumb-item"><a href="../solutions/solution1.html">Exercise 1 - Solution</a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../solutions/solution1.html">Solutions</a></li><li class="breadcrumb-item"><a href="../solutions/solution5.html">Exercise 5 - Solution</a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
     </div>
@@ -260,7 +260,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../solutions/solution1.html" class="sidebar-item-text sidebar-link active">
+  <a href="../solutions/solution1.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Exercise 1 - Solution</span></a>
   </div>
 </li>
@@ -290,7 +290,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../solutions/solution5.html" class="sidebar-item-text sidebar-link">
+  <a href="../solutions/solution5.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text">Exercise 5 - Solution</span></a>
   </div>
 </li>
@@ -336,25 +336,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </nav>
 <div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        <nav id="TOC" role="doc-toc" class="toc-active">
-    <h2 id="toc-title">On this page</h2>
-   
-  <ul>
-  <li><a href="#getting-started" id="toc-getting-started" class="nav-link active" data-scroll-target="#getting-started">Getting started</a></li>
-  <li><a href="#explore-the-data" id="toc-explore-the-data" class="nav-link" data-scroll-target="#explore-the-data">Explore the data</a></li>
-  <li><a href="#clean-up-the-data" id="toc-clean-up-the-data" class="nav-link" data-scroll-target="#clean-up-the-data">Clean up the data</a></li>
-  <li><a href="#meta-data" id="toc-meta-data" class="nav-link" data-scroll-target="#meta-data">Meta Data</a></li>
-  <li><a href="#join-the-datasets" id="toc-join-the-datasets" class="nav-link" data-scroll-target="#join-the-datasets">Join the datasets</a></li>
-  </ul>
-</nav>
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
+        
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../solutions/solution1.html">Solutions</a></li><li class="breadcrumb-item"><a href="../solutions/solution1.html">Exercise 1 - Solution</a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../solutions/solution1.html">Solutions</a></li><li class="breadcrumb-item"><a href="../solutions/solution5.html">Exercise 5 - Solution</a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title">Presentation 1 - Solutions: Base R and Tidyverse / Data Clean-up and Wrangling</h1>
+<h1 class="title">Exercise 5 - Solutions: Linear Regression</h1>
 </div>
 
 
@@ -371,10 +361,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<section id="getting-started" class="level2">
-<h2 class="anchored" data-anchor-id="getting-started">Getting started</h2>
 <ol type="1">
-<li>Load packages.</li>
+<li>Load packages</li>
 </ol>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -387,358 +375,98 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="cell-output cell-output-stderr">
 <pre><code>Warning: pakke 'dplyr' blev bygget under R version 4.2.3</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(readxl)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
-<pre><code>Warning: pakke 'readxl' blev bygget under R version 4.2.3</code></pre>
+<pre><code>── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
+✔ dplyr     1.1.2     ✔ readr     2.1.4
+✔ forcats   1.0.0     ✔ stringr   1.5.0
+✔ ggplot2   3.5.1     ✔ tibble    3.2.1
+✔ lubridate 1.9.2     ✔ tidyr     1.3.0
+✔ purrr     1.0.1     
+── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
+✖ dplyr::filter() masks stats::filter()
+✖ dplyr::lag()    masks stats::lag()
+ℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ModelMetrics)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: pakke 'ModelMetrics' blev bygget under R version 4.2.3</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>
+Vedhæfter pakke: 'ModelMetrics'
+
+Det følgende objekt er maskeret fra 'package:base':
+
+    kappa</code></pre>
 </div>
 </div>
 <ol start="2" type="1">
-<li>Load in the <code>diabetes_clinical_toy_messy.xlsx</code> data set.</li>
+<li>Load the data <code>boston.csv</code></li>
 </ol>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>diabetes_clinical <span class="ot">&lt;-</span> <span class="fu">read_excel</span>(<span class="st">'../data/diabetes_clinical_toy_messy.xlsx'</span>)</span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(diabetes_clinical)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">'../data/boston.csv'</span>)</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 6 × 9
-     ID Sex      Age BloodPressure GeneticRisk   BMI PhysicalActivity Smoker 
-  &lt;dbl&gt; &lt;chr&gt;  &lt;dbl&gt;         &lt;dbl&gt;       &lt;dbl&gt; &lt;dbl&gt;            &lt;dbl&gt; &lt;chr&gt;  
-1  9046 Male      34            84       0.619  24.7               93 Unknown
-2 51676 Male      25            74       0.591  22.5              102 Unknown
-3 31112 Male      30             0       0.839  32.3               75 Former 
-4 60182 Male      50            80       0.178  34.5               98 Unknown
-5  1665 Female    27            60       0.206  26.3               82 Never  
-6 56669 Male      35            84       0.286  35                 58 Smoker 
-# ℹ 1 more variable: Diabetes &lt;dbl&gt;</code></pre>
+<pre><code>     crim indus   nox    rm medv neighborhood
+1 0.00632  2.31 0.538 6.575 24.0     Suburban
+2 0.02731  7.07 0.469 6.421 21.6        Urban
+3 0.02729  7.07 0.469 7.185 34.7        Rural
+4 0.03237  2.18 0.458 6.998 33.4        Urban
+5 0.06905  2.18 0.458 7.147 36.2     Suburban
+6 0.02985  2.18 0.458 6.430 28.7     Suburban</code></pre>
 </div>
 </div>
-</section>
-<section id="explore-the-data" class="level2">
-<h2 class="anchored" data-anchor-id="explore-the-data">Explore the data</h2>
-<p>Use can you either base R or/and tidyverse to solve the exercises.</p>
 <ol start="3" type="1">
-<li>How many missing values (NA’s) are there in each column.</li>
+<li><p><code>Neighborhood</code> is a categorical variable. We could make it a factor but it will also work as a character column (in the case of using <code>lm</code>).</p></li>
+<li><p>Split the dataset into test and training data.</p></li>
 </ol>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">colSums</span>(<span class="fu">is.na</span>(diabetes_clinical))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>              ID              Sex              Age    BloodPressure 
-               0                0                0                0 
-     GeneticRisk              BMI PhysicalActivity           Smoker 
-               5                0                0                0 
-        Diabetes 
-               0 </code></pre>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Set seed to ensure reproducibility</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)  </span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="co">#add an ID column to keep track of observations</span></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>df<span class="sc">$</span>ID <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(df)</span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>train <span class="ot">&lt;-</span> df <span class="sc">%&gt;%</span> <span class="fu">sample_frac</span>(.<span class="dv">75</span>)</span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>test  <span class="ot">&lt;-</span> <span class="fu">anti_join</span>(df, train, <span class="at">by =</span> <span class="st">'ID'</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-</div>
-<ol start="4" type="1">
-<li>Check the distribution of each of the variables. Consider that the variables are of different classes. Do any of the distributions seem odd to you?</li>
-</ol>
-<p>For the categorical variables:</p>
-<p>The <code>Sex</code> values are not consistent.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(diabetes_clinical<span class="sc">$</span>Sex)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>
-Female FEMALE   male   Male 
-   291      2      2    237 </code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(diabetes_clinical<span class="sc">$</span>Smoker)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>
- Former   Never  Smoker Unknown 
-    132     159     162      79 </code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(diabetes_clinical<span class="sc">$</span>Diabetes)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>
-  0   1 
-267 265 </code></pre>
-</div>
-</div>
-<p>For the numerical variables:</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>diabetes_clinical <span class="sc">%&gt;%</span> </span>
-<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">y =</span> Age)) <span class="sc">+</span> </span>
-<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="solution1_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid figure-img" width="672"></p>
-</figure>
-</div>
-</div>
-</div>
-<p>Odd: Some <code>BloodPressure</code> values are 0.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>diabetes_clinical <span class="sc">%&gt;%</span> </span>
-<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">y =</span> BloodPressure)) <span class="sc">+</span> </span>
-<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="solution1_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid figure-img" width="672"></p>
-</figure>
-</div>
-</div>
-</div>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>diabetes_clinical <span class="sc">%&gt;%</span> </span>
-<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">y =</span> GeneticRisk)) <span class="sc">+</span> </span>
-<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Warning: Removed 5 rows containing non-finite outside the scale range
-(`stat_boxplot()`).</code></pre>
-</div>
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="solution1_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid figure-img" width="672"></p>
-</figure>
-</div>
-</div>
-</div>
-<p>Odd: Some <code>BMI</code> values are 0.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>diabetes_clinical <span class="sc">%&gt;%</span> </span>
-<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">y =</span> BMI)) <span class="sc">+</span> </span>
-<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="solution1_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid figure-img" width="672"></p>
-</figure>
-</div>
-</div>
-</div>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>diabetes_clinical <span class="sc">%&gt;%</span> </span>
-<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">y =</span> PhysicalActivity)) <span class="sc">+</span> </span>
-<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="solution1_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid figure-img" width="672"></p>
-</figure>
-</div>
-</div>
-</div>
-</section>
-<section id="clean-up-the-data" class="level2">
-<h2 class="anchored" data-anchor-id="clean-up-the-data">Clean up the data</h2>
-<p>Now that we have had a look at the data, it is time to correct fixable mistakes and remove observations that cannot be corrected.</p>
-<p>Consider the following:</p>
-<ul>
-<li><p>What should we do with the rows that contain NA’s? Do we remove them or keep them?</p></li>
-<li><p>Which odd things in the data can we correct with confidence and which cannot?</p></li>
-<li><p>Are there zeros in the data? Are they true zeros or errors?</p></li>
-<li><p>Do you want to change any of the classes of the variables?</p></li>
-</ul>
 <ol start="5" type="1">
-<li>Clean the data according to your considerations.</li>
+<li>Fit the model</li>
 </ol>
-<div class="callout callout-style-default callout-tip callout-titled">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-Hint
-</div>
-<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
-</div>
-<div id="callout-1" class="callout-1-contents callout-collapse collapse">
-<div class="callout-body-container callout-body">
-<p>Have a look at <code>BloodPressure</code>, <code>BMI</code>, <code>Sex</code>, and <code>Diabetes</code>.</p>
-</div>
-</div>
-</div>
-<p>My considerations:</p>
-<ul>
-<li><p>When modelling, rows with NA’s in the variables we want to model should be removed as we cannot model on NAs. Since there are only NA’s in <code>GeneticRisk</code>, the rows can be left until we need to do a model with <code>GeneticRisk.</code></p></li>
-<li><p>The uppercase/lowercase mistakes in <code>Sex</code> does not influence the interpretability of the variables, so they are simply changes such that the first letter is a capital letter and the remaining letter are lowercase.</p></li>
-<li><p>There are zeros in <code>BMI</code> and <code>BloodPressure</code>. These are considered false zeros as is does not make sense that these variables have a value of 0.</p></li>
-<li><p><code>Diabetes</code> is changed to factor.</p></li>
-</ul>
-<p>Access number of rows before cleaning.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">nrow</span>(diabetes_clinical)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] 532</code></pre>
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>model <span class="ot">&lt;-</span> <span class="fu">lm</span>(medv <span class="sc">~</span> rm <span class="sc">+</span> crim <span class="sc">+</span> neighborhood, <span class="at">data =</span> train)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-</div>
-<p>Cleaning data according to considerations.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>diabetes_clinical_clean <span class="ot">&lt;-</span> diabetes_clinical <span class="sc">%&gt;%</span> </span>
-<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Sex =</span> <span class="fu">str_to_title</span>(Sex),</span>
-<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>         <span class="at">Diabetes =</span> Diabetes <span class="sc">%&gt;%</span> <span class="fu">factor</span>()) <span class="sc">%&gt;%</span> </span>
-<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(BMI <span class="sc">!=</span> <span class="dv">0</span>, BloodPressure <span class="sc">!=</span> <span class="dv">0</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<p>Check the unique sexes now.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>diabetes_clinical_clean<span class="sc">$</span>Sex <span class="sc">%&gt;%</span> <span class="fu">unique</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] "Male"   "Female"</code></pre>
-</div>
-</div>
-<p>Access number of rows after cleaning.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="fu">nrow</span>(diabetes_clinical_clean)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] 493</code></pre>
-</div>
-</div>
-</section>
-<section id="meta-data" class="level2">
-<h2 class="anchored" data-anchor-id="meta-data">Meta Data</h2>
-<ol start="6" type="1">
-<li>Perform step 2-5 from above and do data exploration and cleaning workflow for the <code>diabetes_meta_toy_messy.csv</code> data set. Use the <code>read_delim</code> function to load in the dataset.</li>
-</ol>
-<p>6.2. Load the data set.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>diabetes_meta <span class="ot">&lt;-</span> <span class="fu">read_delim</span>(<span class="st">'../data/diabetes_meta_toy_messy.csv'</span>)</span>
-<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(diabetes_meta)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 6 × 3
-     ID Married Work         
-  &lt;dbl&gt; &lt;chr&gt;   &lt;chr&gt;        
-1 33879 Yes     Self-employed
-2 52800 Yes     Private      
-3 16817 Yes     Private      
-4 70676 Yes     Self-employed
-5  6319 No      Public       
-6 71379 No      Public       </code></pre>
-</div>
-</div>
-<p>Use can you either base R or/and tidyverse to solve the exercises. For now, we just explore the data.</p>
-<p>6.3. How many missing values (NA’s) are there in each column.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="fu">colSums</span>(<span class="fu">is.na</span>(diabetes_meta))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>     ID Married    Work 
-      0       0       0 </code></pre>
-</div>
-</div>
-<p>6.4. Check the distribution of each of the variables. Consider that the variables are of different classes. Do any of the distributions seam odd to you?</p>
-<p>For the categorical variables:</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(diabetes_meta<span class="sc">$</span>Married)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(model)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
-  No  No   Yes Yes  
- 183    3  345    1 </code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(diabetes_meta<span class="sc">$</span>Work)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>
-      Private        Public       Retired Self-employed 
-          283           154             6            89 </code></pre>
-</div>
-</div>
-<p>By investigating the unique values of the <code>Married</code> variable we see that some of the values have whitespace.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="fu">unique</span>(diabetes_meta<span class="sc">$</span>Married)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] "Yes"  "No"   "Yes " "No " </code></pre>
+Call:
+lm(formula = medv ~ rm + crim + neighborhood, data = train)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-19.920  -3.167  -0.468   2.746  35.052 
+
+Coefficients:
+                      Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)          -25.52560    3.08810  -8.266 2.43e-15 ***
+rm                     7.63165    0.49122  15.536  &lt; 2e-16 ***
+crim                  -0.22845    0.03525  -6.482 2.86e-10 ***
+neighborhoodSuburban   0.07995    0.75050   0.107    0.915    
+neighborhoodUrban      3.66323    0.84058   4.358 1.70e-05 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 6.183 on 375 degrees of freedom
+Multiple R-squared:  0.5573,    Adjusted R-squared:  0.5525 
+F-statistic:   118 on 4 and 375 DF,  p-value: &lt; 2.2e-16</code></pre>
 </div>
 </div>
 <ol start="6" type="1">
-<li><ol start="5" type="1">
-<li>Clean the data according to your considerations.</li>
-</ol></li>
+<li><code>rm</code> and <code>crim</code> have a significant influence on the house price. An increase in the number of rooms increases the price since the coefficient is positive, whereas an increase in crime rate reduces the price. There is a significant difference in price between Rural and Urban zones, but not between Rural and Suburban. Rural is the reference level. Lastly, houses with 0 rooms cost -25k dollar. Perhaps the predictors should be centered before fitting the model around 0 so <code>rm</code> == 0 is the average number of rooms for better interpretability.</li>
 </ol>
-<p>My considerations:</p>
-<ul>
-<li><p>The <code>Married</code> variable has whitespace in the some of the values. The values “Yes” and “Yes” will be interpreted as different values. We can confidently remove all the whitespaces in this variable.</p></li>
-<li><p><code>ID</code> is changed to numerical to match the <code>diabetes_clean</code> dataset.</p></li>
-</ul>
-<p>Access number of rows before cleaning.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="fu">nrow</span>(diabetes_meta)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] 532</code></pre>
-</div>
-</div>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a>diabetes_meta_clean <span class="ot">&lt;-</span> diabetes_meta <span class="sc">%&gt;%</span> </span>
-<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Married =</span> <span class="fu">str_trim</span>(Married),</span>
-<span id="cb42-3"><a href="#cb42-3" aria-hidden="true" tabindex="-1"></a>         <span class="at">ID =</span> <span class="fu">as.numeric</span>(ID))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<p>Check the unique marital status now.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a><span class="fu">unique</span>(diabetes_meta_clean<span class="sc">$</span>Married)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] "Yes" "No" </code></pre>
-</div>
-</div>
-<p>Access number of rows after cleaning.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="fu">nrow</span>(diabetes_meta_clean)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] 532</code></pre>
-</div>
-</div>
-</section>
-<section id="join-the-datasets" class="level2">
-<h2 class="anchored" data-anchor-id="join-the-datasets">Join the datasets</h2>
-<ol start="7" type="1">
-<li>Consider what variable the datasets should be joined on.</li>
-</ol>
-<div class="callout callout-style-default callout-tip callout-titled">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-Hint
-</div>
-<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
-</div>
-<div id="callout-2" class="callout-2-contents callout-collapse collapse">
-<div class="callout-body-container callout-body">
-<p>The joining variable must be the same type in both datasets.</p>
-</div>
-</div>
-</div>
-<ol start="8" type="1">
-<li>Join the datasets by the variable you selected above.</li>
-</ol>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb47"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a>diabetes_join <span class="ot">&lt;-</span> diabetes_clinical_clean <span class="sc">%&gt;%</span> </span>
-<span id="cb47-2"><a href="#cb47-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(diabetes_meta_clean, <span class="at">by =</span> <span class="st">'ID'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<ol start="9" type="1">
-<li>How many rows does the joined dataset have? Explain why.</li>
-</ol>
-<div class="callout callout-style-default callout-tip callout-titled">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-3-contents" aria-controls="callout-3" aria-expanded="false" aria-label="Toggle callout">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-Hint
-</div>
-<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
-</div>
-<div id="callout-3" class="callout-3-contents callout-collapse collapse">
-<div class="callout-body-container callout-body">
-<p>Because we used <code>left_join</code>, only the IDs that are in <code>diabetes_clinical_clean</code> are kept.</p>
-</div>
-</div>
-</div>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb48"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a><span class="fu">nrow</span>(diabetes_join)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] 493</code></pre>
-</div>
-</div>
-<ol start="10" type="1">
-<li>Export the joined dataset. Think about which directory you want to save the file in.</li>
-</ol>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb50"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a>writexl<span class="sc">::</span><span class="fu">write_xlsx</span>(diabetes_join, <span class="st">'../out/diabetes_join.xlsx'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
 
 
-</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">

@@ -108,3 +108,58 @@ writexl::write_xlsx(diabetes_clinical_messy, './diabetes_clinical_toy_messy.xlsx
 write_csv(diabetes_meta_messy, './diabetes_meta_toy_messy.csv')
 writexl::write_xlsx(df_glucose_2, './df_glucose.xlsx')
 
+############ Boston housing data (linear regression on house prices) ############ 
+
+#HZ path
+setwd('C:/Users/pnv719/Documents/HeaDS/Courses/R4DS/R4DataScience/data/')
+
+df <- as_tibble(read.csv('boston.csv'))
+df
+
+hist(df$indus, breaks = 30)
+hist(df$dis, breaks = 30)
+hist(df$medv, breaks = 30)
+
+#####adding a categorical variable
+
+# Set seed to ensure reproducibility
+set.seed(123)
+
+#it would make sense for houses in urban areas to be expensive
+assign_neighborhood_probabilistic <- function(medv) {
+  if (medv > 35) {
+    sample(c("Urban", "Suburban", "Rural"), size = 1, prob = c(0.8, 0.1, 0.1))
+  } else if (medv > 20) {
+    sample(c("Urban", "Suburban", "Rural"), size = 1, prob = c(0.3, 0.4, 0.3))
+  } else {
+    sample(c("Urban", "Suburban", "Rural"), size = 1, prob = c(0.1, 0.4, 0.5))
+  }
+}
+
+# Apply the probabilistic neighborhood assignment to the dataset
+df <- df %>%
+  mutate(neighborhood = map_chr(medv, assign_neighborhood_probabilistic))
+
+#check distributions
+ggplot(df, aes(x=medv,fill=neighborhood)) +
+  geom_histogram(position = 'dodge')
+
+#omit dis var
+df <- df %>%
+  select(-dis, -zn, -ID)
+  #select(-ID)
+
+
+#distance to city center and nr rooms are pretty good predictors of price
+ggplot(df, aes(x=dis,y=medv,color=rm)) +
+  geom_point()
+
+ggplot(df, aes(x=rm,y=medv,color=dis)) +
+  geom_point()
+
+#crime doesn't matter much because the influence is pretty much 
+ggplot(df, aes(x=crim,y=medv,color=dis)) +
+  geom_point()
+
+write_csv(df, './boston.csv')
+

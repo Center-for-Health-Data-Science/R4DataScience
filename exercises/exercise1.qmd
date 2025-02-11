@@ -18,7 +18,7 @@ Use can you either base R or/and tidyverse to solve the exercises.
 
 3.  How many missing values (NA's) are there in each column. 
 
-4.  Check the distribution of each of the variables. Consider that they are of different classes. Do any of the distributions seam odd to you?
+4.  Check the distribution of each of the variables. Consider that they are of different classes. Do any of the distributions seem odd to you?
 
 ## Clean up the data
 
