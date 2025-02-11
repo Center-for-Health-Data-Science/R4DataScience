@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Presentation 1: Base R and Tidyverse / Data Clean-up and Wrangling – R for Data Science</title>
+<title>Exercise 1: Base R and Tidyverse / Data Clean-up and Wrangling – R for Data Science</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -19,6 +19,40 @@ ul.task-list li input[type="checkbox"] {
   width: 0.8em;
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 </style>
 
@@ -139,13 +173,13 @@ ul.task-list li input[type="checkbox"] {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../presentations/presentation1.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Presentation 1: Base R and Tidyverse</span></a>
+ <span class="menu-text">Presentation 1: Data Clean Up</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../presentations/presentation2.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Presentation 2: Data Clean Up</span></a>
+ <span class="menu-text">Presentation 2: Advanced Data Wrangling</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -320,7 +354,7 @@ ul.task-list li input[type="checkbox"] {
 
 <header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../exercises/exercise0.html">Exercises</a></li><li class="breadcrumb-item"><a href="../exercises/exercise1.html">Exercise 1: Data Clean Up</a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title">Presentation 1: Base R and Tidyverse / Data Clean-up and Wrangling</h1>
+<h1 class="title">Exercise 1: Base R and Tidyverse / Data Clean-up and Wrangling</h1>
 </div>
 
 
@@ -337,19 +371,24 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
+<p>In this exercise you will practice your R skills by loading, inspecting and cleaning a dataset. You can use base R and/or tidyverse to solve the exercises, it is up to you.</p>
 <section id="getting-started" class="level2">
 <h2 class="anchored" data-anchor-id="getting-started">Getting started</h2>
 <ol type="1">
-<li><p>Load packages.</p></li>
-<li><p>Load in the <code>diabetes_clinical_toy_messy.xlsx</code> data set.</p></li>
+<li>Load the packages you think you will need. There is no need to spend too much time on this part. If you later realize you need another package just add it here and re-run the chunk.</li>
+</ol>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">#your packages here</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<ol start="2" type="1">
+<li>Load in the data set <code>diabetes_clinical_toy_messy.xlsx</code>.</li>
 </ol>
 </section>
 <section id="explore-the-data" class="level2">
 <h2 class="anchored" data-anchor-id="explore-the-data">Explore the data</h2>
-<p>Use can you either base R or/and tidyverse to solve the exercises.</p>
 <ol start="3" type="1">
-<li><p>How many missing values (NA’s) are there in each column.</p></li>
-<li><p>Check the distribution of each of the variables. Consider that they are of different classes. Do any of the distributions seem odd to you?</p></li>
+<li><p>How many missing values (NA’s) are there in each column?</p></li>
+<li><p>Check the distribution of each of the variables. Consider that they are of different data types. Do any of the distributions seem odd to you?</p></li>
 </ol>
 </section>
 <section id="clean-up-the-data" class="level2">
@@ -360,7 +399,7 @@ ul.task-list li input[type="checkbox"] {
 <li><p>What should we do with the rows that contain NAs? Do we remove them or keep them?</p></li>
 <li><p>Which mistakes in the data can be corrected, and which cannot?</p></li>
 <li><p>Are there zeros in the data? Are they true zeros or errors?</p></li>
-<li><p>Do you want to change any of the classes of the variables?</p></li>
+<li><p>Do you want to change any of the data types of the variables?</p></li>
 </ul>
 <ol start="5" type="1">
 <li>Clean the data according to your considerations.</li>
@@ -384,12 +423,14 @@ Hint
 </section>
 <section id="meta-data" class="level2">
 <h2 class="anchored" data-anchor-id="meta-data">Meta Data</h2>
+<p>There is some metadata to accompany the dataset you have just cleaned. Load in the dataset <code>diabetes_meta_toy_messy.xlsx</code> and inspect it.</p>
 <ol start="6" type="1">
-<li>Perform step 2-5 from above and do data exploration and cleaning workflow for the <code>diabetes_meta_toy_messy.xlsx</code> data set.</li>
+<li>Now clean the metadata and do data exploration by repeating step 3-5 from above.</li>
 </ol>
 </section>
 <section id="join-the-datasets" class="level2">
 <h2 class="anchored" data-anchor-id="join-the-datasets">Join the datasets</h2>
+<p>We will combine both datasets together into one tibble.</p>
 <ol start="7" type="1">
 <li>Consider what variable the datasets should be joined on.</li>
 </ol>

@@ -1,12 +1,12 @@
 ---
-title: "Presentation 5: Intro to Modelling in R"
+title: "Presentation 6: Other models"
 format: html
 project:
  type: website
  output-dir: ../docs
 ---
 
-In this section we'll look at how to define and fit a model in R.
+Now that we have learned how to make a model and work with the model object we will look at some other types of models
 
 ## Load packages
 ```{r warning=FALSE, message=FALSE}
@@ -27,9 +27,10 @@ head(df_smoke)
 
 We will use this to perform a linear regression.
 
-![](../figures/lin_reg.jpg){fig-align="center"}
 
-## Linear Regression 
+## Classification
+
+## Clustering
 
 ### Split Data into Training and Test Set
 
@@ -235,10 +236,6 @@ model2$coefficients
 * `exercise2` == $b_3$: The change in life expectancy if the exercise level is 2 (assuming the number of cigarettes stays constant).
 
 Why is there no coefficient for exercise level 0 (low amount of exercise)? This case is covered in the Intercept. It is referred to as the **reference level** of the categorical variable. You can change which level is regarded as the reference and the effect of having this level will always be modelled in the intercept. 
-
-## Classification
-
-## Clustering
 
 
 

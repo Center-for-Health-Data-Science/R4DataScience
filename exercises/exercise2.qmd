@@ -1,5 +1,5 @@
 ---
-title: "Exercise 2 - solutions: Advanced Tidyverse / Pivot longer, wider, and nesting"
+title: "Exercise 2: Advanced Wrangling / Pivot longer, wider, and nesting"
 format: html
 project:
  type: website

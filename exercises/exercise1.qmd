@@ -1,24 +1,28 @@
 ---
-title: "Presentation 1: Base R and Tidyverse / Data Clean-up and Wrangling"
+title: "Exercise 1: Base R and Tidyverse / Data Clean-up and Wrangling"
 format: html
 project:
  type: website
  output-dir: ../docs
 ---
 
+In this exercise you will practice your R skills by loading, inspecting and cleaning a dataset. You can use base R and/or tidyverse to solve the exercises, it is up to you. 
+
 ## Getting started
 
-1.  Load packages.
+1.  Load the packages you think you will need. There is no need to spend too much time on this part. If you later realize you need another package just add it here and re-run the chunk.
 
-2.  Load in the `diabetes_clinical_toy_messy.xlsx` data set.
+```{r}
+#your packages here
+```
+
+2.  Load in the data set `diabetes_clinical_toy_messy.xlsx`.
 
 ## Explore the data
 
-Use can you either base R or/and tidyverse to solve the exercises. 
+3.  How many missing values (NA's) are there in each column?
 
-3.  How many missing values (NA's) are there in each column. 
-
-4.  Check the distribution of each of the variables. Consider that they are of different classes. Do any of the distributions seem odd to you?
+4.  Check the distribution of each of the variables. Consider that they are of different data types. Do any of the distributions seem odd to you?
 
 ## Clean up the data
 
@@ -32,7 +36,7 @@ Consider the following:
 
 -   Are there zeros in the data? Are they true zeros or errors?
 
--   Do you want to change any of the classes of the variables?
+-   Do you want to change any of the data types of the variables?
 
 5.  Clean the data according to your considerations.
 
@@ -43,9 +47,13 @@ Have a look at `BloodPressure`, `BMI`, `Sex`, and `Diabetes`.
 
 ## Meta Data
 
-6.  Perform step 2-5 from above and do data exploration and cleaning workflow for the `diabetes_meta_toy_messy.xlsx` data set.
+There is some metadata to accompany the dataset you have just cleaned. Load in the dataset `diabetes_meta_toy_messy.xlsx` and inspect it.
+
+6. Now clean the metadata and do data exploration by repeating step 3-5 from above. 
 
 ## Join the datasets
+
+We will combine both datasets together into one tibble.
 
 7. Consider what variable the datasets should be joined on.
 

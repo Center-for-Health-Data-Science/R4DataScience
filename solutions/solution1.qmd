@@ -10,7 +10,7 @@ project:
 
 1.  Load packages.
 
-```{r message=FALSE}
+```{r message=FALSE, warning=FALSE}
 library(tidyverse)
 library(readxl)
 ```

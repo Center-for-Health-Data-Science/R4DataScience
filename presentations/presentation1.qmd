@@ -6,6 +6,8 @@ project:
  output-dir: ../docs
 ---
 
+In this section we will look at some differences between base R and tidyverse and also learn how to prepare a clean dataset. 
+
 ## Load Packages
 
 ```{r warning=FALSE, message=FALSE}
@@ -32,6 +34,8 @@ class(df_tidyverse)
 ```
 
 ## Base R and Tidyverse
+
+Many operations in R can be done in several ways. We illustrate here the base R and tidyverse ways to achieve common operations. 
 
 Access the `Age` column:
 
@@ -73,7 +77,7 @@ df_baseR$sales_diff <- NULL
 
 # Tidyverse 
 df_tidyverse <- df_tidyverse %>% 
-  select(!sales_diff)
+  select(-sales_diff)
 ```
 
 Select columns with sales numbers.

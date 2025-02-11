@@ -83,7 +83,7 @@
     "href": "solutions/solution1.html",
     "title": "Presentation 1 - Solutions: Base R and Tidyverse / Data Clean-up and Wrangling",
     "section": "",
-    "text": "Load packages.\n\n\nlibrary(tidyverse)\n\nWarning: pakke 'ggplot2' blev bygget under R version 4.2.3\n\n\nWarning: pakke 'tibble' blev bygget under R version 4.2.3\n\n\nWarning: pakke 'dplyr' blev bygget under R version 4.2.3\n\nlibrary(readxl)\n\nWarning: pakke 'readxl' blev bygget under R version 4.2.3\n\n\n\nLoad in the diabetes_clinical_toy_messy.xlsx data set.\n\n\ndiabetes_clinical &lt;- read_excel('../data/diabetes_clinical_toy_messy.xlsx')\nhead(diabetes_clinical)\n\n# A tibble: 6 × 9\n     ID Sex      Age BloodPressure GeneticRisk   BMI PhysicalActivity Smoker \n  &lt;dbl&gt; &lt;chr&gt;  &lt;dbl&gt;         &lt;dbl&gt;       &lt;dbl&gt; &lt;dbl&gt;            &lt;dbl&gt; &lt;chr&gt;  \n1  9046 Male      34            84       0.619  24.7               93 Unknown\n2 51676 Male      25            74       0.591  22.5              102 Unknown\n3 31112 Male      30             0       0.839  32.3               75 Former \n4 60182 Male      50            80       0.178  34.5               98 Unknown\n5  1665 Female    27            60       0.206  26.3               82 Never  \n6 56669 Male      35            84       0.286  35                 58 Smoker \n# ℹ 1 more variable: Diabetes &lt;dbl&gt;",
+    "text": "Load packages.\n\n\nlibrary(tidyverse)\nlibrary(readxl)\n\n\nLoad in the diabetes_clinical_toy_messy.xlsx data set.\n\n\ndiabetes_clinical &lt;- read_excel('../data/diabetes_clinical_toy_messy.xlsx')\nhead(diabetes_clinical)\n\n# A tibble: 6 × 9\n     ID Sex      Age BloodPressure GeneticRisk   BMI PhysicalActivity Smoker \n  &lt;dbl&gt; &lt;chr&gt;  &lt;dbl&gt;         &lt;dbl&gt;       &lt;dbl&gt; &lt;dbl&gt;            &lt;dbl&gt; &lt;chr&gt;  \n1  9046 Male      34            84       0.619  24.7               93 Unknown\n2 51676 Male      25            74       0.591  22.5              102 Unknown\n3 31112 Male      30             0       0.839  32.3               75 Former \n4 60182 Male      50            80       0.178  34.5               98 Unknown\n5  1665 Female    27            60       0.206  26.3               82 Never  \n6 56669 Male      35            84       0.286  35                 58 Smoker \n# ℹ 1 more variable: Diabetes &lt;dbl&gt;",
     "crumbs": [
       "Course Material",
       "Solutions",
@@ -95,7 +95,7 @@
     "href": "solutions/solution1.html#getting-started",
     "title": "Presentation 1 - Solutions: Base R and Tidyverse / Data Clean-up and Wrangling",
     "section": "",
-    "text": "Load packages.\n\n\nlibrary(tidyverse)\n\nWarning: pakke 'ggplot2' blev bygget under R version 4.2.3\n\n\nWarning: pakke 'tibble' blev bygget under R version 4.2.3\n\n\nWarning: pakke 'dplyr' blev bygget under R version 4.2.3\n\nlibrary(readxl)\n\nWarning: pakke 'readxl' blev bygget under R version 4.2.3\n\n\n\nLoad in the diabetes_clinical_toy_messy.xlsx data set.\n\n\ndiabetes_clinical &lt;- read_excel('../data/diabetes_clinical_toy_messy.xlsx')\nhead(diabetes_clinical)\n\n# A tibble: 6 × 9\n     ID Sex      Age BloodPressure GeneticRisk   BMI PhysicalActivity Smoker \n  &lt;dbl&gt; &lt;chr&gt;  &lt;dbl&gt;         &lt;dbl&gt;       &lt;dbl&gt; &lt;dbl&gt;            &lt;dbl&gt; &lt;chr&gt;  \n1  9046 Male      34            84       0.619  24.7               93 Unknown\n2 51676 Male      25            74       0.591  22.5              102 Unknown\n3 31112 Male      30             0       0.839  32.3               75 Former \n4 60182 Male      50            80       0.178  34.5               98 Unknown\n5  1665 Female    27            60       0.206  26.3               82 Never  \n6 56669 Male      35            84       0.286  35                 58 Smoker \n# ℹ 1 more variable: Diabetes &lt;dbl&gt;",
+    "text": "Load packages.\n\n\nlibrary(tidyverse)\nlibrary(readxl)\n\n\nLoad in the diabetes_clinical_toy_messy.xlsx data set.\n\n\ndiabetes_clinical &lt;- read_excel('../data/diabetes_clinical_toy_messy.xlsx')\nhead(diabetes_clinical)\n\n# A tibble: 6 × 9\n     ID Sex      Age BloodPressure GeneticRisk   BMI PhysicalActivity Smoker \n  &lt;dbl&gt; &lt;chr&gt;  &lt;dbl&gt;         &lt;dbl&gt;       &lt;dbl&gt; &lt;dbl&gt;            &lt;dbl&gt; &lt;chr&gt;  \n1  9046 Male      34            84       0.619  24.7               93 Unknown\n2 51676 Male      25            74       0.591  22.5              102 Unknown\n3 31112 Male      30             0       0.839  32.3               75 Former \n4 60182 Male      50            80       0.178  34.5               98 Unknown\n5  1665 Female    27            60       0.206  26.3               82 Never  \n6 56669 Male      35            84       0.286  35                 58 Smoker \n# ℹ 1 more variable: Diabetes &lt;dbl&gt;",
     "crumbs": [
       "Course Material",
       "Solutions",
@@ -151,552 +151,46 @@
     ]
   },
   {
-    "objectID": "presentations/presentation5.html",
-    "href": "presentations/presentation5.html",
-    "title": "Presentation 5: Intro to Modelling in R",
+    "objectID": "presentations/presentation6.html",
+    "href": "presentations/presentation6.html",
+    "title": "Presentation 6: Other models",
     "section": "",
-    "text": "In this section we’ll look at how to define and fit a model in R.",
-    "crumbs": [
-      "Course Material",
-      "Presentations",
-      "Presentation 5: Intro to Modelling in R"
-    ]
+    "text": "Now that we have learned how to make a model and work with the model object we will look at some other types of models"
   },
   {
-    "objectID": "presentations/presentation5.html#load-packages",
-    "href": "presentations/presentation5.html#load-packages",
-    "title": "Presentation 5: Intro to Modelling in R",
+    "objectID": "presentations/presentation6.html#load-packages",
+    "href": "presentations/presentation6.html#load-packages",
+    "title": "Presentation 6: Other models",
     "section": "Load packages",
-    "text": "Load packages\n\nlibrary(tidyverse)\nlibrary(caret)\nlibrary(ModelMetrics)",
-    "crumbs": [
-      "Course Material",
-      "Presentations",
-      "Presentation 5: Intro to Modelling in R"
-    ]
+    "text": "Load packages\n\nlibrary(tidyverse)\nlibrary(caret)\nlibrary(ModelMetrics)"
   },
   {
-    "objectID": "presentations/presentation5.html#load-data",
-    "href": "presentations/presentation5.html#load-data",
-    "title": "Presentation 5: Intro to Modelling in R",
+    "objectID": "presentations/presentation6.html#load-data",
+    "href": "presentations/presentation6.html#load-data",
+    "title": "Presentation 6: Other models",
     "section": "Load data",
-    "text": "Load data\nIn order to focus on the technical aspects we’ll use a very simple toy dataset. It contains the number of cigarettes smoked per day and how long the person lived. It is inspired by this paper if you want to take a look.\n\ndf_smoke &lt;- read.csv('../data/smoking.csv')\nhead(df_smoke)\n\n  daily_cigarettes life\n1                7   76\n2               11   73\n3               27   72\n4               23   71\n5               13   74\n6               11   76\n\n\nWe will use this to perform a linear regression.",
-    "crumbs": [
-      "Course Material",
-      "Presentations",
-      "Presentation 5: Intro to Modelling in R"
-    ]
+    "text": "Load data\nIn order to focus on the technical aspects we’ll use a very simple toy dataset. It contains the number of cigarettes smoked per day and how long the person lived. It is inspired by this paper if you want to take a look.\n\ndf_smoke &lt;- read.csv('../data/smoking.csv')\nhead(df_smoke)\n\n  daily_cigarettes life\n1                7   76\n2               11   73\n3               27   72\n4               23   71\n5               13   74\n6               11   76\n\n\nWe will use this to perform a linear regression."
   },
   {
-    "objectID": "presentations/presentation5.html#linear-regression",
-    "href": "presentations/presentation5.html#linear-regression",
-    "title": "Presentation 5: Intro to Modelling in R",
-    "section": "Linear Regression",
-    "text": "Linear Regression\n\nSplit Data into Training and Test Set\nFirst, we will split our data into a test and a training set. There are numerous ways to do this. We here show sample_frac from dplyr:\n\n# Set seed to ensure reproducibility\nset.seed(123)  \n\n#add an ID column to keep track of observations\ndf_smoke$ID &lt;- 1:nrow(df_smoke)\n\ntrain &lt;- df_smoke %&gt;% sample_frac(.75)\nnrow(train)\n\n[1] 75\n\nhead(train)\n\n  daily_cigarettes life ID\n1               29   72 31\n2               16   73 79\n3                5   78 51\n4                3   77 14\n5                4   79 67\n6               23   71 42\n\n\nAs you can see, the ID’s in train are shuffled and it only has 75 rows since we asked for 75% of the data. Now all we have to do is identify the other 25%, i.e. the observations not in train. dpylr has a neat function called anti_join for that:\n\n#from df_smoke remove what is in train by checking the ID column\ntest  &lt;- anti_join(df_smoke, train, by = 'ID') \nnrow(test)\n\n[1] 25\n\nhead(test)\n\n  daily_cigarettes life ID\n1                7   76  1\n2               11   73  2\n3               27   72  3\n4               32   70 10\n5                8   75 11\n6               16   75 24\n\n\n\n\nDefining the model\nAs stated above, a linear regression model generally has the form of:\n\\[y=b_0+b_1*x_i\\]\nWhere we refer to \\(b_0\\) as the intercept and \\(b_1\\) as the coefficient. There will typically be one coefficient for each predictor. The goal of modelling is to estimate the values of \\(b_0\\) and all \\(b_i\\).\nWe need to tell R which of our variables is the outcome, \\(y\\) and which predictors \\(x_i\\) we want to include in the model. This is referred to in documentation as the model’s formula. Have a look:\n\n#the formula is written like so:\nlm(y ~ x_1 + x_2 + ...)\n#see the help\n?lm\n\nIn our case, \\(y\\) is the number of years lived and we have a singular predictor \\(x_1\\), the number of cigarettes smoked per day. So that will be our model formulation:\n\n#remember to select the training data subset we defined above! \nmodel &lt;- lm(life ~ daily_cigarettes, data = train)\n\n\n\nModelling results\nBy calling lm we have already trained our model! Lets have a look at the results. The summary gives us a lot of information about the model we trained:\n\n# View model summary\nsummary(model)\n\n\nCall:\nlm(formula = life ~ daily_cigarettes, data = train)\n\nResiduals:\n     Min       1Q   Median       3Q      Max \n-2.71479 -1.03035 -0.06517  0.82928  2.84669 \n\nCoefficients:\n                 Estimate Std. Error t value Pr(&gt;|t|)    \n(Intercept)      78.71479    0.26847  293.20   &lt;2e-16 ***\ndaily_cigarettes -0.28074    0.01351  -20.77   &lt;2e-16 ***\n---\nSignif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1\n\nResidual standard error: 1.251 on 73 degrees of freedom\nMultiple R-squared:  0.8553,    Adjusted R-squared:  0.8533 \nF-statistic: 431.5 on 1 and 73 DF,  p-value: &lt; 2.2e-16\n\n\nIt beings with Call which displays the formula used to fit the model.\nThe Residuals section summarizes the distribution of the residuals, which is the difference between the actual observed \\(y\\) values and the fitted \\(y\\) values.\nThe Coefficients table shows the estimated values for each coefficient including the intercept, along with their standard errors, t-values, and p-values. These help to determine the significance of each predictor. Smaller p-values indicate stronger evidence against the null hypothesis that the true coefficient is zero.\nIn the bottom section we have some information about how well model fits the training data. The Residual Standard Error (RSE) provides a measure of accuracy as it represents the average size of the residuals. The R-squared value indicates the proportion of variance explained by the model, with the Adjusted R-squared accounting for the number of predictors to prevent overfitting. Finally, the F-statistic and its p-value test whether the model as a whole explains a significant portion of the variance in the response variable (the outcome \\(y\\)).\nOverall, the summary helps us to assess the model fit and identify significant predictors and their effect size (size of the coefficient).\nWe can extract the model object’s components with $:\n\nmodel$coefficients\n\n     (Intercept) daily_cigarettes \n      78.7147894       -0.2807398 \n\nhist(model$residuals, breaks = 30, main = 'Histogram of residuals', \n     xlab = 'Residual')\n\n\n\n\n\n\n\n\n\n\nModel interpretation\nWhat do these results mean? Our model formulation is:\n\\[life=b_0+b_1*cigarettes\\]\nAnd we estimated these values:\n\nmodel$coefficients\n\n     (Intercept) daily_cigarettes \n      78.7147894       -0.2807398 \n\n\nTherefore:\n\nThe intercept \\(b_0\\) is the number of years we estimated a person in this dataset will live if they smoke 0 cigarettes. It is 78.7 years\nThe coefficient of cigarettes per day is -0.28. This means for every 1 unit increase in cigarettes (one additional cigarette per day) the life expectancy decreases by 0.28 years.\n\n\n\nModel performance\nWe now use our held out test data to evaluate the model performance. For that we will predict life expectancy for the 25 observations in test and compare with the actual values.\n\n#use the fitted model to make predictions for the test data\ny_pred &lt;- predict(model, test)\ny_pred\n\n       1        2        3        4        5        6        7        8 \n76.74961 75.62665 71.13481 69.73112 76.46887 74.22295 77.59183 70.29260 \n       9       10       11       12       13       14       15       16 \n73.38073 70.01186 76.46887 75.62665 75.34591 76.46887 73.38073 75.34591 \n      17       18       19       20       21       22       23       24 \n76.18813 71.41555 73.66147 71.13481 71.97703 75.34591 72.25777 75.90739 \n      25 \n78.71479 \n\n\nLet’s see how that fits with the known values.\n\npred &lt;- tibble(pred = y_pred, real = test$life)\n\nggplot(pred, aes(x=real, y=pred)) +\n  geom_point()\n\n\n\n\n\n\n\n\nNot too bad! We usually calculate the mean square error (mse) between predictions and the known true values to numerically evaluate regression performance:\n\nmse(pred$real,pred$pred)\n\n[1] 1.742902\n\n\nOur predictions are on average 1.7 years wrong.",
-    "crumbs": [
-      "Course Material",
-      "Presentations",
-      "Presentation 5: Intro to Modelling in R"
-    ]
+    "objectID": "presentations/presentation6.html#classification",
+    "href": "presentations/presentation6.html#classification",
+    "title": "Presentation 6: Other models",
+    "section": "Classification",
+    "text": "Classification"
   },
   {
-    "objectID": "presentations/presentation5.html#regression-with-categorical-features",
-    "href": "presentations/presentation5.html#regression-with-categorical-features",
-    "title": "Presentation 5: Intro to Modelling in R",
+    "objectID": "presentations/presentation6.html#clustering",
+    "href": "presentations/presentation6.html#clustering",
+    "title": "Presentation 6: Other models",
+    "section": "Clustering",
+    "text": "Clustering\n\nSplit Data into Training and Test Set\nFirst, we will split our data into a test and a training set. There are numerous ways to do this. We here show sample_frac from dplyr:\n\n# Set seed to ensure reproducibility\nset.seed(123)  \n\n#add an ID column to keep track of observations\ndf_smoke$ID &lt;- 1:nrow(df_smoke)\n\ntrain &lt;- df_smoke %&gt;% sample_frac(.75)\nnrow(train)\n\n[1] 75\n\nhead(train)\n\n  daily_cigarettes life ID\n1               29   72 31\n2               16   73 79\n3                5   78 51\n4                3   77 14\n5                4   79 67\n6               23   71 42\n\n\nAs you can see, the ID’s in train are shuffled and it only has 75 rows since we asked for 75% of the data. Now all we have to do is identify the other 25%, i.e. the observations not in train. dpylr has a neat function called anti_join for that:\n\n#from df_smoke remove what is in train by checking the ID column\ntest  &lt;- anti_join(df_smoke, train, by = 'ID') \nnrow(test)\n\n[1] 25\n\nhead(test)\n\n  daily_cigarettes life ID\n1                7   76  1\n2               11   73  2\n3               27   72  3\n4               32   70 10\n5                8   75 11\n6               16   75 24\n\n\n\n\nDefining the model\nAs stated above, a linear regression model generally has the form of:\n\\[y=b_0+b_1*x_i\\]\nWhere we refer to \\(b_0\\) as the intercept and \\(b_1\\) as the coefficient. There will typically be one coefficient for each predictor. The goal of modelling is to estimate the values of \\(b_0\\) and all \\(b_i\\).\nWe need to tell R which of our variables is the outcome, \\(y\\) and which predictors \\(x_i\\) we want to include in the model. This is referred to in documentation as the model’s formula. Have a look:\n\n#the formula is written like so:\nlm(y ~ x_1 + x_2 + ...)\n#see the help\n?lm\n\nIn our case, \\(y\\) is the number of years lived and we have a singular predictor \\(x_1\\), the number of cigarettes smoked per day. So that will be our model formulation:\n\n#remember to select the training data subset we defined above! \nmodel &lt;- lm(life ~ daily_cigarettes, data = train)\n\n\n\nModelling results\nBy calling lm we have already trained our model! Lets have a look at the results. The summary gives us a lot of information about the model we trained:\n\n# View model summary\nsummary(model)\n\n\nCall:\nlm(formula = life ~ daily_cigarettes, data = train)\n\nResiduals:\n     Min       1Q   Median       3Q      Max \n-2.71479 -1.03035 -0.06517  0.82928  2.84669 \n\nCoefficients:\n                 Estimate Std. Error t value Pr(&gt;|t|)    \n(Intercept)      78.71479    0.26847  293.20   &lt;2e-16 ***\ndaily_cigarettes -0.28074    0.01351  -20.77   &lt;2e-16 ***\n---\nSignif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1\n\nResidual standard error: 1.251 on 73 degrees of freedom\nMultiple R-squared:  0.8553,    Adjusted R-squared:  0.8533 \nF-statistic: 431.5 on 1 and 73 DF,  p-value: &lt; 2.2e-16\n\n\nIt beings with Call which displays the formula used to fit the model.\nThe Residuals section summarizes the distribution of the residuals, which is the difference between the actual observed \\(y\\) values and the fitted \\(y\\) values.\nThe Coefficients table shows the estimated values for each coefficient including the intercept, along with their standard errors, t-values, and p-values. These help to determine the significance of each predictor. Smaller p-values indicate stronger evidence against the null hypothesis that the true coefficient is zero.\nIn the bottom section we have some information about how well model fits the training data. The Residual Standard Error (RSE) provides a measure of accuracy as it represents the average size of the residuals. The R-squared value indicates the proportion of variance explained by the model, with the Adjusted R-squared accounting for the number of predictors to prevent overfitting. Finally, the F-statistic and its p-value test whether the model as a whole explains a significant portion of the variance in the response variable (the outcome \\(y\\)).\nOverall, the summary helps us to assess the model fit and identify significant predictors and their effect size (size of the coefficient).\nWe can extract the model object’s components with $:\n\nmodel$coefficients\n\n     (Intercept) daily_cigarettes \n      78.7147894       -0.2807398 \n\nhist(model$residuals, breaks = 30, main = 'Histogram of residuals', \n     xlab = 'Residual')\n\n\n\n\n\n\n\n\n\n\nModel interpretation\nWhat do these results mean? Our model formulation is:\n\\[life=b_0+b_1*cigarettes\\]\nAnd we estimated these values:\n\nmodel$coefficients\n\n     (Intercept) daily_cigarettes \n      78.7147894       -0.2807398 \n\n\nTherefore:\n\nThe intercept \\(b_0\\) is the number of years we estimated a person in this dataset will live if they smoke 0 cigarettes. It is 78.7 years\nThe coefficient of cigarettes per day is -0.28. This means for every 1 unit increase in cigarettes (one additional cigarette per day) the life expectancy decreases by 0.28 years.\n\n\n\nModel performance\nWe now use our held out test data to evaluate the model performance. For that we will predict life expectancy for the 25 observations in test and compare with the actual values.\n\n#use the fitted model to make predictions for the test data\ny_pred &lt;- predict(model, test)\ny_pred\n\n       1        2        3        4        5        6        7        8 \n76.74961 75.62665 71.13481 69.73112 76.46887 74.22295 77.59183 70.29260 \n       9       10       11       12       13       14       15       16 \n73.38073 70.01186 76.46887 75.62665 75.34591 76.46887 73.38073 75.34591 \n      17       18       19       20       21       22       23       24 \n76.18813 71.41555 73.66147 71.13481 71.97703 75.34591 72.25777 75.90739 \n      25 \n78.71479 \n\n\nLet’s see how that fits with the known values.\n\npred &lt;- tibble(pred = y_pred, real = test$life)\n\nggplot(pred, aes(x=real, y=pred)) +\n  geom_point()\n\n\n\n\n\n\n\n\nNot too bad! We usually calculate the mean square error (mse) between predictions and the known true values to numerically evaluate regression performance:\n\nmse(pred$real,pred$pred)\n\n[1] 1.742902\n\n\nOur predictions are on average 1.7 years wrong."
+  },
+  {
+    "objectID": "presentations/presentation6.html#regression-with-categorical-features",
+    "href": "presentations/presentation6.html#regression-with-categorical-features",
+    "title": "Presentation 6: Other models",
     "section": "Regression with categorical features",
-    "text": "Regression with categorical features\nNow that we know how to make a simple linear model, how can we include categorical variables and what is the interpretation of their coefficients? To investigate this we will load a second version of the dataset that contains an additional variable: Exercise level.\n\ndf_smoke &lt;- read.csv('../data/smoking_cat.csv')\nhead(df_smoke)\n\n  daily_cigarettes life exercise\n1                7   76        0\n2               11   73        0\n3               27   72        1\n4               23   71        0\n5               13   74        0\n6               11   76        1\n\ndistinct(df_smoke, exercise)\n\n  exercise\n1        0\n2        1\n3        2\n\n\nAlright, we have three different levels of exercise. They are: low == 0, moderate == 1 and high == 2. Before we go on, let’s have a look if our data is represented correctly:\n\nstr(df_smoke)\n\n'data.frame':   100 obs. of  3 variables:\n $ daily_cigarettes: int  7 11 27 23 13 11 20 6 23 32 ...\n $ life            : int  76 73 72 71 74 76 71 76 72 70 ...\n $ exercise        : int  0 0 1 0 0 1 0 1 1 2 ...\n\n\nWe can see that the exercise column is interpreted as an integer. However, it is actually a category! In R categorical variables are known as factors and have their own datatype. Let’s convert exercise to a factor:\n\ndf_smoke$exercise &lt;- as.factor(df_smoke$exercise)\nstr(df_smoke)\n\n'data.frame':   100 obs. of  3 variables:\n $ daily_cigarettes: int  7 11 27 23 13 11 20 6 23 32 ...\n $ life            : int  76 73 72 71 74 76 71 76 72 70 ...\n $ exercise        : Factor w/ 3 levels \"0\",\"1\",\"2\": 1 1 2 1 1 2 1 2 2 3 ...\n\n\nAs before, before fitting the model we’ll split up the data in train and test. Since we’re using the same seed we should get the same observations, i.e. rows into training and test as above.\n\n# Set seed to ensure reproducibility\nset.seed(123)  \n\n#add an ID column to keep track of observations\ndf_smoke$ID &lt;- 1:nrow(df_smoke)\n\ntrain &lt;- df_smoke %&gt;% sample_frac(.75)\ntest  &lt;- anti_join(df_smoke, train, by = 'ID') \n\nAnd now we extend our previous model formula with the new predictor:\n\nmodel2 &lt;- lm(life ~ daily_cigarettes + exercise, data = train)\n\n\nsummary(model2)\n\n\nCall:\nlm(formula = life ~ daily_cigarettes + exercise, data = train)\n\nResiduals:\n     Min       1Q   Median       3Q      Max \n-1.58295 -0.53972 -0.01596  0.53773  1.70257 \n\nCoefficients:\n                  Estimate Std. Error t value Pr(&gt;|t|)    \n(Intercept)      77.582954   0.234237 331.216  &lt; 2e-16 ***\ndaily_cigarettes -0.285521   0.009401 -30.372  &lt; 2e-16 ***\nexercise1         1.095475   0.249402   4.392 3.84e-05 ***\nexercise2         2.372227   0.260427   9.109 1.48e-13 ***\n---\nSignif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1\n\nResidual standard error: 0.8578 on 71 degrees of freedom\nMultiple R-squared:  0.9338,    Adjusted R-squared:  0.931 \nF-statistic: 333.7 on 3 and 71 DF,  p-value: &lt; 2.2e-16\n\n\nWhen we check the summary we see that it has two additional coefficients, exercise1 and exercise2. What are they?\nBecause exercise is a categorical variable it is dummy coded. That means our model formula mathematically looks something like this:\n\\[y=b_0+b_1*x_1 + b_2 *x_2 + b_3*x_3\\]\nwith:\n\n\n\nExercise level\n\\(x_2\\)\n\\(x_3\\)\n\n\n\n\n0\n0\n0\n\n\n1\n1\n0\n\n\n2\n0\n1\n\n\n\nAnd for our coefficients it means:\n\nmodel2$coefficients\n\n     (Intercept) daily_cigarettes        exercise1        exercise2 \n      77.5829543       -0.2855213        1.0954747        2.3722266 \n\n\n\nIntercept == \\(b_0\\): The life expectancy at 0 cigarettes and exercise level 0\ndaily_cigerettes == \\(b_1\\): The change in life expectancy for each additional cigarette.\nexercise1 == \\(b_2\\): The change in life expectancy if the exercise level is 1 (assuming the number of cigarettes stays constant).\nexercise2 == \\(b_3\\): The change in life expectancy if the exercise level is 2 (assuming the number of cigarettes stays constant).\n\nWhy is there no coefficient for exercise level 0 (low amount of exercise)? This case is covered in the Intercept. It is referred to as the reference level of the categorical variable. You can change which level is regarded as the reference and the effect of having this level will always be modelled in the intercept.",
-    "crumbs": [
-      "Course Material",
-      "Presentations",
-      "Presentation 5: Intro to Modelling in R"
-    ]
-  },
-  {
-    "objectID": "presentations/presentation5.html#decision-tree",
-    "href": "presentations/presentation5.html#decision-tree",
-    "title": "Presentation 5: Intro to Modelling in R",
-    "section": "Decision tree",
-    "text": "Decision tree",
-    "crumbs": [
-      "Course Material",
-      "Presentations",
-      "Presentation 5: Intro to Modelling in R"
-    ]
-  },
-  {
-    "objectID": "presentations/presentation5.html#clustering-k-means",
-    "href": "presentations/presentation5.html#clustering-k-means",
-    "title": "Presentation 5: Intro to Modelling in R",
-    "section": "Clustering: K-means",
-    "text": "Clustering: K-means",
-    "crumbs": [
-      "Course Material",
-      "Presentations",
-      "Presentation 5: Intro to Modelling in R"
-    ]
-  },
-  {
-    "objectID": "presentations/presentation4_functions.html",
-    "href": "presentations/presentation4_functions.html",
-    "title": "Presentation 4, Functions",
-    "section": "",
-    "text": "Here is the solution4_functions.R showed:\n\n\n# Packages should be loaded in the main script.\n\n# Function to calculate BMI\ncalculate_bmi &lt;- function(weight_kg, height_m){\n  \n  bmi &lt;- weight_kg/height_m^2\n  \n  return(bmi)\n  \n}\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n# Function to calculate BMI, with control points and error checking. \ncalculate_bmi_2 &lt;- function(weight_kg, height_m) {\n  \n  # Check if weight and height are numeric\n  if (!is.numeric(weight_kg) | !is.numeric(height_m)) {\n    stop(\"Both weight_kg and height_m must be numeric values.\")\n  }\n  \n  # Check if weight and height are positive\n  if (weight_kg &lt;= 0) {\n    stop(\"Weight must be a positive value.\")\n  }\n  if (height_m &lt;= 0) {\n    stop(\"Height must be a positive value.\")\n  }\n  \n  # Calculate BMI\n  bmi &lt;- weight_kg / height_m^2\n  \n  # Check if BMI is within a reasonable range\n  if (bmi &lt; 10 | bmi &gt; 60) {\n    warning(\"The calculated BMI is outside the normal range. Please check your input values.\")\n  }\n  \n  return(bmi)\n  \n}",
-    "crumbs": [
-      "Course Material",
-      "Presentations",
-      "Presentation 4, Functions: Scripting in R"
-    ]
-  },
-  {
-    "objectID": "presentations/presentation2.html",
-    "href": "presentations/presentation2.html",
-    "title": "Presentation 2: Advanced Data Wrangling",
-    "section": "",
-    "text": "library(readxl)\nlibrary(tidyverse)",
-    "crumbs": [
-      "Course Material",
-      "Presentations",
-      "Presentation 2: Data Clean Up"
-    ]
-  },
-  {
-    "objectID": "presentations/presentation2.html#load-packages",
-    "href": "presentations/presentation2.html#load-packages",
-    "title": "Presentation 2: Advanced Data Wrangling",
-    "section": "",
-    "text": "library(readxl)\nlibrary(tidyverse)",
-    "crumbs": [
-      "Course Material",
-      "Presentations",
-      "Presentation 2: Data Clean Up"
-    ]
-  },
-  {
-    "objectID": "presentations/presentation2.html#load-data",
-    "href": "presentations/presentation2.html#load-data",
-    "title": "Presentation 2: Advanced Data Wrangling",
-    "section": "Load data",
-    "text": "Load data\n\ndf_sales &lt;- read_excel('../out/sales_data_2.xlsx')",
-    "crumbs": [
-      "Course Material",
-      "Presentations",
-      "Presentation 2: Data Clean Up"
-    ]
-  },
-  {
-    "objectID": "presentations/presentation2.html#formats-pivot-long-and-wider",
-    "href": "presentations/presentation2.html#formats-pivot-long-and-wider",
-    "title": "Presentation 2: Advanced Data Wrangling",
-    "section": "Formats: Pivot long and wider",
-    "text": "Formats: Pivot long and wider\nIn tidyverse we primarily use two different formats: long and wide. The wide format is how you are probably used to seeing data presented with one column for each measured variable. However, when we need to plot, analyse or model data, we will often need them to be in the long format instead. It is therefore important that we know how to switch between them.\n\nPivot into long format\nThe goal of this section is to make a plot like this where we visualize the sales for each year across each employee.\n\n\n\n\n\nThe data is now in wide format. Can we make the plot in the way the data is formatted now?\n\n Hint \n\nNo. To create the plot, we need a column for the years to use on the x-axis, a column for sales in thousands DKK, and a column for Names. While the Names column is already present, the sales data is spread across four separate columns, and there is no column for the year.\n\n\n\nhead(df_sales)\n\n# A tibble: 6 × 12\n     ID Name      Age Sex    sales_2020 sales_2021 sales_2022 sales_2023 mood \n  &lt;dbl&gt; &lt;chr&gt;   &lt;dbl&gt; &lt;chr&gt;       &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt; &lt;chr&gt;\n1     1 Alice      25 Female        100        110        120        100 happy\n2     2 Bob        30 Male          200        210        220        230 happy\n3     3 Charlie    22 Male          150        160        170        200 happy\n4     4 Sophie     35 Female        300        320        340        250 happy\n5     5 Eve        28 Female        250        240        250        270 happy\n6     6 Frank      NA Male           NA        260        270        280 happy\n# ℹ 3 more variables: raise &lt;chr&gt;, group &lt;chr&gt;, City &lt;chr&gt;\n\n\nThe data set is in wide format. The data can be restructured to long format such that there is one line per year per person. For this we use the pivot_longer function.\n\ndf_sales_longer &lt;- df_sales %&gt;% \n  pivot_longer(cols = starts_with(\"sales_\"),\n               names_to = \"year\",\n               values_to = \"sales\"\n               )\n\nhead(df_sales_longer)\n\n# A tibble: 6 × 10\n     ID Name    Age Sex    mood  raise group        City  year       sales\n  &lt;dbl&gt; &lt;chr&gt; &lt;dbl&gt; &lt;chr&gt;  &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;        &lt;chr&gt; &lt;chr&gt;      &lt;dbl&gt;\n1     1 Alice    25 Female happy no    young_female Miami sales_2020   100\n2     1 Alice    25 Female happy no    young_female Miami sales_2021   110\n3     1 Alice    25 Female happy no    young_female Miami sales_2022   120\n4     1 Alice    25 Female happy no    young_female Miami sales_2023   100\n5     2 Bob      30 Male   happy yes   mature_male  Miami sales_2020   200\n6     2 Bob      30 Male   happy yes   mature_male  Miami sales_2021   210\n\n\nWe can transform the year to integer.\n\ndf_sales_longer &lt;- df_sales_longer %&gt;% \n  mutate(year = str_remove(year, 'sales_') %&gt;% as.integer()) \n\nhead(df_sales_longer)\n\n# A tibble: 6 × 10\n     ID Name    Age Sex    mood  raise group        City   year sales\n  &lt;dbl&gt; &lt;chr&gt; &lt;dbl&gt; &lt;chr&gt;  &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;        &lt;chr&gt; &lt;int&gt; &lt;dbl&gt;\n1     1 Alice    25 Female happy no    young_female Miami  2020   100\n2     1 Alice    25 Female happy no    young_female Miami  2021   110\n3     1 Alice    25 Female happy no    young_female Miami  2022   120\n4     1 Alice    25 Female happy no    young_female Miami  2023   100\n5     2 Bob      30 Male   happy yes   mature_male  Miami  2020   200\n6     2 Bob      30 Male   happy yes   mature_male  Miami  2021   210\n\n\nMake the plot explained above (scatter and line plot over the sales development over the years for each person).\n\ndf_sales_longer %&gt;% \n  ggplot(aes(x = year, \n             y = sales, \n             color = Name)) + \n  geom_point() + \n  geom_line() + \n  theme_bw()\n\n\n\n\n\n\n\n# Saving the plot\n# ggsave('../out/sales_2_plot.png', width = 10.37, height = 7.55, units = 'in')\n\n\n\nPivot back into wide format\nThe pivot_wider function is used to get data to wide format.\n\ndf_sales_wider &lt;- df_sales_longer %&gt;% \n  pivot_wider(names_from = year, \n              values_from = sales,\n              names_prefix = 'sales_')\n\n# Same content\nhead(df_sales)\n\n# A tibble: 6 × 12\n     ID Name      Age Sex    sales_2020 sales_2021 sales_2022 sales_2023 mood \n  &lt;dbl&gt; &lt;chr&gt;   &lt;dbl&gt; &lt;chr&gt;       &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt; &lt;chr&gt;\n1     1 Alice      25 Female        100        110        120        100 happy\n2     2 Bob        30 Male          200        210        220        230 happy\n3     3 Charlie    22 Male          150        160        170        200 happy\n4     4 Sophie     35 Female        300        320        340        250 happy\n5     5 Eve        28 Female        250        240        250        270 happy\n6     6 Frank      NA Male           NA        260        270        280 happy\n# ℹ 3 more variables: raise &lt;chr&gt;, group &lt;chr&gt;, City &lt;chr&gt;\n\nhead(df_sales_wider)\n\n# A tibble: 6 × 12\n     ID Name      Age Sex    mood  raise group       City  sales_2020 sales_2021\n  &lt;dbl&gt; &lt;chr&gt;   &lt;dbl&gt; &lt;chr&gt;  &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;       &lt;chr&gt;      &lt;dbl&gt;      &lt;dbl&gt;\n1     1 Alice      25 Female happy no    young_fema… Miami        100        110\n2     2 Bob        30 Male   happy yes   mature_male Miami        200        210\n3     3 Charlie    22 Male   happy yes   young_male  LA           150        160\n4     4 Sophie     35 Female happy no    mature_fem… New …        300        320\n5     5 Eve        28 Female happy yes   young_fema… LA           250        240\n6     6 Frank      NA Male   happy yes   &lt;NA&gt;        New …         NA        260\n# ℹ 2 more variables: sales_2022 &lt;dbl&gt;, sales_2023 &lt;dbl&gt;",
-    "crumbs": [
-      "Course Material",
-      "Presentations",
-      "Presentation 2: Data Clean Up"
-    ]
-  },
-  {
-    "objectID": "presentations/presentation2.html#nesting",
-    "href": "presentations/presentation2.html#nesting",
-    "title": "Presentation 2: Advanced Data Wrangling",
-    "section": "Nesting",
-    "text": "Nesting\nThe long format can contain many repetitions e.g. information on the sales employee in df_sales_longer is repeated for every year. Instead of having many nearly identical rows we can use nesting to have just one row with the employee information and the associated sales data in its own ‘mini-tibble’.\nWe’ll group data by Name and nest year and sales into a single column that we will name sales_data.\n\ndf_sales_longer_nested &lt;- df_sales_longer %&gt;%  \n  group_by(Name) %&gt;% \n  nest(sales_data = c(year, sales)) %&gt;% \n  ungroup()\n\nhead(df_sales_longer_nested)\n\n# A tibble: 6 × 9\n     ID Name      Age Sex    mood  raise group         City     sales_data      \n  &lt;dbl&gt; &lt;chr&gt;   &lt;dbl&gt; &lt;chr&gt;  &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;         &lt;chr&gt;    &lt;list&gt;          \n1     1 Alice      25 Female happy no    young_female  Miami    &lt;tibble [4 × 2]&gt;\n2     2 Bob        30 Male   happy yes   mature_male   Miami    &lt;tibble [4 × 2]&gt;\n3     3 Charlie    22 Male   happy yes   young_male    LA       &lt;tibble [4 × 2]&gt;\n4     4 Sophie     35 Female happy no    mature_female New York &lt;tibble [4 × 2]&gt;\n5     5 Eve        28 Female happy yes   young_female  LA       &lt;tibble [4 × 2]&gt;\n6     6 Frank      NA Male   happy yes   &lt;NA&gt;          New York &lt;tibble [4 × 2]&gt;\n\n\nNow we have a structured dataset which is more readable.\nNote: Nested data cannot be exported as an Excel or CSV file. Instead, you need to export it as an RDS file, a format specifically designed to save R objects.\nWe can extract the sales information for a particular employee using the pull function.\n\ndf_sales_longer_nested %&gt;% \n  filter(Name == 'Bob') %&gt;% \n  pull(sales_data)\n\n[[1]]\n# A tibble: 4 × 2\n   year sales\n  &lt;int&gt; &lt;dbl&gt;\n1  2020   200\n2  2021   210\n3  2022   220\n4  2023   230",
-    "crumbs": [
-      "Course Material",
-      "Presentations",
-      "Presentation 2: Data Clean Up"
-    ]
-  },
-  {
-    "objectID": "presentations/presentation2.html#tidyverse-helpers-across-and-where",
-    "href": "presentations/presentation2.html#tidyverse-helpers-across-and-where",
-    "title": "Presentation 2: Advanced Data Wrangling",
-    "section": "Tidyverse helpers: across() and where()",
-    "text": "Tidyverse helpers: across() and where()\n\nUsing across() to select columns\nYou probably noticed that we used a function to help us to summarise() all columns in Presentation 1:\n\ndf_tidyverse %&gt;% summarise(across(everything(), ~ sum(is.na(.))))\n\nIn this section we will say a bit more about the so called tidyverse helpers such as across(), where(), and starts_with(). These helpers are useful when we want to apply a functions, i.e. summarise(), or mutate() to several columns.\nLet’s have an example. We know we can calculate the mean of each sales column like so:\n\ndf_sales %&gt;%\n  summarise(mean(sales_2020),\n            mean(sales_2021),\n            mean(sales_2022),\n            mean(sales_2023))\n\n# A tibble: 1 × 4\n  `mean(sales_2020)` `mean(sales_2021)` `mean(sales_2022)` `mean(sales_2023)`\n               &lt;dbl&gt;              &lt;dbl&gt;              &lt;dbl&gt;              &lt;dbl&gt;\n1                 NA                300                 NA                305\n\n\nNote: We got some NAs because sales_2020 and 2022 contain NA values and we didn’t specify na.rm=TRUE. We will continue to see these in the below examples. Don’t worry about them for now, we will show you how to deal with them later!\nBut then we need to name every column we want to apply summarise to. across() instead lets us select the columns across which we want to apply summarise in a dynamic fashion:\n\ndf_sales %&gt;%\n  summarise(across(everything(), mean))\n\n# A tibble: 1 × 12\n     ID  Name   Age   Sex sales_2020 sales_2021 sales_2022 sales_2023  mood\n  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt; &lt;dbl&gt;\n1   5.5    NA    NA    NA         NA        300         NA        305    NA\n# ℹ 3 more variables: raise &lt;dbl&gt;, group &lt;dbl&gt;, City &lt;dbl&gt;\n\n\nWe put the columns we want to select inside the brackets of across(). everything(), as you have probably guessed means all columns.\nWe will probably not want to calculate means on non-numeric columns, so let’s select only numeric columns. For that we need another helper caller where() that lets us select columns based on their properties, like data type.\n\ndf_sales %&gt;%\n  summarise(across(where(is.numeric), mean))\n\n# A tibble: 1 × 6\n     ID   Age sales_2020 sales_2021 sales_2022 sales_2023\n  &lt;dbl&gt; &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt;\n1   5.5    NA         NA        300         NA        305\n\n\nThere is another group of helpers that refers to column names:\n\nstarts_with()\nends_with()\ncontains()\n\nAnd we can use them to select only columns starting with ‘sales’:\n\ndf_sales %&gt;%\n  summarise(across(starts_with('sales'), mean))\n\n# A tibble: 1 × 4\n  sales_2020 sales_2021 sales_2022 sales_2023\n       &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt;\n1         NA        300         NA        305\n\n\nIf the column names follow some pattern like ‘sales_XXXX’ we can also employ num_range to specify them:\n\ndf_sales %&gt;%\n  summarise(across(num_range('sales_', 2020:2023), mean))\n\n# A tibble: 1 × 4\n  sales_2020 sales_2021 sales_2022 sales_2023\n       &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt;\n1         NA        300         NA        305\n\n\nLastly, we can always straight up supply the names of the columns we want to select in a vector:\n\ndf_sales %&gt;%\n  summarise(across(c(sales_2020, sales_2021), mean))\n\n# A tibble: 1 × 2\n  sales_2020 sales_2021\n       &lt;dbl&gt;      &lt;dbl&gt;\n1         NA        300\n\n\nAll these ways can be used to select columns in tidyverse, also outside of across(). As an example, you’ve already see starts_with() in the Long Format section when we selected the columns to convert with pivot_longer():\n\ndf_sales %&gt;% \n  pivot_longer(cols = starts_with(\"sales_\"),\n               names_to = \"year\",\n               values_to = \"sales\")\n\n\n\nsummarise() becomes more powerful!\nAlright, so we now know how save ourselves from having to name every column we want to operate on, but what if we want to calculate several summary stats? There’s more to numbers than means!\nNow that we have across() we can supply summarise with a list of summary functions to execute:\n\ndf_sales %&gt;%\n  summarise(across(starts_with(\"sales\"), list(mean, sd, min, max)))\n\n# A tibble: 1 × 16\n  sales_2020_1 sales_2020_2 sales_2020_3 sales_2020_4 sales_2021_1 sales_2021_2\n         &lt;dbl&gt;        &lt;dbl&gt;        &lt;dbl&gt;        &lt;dbl&gt;        &lt;dbl&gt;        &lt;dbl&gt;\n1           NA           NA           NA           NA          300         131.\n# ℹ 10 more variables: sales_2021_3 &lt;dbl&gt;, sales_2021_4 &lt;dbl&gt;,\n#   sales_2022_1 &lt;dbl&gt;, sales_2022_2 &lt;dbl&gt;, sales_2022_3 &lt;dbl&gt;,\n#   sales_2022_4 &lt;dbl&gt;, sales_2023_1 &lt;dbl&gt;, sales_2023_2 &lt;dbl&gt;,\n#   sales_2023_3 &lt;dbl&gt;, sales_2023_4 &lt;dbl&gt;\n\n\nNow we get one long row with mean, sd, min and max for every column starting with sales. We’re probably not super happy with the column names sales_2020_1, sales_2020_2, ect, so let’s add names that contain the function we’re executing (mean, ect). In order for this to work we must also name the functions:\n\ndf_sales %&gt;%\n  summarise(across(starts_with(\"sales\"), \n                   list(mean = mean, sd = sd, min = min, max = max),\n                   .names = \"{.col}-{.fn}\"))\n\n# A tibble: 1 × 16\n  `sales_2020-mean` `sales_2020-sd` `sales_2020-min` `sales_2020-max`\n              &lt;dbl&gt;           &lt;dbl&gt;            &lt;dbl&gt;            &lt;dbl&gt;\n1                NA              NA               NA               NA\n# ℹ 12 more variables: `sales_2021-mean` &lt;dbl&gt;, `sales_2021-sd` &lt;dbl&gt;,\n#   `sales_2021-min` &lt;dbl&gt;, `sales_2021-max` &lt;dbl&gt;, `sales_2022-mean` &lt;dbl&gt;,\n#   `sales_2022-sd` &lt;dbl&gt;, `sales_2022-min` &lt;dbl&gt;, `sales_2022-max` &lt;dbl&gt;,\n#   `sales_2023-mean` &lt;dbl&gt;, `sales_2023-sd` &lt;dbl&gt;, `sales_2023-min` &lt;dbl&gt;,\n#   `sales_2023-max` &lt;dbl&gt;\n\n\nStill not your preferred format? You can probably pivot your way out of that!\n\ndf_sales %&gt;%\n  #run summarise on all sales columns\n  summarise(across(starts_with(\"sales\"), \n                   list(mean = mean, sd = sd, min = min, max = max),\n                   .names = \"{.col}-{.fn}\")) %&gt;%\n  #add reformating\n  pivot_longer(cols = everything(), \n               names_to = c(\"variable\", \"statistic\"), \n               names_sep = \"-\") %&gt;%\n  pivot_wider(names_from = statistic, values_from = value)\n\n# A tibble: 4 × 5\n  variable    mean    sd   min   max\n  &lt;chr&gt;      &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;\n1 sales_2020    NA   NA     NA    NA\n2 sales_2021   300  131.   110   510\n3 sales_2022    NA   NA     NA    NA\n4 sales_2023   305  131.   100   500",
-    "crumbs": [
-      "Course Material",
-      "Presentations",
-      "Presentation 2: Data Clean Up"
-    ]
-  },
-  {
-    "objectID": "presentations/presentation2.html#the-anonymous-function-and-.",
-    "href": "presentations/presentation2.html#the-anonymous-function-and-.",
-    "title": "Presentation 2: Advanced Data Wrangling",
-    "section": "The anonymous function: ~ and .",
-    "text": "The anonymous function: ~ and .\nBut wait! We still have those pesky NAs in our summary stats. Let’s just add the na.rm=TRUE argument. To not have too many things going on at once we’ll only do mean() for now:\n\ndf_sales %&gt;%\n  summarise(across(starts_with(\"sales\"), \n                   list(mean = mean(na.rm = TRUE)),\n                   .names = \"{.col}-{.fn}\"))\n\nError in `summarise()`:\nℹ In argument: `across(...)`.\nCaused by error in `mean.default()`:\n! argument \"x\" is missing, with no default\n\n\nBrrrtt! We may not.\n\n\n\n\n\nWhy? We are requesting a function call across several columns and we’re doing it in shorthand. This is only permitted is there are no arguments to the function (mean(), sd(), ect). You will also notice that we didn’t use brackets after their names, which is part of using the function short hand.\nIf we need to pass arguments to functions inside another function call (i.e. calling mean inside summarise) we need to invoke the anonymous function. Don’t worry, it is much less ominous than it sounds! It is written as a ~ and looks like this:\n\ndf_sales %&gt;%\n  summarise(across(starts_with(\"sales\"), \n                   list(mean = ~ mean(., na.rm = TRUE)),\n                   .names = \"{.col}-{.fn}\"))\n\n# A tibble: 1 × 4\n  `sales_2020-mean` `sales_2021-mean` `sales_2022-mean` `sales_2023-mean`\n              &lt;dbl&gt;             &lt;dbl&gt;             &lt;dbl&gt;             &lt;dbl&gt;\n1              294.               300              288.               305\n\n\nThe observant reader will also have noticed that a . has appeared in the brackets behind mean(). It simply means ‘the data previously referred to’, in this case every column starting with ‘sales’. We need to use the . because mean when called as a proper function needs to have an argument (a vector of numbers) to work on:\n\nmean(df_sales$sales_2020,na.rm=TRUE)\n\n[1] 294.4444\n\n\nSo this is it, we invoke the anonymous function for every statistic we want to calculate and now we may pass arguments:\n\ndf_sales %&gt;%\n  #across and starts_with selects columns\n  summarise(across(starts_with(\"sales\"), \n                   #list the functions to execute\n                   list(mean = ~ mean(., na.rm=T),\n                        sd = ~ sd(., na.rm=T), \n                        min = ~ min(., na.rm=T), \n                        max = ~ max(., na.rm=T)),\n                   #specify names of output columns\n                   .names = \"{.col}-{.fn}\")) %&gt;%\n  \n  #add reformating\n  pivot_longer(cols = everything(), \n               names_to = c(\"variable\", \"statistic\"), \n               names_sep = \"-\") %&gt;%\n  pivot_wider(names_from = statistic, values_from = value)\n\n# A tibble: 4 × 5\n  variable    mean    sd   min   max\n  &lt;chr&gt;      &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;\n1 sales_2020  294.  136.   100   500\n2 sales_2021  300   131.   110   510\n3 sales_2022  288.  115.   120   470\n4 sales_2023  305   131.   100   500\n\n\n\nOther usage examples\nThe anonymous function and across are also useful inside mutate()! Our data has sales in thousands DKK, so lets multiply every value in every sales column with 1000:\n\ndf_sales %&gt;% head(n=3)\n\n# A tibble: 3 × 12\n     ID Name      Age Sex    sales_2020 sales_2021 sales_2022 sales_2023 mood \n  &lt;dbl&gt; &lt;chr&gt;   &lt;dbl&gt; &lt;chr&gt;       &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt; &lt;chr&gt;\n1     1 Alice      25 Female        100        110        120        100 happy\n2     2 Bob        30 Male          200        210        220        230 happy\n3     3 Charlie    22 Male          150        160        170        200 happy\n# ℹ 3 more variables: raise &lt;chr&gt;, group &lt;chr&gt;, City &lt;chr&gt;\n\n\n\ndf_sales %&gt;%\n  mutate(across(starts_with(\"sales\"), ~ . * 1000)) %&gt;%\n  head(n=3)\n\n# A tibble: 3 × 12\n     ID Name      Age Sex    sales_2020 sales_2021 sales_2022 sales_2023 mood \n  &lt;dbl&gt; &lt;chr&gt;   &lt;dbl&gt; &lt;chr&gt;       &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt; &lt;chr&gt;\n1     1 Alice      25 Female     100000     110000     120000     100000 happy\n2     2 Bob        30 Male       200000     210000     220000     230000 happy\n3     3 Charlie    22 Male       150000     160000     170000     200000 happy\n# ℹ 3 more variables: raise &lt;chr&gt;, group &lt;chr&gt;, City &lt;chr&gt;\n\n\n\nWhat is happening here is we first select all columns starting with ‘sales’ by using across() and starts_with(). Then we say that we want to execute a function on each of these columns. The function shall be ‘multiply this column by 1000’. Multiplying by 1000 is written as * 1000 in R, ‘this column’ is . as we discussed before and ~ tells R that we’re executing a function.\nAnother cool example: Replacing NAs with 0s only in the columns starting with ‘sales’:\n\ndf_sales %&gt;%\n  mutate(across(starts_with(\"sales\"), ~ replace_na(.,0)))\n\n# A tibble: 10 × 12\n      ID Name      Age Sex    sales_2020 sales_2021 sales_2022 sales_2023 mood \n   &lt;dbl&gt; &lt;chr&gt;   &lt;dbl&gt; &lt;chr&gt;       &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt; &lt;chr&gt;\n 1     1 Alice      25 Female        100        110        120        100 happy\n 2     2 Bob        30 Male          200        210        220        230 happy\n 3     3 Charlie    22 Male          150        160        170        200 happy\n 4     4 Sophie     35 Female        300        320        340        250 happy\n 5     5 Eve        28 Female        250        240        250        270 happy\n 6     6 Frank      NA Male            0        260        270        280 happy\n 7     7 Grace      40 Female        400        420        430        450 happy\n 8     8 Hannah     29 Female        500        510          0        500 happy\n 9     9 Ian        21 Male          450        460        470        480 happy\n10    10 Jack       33 Male          300        310        320        290 happy\n# ℹ 3 more variables: raise &lt;chr&gt;, group &lt;chr&gt;, City &lt;chr&gt;\n\n\nThis is it for now but there will be user-defined functions later!",
-    "crumbs": [
-      "Course Material",
-      "Presentations",
-      "Presentation 2: Data Clean Up"
-    ]
-  },
-  {
-    "objectID": "index.html",
-    "href": "index.html",
-    "title": "R for Data Science",
-    "section": "",
-    "text": "This 3 day course is a continuation of our 2 day course FromExceltoR and the material of that course is a prerequisite to this course. If you have not used R since you took the course, please go through the course material again (link to course). R for Data Science is an advanced course in R-programming for researchers at the Faculty of Health and Medical Sciences (SUND), University of Copenhagen. The course is build on code-along presentations and exercises in Quarto documents.\n\nThe course goes through the following topics:\n\nScript formats\nAdvanced tidyverse using real world data (build on material from our introduction to R course, FromExceltoR)\nScripting in R using functions, for-loops, if-else statements.\nModelling in R.\n\nThe material in this repository is for teaching purposes only and not to be distributed commercially.\nFinally… Dear course participants, it would greatly help us if you could complete our UPDATE LINK feedback form."
-  },
-  {
-    "objectID": "index.html#welcome-to-the-main-page-of-r-for-data-science",
-    "href": "index.html#welcome-to-the-main-page-of-r-for-data-science",
-    "title": "R for Data Science",
-    "section": "",
-    "text": "This 3 day course is a continuation of our 2 day course FromExceltoR and the material of that course is a prerequisite to this course. If you have not used R since you took the course, please go through the course material again (link to course). R for Data Science is an advanced course in R-programming for researchers at the Faculty of Health and Medical Sciences (SUND), University of Copenhagen. The course is build on code-along presentations and exercises in Quarto documents.\n\nThe course goes through the following topics:\n\nScript formats\nAdvanced tidyverse using real world data (build on material from our introduction to R course, FromExceltoR)\nScripting in R using functions, for-loops, if-else statements.\nModelling in R.\n\nThe material in this repository is for teaching purposes only and not to be distributed commercially.\nFinally… Dear course participants, it would greatly help us if you could complete our UPDATE LINK feedback form."
-  },
-  {
-    "objectID": "index.html#program",
-    "href": "index.html#program",
-    "title": "R for Data Science",
-    "section": "Program",
-    "text": "Program"
-  },
-  {
-    "objectID": "exercises/exercise2.html",
-    "href": "exercises/exercise2.html",
-    "title": "Exercise 2 - solutions: Advanced Tidyverse / Pivot longer, wider, and nesting",
-    "section": "",
-    "text": "In this exercise you will do some more advance tidyverse operations such as pivoting and nesting, as well as create plots to brush up on your ggplot skills.",
-    "crumbs": [
-      "Course Material",
-      "Exercises",
-      "Exercise 2: Exploratory Data Analysis"
-    ]
-  },
-  {
-    "objectID": "exercises/exercise2.html#introduction",
-    "href": "exercises/exercise2.html#introduction",
-    "title": "Exercise 2 - solutions: Advanced Tidyverse / Pivot longer, wider, and nesting",
-    "section": "",
-    "text": "In this exercise you will do some more advance tidyverse operations such as pivoting and nesting, as well as create plots to brush up on your ggplot skills.",
-    "crumbs": [
-      "Course Material",
-      "Exercises",
-      "Exercise 2: Exploratory Data Analysis"
-    ]
-  },
-  {
-    "objectID": "exercises/exercise2.html#first-steps",
-    "href": "exercises/exercise2.html#first-steps",
-    "title": "Exercise 2 - solutions: Advanced Tidyverse / Pivot longer, wider, and nesting",
-    "section": "First steps",
-    "text": "First steps\n\nLoad packages.\nLoad the joined diabetes data set you created in exercise 1 and the glucose dataset from the data folder.\nHave a look at the glucose dataset. The OGTT column contains measurements from a Oral Glucose Tolerance Test where blood glucose is measured at fasting (Glucose_0), 6 hours after glucose intake (Glucose_6), and 12 hours after (Glucose_12).\nRestructure the glucose dataset into a long format. How many rows are there per ID? Does that make sense?\n\n\n\n\n\n\n\nHint\n\n\n\n\n\nRemember the flow:\n\npivot_longer(cols = LIST_WITH_COLUMNS_TO_PIVOT,\n             names_to = \"NEW_COLUMN_CONTAINING_COLUMN_NAMES\",\n             values_to = \"NEW_COLUMN_CONTAINING_COLUMN_VALUES\")\n\nHave a look at slide 16 for a visual overview.\n\n\n\n\nChange the glucose measurements to numeric variable.\n\n\n\n\n\n\n\nHint\n\n\n\n\n\nThe stringr packages is a part of tidyverse and has many functions for manipulating strings. Find a function that can split the string so you can extract the numbers on the other side of the underscore.\n\n\n\n\nNest the glucose measurements and values such that there is only one row per ID.\n\n\n\n\n\n\n\nHint\n\n\n\n\n\nRemember the flow:\n\ngroup_by() %&gt;% \n  nest() %&gt;% \n  ungroup()\n\n\n\n\n\nMerge the nested glucose dataset with the joined diabetes.\nPull the glucose measurements (OGTT) from your favorite ID.\n\n\n\n\n\n\n\nHint\n\n\n\n\n\nFirst filter for your favorite ID and then pull the nested column.\n\n\n\n\nCreate a figure that visualizes glucose measurements at each time point (Measurement), stratified by patient ID. Give the plot a meaningful title.\nCalculate the mean glucose measure for each measurement.\n\n\n\n\n\n\n\nHint\n\n\n\n\n\nYou will need to use unnest(), group_by(), and summerize().\n\n\n\n\nMake the same calculation and stratify on Diabetes as well.\n\nThis next exercise might be a bit more challenging. It requires multiple operations and might involve some techniques that were not explicitly shown in the presentations.\n\nRecreate the plot you made in Exercise 10 and include the mean value for each glucose measurement for the two Diabetes statuses (0 and 1).\n\n\n\n\n\n\n\nHint\n\n\n\n\n\nThere are several ways to solve this task. There is a workflow suggestion:\n\nThe line in the plot is connected by ID. Create new IDs for the mean values that do not already exist in the dataset. Use RANDOM_ID %in% df$ID to check if an ID is already present.\nData from another dataset can be added to the plot like this: + geom_point(DATA, aes(x = VAR1, y = VAR2, group = VAR3))\n\n\n\n\n\nExport the final dataset. Since the dataset is nested, you cannot export it as an excel file. Export the dataset as an .rds file. Have a guess at what the function is called.",
-    "crumbs": [
-      "Course Material",
-      "Exercises",
-      "Exercise 2: Exploratory Data Analysis"
-    ]
-  },
-  {
-    "objectID": "exercises/exercise0.html",
-    "href": "exercises/exercise0.html",
-    "title": "Exercise 0: R script and Quarto",
-    "section": "",
-    "text": "Make a new directory for this course.\nGo to course website and to the Data tab. Press the Download Data button.\nMove the Data folder to your course directory.\nUnder your course directory, make a new folder for your scripts, one for our output, and another for the presentations you download.\n\nYour file tree should look something like this:",
-    "crumbs": [
-      "Course Material",
-      "Exercises",
-      "Exercise 0: R script and Quarto"
-    ]
-  },
-  {
-    "objectID": "exercises/exercise0.html#file-management-data-download",
-    "href": "exercises/exercise0.html#file-management-data-download",
-    "title": "Exercise 0: R script and Quarto",
-    "section": "",
-    "text": "Make a new directory for this course.\nGo to course website and to the Data tab. Press the Download Data button.\nMove the Data folder to your course directory.\nUnder your course directory, make a new folder for your scripts, one for our output, and another for the presentations you download.\n\nYour file tree should look something like this:",
-    "crumbs": [
-      "Course Material",
-      "Exercises",
-      "Exercise 0: R script and Quarto"
-    ]
-  },
-  {
-    "objectID": "exercises/exercise0.html#working-directories",
-    "href": "exercises/exercise0.html#working-directories",
-    "title": "Exercise 0: R script and Quarto",
-    "section": "Working directories",
-    "text": "Working directories\n\nOpen R studio.\nAccess your current working directory by writing getwd() in the console.\n\nThe working directory in R (or other programming environments) is the folder on your computer where R looks for files to read or write by default. When you load or save data, R will use the working directory unless you specify another path. A path can either be absolute or relative:\n\nAbsolute path: The path from the root of your file system to the input file.\nRelative path: The path from the working directory to the input file.",
-    "crumbs": [
-      "Course Material",
-      "Exercises",
-      "Exercise 0: R script and Quarto"
-    ]
-  },
-  {
-    "objectID": "exercises/exercise0.html#r-script",
-    "href": "exercises/exercise0.html#r-script",
-    "title": "Exercise 0: R script and Quarto",
-    "section": "R Script",
-    "text": "R Script\n\nCreate an R script and save it in your work folder.\n\nAn R script is a plain text file containing a series of R commands and code used for data analysis. R scripts have a .R extension and can be executed line-by-line in an interactive R session or as a whole script. They are ideal for automating workflows and keeping your analyses reproducible and organized. R scripts can be submitted to a job on a supercomputer unlike Quarto documents.\n\nType getwd() in your R script and run the line. Compare the working directory with the one from the console.\nChange the working directory using setwd().\nRun getwd() again.\nType in a few lines of code and some comments and re-save the file.",
-    "crumbs": [
-      "Course Material",
-      "Exercises",
-      "Exercise 0: R script and Quarto"
-    ]
-  },
-  {
-    "objectID": "exercises/exercise0.html#quarto",
-    "href": "exercises/exercise0.html#quarto",
-    "title": "Exercise 0: R script and Quarto",
-    "section": "Quarto",
-    "text": "Quarto\n\nCreate an Quarto document and save it in your work folder.\n\nQuarto is an open-source publishing system designed to help you create dynamic, reproducible documents, presentations, and websites. It extends the ideas of tools like R Markdown, combining simplicity with powerful customization options for modern scientific and technical communication.\n\nType getwd() in a code chunk in your Quarto document and run the line. Compare the working directory with the one from the console.\nChange the working directory in one chuck using setwd().\nRun getwd() in the same chunk as setwd() AND in another chunk. What do you observe?\n\n\n\n\n\n\n\nHint\n\n\n\n\n\n\nsetwd('')\ngetwd()\n\n\ngetwd()\n\n\n\n\n\nCreate some code chunks, write text and headers. Re-save the file.\nRender the Quarto document and have a look at the html file.\n\n\n\n\n\n\n\nResources for Quarto\n\n\n\n\n\n\nQuarto website\n\n“Get started with Quarto” tutorial for RStudio\n\n“Get started with Quarto” video for RStudio\nComprehensive guides to Quarto basics",
-    "crumbs": [
-      "Course Material",
-      "Exercises",
-      "Exercise 0: R script and Quarto"
-    ]
-  },
-  {
-    "objectID": "exercises/exercise0.html#r-project",
-    "href": "exercises/exercise0.html#r-project",
-    "title": "Exercise 0: R script and Quarto",
-    "section": "R project",
-    "text": "R project\nAn R project in RStudio creates a self-contained working environment tied to a specific folder, which becomes the default working directory for all scripts, data, and outputs. This structure helps organize files, ensures reproducibility, and simplifies path management. By default, a Quarto document’s working directory is its file location. While this can be changed chunk-wise, the working directory for R scripts can be set globally for all scripts in a folder by creating an R project. The R project is a small configuration file, usually placed in the root of the project folder, and requires no manual interaction—it quietly ensures your workflows remain well-organized.\n\n\n\n\n\n\nCreate an R project by clicking the Project (None) in the top right → New Project → Existing Directory and choose an appropriate location. Look at the top-right corner to check that you are in your R project.\nReopen the the R script and Quarto document you created in Exercise 7 and 13 respectively. Check each of their working directories. Are they as you expect? Explain.\n\n\n\n\n\n\n\nHint\n\n\n\n\n\n\nThe working directory of the R script is the same as the location of the .Rproj file.\nThe working directory of the Quarto document is always the same as the location of the document.\n\n\n\n\n\nIf you like the flow of the R project, keep it. If not, delete it. It is not necessary to have an R project. NB If you delete it, click the R project drop-down menu in the top-right corner → Close Project.",
-    "crumbs": [
-      "Course Material",
-      "Exercises",
-      "Exercise 0: R script and Quarto"
-    ]
-  },
-  {
-    "objectID": "about_heads.html",
-    "href": "about_heads.html",
-    "title": "About HeaDS",
-    "section": "",
-    "text": "In the Center for Health Data Science (HeaDS) we do both research and in the DataLab and Sandbox we develop and host course. Read more about all the cool stuff we do on our website.\n\n\nThe DataLab offers a range of services to support SUND employees in their data science analyses. Here’s an overview:\n\nCourses: We offer data science and bioinformatics courses for all SUND staff (researchers, administrative staff, technical staff, etc.). Our most popular courses include “From Excel to R,” “Python Tsunami,” and “Introduction to Bulk RNA-seq Analysis.”\nConsultations: We host drop-in sessions every Thursday from 13:00 to 15:00, where we assist with data science-related challenges and questions. Alternatively, you can reach out to arrange a one-on-one meeting on another day.\nCommissions: We conduct commissioned research, such as bioinformatics and data science analyses tailored to your needs. Additionally, we offer a commissioned supervision scheme if you would like to learn how to perform the analysis yourself.\nEvents: We host various data science events. Join us for our seminar series, “Talking HeaDS.” Our next session is in the spring (date and speeker TBA), and you can sign up here: https://eventsignup.ku.dk/talkingheadsspring2025."
-  },
-  {
-    "objectID": "about_heads.html#center-for-health-data-science",
-    "href": "about_heads.html#center-for-health-data-science",
-    "title": "About HeaDS",
-    "section": "",
-    "text": "In the Center for Health Data Science (HeaDS) we do both research and in the DataLab and Sandbox we develop and host course. Read more about all the cool stuff we do on our website.\n\n\nThe DataLab offers a range of services to support SUND employees in their data science analyses. Here’s an overview:\n\nCourses: We offer data science and bioinformatics courses for all SUND staff (researchers, administrative staff, technical staff, etc.). Our most popular courses include “From Excel to R,” “Python Tsunami,” and “Introduction to Bulk RNA-seq Analysis.”\nConsultations: We host drop-in sessions every Thursday from 13:00 to 15:00, where we assist with data science-related challenges and questions. Alternatively, you can reach out to arrange a one-on-one meeting on another day.\nCommissions: We conduct commissioned research, such as bioinformatics and data science analyses tailored to your needs. Additionally, we offer a commissioned supervision scheme if you would like to learn how to perform the analysis yourself.\nEvents: We host various data science events. Join us for our seminar series, “Talking HeaDS.” Our next session is in the spring (date and speeker TBA), and you can sign up here: https://eventsignup.ku.dk/talkingheadsspring2025."
-  },
-  {
-    "objectID": "data/data.html",
-    "href": "data/data.html",
-    "title": "Data",
-    "section": "",
-    "text": "DOWNLOAD DATA  \n\nAfter download, unzip the data folder and place it somewhere you can find it again.",
-    "crumbs": [
-      "Course Material",
-      "Data️"
-    ]
-  },
-  {
-    "objectID": "data/data.html#download-data",
-    "href": "data/data.html#download-data",
-    "title": "Data",
-    "section": "",
-    "text": "DOWNLOAD DATA  \n\nAfter download, unzip the data folder and place it somewhere you can find it again.",
-    "crumbs": [
-      "Course Material",
-      "Data️"
-    ]
-  },
-  {
-    "objectID": "data/data.html#download-presentations",
-    "href": "data/data.html#download-presentations",
-    "title": "Data",
-    "section": "Download presentations",
-    "text": "Download presentations\nIt can be nice to follow along the presentation scripts as we go through them.\n\n  DOWNLOAD PRESENTATIONS",
-    "crumbs": [
-      "Course Material",
-      "Data️"
-    ]
-  },
-  {
-    "objectID": "exercises/exercise1.html",
-    "href": "exercises/exercise1.html",
-    "title": "Presentation 1: Base R and Tidyverse / Data Clean-up and Wrangling",
-    "section": "",
-    "text": "Load packages.\nLoad in the diabetes_clinical_toy_messy.xlsx data set.",
-    "crumbs": [
-      "Course Material",
-      "Exercises",
-      "Exercise 1: Data Clean Up"
-    ]
-  },
-  {
-    "objectID": "exercises/exercise1.html#getting-started",
-    "href": "exercises/exercise1.html#getting-started",
-    "title": "Presentation 1: Base R and Tidyverse / Data Clean-up and Wrangling",
-    "section": "",
-    "text": "Load packages.\nLoad in the diabetes_clinical_toy_messy.xlsx data set.",
-    "crumbs": [
-      "Course Material",
-      "Exercises",
-      "Exercise 1: Data Clean Up"
-    ]
-  },
-  {
-    "objectID": "exercises/exercise1.html#explore-the-data",
-    "href": "exercises/exercise1.html#explore-the-data",
-    "title": "Presentation 1: Base R and Tidyverse / Data Clean-up and Wrangling",
-    "section": "Explore the data",
-    "text": "Explore the data\nUse can you either base R or/and tidyverse to solve the exercises.\n\nHow many missing values (NA’s) are there in each column.\nCheck the distribution of each of the variables. Consider that they are of different classes. Do any of the distributions seem odd to you?",
-    "crumbs": [
-      "Course Material",
-      "Exercises",
-      "Exercise 1: Data Clean Up"
-    ]
-  },
-  {
-    "objectID": "exercises/exercise1.html#clean-up-the-data",
-    "href": "exercises/exercise1.html#clean-up-the-data",
-    "title": "Presentation 1: Base R and Tidyverse / Data Clean-up and Wrangling",
-    "section": "Clean up the data",
-    "text": "Clean up the data\nNow that we have had a look at the data, it is time to correct fixable mistakes and remove observations that cannot be corrected.\nConsider the following:\n\nWhat should we do with the rows that contain NAs? Do we remove them or keep them?\nWhich mistakes in the data can be corrected, and which cannot?\nAre there zeros in the data? Are they true zeros or errors?\nDo you want to change any of the classes of the variables?\n\n\nClean the data according to your considerations.\n\n\n\n\n\n\n\nHint\n\n\n\n\n\nHave a look at BloodPressure, BMI, Sex, and Diabetes.",
-    "crumbs": [
-      "Course Material",
-      "Exercises",
-      "Exercise 1: Data Clean Up"
-    ]
-  },
-  {
-    "objectID": "exercises/exercise1.html#meta-data",
-    "href": "exercises/exercise1.html#meta-data",
-    "title": "Presentation 1: Base R and Tidyverse / Data Clean-up and Wrangling",
-    "section": "Meta Data",
-    "text": "Meta Data\n\nPerform step 2-5 from above and do data exploration and cleaning workflow for the diabetes_meta_toy_messy.xlsx data set.",
-    "crumbs": [
-      "Course Material",
-      "Exercises",
-      "Exercise 1: Data Clean Up"
-    ]
-  },
-  {
-    "objectID": "exercises/exercise1.html#join-the-datasets",
-    "href": "exercises/exercise1.html#join-the-datasets",
-    "title": "Presentation 1: Base R and Tidyverse / Data Clean-up and Wrangling",
-    "section": "Join the datasets",
-    "text": "Join the datasets\n\nConsider what variable the datasets should be joined on.\n\n\n\n\n\n\n\nHint\n\n\n\n\n\nThe joining variable must be the same type in both datasets.\n\n\n\n\nJoin the datasets by the variable you selected above.\nHow many rows does the joined dataset have? Explain why.\n\n\n\n\n\n\n\nHint\n\n\n\n\n\nBecause we used left_join, only the IDs that are in diabetes_clinical_clean are kept.\n\n\n\n\nExport the joined dataset. Think about which directory you want to save the file in.",
-    "crumbs": [
-      "Course Material",
-      "Exercises",
-      "Exercise 1: Data Clean Up"
-    ]
-  },
-  {
-    "objectID": "exercises/exercise5.html",
-    "href": "exercises/exercise5.html",
-    "title": "Exercise 5 - Linear regression",
-    "section": "",
-    "text": "In this exercise you will fit and interpret a linear regression model.\n\n\n\nLoad packages\nLoad the data boston.csv\n\nThis dataset describes conditions surrounding the Boston housing market in the 1970s. Each row describes a zone in the Boston area (so there is more than one house in each row).\nThe columns are:\ncrim - per capita crime rate\nindus - proportion of non-retail businesses\nnox - Nitrogen oxides concentration (air pollution)\nrm - average number of rooms\nneighborhood - the type of neighborhood the zone is in\nmedv - median value per house in 1000s\n\n\n\n\nDoes the datatype of each column fit to it what it describes? Do you need to change any data types?\n\n\n\n\n\nSplit the dataset into test and training data.\nFit a model of how well the number of rooms (rm), crime rate (crim) and neighborhood type (neighborhood) predict the value of the houses (medv).\nDescribe what information you get from the model summary.",
-    "crumbs": [
-      "Course Material",
-      "Exercises",
-      "Exercise 5: Linear Regression"
-    ]
-  },
-  {
-    "objectID": "exercises/exercise5.html#introduction",
-    "href": "exercises/exercise5.html#introduction",
-    "title": "Exercise 5 - Linear regression",
-    "section": "",
-    "text": "In this exercise you will fit and interpret a linear regression model.\n\n\n\nLoad packages\nLoad the data boston.csv\n\nThis dataset describes conditions surrounding the Boston housing market in the 1970s. Each row describes a zone in the Boston area (so there is more than one house in each row).\nThe columns are:\ncrim - per capita crime rate\nindus - proportion of non-retail businesses\nnox - Nitrogen oxides concentration (air pollution)\nrm - average number of rooms\nneighborhood - the type of neighborhood the zone is in\nmedv - median value per house in 1000s\n\n\n\n\nDoes the datatype of each column fit to it what it describes? Do you need to change any data types?\n\n\n\n\n\nSplit the dataset into test and training data.\nFit a model of how well the number of rooms (rm), crime rate (crim) and neighborhood type (neighborhood) predict the value of the houses (medv).\nDescribe what information you get from the model summary.",
-    "crumbs": [
-      "Course Material",
-      "Exercises",
-      "Exercise 5: Linear Regression"
-    ]
-  },
-  {
-    "objectID": "presentations/presentation1.html",
-    "href": "presentations/presentation1.html",
-    "title": "Presentation 1: Base R and Tidyverse",
-    "section": "",
-    "text": "library(tidyverse)",
-    "crumbs": [
-      "Course Material",
-      "Presentations",
-      "Presentation 1: Base R and Tidyverse"
-    ]
-  },
-  {
-    "objectID": "presentations/presentation1.html#load-packages",
-    "href": "presentations/presentation1.html#load-packages",
-    "title": "Presentation 1: Base R and Tidyverse",
-    "section": "",
-    "text": "library(tidyverse)",
-    "crumbs": [
-      "Course Material",
-      "Presentations",
-      "Presentation 1: Base R and Tidyverse"
-    ]
-  },
-  {
-    "objectID": "presentations/presentation1.html#load-dataset",
-    "href": "presentations/presentation1.html#load-dataset",
-    "title": "Presentation 1: Base R and Tidyverse",
-    "section": "Load Dataset",
-    "text": "Load Dataset\nHere we load a dataframe that contains sales data for employees (in thousands DKK) from 2020 to 2023. We load the data as df_baseR which we will use to demonstrate base R commands. A copy of the same dataframe, df_tidyverse, is used to demonstrate tidyverse commands.\n\ndf_baseR &lt;- readxl::read_excel('../data/df_sales_1.xlsx') %&gt;% as.data.frame()\ndf_tidyverse &lt;- readxl::read_excel('../data/df_sales_1.xlsx') %&gt;% as_tibble()\n\nTable format in baseR is called data.frame. Have a look at the object in the terminal. It is very simple.\n\nclass(df_baseR)\n\n[1] \"data.frame\"\n\n\nTable format in tidyverse is called tibble. Have a look at the object in the terminal. The dimensions of the tibble is provided together with the classes of each column.\n\nclass(df_tidyverse)\n\n[1] \"tbl_df\"     \"tbl\"        \"data.frame\"",
-    "crumbs": [
-      "Course Material",
-      "Presentations",
-      "Presentation 1: Base R and Tidyverse"
-    ]
-  },
-  {
-    "objectID": "presentations/presentation1.html#base-r-and-tidyverse",
-    "href": "presentations/presentation1.html#base-r-and-tidyverse",
-    "title": "Presentation 1: Base R and Tidyverse",
-    "section": "Base R and Tidyverse",
-    "text": "Base R and Tidyverse\nAccess the Age column:\n\n# Base R \ndf_baseR['Age']\n\n# Tidyverse \ndf_tidyverse %&gt;% select(Age)\n\nAccess the Age column as a vector:\n\n# Base R \ndf_baseR[['Age']]\ndf_tidyverse$Age\n\n# Tidyverse \ndf_tidyverse %&gt;% pull(Age)\n\nAdd a column containing the difference in sales in 2022 and 2022.\n\n# Base R \ndf_baseR$sales_diff &lt;- df_baseR$sales_2022 - df_baseR$sales_2020\n\n# Tidyverse \ndf_tidyverse &lt;- df_tidyverse %&gt;% \n  mutate(sales_diff = sales_2022 - sales_2020)\n\nRemove the sales_diff column.\n\n# Base R \ndf_baseR$sales_diff &lt;- NULL\n\n# Tidyverse \ndf_tidyverse &lt;- df_tidyverse %&gt;% \n  select(!sales_diff)\n\nSelect columns with sales numbers.\n\n# Base R \ndf_baseR[, startsWith(colnames(df_baseR), 'sales_')]\n\n# Tidyverse \ndf_tidyverse %&gt;% \n  select(starts_with('sales_'))\n\nFilter rows for people older than 25.\n\n# Base R \ndf_baseR[df_baseR$Age &gt; 25 ,]\n\n# Tidyverse \ndf_tidyverse %&gt;% \n  filter(Age &gt; 25)\n\nFilter row for people that are 30 years old or younger and have sales in 2022 over 200.\n\n# Base R \ndf_baseR[!is.na(df_baseR$Age) & !is.na(df_baseR$sales_2022) &\n         df_baseR$Age &lt;= 30 & df_baseR$sales_2022 &gt; 200 ,]\n\n# Tidyverse \ndf_tidyverse %&gt;% \n  filter(Age &lt;= 30, sales_2022 &gt; 200)\n\nAdd column.\n\n# Base R \ndf_baseR$mood &lt;- \"happy\"\n\n# Tidyverse \ndf_tidyverse &lt;- df_tidyverse %&gt;% \n  mutate(mood = \"happy\")\n\nConditions using ifelse.\n\n# Base R \ndf_baseR$raise &lt;- ifelse(df_baseR$sales_2023 &gt; df_baseR$sales_2022, \"yes\", \"no\")\n\n# Tidyverse \ndf_tidyverse &lt;- df_tidyverse %&gt;% \n  mutate(raise = ifelse(sales_2023 &gt; sales_2022, \"yes\", \"no\"))\n\nConditions using case_when.\n\n# Base R \ndf_baseR$group &lt;- ifelse(df_baseR$Age &lt; 30 & df_baseR$Sex == \"Female\", \"young_female\",\n                  ifelse(df_baseR$Age &lt; 30 & df_baseR$Sex == \"Male\", \"young_male\",\n                  ifelse(df_baseR$Age &gt;= 30 & df_baseR$Sex == \"Female\", \"mature_female\",\n                  ifelse(df_baseR$Age &gt;= 30 & df_baseR$Sex == \"Male\", \"mature_male\", NA))))\n\n# Tidyverse \ndf_tidyverse &lt;- df_tidyverse %&gt;% \n  mutate(group = case_when(Age &lt; 30 & Sex == \"Female\" ~ \"young_female\",\n                           Age &lt; 30 & Sex == \"Male\" ~ \"young_male\",\n                           Age &gt;= 30 & Sex == \"Female\" ~ \"mature_female\",\n                           Age &gt;= 30 & Sex == \"Male\" ~ \"mature_male\", \n                           .default = NA))\n\nCheck which columns have NAs.\n\n# Base R\ncolSums(is.na(df_baseR))\n\n# Tidyverse\ndf_tidyverse %&gt;% summarise(across(everything(), ~ sum(is.na(.))))\n\nRemove rows with any NAs.\n\n# Base R\ndf_baseR_no_na &lt;- df_baseR[complete.cases(df_baseR), ]\n\n# Tidyverse\ndf_tidyverse_no_na &lt;- df_tidyverse %&gt;% drop_na()\n\nSort data based on sales in 2022 in descending order.\n\n# Base R \ndf_baseR[order(-df_baseR$sales_2022) ,]\n\n# Tidyverse \ndf_tidyverse %&gt;% arrange(desc(sales_2022))\n\nDo the filtering in 4. and select the Name and Sex column. This far, do you prefer the base R or tidyverse way? Do you see pros and cons with both?\n\n# Base R, NAs not removed\ndf_baseR[!is.na(df_baseR$Age) & !is.na(df_baseR$sales_2022) &\n         df_baseR$Age &lt;= 30 & df_baseR$sales_2022 &gt; 200 , c('Age', 'Sex')]\n\n# Base R, NAs removed\ndf_baseR_no_na[df_baseR_no_na$Age &lt;= 30 & df_baseR_no_na$sales_2022 &gt; 200 , c('Age', 'Sex')]\n\n# Tidyverse \ndf_tidyverse %&gt;% \n  filter(Age &lt;= 30, sales_2022 &gt; 200) %&gt;% \n  select(Age, Sex)\n\nThe df_location data frame contains information about the cities of the sales people.\n\nset.seed(101)\n\ndf_location &lt;- data.frame(\n  ID = sample(10),\n  City = c(\"New York\", \"LA\", \"New York\", \"Chicago\", \"Miami\", \"Miami\", \"LA\", \"Chicago\", \"LA\", \"New York\")\n)\n\nhead(df_location)\n\nJoin df and df_location. For base R we use merge and for tidyverse we use left_join.\n\n# Base R \ndf_baseR_merged &lt;- merge(df_baseR, df_location, by = 'ID')\nhead(df_baseR_merged)\n\n# Tidyverse \ndf_tidyverse_join &lt;- df_tidyverse %&gt;% left_join(df_location, by = 'ID')\nhead(df_tidyverse_join)\n\nCount the number of people in each of the unique cities.\n\n# Base R\ntable(df_baseR_merged$City)\n\n# Tidyverse\ndf_tidyverse_join %&gt;% count(City)",
-    "crumbs": [
-      "Course Material",
-      "Presentations",
-      "Presentation 1: Base R and Tidyverse"
-    ]
-  },
-  {
-    "objectID": "presentations/presentation1.html#string-manipulation",
-    "href": "presentations/presentation1.html#string-manipulation",
-    "title": "Presentation 1: Base R and Tidyverse",
-    "section": "String manipulation",
-    "text": "String manipulation\nWe will do string manipulation the tidyverse way.\nThe paste function concatenates two strings to one.\n\npaste('Alice', 'Hansen')\n\n[1] \"Alice Hansen\"\n\n\nThe sep argument is a space by default, but can be changed to any character.\n\npaste('Alice', 'Hansen', sep = \"_\")\n\n[1] \"Alice_Hansen\"\n\n\nThe paste0 function concatenates two strings to one without adding any separator between them.\n\npaste0('Alice', 'Hansen')\n\n[1] \"AliceHansen\"\n\n\nLet’s give all the employees the last name Hansen.\n\ndf_tidyverse_join &lt;- df_tidyverse_join %&gt;% \n  mutate(Name = paste(Name, 'Hansen'))\n\nhead(df_tidyverse_join)\n\n# A tibble: 6 × 12\n     ID Name         Age Sex   sales_2020 sales_2021 sales_2022 sales_2023 mood \n  &lt;dbl&gt; &lt;chr&gt;      &lt;dbl&gt; &lt;chr&gt;      &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt; &lt;chr&gt;\n1     1 Alice Han…    25 Fema…        100        110        120        100 happy\n2     2 Bob Hansen    30 Male         200        210        220        230 happy\n3     3 Charlie H…    22 Male         150        160        170        200 happy\n4     4 Sophie Ha…    35 Fema…        300        320        340        250 happy\n5     5 Eve Hansen    28 Fema…        250        240        250        270 happy\n6     6 Frank Han…    NA Male          NA        260        270        280 happy\n# ℹ 3 more variables: raise &lt;chr&gt;, group &lt;chr&gt;, City &lt;chr&gt;\n\n\nWe use the str_split function to split a string into multiple parts in a list.\n\nstr_split('Alice Hansen', pattern = ' ')\n\n[[1]]\n[1] \"Alice\"  \"Hansen\"\n\n\n\nstr_split('Alice_Hansen_Jensen', pattern = '_')\n\n[[1]]\n[1] \"Alice\"  \"Hansen\" \"Jensen\"\n\n\nIndexing one of the strings in the list using the str_split_i function.\n\nstr_split_i('Alice_Hansen_Jensen', pattern = '_', i = 2)\n\n[1] \"Hansen\"\n\n\nLet’s remove the last name we just gave the employees.\n\ndf_tidyverse_join &lt;- df_tidyverse_join %&gt;% \n  mutate(Name = str_split_i(Name, pattern = ' ', i = 1))\n\nhead(df_tidyverse_join)\n\n# A tibble: 6 × 12\n     ID Name      Age Sex    sales_2020 sales_2021 sales_2022 sales_2023 mood \n  &lt;dbl&gt; &lt;chr&gt;   &lt;dbl&gt; &lt;chr&gt;       &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt; &lt;chr&gt;\n1     1 Alice      25 Female        100        110        120        100 happy\n2     2 Bob        30 Male          200        210        220        230 happy\n3     3 Charlie    22 Male          150        160        170        200 happy\n4     4 Sophie     35 Female        300        320        340        250 happy\n5     5 Eve        28 Female        250        240        250        270 happy\n6     6 Frank      NA Male           NA        260        270        280 happy\n# ℹ 3 more variables: raise &lt;chr&gt;, group &lt;chr&gt;, City &lt;chr&gt;\n\n\nDetect substring in main string using str_detect.\n\nstr_detect('Alice', 'A')\n\n[1] TRUE\n\n\n\nstr_detect('Alice', 'B')\n\n[1] FALSE\n\n\nAdd column that check if “A” or “a” in Name and place it after the Name column.\n\ndf_tidyverse_join %&gt;% \n  mutate(A_in_name = str_detect(Name, 'A|a'),\n         .after = Name) %&gt;% \n  head()\n\n# A tibble: 6 × 13\n     ID Name   A_in_name   Age Sex   sales_2020 sales_2021 sales_2022 sales_2023\n  &lt;dbl&gt; &lt;chr&gt;  &lt;lgl&gt;     &lt;dbl&gt; &lt;chr&gt;      &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt;\n1     1 Alice  TRUE         25 Fema…        100        110        120        100\n2     2 Bob    FALSE        30 Male         200        210        220        230\n3     3 Charl… TRUE         22 Male         150        160        170        200\n4     4 Sophie FALSE        35 Fema…        300        320        340        250\n5     5 Eve    FALSE        28 Fema…        250        240        250        270\n6     6 Frank  TRUE         NA Male          NA        260        270        280\n# ℹ 4 more variables: mood &lt;chr&gt;, raise &lt;chr&gt;, group &lt;chr&gt;, City &lt;chr&gt;",
-    "crumbs": [
-      "Course Material",
-      "Presentations",
-      "Presentation 1: Base R and Tidyverse"
-    ]
-  },
-  {
-    "objectID": "presentations/presentation1.html#whitespace",
-    "href": "presentations/presentation1.html#whitespace",
-    "title": "Presentation 1: Base R and Tidyverse",
-    "section": "Whitespace",
-    "text": "Whitespace\nWhitespace includes spaces, newlines, and other blank characters in text. It can cause errors or inconsistencies in data, so removing unnecessary whitespace is an important step in cleaning data.\nLet’s have a look at a version of the sales data frame with whitespaces. In the tibble format it cannot be spotted.\n\ndf_sales_messy &lt;- read_delim('../data/df_sales_messy.csv')\nhead(df_sales_messy)\n\n# A tibble: 6 × 8\n     ID Name      Age Sex    sales_2020 sales_2021 sales_2022 sales_2023\n  &lt;dbl&gt; &lt;chr&gt;   &lt;dbl&gt; &lt;chr&gt;       &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt;\n1     1 Alice      25 Female        100        110        120        100\n2     2 Bob        30 Male          200        210        220        230\n3     3 Charlie    22 Male          150        160        170        200\n4     4 Sophie     35 Female        300        320        340        250\n5     5 Eve        28 Female        250        240        250        270\n6     6 Frank      NA Male           NA        260        270        280\n\n\nAccessing the unique sexes of the Sex column before cleaning.\n\ndf_sales_messy$Sex %&gt;% unique()\n\n[1] \"Female\"  \"Male\"    \"Female \" \"Male \"  \n\n\nUse the str_trim function to remove whitespace.\n\ndf_sales_messy$Sex %&gt;% str_trim() %&gt;% unique()\n\n[1] \"Female\" \"Male\"  \n\n\nLike other function, the str_trim function can also be used inside the mutate function to alter the data frame.\n\ndf_sales_clean &lt;- df_sales_messy %&gt;% \n  mutate(Sex = str_trim(Sex))\n\nAccessing the unique sexes of the Sex column after cleaning.\n\ndf_sales_clean$Sex %&gt;% unique()\n\n[1] \"Female\" \"Male\"",
-    "crumbs": [
-      "Course Material",
-      "Presentations",
-      "Presentation 1: Base R and Tidyverse"
-    ]
-  },
-  {
-    "objectID": "presentations/presentation1.html#export-dataset",
-    "href": "presentations/presentation1.html#export-dataset",
-    "title": "Presentation 1: Base R and Tidyverse",
-    "section": "Export Dataset",
-    "text": "Export Dataset\nExport tidyverse dataset\n\nwritexl::write_xlsx(df_tidyverse_join, '../out/sales_data_2.xlsx')",
-    "crumbs": [
-      "Course Material",
-      "Presentations",
-      "Presentation 1: Base R and Tidyverse"
-    ]
-  },
-  {
-    "objectID": "presentations/presentation3.html",
-    "href": "presentations/presentation3.html",
-    "title": "Presentation 3 - Exploratory Data Analysis (EDA)",
-    "section": "",
-    "text": "We will not be going through any presentation for this part.\nFor Exercise 3-13 we refer to the FromExceltoR material: https://center-for-health-data-science.github.io/FromExceltoR/Presentations/presentation3.html.\nFor Exercise 14-19 we refer to the this tutorial about Principal Component Analysis (PCA): https://cran.r-project.org/web/packages/ggfortify/vignettes/plot_pca.html.\nFor theory about PCA have a look at this video: https://www.youtube.com/watch?v=FgakZw6K1QQ&t=799s. NB: This video structures samples/mice as features and genes as observations, where as the usual structure is genes as features and samples/mice as observations.",
-    "crumbs": [
-      "Course Material",
-      "Presentations",
-      "Presentation 3: Exploratory Data Analysis"
-    ]
+    "text": "Regression with categorical features\nNow that we know how to make a simple linear model, how can we include categorical variables and what is the interpretation of their coefficients? To investigate this we will load a second version of the dataset that contains an additional variable: Exercise level.\n\ndf_smoke &lt;- read.csv('../data/smoking_cat.csv')\nhead(df_smoke)\n\n  daily_cigarettes life exercise\n1                7   76        0\n2               11   73        0\n3               27   72        1\n4               23   71        0\n5               13   74        0\n6               11   76        1\n\ndistinct(df_smoke, exercise)\n\n  exercise\n1        0\n2        1\n3        2\n\n\nAlright, we have three different levels of exercise. They are: low == 0, moderate == 1 and high == 2. Before we go on, let’s have a look if our data is represented correctly:\n\nstr(df_smoke)\n\n'data.frame':   100 obs. of  3 variables:\n $ daily_cigarettes: int  7 11 27 23 13 11 20 6 23 32 ...\n $ life            : int  76 73 72 71 74 76 71 76 72 70 ...\n $ exercise        : int  0 0 1 0 0 1 0 1 1 2 ...\n\n\nWe can see that the exercise column is interpreted as an integer. However, it is actually a category! In R categorical variables are known as factors and have their own datatype. Let’s convert exercise to a factor:\n\ndf_smoke$exercise &lt;- as.factor(df_smoke$exercise)\nstr(df_smoke)\n\n'data.frame':   100 obs. of  3 variables:\n $ daily_cigarettes: int  7 11 27 23 13 11 20 6 23 32 ...\n $ life            : int  76 73 72 71 74 76 71 76 72 70 ...\n $ exercise        : Factor w/ 3 levels \"0\",\"1\",\"2\": 1 1 2 1 1 2 1 2 2 3 ...\n\n\nAs before, before fitting the model we’ll split up the data in train and test. Since we’re using the same seed we should get the same observations, i.e. rows into training and test as above.\n\n# Set seed to ensure reproducibility\nset.seed(123)  \n\n#add an ID column to keep track of observations\ndf_smoke$ID &lt;- 1:nrow(df_smoke)\n\ntrain &lt;- df_smoke %&gt;% sample_frac(.75)\ntest  &lt;- anti_join(df_smoke, train, by = 'ID') \n\nAnd now we extend our previous model formula with the new predictor:\n\nmodel2 &lt;- lm(life ~ daily_cigarettes + exercise, data = train)\n\n\nsummary(model2)\n\n\nCall:\nlm(formula = life ~ daily_cigarettes + exercise, data = train)\n\nResiduals:\n     Min       1Q   Median       3Q      Max \n-1.58295 -0.53972 -0.01596  0.53773  1.70257 \n\nCoefficients:\n                  Estimate Std. Error t value Pr(&gt;|t|)    \n(Intercept)      77.582954   0.234237 331.216  &lt; 2e-16 ***\ndaily_cigarettes -0.285521   0.009401 -30.372  &lt; 2e-16 ***\nexercise1         1.095475   0.249402   4.392 3.84e-05 ***\nexercise2         2.372227   0.260427   9.109 1.48e-13 ***\n---\nSignif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1\n\nResidual standard error: 0.8578 on 71 degrees of freedom\nMultiple R-squared:  0.9338,    Adjusted R-squared:  0.931 \nF-statistic: 333.7 on 3 and 71 DF,  p-value: &lt; 2.2e-16\n\n\nWhen we check the summary we see that it has two additional coefficients, exercise1 and exercise2. What are they?\nBecause exercise is a categorical variable it is dummy coded. That means our model formula mathematically looks something like this:\n\\[y=b_0+b_1*x_1 + b_2 *x_2 + b_3*x_3\\]\nwith:\n\n\n\nExercise level\n\\(x_2\\)\n\\(x_3\\)\n\n\n\n\n0\n0\n0\n\n\n1\n1\n0\n\n\n2\n0\n1\n\n\n\nAnd for our coefficients it means:\n\nmodel2$coefficients\n\n     (Intercept) daily_cigarettes        exercise1        exercise2 \n      77.5829543       -0.2855213        1.0954747        2.3722266 \n\n\n\nIntercept == \\(b_0\\): The life expectancy at 0 cigarettes and exercise level 0\ndaily_cigerettes == \\(b_1\\): The change in life expectancy for each additional cigarette.\nexercise1 == \\(b_2\\): The change in life expectancy if the exercise level is 1 (assuming the number of cigarettes stays constant).\nexercise2 == \\(b_3\\): The change in life expectancy if the exercise level is 2 (assuming the number of cigarettes stays constant).\n\nWhy is there no coefficient for exercise level 0 (low amount of exercise)? This case is covered in the Intercept. It is referred to as the reference level of the categorical variable. You can change which level is regarded as the reference and the effect of having this level will always be modelled in the intercept."
   },
   {
     "objectID": "presentations/presentation4_main_script.html",
@@ -792,6 +286,554 @@
       "Course Material",
       "Presentations",
       "Presentation 4: Scripting in R"
+    ]
+  },
+  {
+    "objectID": "presentations/presentation3.html",
+    "href": "presentations/presentation3.html",
+    "title": "Presentation 3 - Exploratory Data Analysis (EDA)",
+    "section": "",
+    "text": "We will not be going through any presentation for this part.\nFor Exercise 3-13 we refer to the FromExceltoR material: https://center-for-health-data-science.github.io/FromExceltoR/Presentations/presentation3.html.\nFor Exercise 14-19 we refer to the this tutorial about Principal Component Analysis (PCA): https://cran.r-project.org/web/packages/ggfortify/vignettes/plot_pca.html.\nFor theory about PCA have a look at this video: https://www.youtube.com/watch?v=FgakZw6K1QQ&t=799s. NB: This video structures samples/mice as features and genes as observations, where as the usual structure is genes as features and samples/mice as observations.",
+    "crumbs": [
+      "Course Material",
+      "Presentations",
+      "Presentation 3: Exploratory Data Analysis"
+    ]
+  },
+  {
+    "objectID": "presentations/presentation1.html",
+    "href": "presentations/presentation1.html",
+    "title": "Presentation 1: Base R and Tidyverse",
+    "section": "",
+    "text": "In this section we will look at some differences between base R and tidyverse and also learn how to prepare a clean dataset.",
+    "crumbs": [
+      "Course Material",
+      "Presentations",
+      "Presentation 1: Data Clean Up"
+    ]
+  },
+  {
+    "objectID": "presentations/presentation1.html#load-packages",
+    "href": "presentations/presentation1.html#load-packages",
+    "title": "Presentation 1: Base R and Tidyverse",
+    "section": "Load Packages",
+    "text": "Load Packages\n\nlibrary(tidyverse)",
+    "crumbs": [
+      "Course Material",
+      "Presentations",
+      "Presentation 1: Data Clean Up"
+    ]
+  },
+  {
+    "objectID": "presentations/presentation1.html#load-dataset",
+    "href": "presentations/presentation1.html#load-dataset",
+    "title": "Presentation 1: Base R and Tidyverse",
+    "section": "Load Dataset",
+    "text": "Load Dataset\nHere we load a dataframe that contains sales data for employees (in thousands DKK) from 2020 to 2023. We load the data as df_baseR which we will use to demonstrate base R commands. A copy of the same dataframe, df_tidyverse, is used to demonstrate tidyverse commands.\n\ndf_baseR &lt;- readxl::read_excel('../data/df_sales_1.xlsx') %&gt;% as.data.frame()\ndf_tidyverse &lt;- readxl::read_excel('../data/df_sales_1.xlsx') %&gt;% as_tibble()\n\nTable format in baseR is called data.frame. Have a look at the object in the terminal. It is very simple.\n\nclass(df_baseR)\n\n[1] \"data.frame\"\n\n\nTable format in tidyverse is called tibble. Have a look at the object in the terminal. The dimensions of the tibble is provided together with the classes of each column.\n\nclass(df_tidyverse)\n\n[1] \"tbl_df\"     \"tbl\"        \"data.frame\"",
+    "crumbs": [
+      "Course Material",
+      "Presentations",
+      "Presentation 1: Data Clean Up"
+    ]
+  },
+  {
+    "objectID": "presentations/presentation1.html#base-r-and-tidyverse",
+    "href": "presentations/presentation1.html#base-r-and-tidyverse",
+    "title": "Presentation 1: Base R and Tidyverse",
+    "section": "Base R and Tidyverse",
+    "text": "Base R and Tidyverse\nMany operations in R can be done in several ways. We illustrate here the base R and tidyverse ways to achieve common operations.\nAccess the Age column:\n\n# Base R \ndf_baseR['Age']\n\n# Tidyverse \ndf_tidyverse %&gt;% select(Age)\n\nAccess the Age column as a vector:\n\n# Base R \ndf_baseR[['Age']]\ndf_tidyverse$Age\n\n# Tidyverse \ndf_tidyverse %&gt;% pull(Age)\n\nAdd a column containing the difference in sales in 2022 and 2022.\n\n# Base R \ndf_baseR$sales_diff &lt;- df_baseR$sales_2022 - df_baseR$sales_2020\n\n# Tidyverse \ndf_tidyverse &lt;- df_tidyverse %&gt;% \n  mutate(sales_diff = sales_2022 - sales_2020)\n\nRemove the sales_diff column.\n\n# Base R \ndf_baseR$sales_diff &lt;- NULL\n\n# Tidyverse \ndf_tidyverse &lt;- df_tidyverse %&gt;% \n  select(-sales_diff)\n\nSelect columns with sales numbers.\n\n# Base R \ndf_baseR[, startsWith(colnames(df_baseR), 'sales_')]\n\n# Tidyverse \ndf_tidyverse %&gt;% \n  select(starts_with('sales_'))\n\nFilter rows for people older than 25.\n\n# Base R \ndf_baseR[df_baseR$Age &gt; 25 ,]\n\n# Tidyverse \ndf_tidyverse %&gt;% \n  filter(Age &gt; 25)\n\nFilter row for people that are 30 years old or younger and have sales in 2022 over 200.\n\n# Base R \ndf_baseR[!is.na(df_baseR$Age) & !is.na(df_baseR$sales_2022) &\n         df_baseR$Age &lt;= 30 & df_baseR$sales_2022 &gt; 200 ,]\n\n# Tidyverse \ndf_tidyverse %&gt;% \n  filter(Age &lt;= 30, sales_2022 &gt; 200)\n\nAdd column.\n\n# Base R \ndf_baseR$mood &lt;- \"happy\"\n\n# Tidyverse \ndf_tidyverse &lt;- df_tidyverse %&gt;% \n  mutate(mood = \"happy\")\n\nConditions using ifelse.\n\n# Base R \ndf_baseR$raise &lt;- ifelse(df_baseR$sales_2023 &gt; df_baseR$sales_2022, \"yes\", \"no\")\n\n# Tidyverse \ndf_tidyverse &lt;- df_tidyverse %&gt;% \n  mutate(raise = ifelse(sales_2023 &gt; sales_2022, \"yes\", \"no\"))\n\nConditions using case_when.\n\n# Base R \ndf_baseR$group &lt;- ifelse(df_baseR$Age &lt; 30 & df_baseR$Sex == \"Female\", \"young_female\",\n                  ifelse(df_baseR$Age &lt; 30 & df_baseR$Sex == \"Male\", \"young_male\",\n                  ifelse(df_baseR$Age &gt;= 30 & df_baseR$Sex == \"Female\", \"mature_female\",\n                  ifelse(df_baseR$Age &gt;= 30 & df_baseR$Sex == \"Male\", \"mature_male\", NA))))\n\n# Tidyverse \ndf_tidyverse &lt;- df_tidyverse %&gt;% \n  mutate(group = case_when(Age &lt; 30 & Sex == \"Female\" ~ \"young_female\",\n                           Age &lt; 30 & Sex == \"Male\" ~ \"young_male\",\n                           Age &gt;= 30 & Sex == \"Female\" ~ \"mature_female\",\n                           Age &gt;= 30 & Sex == \"Male\" ~ \"mature_male\", \n                           .default = NA))\n\nCheck which columns have NAs.\n\n# Base R\ncolSums(is.na(df_baseR))\n\n# Tidyverse\ndf_tidyverse %&gt;% summarise(across(everything(), ~ sum(is.na(.))))\n\nRemove rows with any NAs.\n\n# Base R\ndf_baseR_no_na &lt;- df_baseR[complete.cases(df_baseR), ]\n\n# Tidyverse\ndf_tidyverse_no_na &lt;- df_tidyverse %&gt;% drop_na()\n\nSort data based on sales in 2022 in descending order.\n\n# Base R \ndf_baseR[order(-df_baseR$sales_2022) ,]\n\n# Tidyverse \ndf_tidyverse %&gt;% arrange(desc(sales_2022))\n\nDo the filtering in 4. and select the Name and Sex column. This far, do you prefer the base R or tidyverse way? Do you see pros and cons with both?\n\n# Base R, NAs not removed\ndf_baseR[!is.na(df_baseR$Age) & !is.na(df_baseR$sales_2022) &\n         df_baseR$Age &lt;= 30 & df_baseR$sales_2022 &gt; 200 , c('Age', 'Sex')]\n\n# Base R, NAs removed\ndf_baseR_no_na[df_baseR_no_na$Age &lt;= 30 & df_baseR_no_na$sales_2022 &gt; 200 , c('Age', 'Sex')]\n\n# Tidyverse \ndf_tidyverse %&gt;% \n  filter(Age &lt;= 30, sales_2022 &gt; 200) %&gt;% \n  select(Age, Sex)\n\nThe df_location data frame contains information about the cities of the sales people.\n\nset.seed(101)\n\ndf_location &lt;- data.frame(\n  ID = sample(10),\n  City = c(\"New York\", \"LA\", \"New York\", \"Chicago\", \"Miami\", \"Miami\", \"LA\", \"Chicago\", \"LA\", \"New York\")\n)\n\nhead(df_location)\n\nJoin df and df_location. For base R we use merge and for tidyverse we use left_join.\n\n# Base R \ndf_baseR_merged &lt;- merge(df_baseR, df_location, by = 'ID')\nhead(df_baseR_merged)\n\n# Tidyverse \ndf_tidyverse_join &lt;- df_tidyverse %&gt;% left_join(df_location, by = 'ID')\nhead(df_tidyverse_join)\n\nCount the number of people in each of the unique cities.\n\n# Base R\ntable(df_baseR_merged$City)\n\n# Tidyverse\ndf_tidyverse_join %&gt;% count(City)",
+    "crumbs": [
+      "Course Material",
+      "Presentations",
+      "Presentation 1: Data Clean Up"
+    ]
+  },
+  {
+    "objectID": "presentations/presentation1.html#string-manipulation",
+    "href": "presentations/presentation1.html#string-manipulation",
+    "title": "Presentation 1: Base R and Tidyverse",
+    "section": "String manipulation",
+    "text": "String manipulation\nWe will do string manipulation the tidyverse way.\nThe paste function concatenates two strings to one.\n\npaste('Alice', 'Hansen')\n\n[1] \"Alice Hansen\"\n\n\nThe sep argument is a space by default, but can be changed to any character.\n\npaste('Alice', 'Hansen', sep = \"_\")\n\n[1] \"Alice_Hansen\"\n\n\nThe paste0 function concatenates two strings to one without adding any separator between them.\n\npaste0('Alice', 'Hansen')\n\n[1] \"AliceHansen\"\n\n\nLet’s give all the employees the last name Hansen.\n\ndf_tidyverse_join &lt;- df_tidyverse_join %&gt;% \n  mutate(Name = paste(Name, 'Hansen'))\n\nhead(df_tidyverse_join)\n\n# A tibble: 6 × 12\n     ID Name         Age Sex   sales_2020 sales_2021 sales_2022 sales_2023 mood \n  &lt;dbl&gt; &lt;chr&gt;      &lt;dbl&gt; &lt;chr&gt;      &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt; &lt;chr&gt;\n1     1 Alice Han…    25 Fema…        100        110        120        100 happy\n2     2 Bob Hansen    30 Male         200        210        220        230 happy\n3     3 Charlie H…    22 Male         150        160        170        200 happy\n4     4 Sophie Ha…    35 Fema…        300        320        340        250 happy\n5     5 Eve Hansen    28 Fema…        250        240        250        270 happy\n6     6 Frank Han…    NA Male          NA        260        270        280 happy\n# ℹ 3 more variables: raise &lt;chr&gt;, group &lt;chr&gt;, City &lt;chr&gt;\n\n\nWe use the str_split function to split a string into multiple parts in a list.\n\nstr_split('Alice Hansen', pattern = ' ')\n\n[[1]]\n[1] \"Alice\"  \"Hansen\"\n\n\n\nstr_split('Alice_Hansen_Jensen', pattern = '_')\n\n[[1]]\n[1] \"Alice\"  \"Hansen\" \"Jensen\"\n\n\nIndexing one of the strings in the list using the str_split_i function.\n\nstr_split_i('Alice_Hansen_Jensen', pattern = '_', i = 2)\n\n[1] \"Hansen\"\n\n\nLet’s remove the last name we just gave the employees.\n\ndf_tidyverse_join &lt;- df_tidyverse_join %&gt;% \n  mutate(Name = str_split_i(Name, pattern = ' ', i = 1))\n\nhead(df_tidyverse_join)\n\n# A tibble: 6 × 12\n     ID Name      Age Sex    sales_2020 sales_2021 sales_2022 sales_2023 mood \n  &lt;dbl&gt; &lt;chr&gt;   &lt;dbl&gt; &lt;chr&gt;       &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt; &lt;chr&gt;\n1     1 Alice      25 Female        100        110        120        100 happy\n2     2 Bob        30 Male          200        210        220        230 happy\n3     3 Charlie    22 Male          150        160        170        200 happy\n4     4 Sophie     35 Female        300        320        340        250 happy\n5     5 Eve        28 Female        250        240        250        270 happy\n6     6 Frank      NA Male           NA        260        270        280 happy\n# ℹ 3 more variables: raise &lt;chr&gt;, group &lt;chr&gt;, City &lt;chr&gt;\n\n\nDetect substring in main string using str_detect.\n\nstr_detect('Alice', 'A')\n\n[1] TRUE\n\n\n\nstr_detect('Alice', 'B')\n\n[1] FALSE\n\n\nAdd column that check if “A” or “a” in Name and place it after the Name column.\n\ndf_tidyverse_join %&gt;% \n  mutate(A_in_name = str_detect(Name, 'A|a'),\n         .after = Name) %&gt;% \n  head()\n\n# A tibble: 6 × 13\n     ID Name   A_in_name   Age Sex   sales_2020 sales_2021 sales_2022 sales_2023\n  &lt;dbl&gt; &lt;chr&gt;  &lt;lgl&gt;     &lt;dbl&gt; &lt;chr&gt;      &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt;\n1     1 Alice  TRUE         25 Fema…        100        110        120        100\n2     2 Bob    FALSE        30 Male         200        210        220        230\n3     3 Charl… TRUE         22 Male         150        160        170        200\n4     4 Sophie FALSE        35 Fema…        300        320        340        250\n5     5 Eve    FALSE        28 Fema…        250        240        250        270\n6     6 Frank  TRUE         NA Male          NA        260        270        280\n# ℹ 4 more variables: mood &lt;chr&gt;, raise &lt;chr&gt;, group &lt;chr&gt;, City &lt;chr&gt;",
+    "crumbs": [
+      "Course Material",
+      "Presentations",
+      "Presentation 1: Data Clean Up"
+    ]
+  },
+  {
+    "objectID": "presentations/presentation1.html#whitespace",
+    "href": "presentations/presentation1.html#whitespace",
+    "title": "Presentation 1: Base R and Tidyverse",
+    "section": "Whitespace",
+    "text": "Whitespace\nWhitespace includes spaces, newlines, and other blank characters in text. It can cause errors or inconsistencies in data, so removing unnecessary whitespace is an important step in cleaning data.\nLet’s have a look at a version of the sales data frame with whitespaces. In the tibble format it cannot be spotted.\n\ndf_sales_messy &lt;- read_delim('../data/df_sales_messy.csv')\nhead(df_sales_messy)\n\n# A tibble: 6 × 8\n     ID Name      Age Sex    sales_2020 sales_2021 sales_2022 sales_2023\n  &lt;dbl&gt; &lt;chr&gt;   &lt;dbl&gt; &lt;chr&gt;       &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt;\n1     1 Alice      25 Female        100        110        120        100\n2     2 Bob        30 Male          200        210        220        230\n3     3 Charlie    22 Male          150        160        170        200\n4     4 Sophie     35 Female        300        320        340        250\n5     5 Eve        28 Female        250        240        250        270\n6     6 Frank      NA Male           NA        260        270        280\n\n\nAccessing the unique sexes of the Sex column before cleaning.\n\ndf_sales_messy$Sex %&gt;% unique()\n\n[1] \"Female\"  \"Male\"    \"Female \" \"Male \"  \n\n\nUse the str_trim function to remove whitespace.\n\ndf_sales_messy$Sex %&gt;% str_trim() %&gt;% unique()\n\n[1] \"Female\" \"Male\"  \n\n\nLike other function, the str_trim function can also be used inside the mutate function to alter the data frame.\n\ndf_sales_clean &lt;- df_sales_messy %&gt;% \n  mutate(Sex = str_trim(Sex))\n\nAccessing the unique sexes of the Sex column after cleaning.\n\ndf_sales_clean$Sex %&gt;% unique()\n\n[1] \"Female\" \"Male\"",
+    "crumbs": [
+      "Course Material",
+      "Presentations",
+      "Presentation 1: Data Clean Up"
+    ]
+  },
+  {
+    "objectID": "presentations/presentation1.html#export-dataset",
+    "href": "presentations/presentation1.html#export-dataset",
+    "title": "Presentation 1: Base R and Tidyverse",
+    "section": "Export Dataset",
+    "text": "Export Dataset\nExport tidyverse dataset\n\nwritexl::write_xlsx(df_tidyverse_join, '../out/sales_data_2.xlsx')",
+    "crumbs": [
+      "Course Material",
+      "Presentations",
+      "Presentation 1: Data Clean Up"
+    ]
+  },
+  {
+    "objectID": "exercises/exercise5.html",
+    "href": "exercises/exercise5.html",
+    "title": "Exercise 5 - Linear regression",
+    "section": "",
+    "text": "In this exercise you will fit and interpret a linear regression model.\n\n\n\nLoad packages\nLoad the data boston.csv\n\nThis dataset describes conditions surrounding the Boston housing market in the 1970s. Each row describes a zone in the Boston area (so there is more than one house in each row).\nThe columns are:\ncrim - per capita crime rate\nindus - proportion of non-retail businesses\nnox - Nitrogen oxides concentration (air pollution)\nrm - average number of rooms\nneighborhood - the type of neighborhood the zone is in\nmedv - median value per house in 1000s\n\n\n\n\nDoes the datatype of each column fit to it what it describes? Do you need to change any data types?\n\n\n\n\n\nSplit the dataset into test and training data.\nFit a model of how well the number of rooms (rm), crime rate (crim) and neighborhood type (neighborhood) predict the value of the houses (medv).\nDescribe what information you get from the model summary.",
+    "crumbs": [
+      "Course Material",
+      "Exercises",
+      "Exercise 5: Linear Regression"
+    ]
+  },
+  {
+    "objectID": "exercises/exercise5.html#introduction",
+    "href": "exercises/exercise5.html#introduction",
+    "title": "Exercise 5 - Linear regression",
+    "section": "",
+    "text": "In this exercise you will fit and interpret a linear regression model.\n\n\n\nLoad packages\nLoad the data boston.csv\n\nThis dataset describes conditions surrounding the Boston housing market in the 1970s. Each row describes a zone in the Boston area (so there is more than one house in each row).\nThe columns are:\ncrim - per capita crime rate\nindus - proportion of non-retail businesses\nnox - Nitrogen oxides concentration (air pollution)\nrm - average number of rooms\nneighborhood - the type of neighborhood the zone is in\nmedv - median value per house in 1000s\n\n\n\n\nDoes the datatype of each column fit to it what it describes? Do you need to change any data types?\n\n\n\n\n\nSplit the dataset into test and training data.\nFit a model of how well the number of rooms (rm), crime rate (crim) and neighborhood type (neighborhood) predict the value of the houses (medv).\nDescribe what information you get from the model summary.",
+    "crumbs": [
+      "Course Material",
+      "Exercises",
+      "Exercise 5: Linear Regression"
+    ]
+  },
+  {
+    "objectID": "exercises/exercise1.html",
+    "href": "exercises/exercise1.html",
+    "title": "Exercise 1: Base R and Tidyverse / Data Clean-up and Wrangling",
+    "section": "",
+    "text": "In this exercise you will practice your R skills by loading, inspecting and cleaning a dataset. You can use base R and/or tidyverse to solve the exercises, it is up to you.",
+    "crumbs": [
+      "Course Material",
+      "Exercises",
+      "Exercise 1: Data Clean Up"
+    ]
+  },
+  {
+    "objectID": "exercises/exercise1.html#getting-started",
+    "href": "exercises/exercise1.html#getting-started",
+    "title": "Exercise 1: Base R and Tidyverse / Data Clean-up and Wrangling",
+    "section": "Getting started",
+    "text": "Getting started\n\nLoad the packages you think you will need. There is no need to spend too much time on this part. If you later realize you need another package just add it here and re-run the chunk.\n\n\n#your packages here\n\n\nLoad in the data set diabetes_clinical_toy_messy.xlsx.",
+    "crumbs": [
+      "Course Material",
+      "Exercises",
+      "Exercise 1: Data Clean Up"
+    ]
+  },
+  {
+    "objectID": "exercises/exercise1.html#explore-the-data",
+    "href": "exercises/exercise1.html#explore-the-data",
+    "title": "Exercise 1: Base R and Tidyverse / Data Clean-up and Wrangling",
+    "section": "Explore the data",
+    "text": "Explore the data\n\nHow many missing values (NA’s) are there in each column?\nCheck the distribution of each of the variables. Consider that they are of different data types. Do any of the distributions seem odd to you?",
+    "crumbs": [
+      "Course Material",
+      "Exercises",
+      "Exercise 1: Data Clean Up"
+    ]
+  },
+  {
+    "objectID": "exercises/exercise1.html#clean-up-the-data",
+    "href": "exercises/exercise1.html#clean-up-the-data",
+    "title": "Exercise 1: Base R and Tidyverse / Data Clean-up and Wrangling",
+    "section": "Clean up the data",
+    "text": "Clean up the data\nNow that we have had a look at the data, it is time to correct fixable mistakes and remove observations that cannot be corrected.\nConsider the following:\n\nWhat should we do with the rows that contain NAs? Do we remove them or keep them?\nWhich mistakes in the data can be corrected, and which cannot?\nAre there zeros in the data? Are they true zeros or errors?\nDo you want to change any of the data types of the variables?\n\n\nClean the data according to your considerations.\n\n\n\n\n\n\n\nHint\n\n\n\n\n\nHave a look at BloodPressure, BMI, Sex, and Diabetes.",
+    "crumbs": [
+      "Course Material",
+      "Exercises",
+      "Exercise 1: Data Clean Up"
+    ]
+  },
+  {
+    "objectID": "exercises/exercise1.html#meta-data",
+    "href": "exercises/exercise1.html#meta-data",
+    "title": "Exercise 1: Base R and Tidyverse / Data Clean-up and Wrangling",
+    "section": "Meta Data",
+    "text": "Meta Data\nThere is some metadata to accompany the dataset you have just cleaned. Load in the dataset diabetes_meta_toy_messy.xlsx and inspect it.\n\nNow clean the metadata and do data exploration by repeating step 3-5 from above.",
+    "crumbs": [
+      "Course Material",
+      "Exercises",
+      "Exercise 1: Data Clean Up"
+    ]
+  },
+  {
+    "objectID": "exercises/exercise1.html#join-the-datasets",
+    "href": "exercises/exercise1.html#join-the-datasets",
+    "title": "Exercise 1: Base R and Tidyverse / Data Clean-up and Wrangling",
+    "section": "Join the datasets",
+    "text": "Join the datasets\nWe will combine both datasets together into one tibble.\n\nConsider what variable the datasets should be joined on.\n\n\n\n\n\n\n\nHint\n\n\n\n\n\nThe joining variable must be the same type in both datasets.\n\n\n\n\nJoin the datasets by the variable you selected above.\nHow many rows does the joined dataset have? Explain why.\n\n\n\n\n\n\n\nHint\n\n\n\n\n\nBecause we used left_join, only the IDs that are in diabetes_clinical_clean are kept.\n\n\n\n\nExport the joined dataset. Think about which directory you want to save the file in.",
+    "crumbs": [
+      "Course Material",
+      "Exercises",
+      "Exercise 1: Data Clean Up"
+    ]
+  },
+  {
+    "objectID": "data/data.html",
+    "href": "data/data.html",
+    "title": "Data",
+    "section": "",
+    "text": "DOWNLOAD DATA  \n\nAfter download, unzip the data folder and place it somewhere you can find it again.",
+    "crumbs": [
+      "Course Material",
+      "Data️"
+    ]
+  },
+  {
+    "objectID": "data/data.html#download-data",
+    "href": "data/data.html#download-data",
+    "title": "Data",
+    "section": "",
+    "text": "DOWNLOAD DATA  \n\nAfter download, unzip the data folder and place it somewhere you can find it again.",
+    "crumbs": [
+      "Course Material",
+      "Data️"
+    ]
+  },
+  {
+    "objectID": "data/data.html#download-presentations",
+    "href": "data/data.html#download-presentations",
+    "title": "Data",
+    "section": "Download presentations",
+    "text": "Download presentations\nIt can be nice to follow along the presentation scripts as we go through them.\n\n  DOWNLOAD PRESENTATIONS",
+    "crumbs": [
+      "Course Material",
+      "Data️"
+    ]
+  },
+  {
+    "objectID": "about_heads.html",
+    "href": "about_heads.html",
+    "title": "About HeaDS",
+    "section": "",
+    "text": "In the Center for Health Data Science (HeaDS) we do both research and in the DataLab and Sandbox we develop and host course. Read more about all the cool stuff we do on our website.\n\n\nThe DataLab offers a range of services to support SUND employees in their data science analyses. Here’s an overview:\n\nCourses: We offer data science and bioinformatics courses for all SUND staff (researchers, administrative staff, technical staff, etc.). Our most popular courses include “From Excel to R,” “Python Tsunami,” and “Introduction to Bulk RNA-seq Analysis.”\nConsultations: We host drop-in sessions every Thursday from 13:00 to 15:00, where we assist with data science-related challenges and questions. Alternatively, you can reach out to arrange a one-on-one meeting on another day.\nCommissions: We conduct commissioned research, such as bioinformatics and data science analyses tailored to your needs. Additionally, we offer a commissioned supervision scheme if you would like to learn how to perform the analysis yourself.\nEvents: We host various data science events. Join us for our seminar series, “Talking HeaDS.” Our next session is in the spring (date and speeker TBA), and you can sign up here: https://eventsignup.ku.dk/talkingheadsspring2025."
+  },
+  {
+    "objectID": "about_heads.html#center-for-health-data-science",
+    "href": "about_heads.html#center-for-health-data-science",
+    "title": "About HeaDS",
+    "section": "",
+    "text": "In the Center for Health Data Science (HeaDS) we do both research and in the DataLab and Sandbox we develop and host course. Read more about all the cool stuff we do on our website.\n\n\nThe DataLab offers a range of services to support SUND employees in their data science analyses. Here’s an overview:\n\nCourses: We offer data science and bioinformatics courses for all SUND staff (researchers, administrative staff, technical staff, etc.). Our most popular courses include “From Excel to R,” “Python Tsunami,” and “Introduction to Bulk RNA-seq Analysis.”\nConsultations: We host drop-in sessions every Thursday from 13:00 to 15:00, where we assist with data science-related challenges and questions. Alternatively, you can reach out to arrange a one-on-one meeting on another day.\nCommissions: We conduct commissioned research, such as bioinformatics and data science analyses tailored to your needs. Additionally, we offer a commissioned supervision scheme if you would like to learn how to perform the analysis yourself.\nEvents: We host various data science events. Join us for our seminar series, “Talking HeaDS.” Our next session is in the spring (date and speeker TBA), and you can sign up here: https://eventsignup.ku.dk/talkingheadsspring2025."
+  },
+  {
+    "objectID": "exercises/exercise0.html",
+    "href": "exercises/exercise0.html",
+    "title": "Exercise 0: R script and Quarto",
+    "section": "",
+    "text": "Make a new directory for this course.\nGo to course website and to the Data tab. Press the Download Data button.\nMove the Data folder to your course directory.\nUnder your course directory, make a new folder for your scripts, one for our output, and another for the presentations you download.\n\nYour file tree should look something like this:",
+    "crumbs": [
+      "Course Material",
+      "Exercises",
+      "Exercise 0: R script and Quarto"
+    ]
+  },
+  {
+    "objectID": "exercises/exercise0.html#file-management-data-download",
+    "href": "exercises/exercise0.html#file-management-data-download",
+    "title": "Exercise 0: R script and Quarto",
+    "section": "",
+    "text": "Make a new directory for this course.\nGo to course website and to the Data tab. Press the Download Data button.\nMove the Data folder to your course directory.\nUnder your course directory, make a new folder for your scripts, one for our output, and another for the presentations you download.\n\nYour file tree should look something like this:",
+    "crumbs": [
+      "Course Material",
+      "Exercises",
+      "Exercise 0: R script and Quarto"
+    ]
+  },
+  {
+    "objectID": "exercises/exercise0.html#working-directories",
+    "href": "exercises/exercise0.html#working-directories",
+    "title": "Exercise 0: R script and Quarto",
+    "section": "Working directories",
+    "text": "Working directories\n\nOpen R studio.\nAccess your current working directory by writing getwd() in the console.\n\nThe working directory in R (or other programming environments) is the folder on your computer where R looks for files to read or write by default. When you load or save data, R will use the working directory unless you specify another path. A path can either be absolute or relative:\n\nAbsolute path: The path from the root of your file system to the input file.\nRelative path: The path from the working directory to the input file.",
+    "crumbs": [
+      "Course Material",
+      "Exercises",
+      "Exercise 0: R script and Quarto"
+    ]
+  },
+  {
+    "objectID": "exercises/exercise0.html#r-script",
+    "href": "exercises/exercise0.html#r-script",
+    "title": "Exercise 0: R script and Quarto",
+    "section": "R Script",
+    "text": "R Script\n\nCreate an R script and save it in your work folder.\n\nAn R script is a plain text file containing a series of R commands and code used for data analysis. R scripts have a .R extension and can be executed line-by-line in an interactive R session or as a whole script. They are ideal for automating workflows and keeping your analyses reproducible and organized. R scripts can be submitted to a job on a supercomputer unlike Quarto documents.\n\nType getwd() in your R script and run the line. Compare the working directory with the one from the console.\nChange the working directory using setwd().\nRun getwd() again.\nType in a few lines of code and some comments and re-save the file.",
+    "crumbs": [
+      "Course Material",
+      "Exercises",
+      "Exercise 0: R script and Quarto"
+    ]
+  },
+  {
+    "objectID": "exercises/exercise0.html#quarto",
+    "href": "exercises/exercise0.html#quarto",
+    "title": "Exercise 0: R script and Quarto",
+    "section": "Quarto",
+    "text": "Quarto\n\nCreate an Quarto document and save it in your work folder.\n\nQuarto is an open-source publishing system designed to help you create dynamic, reproducible documents, presentations, and websites. It extends the ideas of tools like R Markdown, combining simplicity with powerful customization options for modern scientific and technical communication.\n\nType getwd() in a code chunk in your Quarto document and run the line. Compare the working directory with the one from the console.\nChange the working directory in one chuck using setwd().\nRun getwd() in the same chunk as setwd() AND in another chunk. What do you observe?\n\n\n\n\n\n\n\nHint\n\n\n\n\n\n\nsetwd('')\ngetwd()\n\n\ngetwd()\n\n\n\n\n\nCreate some code chunks, write text and headers. Re-save the file.\nRender the Quarto document and have a look at the html file.\n\n\n\n\n\n\n\nResources for Quarto\n\n\n\n\n\n\nQuarto website\n\n“Get started with Quarto” tutorial for RStudio\n\n“Get started with Quarto” video for RStudio\nComprehensive guides to Quarto basics",
+    "crumbs": [
+      "Course Material",
+      "Exercises",
+      "Exercise 0: R script and Quarto"
+    ]
+  },
+  {
+    "objectID": "exercises/exercise0.html#r-project",
+    "href": "exercises/exercise0.html#r-project",
+    "title": "Exercise 0: R script and Quarto",
+    "section": "R project",
+    "text": "R project\nAn R project in RStudio creates a self-contained working environment tied to a specific folder, which becomes the default working directory for all scripts, data, and outputs. This structure helps organize files, ensures reproducibility, and simplifies path management. By default, a Quarto document’s working directory is its file location. While this can be changed chunk-wise, the working directory for R scripts can be set globally for all scripts in a folder by creating an R project. The R project is a small configuration file, usually placed in the root of the project folder, and requires no manual interaction—it quietly ensures your workflows remain well-organized.\n\n\n\n\n\n\nCreate an R project by clicking the Project (None) in the top right → New Project → Existing Directory and choose an appropriate location. Look at the top-right corner to check that you are in your R project.\nReopen the the R script and Quarto document you created in Exercise 7 and 13 respectively. Check each of their working directories. Are they as you expect? Explain.\n\n\n\n\n\n\n\nHint\n\n\n\n\n\n\nThe working directory of the R script is the same as the location of the .Rproj file.\nThe working directory of the Quarto document is always the same as the location of the document.\n\n\n\n\n\nIf you like the flow of the R project, keep it. If not, delete it. It is not necessary to have an R project. NB If you delete it, click the R project drop-down menu in the top-right corner → Close Project.",
+    "crumbs": [
+      "Course Material",
+      "Exercises",
+      "Exercise 0: R script and Quarto"
+    ]
+  },
+  {
+    "objectID": "exercises/exercise2.html",
+    "href": "exercises/exercise2.html",
+    "title": "Exercise 2: Advanced Wrangling / Pivot longer, wider, and nesting",
+    "section": "",
+    "text": "In this exercise you will do some more advance tidyverse operations such as pivoting and nesting, as well as create plots to brush up on your ggplot skills.",
+    "crumbs": [
+      "Course Material",
+      "Exercises",
+      "Exercise 2: Exploratory Data Analysis"
+    ]
+  },
+  {
+    "objectID": "exercises/exercise2.html#introduction",
+    "href": "exercises/exercise2.html#introduction",
+    "title": "Exercise 2: Advanced Wrangling / Pivot longer, wider, and nesting",
+    "section": "",
+    "text": "In this exercise you will do some more advance tidyverse operations such as pivoting and nesting, as well as create plots to brush up on your ggplot skills.",
+    "crumbs": [
+      "Course Material",
+      "Exercises",
+      "Exercise 2: Exploratory Data Analysis"
+    ]
+  },
+  {
+    "objectID": "exercises/exercise2.html#first-steps",
+    "href": "exercises/exercise2.html#first-steps",
+    "title": "Exercise 2: Advanced Wrangling / Pivot longer, wider, and nesting",
+    "section": "First steps",
+    "text": "First steps\n\nLoad packages.\nLoad the joined diabetes data set you created in exercise 1 and the glucose dataset from the data folder.\nHave a look at the glucose dataset. The OGTT column contains measurements from a Oral Glucose Tolerance Test where blood glucose is measured at fasting (Glucose_0), 6 hours after glucose intake (Glucose_6), and 12 hours after (Glucose_12).\nRestructure the glucose dataset into a long format. How many rows are there per ID? Does that make sense?\n\n\n\n\n\n\n\nHint\n\n\n\n\n\nRemember the flow:\n\npivot_longer(cols = LIST_WITH_COLUMNS_TO_PIVOT,\n             names_to = \"NEW_COLUMN_CONTAINING_COLUMN_NAMES\",\n             values_to = \"NEW_COLUMN_CONTAINING_COLUMN_VALUES\")\n\nHave a look at slide 16 for a visual overview.\n\n\n\n\nChange the glucose measurements to numeric variable.\n\n\n\n\n\n\n\nHint\n\n\n\n\n\nThe stringr packages is a part of tidyverse and has many functions for manipulating strings. Find a function that can split the string so you can extract the numbers on the other side of the underscore.\n\n\n\n\nNest the glucose measurements and values such that there is only one row per ID.\n\n\n\n\n\n\n\nHint\n\n\n\n\n\nRemember the flow:\n\ngroup_by() %&gt;% \n  nest() %&gt;% \n  ungroup()\n\n\n\n\n\nMerge the nested glucose dataset with the joined diabetes.\nPull the glucose measurements (OGTT) from your favorite ID.\n\n\n\n\n\n\n\nHint\n\n\n\n\n\nFirst filter for your favorite ID and then pull the nested column.\n\n\n\n\nCreate a figure that visualizes glucose measurements at each time point (Measurement), stratified by patient ID. Give the plot a meaningful title.\nCalculate the mean glucose measure for each measurement.\n\n\n\n\n\n\n\nHint\n\n\n\n\n\nYou will need to use unnest(), group_by(), and summerize().\n\n\n\n\nMake the same calculation and stratify on Diabetes as well.\n\nThis next exercise might be a bit more challenging. It requires multiple operations and might involve some techniques that were not explicitly shown in the presentations.\n\nRecreate the plot you made in Exercise 10 and include the mean value for each glucose measurement for the two Diabetes statuses (0 and 1).\n\n\n\n\n\n\n\nHint\n\n\n\n\n\nThere are several ways to solve this task. There is a workflow suggestion:\n\nThe line in the plot is connected by ID. Create new IDs for the mean values that do not already exist in the dataset. Use RANDOM_ID %in% df$ID to check if an ID is already present.\nData from another dataset can be added to the plot like this: + geom_point(DATA, aes(x = VAR1, y = VAR2, group = VAR3))\n\n\n\n\n\nExport the final dataset. Since the dataset is nested, you cannot export it as an excel file. Export the dataset as an .rds file. Have a guess at what the function is called.",
+    "crumbs": [
+      "Course Material",
+      "Exercises",
+      "Exercise 2: Exploratory Data Analysis"
+    ]
+  },
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "R for Data Science",
+    "section": "",
+    "text": "This 3 day course is a continuation of our 2 day course FromExceltoR and the material of that course is a prerequisite to this course. If you have not used R since you took the course, please go through the course material again (link to course). R for Data Science is an advanced course in R-programming for researchers at the Faculty of Health and Medical Sciences (SUND), University of Copenhagen. The course is build on code-along presentations and exercises in Quarto documents.\n\nThe course goes through the following topics:\n\nScript formats\nAdvanced tidyverse using real world data (build on material from our introduction to R course, FromExceltoR)\nScripting in R using functions, for-loops, if-else statements.\nModelling in R.\n\nThe material in this repository is for teaching purposes only and not to be distributed commercially.\nFinally… Dear course participants, it would greatly help us if you could complete our UPDATE LINK feedback form."
+  },
+  {
+    "objectID": "index.html#welcome-to-the-main-page-of-r-for-data-science",
+    "href": "index.html#welcome-to-the-main-page-of-r-for-data-science",
+    "title": "R for Data Science",
+    "section": "",
+    "text": "This 3 day course is a continuation of our 2 day course FromExceltoR and the material of that course is a prerequisite to this course. If you have not used R since you took the course, please go through the course material again (link to course). R for Data Science is an advanced course in R-programming for researchers at the Faculty of Health and Medical Sciences (SUND), University of Copenhagen. The course is build on code-along presentations and exercises in Quarto documents.\n\nThe course goes through the following topics:\n\nScript formats\nAdvanced tidyverse using real world data (build on material from our introduction to R course, FromExceltoR)\nScripting in R using functions, for-loops, if-else statements.\nModelling in R.\n\nThe material in this repository is for teaching purposes only and not to be distributed commercially.\nFinally… Dear course participants, it would greatly help us if you could complete our UPDATE LINK feedback form."
+  },
+  {
+    "objectID": "index.html#program",
+    "href": "index.html#program",
+    "title": "R for Data Science",
+    "section": "Program",
+    "text": "Program"
+  },
+  {
+    "objectID": "presentations/presentation2.html",
+    "href": "presentations/presentation2.html",
+    "title": "Presentation 2: Advanced Data Wrangling",
+    "section": "",
+    "text": "library(readxl)\nlibrary(tidyverse)",
+    "crumbs": [
+      "Course Material",
+      "Presentations",
+      "Presentation 2: Advanced Data Wrangling"
+    ]
+  },
+  {
+    "objectID": "presentations/presentation2.html#load-packages",
+    "href": "presentations/presentation2.html#load-packages",
+    "title": "Presentation 2: Advanced Data Wrangling",
+    "section": "",
+    "text": "library(readxl)\nlibrary(tidyverse)",
+    "crumbs": [
+      "Course Material",
+      "Presentations",
+      "Presentation 2: Advanced Data Wrangling"
+    ]
+  },
+  {
+    "objectID": "presentations/presentation2.html#load-data",
+    "href": "presentations/presentation2.html#load-data",
+    "title": "Presentation 2: Advanced Data Wrangling",
+    "section": "Load data",
+    "text": "Load data\n\ndf_sales &lt;- read_excel('../out/sales_data_2.xlsx')",
+    "crumbs": [
+      "Course Material",
+      "Presentations",
+      "Presentation 2: Advanced Data Wrangling"
+    ]
+  },
+  {
+    "objectID": "presentations/presentation2.html#formats-pivot-long-and-wider",
+    "href": "presentations/presentation2.html#formats-pivot-long-and-wider",
+    "title": "Presentation 2: Advanced Data Wrangling",
+    "section": "Formats: Pivot long and wider",
+    "text": "Formats: Pivot long and wider\nIn tidyverse we primarily use two different formats: long and wide. The wide format is how you are probably used to seeing data presented with one column for each measured variable. However, when we need to plot, analyse or model data, we will often need them to be in the long format instead. It is therefore important that we know how to switch between them.\n\nPivot into long format\nThe goal of this section is to make a plot like this where we visualize the sales for each year across each employee.\n\n\n\n\n\nThe data is now in wide format. Can we make the plot in the way the data is formatted now?\n\n Hint \n\nNo. To create the plot, we need a column for the years to use on the x-axis, a column for sales in thousands DKK, and a column for Names. While the Names column is already present, the sales data is spread across four separate columns, and there is no column for the year.\n\n\n\nhead(df_sales)\n\n# A tibble: 6 × 12\n     ID Name      Age Sex    sales_2020 sales_2021 sales_2022 sales_2023 mood \n  &lt;dbl&gt; &lt;chr&gt;   &lt;dbl&gt; &lt;chr&gt;       &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt; &lt;chr&gt;\n1     1 Alice      25 Female        100        110        120        100 happy\n2     2 Bob        30 Male          200        210        220        230 happy\n3     3 Charlie    22 Male          150        160        170        200 happy\n4     4 Sophie     35 Female        300        320        340        250 happy\n5     5 Eve        28 Female        250        240        250        270 happy\n6     6 Frank      NA Male           NA        260        270        280 happy\n# ℹ 3 more variables: raise &lt;chr&gt;, group &lt;chr&gt;, City &lt;chr&gt;\n\n\nThe data set is in wide format. The data can be restructured to long format such that there is one line per year per person. For this we use the pivot_longer function.\n\ndf_sales_longer &lt;- df_sales %&gt;% \n  pivot_longer(cols = starts_with(\"sales_\"),\n               names_to = \"year\",\n               values_to = \"sales\"\n               )\n\nhead(df_sales_longer)\n\n# A tibble: 6 × 10\n     ID Name    Age Sex    mood  raise group        City  year       sales\n  &lt;dbl&gt; &lt;chr&gt; &lt;dbl&gt; &lt;chr&gt;  &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;        &lt;chr&gt; &lt;chr&gt;      &lt;dbl&gt;\n1     1 Alice    25 Female happy no    young_female Miami sales_2020   100\n2     1 Alice    25 Female happy no    young_female Miami sales_2021   110\n3     1 Alice    25 Female happy no    young_female Miami sales_2022   120\n4     1 Alice    25 Female happy no    young_female Miami sales_2023   100\n5     2 Bob      30 Male   happy yes   mature_male  Miami sales_2020   200\n6     2 Bob      30 Male   happy yes   mature_male  Miami sales_2021   210\n\n\nWe can transform the year to integer.\n\ndf_sales_longer &lt;- df_sales_longer %&gt;% \n  mutate(year = str_remove(year, 'sales_') %&gt;% as.integer()) \n\nhead(df_sales_longer)\n\n# A tibble: 6 × 10\n     ID Name    Age Sex    mood  raise group        City   year sales\n  &lt;dbl&gt; &lt;chr&gt; &lt;dbl&gt; &lt;chr&gt;  &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;        &lt;chr&gt; &lt;int&gt; &lt;dbl&gt;\n1     1 Alice    25 Female happy no    young_female Miami  2020   100\n2     1 Alice    25 Female happy no    young_female Miami  2021   110\n3     1 Alice    25 Female happy no    young_female Miami  2022   120\n4     1 Alice    25 Female happy no    young_female Miami  2023   100\n5     2 Bob      30 Male   happy yes   mature_male  Miami  2020   200\n6     2 Bob      30 Male   happy yes   mature_male  Miami  2021   210\n\n\nMake the plot explained above (scatter and line plot over the sales development over the years for each person).\n\ndf_sales_longer %&gt;% \n  ggplot(aes(x = year, \n             y = sales, \n             color = Name)) + \n  geom_point() + \n  geom_line() + \n  theme_bw()\n\n\n\n\n\n\n\n# Saving the plot\n# ggsave('../out/sales_2_plot.png', width = 10.37, height = 7.55, units = 'in')\n\n\n\nPivot back into wide format\nThe pivot_wider function is used to get data to wide format.\n\ndf_sales_wider &lt;- df_sales_longer %&gt;% \n  pivot_wider(names_from = year, \n              values_from = sales,\n              names_prefix = 'sales_')\n\n# Same content\nhead(df_sales)\n\n# A tibble: 6 × 12\n     ID Name      Age Sex    sales_2020 sales_2021 sales_2022 sales_2023 mood \n  &lt;dbl&gt; &lt;chr&gt;   &lt;dbl&gt; &lt;chr&gt;       &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt; &lt;chr&gt;\n1     1 Alice      25 Female        100        110        120        100 happy\n2     2 Bob        30 Male          200        210        220        230 happy\n3     3 Charlie    22 Male          150        160        170        200 happy\n4     4 Sophie     35 Female        300        320        340        250 happy\n5     5 Eve        28 Female        250        240        250        270 happy\n6     6 Frank      NA Male           NA        260        270        280 happy\n# ℹ 3 more variables: raise &lt;chr&gt;, group &lt;chr&gt;, City &lt;chr&gt;\n\nhead(df_sales_wider)\n\n# A tibble: 6 × 12\n     ID Name      Age Sex    mood  raise group       City  sales_2020 sales_2021\n  &lt;dbl&gt; &lt;chr&gt;   &lt;dbl&gt; &lt;chr&gt;  &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;       &lt;chr&gt;      &lt;dbl&gt;      &lt;dbl&gt;\n1     1 Alice      25 Female happy no    young_fema… Miami        100        110\n2     2 Bob        30 Male   happy yes   mature_male Miami        200        210\n3     3 Charlie    22 Male   happy yes   young_male  LA           150        160\n4     4 Sophie     35 Female happy no    mature_fem… New …        300        320\n5     5 Eve        28 Female happy yes   young_fema… LA           250        240\n6     6 Frank      NA Male   happy yes   &lt;NA&gt;        New …         NA        260\n# ℹ 2 more variables: sales_2022 &lt;dbl&gt;, sales_2023 &lt;dbl&gt;",
+    "crumbs": [
+      "Course Material",
+      "Presentations",
+      "Presentation 2: Advanced Data Wrangling"
+    ]
+  },
+  {
+    "objectID": "presentations/presentation2.html#nesting",
+    "href": "presentations/presentation2.html#nesting",
+    "title": "Presentation 2: Advanced Data Wrangling",
+    "section": "Nesting",
+    "text": "Nesting\nThe long format can contain many repetitions e.g. information on the sales employee in df_sales_longer is repeated for every year. Instead of having many nearly identical rows we can use nesting to have just one row with the employee information and the associated sales data in its own ‘mini-tibble’.\nWe’ll group data by Name and nest year and sales into a single column that we will name sales_data.\n\ndf_sales_longer_nested &lt;- df_sales_longer %&gt;%  \n  group_by(Name) %&gt;% \n  nest(sales_data = c(year, sales)) %&gt;% \n  ungroup()\n\nhead(df_sales_longer_nested)\n\n# A tibble: 6 × 9\n     ID Name      Age Sex    mood  raise group         City     sales_data      \n  &lt;dbl&gt; &lt;chr&gt;   &lt;dbl&gt; &lt;chr&gt;  &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;         &lt;chr&gt;    &lt;list&gt;          \n1     1 Alice      25 Female happy no    young_female  Miami    &lt;tibble [4 × 2]&gt;\n2     2 Bob        30 Male   happy yes   mature_male   Miami    &lt;tibble [4 × 2]&gt;\n3     3 Charlie    22 Male   happy yes   young_male    LA       &lt;tibble [4 × 2]&gt;\n4     4 Sophie     35 Female happy no    mature_female New York &lt;tibble [4 × 2]&gt;\n5     5 Eve        28 Female happy yes   young_female  LA       &lt;tibble [4 × 2]&gt;\n6     6 Frank      NA Male   happy yes   &lt;NA&gt;          New York &lt;tibble [4 × 2]&gt;\n\n\nNow we have a structured dataset which is more readable.\nNote: Nested data cannot be exported as an Excel or CSV file. Instead, you need to export it as an RDS file, a format specifically designed to save R objects.\nWe can extract the sales information for a particular employee using the pull function.\n\ndf_sales_longer_nested %&gt;% \n  filter(Name == 'Bob') %&gt;% \n  pull(sales_data)\n\n[[1]]\n# A tibble: 4 × 2\n   year sales\n  &lt;int&gt; &lt;dbl&gt;\n1  2020   200\n2  2021   210\n3  2022   220\n4  2023   230",
+    "crumbs": [
+      "Course Material",
+      "Presentations",
+      "Presentation 2: Advanced Data Wrangling"
+    ]
+  },
+  {
+    "objectID": "presentations/presentation2.html#tidyverse-helpers-across-and-where",
+    "href": "presentations/presentation2.html#tidyverse-helpers-across-and-where",
+    "title": "Presentation 2: Advanced Data Wrangling",
+    "section": "Tidyverse helpers: across() and where()",
+    "text": "Tidyverse helpers: across() and where()\n\nUsing across() to select columns\nYou probably noticed that we used a function to help us to summarise() all columns in Presentation 1:\n\ndf_tidyverse %&gt;% summarise(across(everything(), ~ sum(is.na(.))))\n\nIn this section we will say a bit more about the so called tidyverse helpers such as across(), where(), and starts_with(). These helpers are useful when we want to apply a functions, i.e. summarise(), or mutate() to several columns.\nLet’s have an example. We know we can calculate the mean of each sales column like so:\n\ndf_sales %&gt;%\n  summarise(mean(sales_2020),\n            mean(sales_2021),\n            mean(sales_2022),\n            mean(sales_2023))\n\n# A tibble: 1 × 4\n  `mean(sales_2020)` `mean(sales_2021)` `mean(sales_2022)` `mean(sales_2023)`\n               &lt;dbl&gt;              &lt;dbl&gt;              &lt;dbl&gt;              &lt;dbl&gt;\n1                 NA                300                 NA                305\n\n\nNote: We got some NAs because sales_2020 and 2022 contain NA values and we didn’t specify na.rm=TRUE. We will continue to see these in the below examples. Don’t worry about them for now, we will show you how to deal with them later!\nBut then we need to name every column we want to apply summarise to. across() instead lets us select the columns across which we want to apply summarise in a dynamic fashion:\n\ndf_sales %&gt;%\n  summarise(across(everything(), mean))\n\n# A tibble: 1 × 12\n     ID  Name   Age   Sex sales_2020 sales_2021 sales_2022 sales_2023  mood\n  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt; &lt;dbl&gt;\n1   5.5    NA    NA    NA         NA        300         NA        305    NA\n# ℹ 3 more variables: raise &lt;dbl&gt;, group &lt;dbl&gt;, City &lt;dbl&gt;\n\n\nWe put the columns we want to select inside the brackets of across(). everything(), as you have probably guessed means all columns.\nWe will probably not want to calculate means on non-numeric columns, so let’s select only numeric columns. For that we need another helper caller where() that lets us select columns based on their properties, like data type.\n\ndf_sales %&gt;%\n  summarise(across(where(is.numeric), mean))\n\n# A tibble: 1 × 6\n     ID   Age sales_2020 sales_2021 sales_2022 sales_2023\n  &lt;dbl&gt; &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt;\n1   5.5    NA         NA        300         NA        305\n\n\nThere is another group of helpers that refers to column names:\n\nstarts_with()\nends_with()\ncontains()\n\nAnd we can use them to select only columns starting with ‘sales’:\n\ndf_sales %&gt;%\n  summarise(across(starts_with('sales'), mean))\n\n# A tibble: 1 × 4\n  sales_2020 sales_2021 sales_2022 sales_2023\n       &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt;\n1         NA        300         NA        305\n\n\nIf the column names follow some pattern like ‘sales_XXXX’ we can also employ num_range to specify them:\n\ndf_sales %&gt;%\n  summarise(across(num_range('sales_', 2020:2023), mean))\n\n# A tibble: 1 × 4\n  sales_2020 sales_2021 sales_2022 sales_2023\n       &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt;\n1         NA        300         NA        305\n\n\nLastly, we can always straight up supply the names of the columns we want to select in a vector:\n\ndf_sales %&gt;%\n  summarise(across(c(sales_2020, sales_2021), mean))\n\n# A tibble: 1 × 2\n  sales_2020 sales_2021\n       &lt;dbl&gt;      &lt;dbl&gt;\n1         NA        300\n\n\nAll these ways can be used to select columns in tidyverse, also outside of across(). As an example, you’ve already see starts_with() in the Long Format section when we selected the columns to convert with pivot_longer():\n\ndf_sales %&gt;% \n  pivot_longer(cols = starts_with(\"sales_\"),\n               names_to = \"year\",\n               values_to = \"sales\")\n\n\n\nsummarise() becomes more powerful!\nAlright, so we now know how save ourselves from having to name every column we want to operate on, but what if we want to calculate several summary stats? There’s more to numbers than means!\nNow that we have across() we can supply summarise with a list of summary functions to execute:\n\ndf_sales %&gt;%\n  summarise(across(starts_with(\"sales\"), list(mean, sd, min, max)))\n\n# A tibble: 1 × 16\n  sales_2020_1 sales_2020_2 sales_2020_3 sales_2020_4 sales_2021_1 sales_2021_2\n         &lt;dbl&gt;        &lt;dbl&gt;        &lt;dbl&gt;        &lt;dbl&gt;        &lt;dbl&gt;        &lt;dbl&gt;\n1           NA           NA           NA           NA          300         131.\n# ℹ 10 more variables: sales_2021_3 &lt;dbl&gt;, sales_2021_4 &lt;dbl&gt;,\n#   sales_2022_1 &lt;dbl&gt;, sales_2022_2 &lt;dbl&gt;, sales_2022_3 &lt;dbl&gt;,\n#   sales_2022_4 &lt;dbl&gt;, sales_2023_1 &lt;dbl&gt;, sales_2023_2 &lt;dbl&gt;,\n#   sales_2023_3 &lt;dbl&gt;, sales_2023_4 &lt;dbl&gt;\n\n\nNow we get one long row with mean, sd, min and max for every column starting with sales. We’re probably not super happy with the column names sales_2020_1, sales_2020_2, ect, so let’s add names that contain the function we’re executing (mean, ect). In order for this to work we must also name the functions:\n\ndf_sales %&gt;%\n  summarise(across(starts_with(\"sales\"), \n                   list(mean = mean, sd = sd, min = min, max = max),\n                   .names = \"{.col}-{.fn}\"))\n\n# A tibble: 1 × 16\n  `sales_2020-mean` `sales_2020-sd` `sales_2020-min` `sales_2020-max`\n              &lt;dbl&gt;           &lt;dbl&gt;            &lt;dbl&gt;            &lt;dbl&gt;\n1                NA              NA               NA               NA\n# ℹ 12 more variables: `sales_2021-mean` &lt;dbl&gt;, `sales_2021-sd` &lt;dbl&gt;,\n#   `sales_2021-min` &lt;dbl&gt;, `sales_2021-max` &lt;dbl&gt;, `sales_2022-mean` &lt;dbl&gt;,\n#   `sales_2022-sd` &lt;dbl&gt;, `sales_2022-min` &lt;dbl&gt;, `sales_2022-max` &lt;dbl&gt;,\n#   `sales_2023-mean` &lt;dbl&gt;, `sales_2023-sd` &lt;dbl&gt;, `sales_2023-min` &lt;dbl&gt;,\n#   `sales_2023-max` &lt;dbl&gt;\n\n\nStill not your preferred format? You can probably pivot your way out of that!\n\ndf_sales %&gt;%\n  #run summarise on all sales columns\n  summarise(across(starts_with(\"sales\"), \n                   list(mean = mean, sd = sd, min = min, max = max),\n                   .names = \"{.col}-{.fn}\")) %&gt;%\n  #add reformating\n  pivot_longer(cols = everything(), \n               names_to = c(\"variable\", \"statistic\"), \n               names_sep = \"-\") %&gt;%\n  pivot_wider(names_from = statistic, values_from = value)\n\n# A tibble: 4 × 5\n  variable    mean    sd   min   max\n  &lt;chr&gt;      &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;\n1 sales_2020    NA   NA     NA    NA\n2 sales_2021   300  131.   110   510\n3 sales_2022    NA   NA     NA    NA\n4 sales_2023   305  131.   100   500",
+    "crumbs": [
+      "Course Material",
+      "Presentations",
+      "Presentation 2: Advanced Data Wrangling"
+    ]
+  },
+  {
+    "objectID": "presentations/presentation2.html#the-anonymous-function-and-.",
+    "href": "presentations/presentation2.html#the-anonymous-function-and-.",
+    "title": "Presentation 2: Advanced Data Wrangling",
+    "section": "The anonymous function: ~ and .",
+    "text": "The anonymous function: ~ and .\nBut wait! We still have those pesky NAs in our summary stats. Let’s just add the na.rm=TRUE argument. To not have too many things going on at once we’ll only do mean() for now:\n\ndf_sales %&gt;%\n  summarise(across(starts_with(\"sales\"), \n                   list(mean = mean(na.rm = TRUE)),\n                   .names = \"{.col}-{.fn}\"))\n\nError in `summarise()`:\nℹ In argument: `across(...)`.\nCaused by error in `mean.default()`:\n! argument \"x\" is missing, with no default\n\n\nBrrrtt! We may not.\n\n\n\n\n\nWhy? We are requesting a function call across several columns and we’re doing it in shorthand. This is only permitted is there are no arguments to the function (mean(), sd(), ect). You will also notice that we didn’t use brackets after their names, which is part of using the function short hand.\nIf we need to pass arguments to functions inside another function call (i.e. calling mean inside summarise) we need to invoke the anonymous function. Don’t worry, it is much less ominous than it sounds! It is written as a ~ and looks like this:\n\ndf_sales %&gt;%\n  summarise(across(starts_with(\"sales\"), \n                   list(mean = ~ mean(., na.rm = TRUE)),\n                   .names = \"{.col}-{.fn}\"))\n\n# A tibble: 1 × 4\n  `sales_2020-mean` `sales_2021-mean` `sales_2022-mean` `sales_2023-mean`\n              &lt;dbl&gt;             &lt;dbl&gt;             &lt;dbl&gt;             &lt;dbl&gt;\n1              294.               300              288.               305\n\n\nThe observant reader will also have noticed that a . has appeared in the brackets behind mean(). It simply means ‘the data previously referred to’, in this case every column starting with ‘sales’. We need to use the . because mean when called as a proper function needs to have an argument (a vector of numbers) to work on:\n\nmean(df_sales$sales_2020,na.rm=TRUE)\n\n[1] 294.4444\n\n\nSo this is it, we invoke the anonymous function for every statistic we want to calculate and now we may pass arguments:\n\ndf_sales %&gt;%\n  #across and starts_with selects columns\n  summarise(across(starts_with(\"sales\"), \n                   #list the functions to execute\n                   list(mean = ~ mean(., na.rm=T),\n                        sd = ~ sd(., na.rm=T), \n                        min = ~ min(., na.rm=T), \n                        max = ~ max(., na.rm=T)),\n                   #specify names of output columns\n                   .names = \"{.col}-{.fn}\")) %&gt;%\n  \n  #add reformating\n  pivot_longer(cols = everything(), \n               names_to = c(\"variable\", \"statistic\"), \n               names_sep = \"-\") %&gt;%\n  pivot_wider(names_from = statistic, values_from = value)\n\n# A tibble: 4 × 5\n  variable    mean    sd   min   max\n  &lt;chr&gt;      &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;\n1 sales_2020  294.  136.   100   500\n2 sales_2021  300   131.   110   510\n3 sales_2022  288.  115.   120   470\n4 sales_2023  305   131.   100   500\n\n\n\nOther usage examples\nThe anonymous function and across are also useful inside mutate()! Our data has sales in thousands DKK, so lets multiply every value in every sales column with 1000:\n\ndf_sales %&gt;% head(n=3)\n\n# A tibble: 3 × 12\n     ID Name      Age Sex    sales_2020 sales_2021 sales_2022 sales_2023 mood \n  &lt;dbl&gt; &lt;chr&gt;   &lt;dbl&gt; &lt;chr&gt;       &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt; &lt;chr&gt;\n1     1 Alice      25 Female        100        110        120        100 happy\n2     2 Bob        30 Male          200        210        220        230 happy\n3     3 Charlie    22 Male          150        160        170        200 happy\n# ℹ 3 more variables: raise &lt;chr&gt;, group &lt;chr&gt;, City &lt;chr&gt;\n\n\n\ndf_sales %&gt;%\n  mutate(across(starts_with(\"sales\"), ~ . * 1000)) %&gt;%\n  head(n=3)\n\n# A tibble: 3 × 12\n     ID Name      Age Sex    sales_2020 sales_2021 sales_2022 sales_2023 mood \n  &lt;dbl&gt; &lt;chr&gt;   &lt;dbl&gt; &lt;chr&gt;       &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt; &lt;chr&gt;\n1     1 Alice      25 Female     100000     110000     120000     100000 happy\n2     2 Bob        30 Male       200000     210000     220000     230000 happy\n3     3 Charlie    22 Male       150000     160000     170000     200000 happy\n# ℹ 3 more variables: raise &lt;chr&gt;, group &lt;chr&gt;, City &lt;chr&gt;\n\n\n\nWhat is happening here is we first select all columns starting with ‘sales’ by using across() and starts_with(). Then we say that we want to execute a function on each of these columns. The function shall be ‘multiply this column by 1000’. Multiplying by 1000 is written as * 1000 in R, ‘this column’ is . as we discussed before and ~ tells R that we’re executing a function.\nAnother cool example: Replacing NAs with 0s only in the columns starting with ‘sales’:\n\ndf_sales %&gt;%\n  mutate(across(starts_with(\"sales\"), ~ replace_na(.,0)))\n\n# A tibble: 10 × 12\n      ID Name      Age Sex    sales_2020 sales_2021 sales_2022 sales_2023 mood \n   &lt;dbl&gt; &lt;chr&gt;   &lt;dbl&gt; &lt;chr&gt;       &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt; &lt;chr&gt;\n 1     1 Alice      25 Female        100        110        120        100 happy\n 2     2 Bob        30 Male          200        210        220        230 happy\n 3     3 Charlie    22 Male          150        160        170        200 happy\n 4     4 Sophie     35 Female        300        320        340        250 happy\n 5     5 Eve        28 Female        250        240        250        270 happy\n 6     6 Frank      NA Male            0        260        270        280 happy\n 7     7 Grace      40 Female        400        420        430        450 happy\n 8     8 Hannah     29 Female        500        510          0        500 happy\n 9     9 Ian        21 Male          450        460        470        480 happy\n10    10 Jack       33 Male          300        310        320        290 happy\n# ℹ 3 more variables: raise &lt;chr&gt;, group &lt;chr&gt;, City &lt;chr&gt;\n\n\nThis is it for now but there will be user-defined functions later!",
+    "crumbs": [
+      "Course Material",
+      "Presentations",
+      "Presentation 2: Advanced Data Wrangling"
+    ]
+  },
+  {
+    "objectID": "presentations/presentation4_functions.html",
+    "href": "presentations/presentation4_functions.html",
+    "title": "Presentation 4, Functions",
+    "section": "",
+    "text": "Here is the solution4_functions.R showed:\n\n\n# Packages should be loaded in the main script.\n\n# Function to calculate BMI\ncalculate_bmi &lt;- function(weight_kg, height_m){\n  \n  bmi &lt;- weight_kg/height_m^2\n  \n  return(bmi)\n  \n}\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n# Function to calculate BMI, with control points and error checking. \ncalculate_bmi_2 &lt;- function(weight_kg, height_m) {\n  \n  # Check if weight and height are numeric\n  if (!is.numeric(weight_kg) | !is.numeric(height_m)) {\n    stop(\"Both weight_kg and height_m must be numeric values.\")\n  }\n  \n  # Check if weight and height are positive\n  if (weight_kg &lt;= 0) {\n    stop(\"Weight must be a positive value.\")\n  }\n  if (height_m &lt;= 0) {\n    stop(\"Height must be a positive value.\")\n  }\n  \n  # Calculate BMI\n  bmi &lt;- weight_kg / height_m^2\n  \n  # Check if BMI is within a reasonable range\n  if (bmi &lt; 10 | bmi &gt; 60) {\n    warning(\"The calculated BMI is outside the normal range. Please check your input values.\")\n  }\n  \n  return(bmi)\n  \n}",
+    "crumbs": [
+      "Course Material",
+      "Presentations",
+      "Presentation 4, Functions: Scripting in R"
+    ]
+  },
+  {
+    "objectID": "presentations/presentation5.html",
+    "href": "presentations/presentation5.html",
+    "title": "Presentation 5: Intro to Modelling in R",
+    "section": "",
+    "text": "In this section we’ll look at how to define and fit a model in R.",
+    "crumbs": [
+      "Course Material",
+      "Presentations",
+      "Presentation 5: Intro to Modelling in R"
+    ]
+  },
+  {
+    "objectID": "presentations/presentation5.html#load-packages",
+    "href": "presentations/presentation5.html#load-packages",
+    "title": "Presentation 5: Intro to Modelling in R",
+    "section": "Load packages",
+    "text": "Load packages\n\nlibrary(tidyverse)\nlibrary(caret)\nlibrary(ModelMetrics)",
+    "crumbs": [
+      "Course Material",
+      "Presentations",
+      "Presentation 5: Intro to Modelling in R"
+    ]
+  },
+  {
+    "objectID": "presentations/presentation5.html#load-data",
+    "href": "presentations/presentation5.html#load-data",
+    "title": "Presentation 5: Intro to Modelling in R",
+    "section": "Load data",
+    "text": "Load data\nIn order to focus on the technical aspects we’ll use a very simple toy dataset. It contains the number of cigarettes smoked per day and how long the person lived. It is inspired by this paper if you want to take a look.\n\ndf_smoke &lt;- read.csv('../data/smoking.csv')\nhead(df_smoke)\n\n  daily_cigarettes life\n1                7   76\n2               11   73\n3               27   72\n4               23   71\n5               13   74\n6               11   76\n\n\nWe will use this to perform a linear regression.",
+    "crumbs": [
+      "Course Material",
+      "Presentations",
+      "Presentation 5: Intro to Modelling in R"
+    ]
+  },
+  {
+    "objectID": "presentations/presentation5.html#linear-regression",
+    "href": "presentations/presentation5.html#linear-regression",
+    "title": "Presentation 5: Intro to Modelling in R",
+    "section": "Linear Regression",
+    "text": "Linear Regression\n\nSplit Data into Training and Test Set\nFirst, we will split our data into a test and a training set. There are numerous ways to do this. We here show sample_frac from dplyr:\n\n# Set seed to ensure reproducibility\nset.seed(123)  \n\n#add an ID column to keep track of observations\ndf_smoke$ID &lt;- 1:nrow(df_smoke)\n\ntrain &lt;- df_smoke %&gt;% sample_frac(.75)\nnrow(train)\n\n[1] 75\n\nhead(train)\n\n  daily_cigarettes life ID\n1               29   72 31\n2               16   73 79\n3                5   78 51\n4                3   77 14\n5                4   79 67\n6               23   71 42\n\n\nAs you can see, the ID’s in train are shuffled and it only has 75 rows since we asked for 75% of the data. Now all we have to do is identify the other 25%, i.e. the observations not in train. dpylr has a neat function called anti_join for that:\n\n#from df_smoke remove what is in train by checking the ID column\ntest  &lt;- anti_join(df_smoke, train, by = 'ID') \nnrow(test)\n\n[1] 25\n\nhead(test)\n\n  daily_cigarettes life ID\n1                7   76  1\n2               11   73  2\n3               27   72  3\n4               32   70 10\n5                8   75 11\n6               16   75 24\n\n\n\n\nDefining the model\nAs stated above, a linear regression model generally has the form of:\n\\[y=b_0+b_1*x_i\\]\nWhere we refer to \\(b_0\\) as the intercept and \\(b_1\\) as the coefficient. There will typically be one coefficient for each predictor. The goal of modelling is to estimate the values of \\(b_0\\) and all \\(b_i\\).\nWe need to tell R which of our variables is the outcome, \\(y\\) and which predictors \\(x_i\\) we want to include in the model. This is referred to in documentation as the model’s formula. Have a look:\n\n#the formula is written like so:\nlm(y ~ x_1 + x_2 + ...)\n#see the help\n?lm\n\nIn our case, \\(y\\) is the number of years lived and we have a singular predictor \\(x_1\\), the number of cigarettes smoked per day. So that will be our model formulation:\n\n#remember to select the training data subset we defined above! \nmodel &lt;- lm(life ~ daily_cigarettes, data = train)\n\n\n\nModelling results\nBy calling lm we have already trained our model! Lets have a look at the results. The summary gives us a lot of information about the model we trained:\n\n# View model summary\nsummary(model)\n\n\nCall:\nlm(formula = life ~ daily_cigarettes, data = train)\n\nResiduals:\n     Min       1Q   Median       3Q      Max \n-2.71479 -1.03035 -0.06517  0.82928  2.84669 \n\nCoefficients:\n                 Estimate Std. Error t value Pr(&gt;|t|)    \n(Intercept)      78.71479    0.26847  293.20   &lt;2e-16 ***\ndaily_cigarettes -0.28074    0.01351  -20.77   &lt;2e-16 ***\n---\nSignif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1\n\nResidual standard error: 1.251 on 73 degrees of freedom\nMultiple R-squared:  0.8553,    Adjusted R-squared:  0.8533 \nF-statistic: 431.5 on 1 and 73 DF,  p-value: &lt; 2.2e-16\n\n\nIt beings with Call which displays the formula used to fit the model.\nThe Residuals section summarizes the distribution of the residuals, which is the difference between the actual observed \\(y\\) values and the fitted \\(y\\) values.\nThe Coefficients table shows the estimated values for each coefficient including the intercept, along with their standard errors, t-values, and p-values. These help to determine the significance of each predictor. Smaller p-values indicate stronger evidence against the null hypothesis that the true coefficient is zero.\nIn the bottom section we have some information about how well model fits the training data. The Residual Standard Error (RSE) provides a measure of accuracy as it represents the average size of the residuals. The R-squared value indicates the proportion of variance explained by the model, with the Adjusted R-squared accounting for the number of predictors to prevent overfitting. Finally, the F-statistic and its p-value test whether the model as a whole explains a significant portion of the variance in the response variable (the outcome \\(y\\)).\nOverall, the summary helps us to assess the model fit and identify significant predictors and their effect size (size of the coefficient).\nWe can extract the model object’s components with $:\n\nmodel$coefficients\n\n     (Intercept) daily_cigarettes \n      78.7147894       -0.2807398 \n\nhist(model$residuals, breaks = 30, main = 'Histogram of residuals', \n     xlab = 'Residual')\n\n\n\n\n\n\n\n\n\n\nModel interpretation\nWhat do these results mean? Our model formulation is:\n\\[life=b_0+b_1*cigarettes\\]\nAnd we estimated these values:\n\nmodel$coefficients\n\n     (Intercept) daily_cigarettes \n      78.7147894       -0.2807398 \n\n\nTherefore:\n\nThe intercept \\(b_0\\) is the number of years we estimated a person in this dataset will live if they smoke 0 cigarettes. It is 78.7 years\nThe coefficient of cigarettes per day is -0.28. This means for every 1 unit increase in cigarettes (one additional cigarette per day) the life expectancy decreases by 0.28 years.\n\n\n\nModel performance\nWe now use our held out test data to evaluate the model performance. For that we will predict life expectancy for the 25 observations in test and compare with the actual values.\n\n#use the fitted model to make predictions for the test data\ny_pred &lt;- predict(model, test)\ny_pred\n\n       1        2        3        4        5        6        7        8 \n76.74961 75.62665 71.13481 69.73112 76.46887 74.22295 77.59183 70.29260 \n       9       10       11       12       13       14       15       16 \n73.38073 70.01186 76.46887 75.62665 75.34591 76.46887 73.38073 75.34591 \n      17       18       19       20       21       22       23       24 \n76.18813 71.41555 73.66147 71.13481 71.97703 75.34591 72.25777 75.90739 \n      25 \n78.71479 \n\n\nLet’s see how that fits with the known values.\n\npred &lt;- tibble(pred = y_pred, real = test$life)\n\nggplot(pred, aes(x=real, y=pred)) +\n  geom_point()\n\n\n\n\n\n\n\n\nNot too bad! We usually calculate the mean square error (mse) between predictions and the known true values to numerically evaluate regression performance:\n\nmse(pred$real,pred$pred)\n\n[1] 1.742902\n\n\nOur predictions are on average 1.7 years wrong.",
+    "crumbs": [
+      "Course Material",
+      "Presentations",
+      "Presentation 5: Intro to Modelling in R"
+    ]
+  },
+  {
+    "objectID": "presentations/presentation5.html#regression-with-categorical-features",
+    "href": "presentations/presentation5.html#regression-with-categorical-features",
+    "title": "Presentation 5: Intro to Modelling in R",
+    "section": "Regression with categorical features",
+    "text": "Regression with categorical features\nNow that we know how to make a simple linear model, how can we include categorical variables and what is the interpretation of their coefficients? To investigate this we will load a second version of the dataset that contains an additional variable: Exercise level.\n\ndf_smoke &lt;- read.csv('../data/smoking_cat.csv')\nhead(df_smoke)\n\n  daily_cigarettes life exercise\n1                7   76        0\n2               11   73        0\n3               27   72        1\n4               23   71        0\n5               13   74        0\n6               11   76        1\n\ndistinct(df_smoke, exercise)\n\n  exercise\n1        0\n2        1\n3        2\n\n\nAlright, we have three different levels of exercise. They are: low == 0, moderate == 1 and high == 2. Before we go on, let’s have a look if our data is represented correctly:\n\nstr(df_smoke)\n\n'data.frame':   100 obs. of  3 variables:\n $ daily_cigarettes: int  7 11 27 23 13 11 20 6 23 32 ...\n $ life            : int  76 73 72 71 74 76 71 76 72 70 ...\n $ exercise        : int  0 0 1 0 0 1 0 1 1 2 ...\n\n\nWe can see that the exercise column is interpreted as an integer. However, it is actually a category! In R categorical variables are known as factors and have their own datatype. Let’s convert exercise to a factor:\n\ndf_smoke$exercise &lt;- as.factor(df_smoke$exercise)\nstr(df_smoke)\n\n'data.frame':   100 obs. of  3 variables:\n $ daily_cigarettes: int  7 11 27 23 13 11 20 6 23 32 ...\n $ life            : int  76 73 72 71 74 76 71 76 72 70 ...\n $ exercise        : Factor w/ 3 levels \"0\",\"1\",\"2\": 1 1 2 1 1 2 1 2 2 3 ...\n\n\nAs before, before fitting the model we’ll split up the data in train and test. Since we’re using the same seed we should get the same observations, i.e. rows into training and test as above.\n\n# Set seed to ensure reproducibility\nset.seed(123)  \n\n#add an ID column to keep track of observations\ndf_smoke$ID &lt;- 1:nrow(df_smoke)\n\ntrain &lt;- df_smoke %&gt;% sample_frac(.75)\ntest  &lt;- anti_join(df_smoke, train, by = 'ID') \n\nAnd now we extend our previous model formula with the new predictor:\n\nmodel2 &lt;- lm(life ~ daily_cigarettes + exercise, data = train)\n\n\nsummary(model2)\n\n\nCall:\nlm(formula = life ~ daily_cigarettes + exercise, data = train)\n\nResiduals:\n     Min       1Q   Median       3Q      Max \n-1.58295 -0.53972 -0.01596  0.53773  1.70257 \n\nCoefficients:\n                  Estimate Std. Error t value Pr(&gt;|t|)    \n(Intercept)      77.582954   0.234237 331.216  &lt; 2e-16 ***\ndaily_cigarettes -0.285521   0.009401 -30.372  &lt; 2e-16 ***\nexercise1         1.095475   0.249402   4.392 3.84e-05 ***\nexercise2         2.372227   0.260427   9.109 1.48e-13 ***\n---\nSignif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1\n\nResidual standard error: 0.8578 on 71 degrees of freedom\nMultiple R-squared:  0.9338,    Adjusted R-squared:  0.931 \nF-statistic: 333.7 on 3 and 71 DF,  p-value: &lt; 2.2e-16\n\n\nWhen we check the summary we see that it has two additional coefficients, exercise1 and exercise2. What are they?\nBecause exercise is a categorical variable it is dummy coded. That means our model formula mathematically looks something like this:\n\\[y=b_0+b_1*x_1 + b_2 *x_2 + b_3*x_3\\]\nwith:\n\n\n\nExercise level\n\\(x_2\\)\n\\(x_3\\)\n\n\n\n\n0\n0\n0\n\n\n1\n1\n0\n\n\n2\n0\n1\n\n\n\nAnd for our coefficients it means:\n\nmodel2$coefficients\n\n     (Intercept) daily_cigarettes        exercise1        exercise2 \n      77.5829543       -0.2855213        1.0954747        2.3722266 \n\n\n\nIntercept == \\(b_0\\): The life expectancy at 0 cigarettes and exercise level 0\ndaily_cigerettes == \\(b_1\\): The change in life expectancy for each additional cigarette.\nexercise1 == \\(b_2\\): The change in life expectancy if the exercise level is 1 (assuming the number of cigarettes stays constant).\nexercise2 == \\(b_3\\): The change in life expectancy if the exercise level is 2 (assuming the number of cigarettes stays constant).\n\nWhy is there no coefficient for exercise level 0 (low amount of exercise)? This case is covered in the Intercept. It is referred to as the reference level of the categorical variable. You can change which level is regarded as the reference and the effect of having this level will always be modelled in the intercept.",
+    "crumbs": [
+      "Course Material",
+      "Presentations",
+      "Presentation 5: Intro to Modelling in R"
+    ]
+  },
+  {
+    "objectID": "presentations/presentation5.html#classification",
+    "href": "presentations/presentation5.html#classification",
+    "title": "Presentation 5: Intro to Modelling in R",
+    "section": "Classification",
+    "text": "Classification",
+    "crumbs": [
+      "Course Material",
+      "Presentations",
+      "Presentation 5: Intro to Modelling in R"
+    ]
+  },
+  {
+    "objectID": "presentations/presentation5.html#clustering",
+    "href": "presentations/presentation5.html#clustering",
+    "title": "Presentation 5: Intro to Modelling in R",
+    "section": "Clustering",
+    "text": "Clustering",
+    "crumbs": [
+      "Course Material",
+      "Presentations",
+      "Presentation 5: Intro to Modelling in R"
     ]
   },
   {
