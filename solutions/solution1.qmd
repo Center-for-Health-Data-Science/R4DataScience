@@ -1,5 +1,5 @@
 ---
-title: "Presentation 1 - Solutions: Base R and Tidyverse / Data Clean-up and Wrangling"
+title: "Exercise 1 - Solutions: Data Cleanup (Base R and Tidyverse)"
 format: html
 project:
  type: website

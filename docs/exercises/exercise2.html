@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Exercise 2: Advanced Wrangling / Pivot longer, wider, and nesting – R for Data Science</title>
+<title>Exercise 2: Advanced Wrangling – R for Data Science</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -143,7 +143,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../exercises/exercise0.html">Exercises</a></li><li class="breadcrumb-item"><a href="../exercises/exercise2.html">Exercise 2: Exploratory Data Analysis</a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../exercises/exercise0.html">Exercises</a></li><li class="breadcrumb-item"><a href="../exercises/exercise2.html">Exercise 2: Advanced Data Wrangling</a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
     </div>
@@ -173,7 +173,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../presentations/presentation1.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Presentation 1: Data Clean Up</span></a>
+ <span class="menu-text">Presentation 1: Data Cleanup</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -232,13 +232,19 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../exercises/exercise1.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Exercise 1: Data Clean Up</span></a>
+ <span class="menu-text">Exercise 1: Data Cleanup</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../exercises/exercise2.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text">Exercise 2: Exploratory Data Analysis</span></a>
+ <span class="menu-text">Exercise 2: Advanced Data Wrangling</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../exercises/exercise3.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Exercise 3: Exploratory Data Analysis</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -349,9 +355,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../exercises/exercise0.html">Exercises</a></li><li class="breadcrumb-item"><a href="../exercises/exercise2.html">Exercise 2: Exploratory Data Analysis</a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../exercises/exercise0.html">Exercises</a></li><li class="breadcrumb-item"><a href="../exercises/exercise2.html">Exercise 2: Advanced Data Wrangling</a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title">Exercise 2: Advanced Wrangling / Pivot longer, wider, and nesting</h1>
+<h1 class="title">Exercise 2: Advanced Wrangling</h1>
 </div>
 
 
@@ -370,14 +376,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <section id="introduction" class="level2">
 <h2 class="anchored" data-anchor-id="introduction">Introduction</h2>
-<p>In this exercise you will do some more advance tidyverse operations such as pivoting and nesting, as well as create plots to brush up on your ggplot skills.</p>
+<p>In this exercise you will do some more advance tidyverse operations such as pivoting and nesting.</p>
 </section>
 <section id="first-steps" class="level2">
 <h2 class="anchored" data-anchor-id="first-steps">First steps</h2>
 <ol type="1">
 <li><p>Load packages.</p></li>
 <li><p>Load the joined diabetes data set you created in exercise 1 and the glucose dataset from the data folder.</p></li>
-<li><p>Have a look at the glucose dataset. The <code>OGTT</code> column contains measurements from a Oral Glucose Tolerance Test where blood glucose is measured at fasting (Glucose_0), 6 hours after glucose intake (Glucose_6), and 12 hours after (Glucose_12).</p></li>
+<li><p>Have a look at the glucose dataset. It has three columns with measurements from a Oral Glucose Tolerance Test where blood glucose is measured at fasting (Glucose_0), 6 hours after glucose intake (Glucose_6), and 12 hours after (Glucose_12). The last columns is an ID column.</p></li>
 <li><p>Restructure the glucose dataset into a long format. How many rows are there per ID? Does that make sense?</p></li>
 </ol>
 <div class="callout callout-style-default callout-tip callout-titled">
@@ -403,7 +409,7 @@ Hint
 </div>
 </div>
 <ol start="5" type="1">
-<li>Change the glucose measurements to numeric variable.</li>
+<li>In your long format dataframe you should have one column that described which measurement the row refers to, i.e.&nbsp;Glucose_0, Glucose_60 or Glucose_120. Transform this column so that you only have the numerical part, i.e.&nbsp;<strong>only</strong> 0, 60 or 120. Then change the data type of that column to numeric.</li>
 </ol>
 <div class="callout callout-style-default callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
@@ -422,7 +428,7 @@ Hint
 </div>
 </div>
 <ol start="6" type="1">
-<li>Nest the glucose measurements and values such that there is only one row per ID.</li>
+<li>Nest the glucose measurements and values such that there is only one row per ID and call the nested column OGTT (Oral Glucose Tolerance Test). Display the resulting tibble to confirm that you have succeeded.</li>
 </ol>
 <div class="callout callout-style-default callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-3-contents" aria-controls="callout-3" aria-expanded="false" aria-label="Toggle callout">
@@ -446,7 +452,7 @@ Hint
 </div>
 </div>
 <ol start="7" type="1">
-<li><p>Merge the nested glucose dataset with the joined diabetes.</p></li>
+<li><p>Merge the nested glucose dataset with the joined diabetes dataset.</p></li>
 <li><p>Pull the glucose measurements (<code>OGTT</code>) from your favorite ID.</p></li>
 </ol>
 <div class="callout callout-style-default callout-tip callout-titled">
@@ -466,8 +472,7 @@ Hint
 </div>
 </div>
 <ol start="9" type="1">
-<li><p>Create a figure that visualizes glucose measurements at each time point (Measurement), stratified by patient ID. Give the plot a meaningful title.</p></li>
-<li><p>Calculate the mean glucose measure for each measurement.</p></li>
+<li>Calculate the mean glucose measure for each measurement timepoint.</li>
 </ol>
 <div class="callout callout-style-default callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-5-contents" aria-controls="callout-5" aria-expanded="false" aria-label="Toggle callout">
@@ -485,12 +490,8 @@ Hint
 </div>
 </div>
 </div>
-<ol start="11" type="1">
-<li>Make the same calculation and stratify on Diabetes as well.</li>
-</ol>
-<p>This next exercise might be a bit more challenging. It requires multiple operations and might involve some techniques that were not explicitly shown in the presentations.</p>
-<ol start="12" type="1">
-<li>Recreate the plot you made in Exercise 10 and include the mean value for each glucose measurement for the two Diabetes statuses (0 and 1).</li>
+<ol start="10" type="1">
+<li>Calculate mean and standard deviation for all numeric columns.</li>
 </ol>
 <div class="callout callout-style-default callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-6-contents" aria-controls="callout-6" aria-expanded="false" aria-label="Toggle callout">
@@ -504,15 +505,11 @@ Hint
 </div>
 <div id="callout-6" class="callout-6-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<p>There are several ways to solve this task. There is a workflow suggestion:</p>
-<ul>
-<li><p>The line in the plot is connected by ID. Create new IDs for the mean values that do not already exist in the dataset. Use <code>RANDOM_ID %in% df$ID</code> to check if an ID is already present.</p></li>
-<li><p>Data from another dataset can be added to the plot like this: <code>+ geom_point(DATA, aes(x = VAR1, y = VAR2, group = VAR3))</code></p></li>
-</ul>
+<p>You will need to use <code>summarise()</code> and <code>across()</code>, selecting numeric columns.</p>
 </div>
 </div>
 </div>
-<ol start="13" type="1">
+<ol start="11" type="1">
 <li>Export the final dataset. Since the dataset is nested, you cannot export it as an excel file. Export the dataset as an <code>.rds</code> file. Have a guess at what the function is called.</li>
 </ol>
 

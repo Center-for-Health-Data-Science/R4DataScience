@@ -1,5 +1,5 @@
 ---
-title: "Exercise 2: Advanced Wrangling / Pivot longer, wider, and nesting"
+title: "Exercise 2: Advanced Wrangling"
 format: html
 project:
  type: website
@@ -8,7 +8,7 @@ project:
 
 ## Introduction
 
-In this exercise you will do some more advance tidyverse operations such as pivoting and nesting, as well as create plots to brush up on your ggplot skills.
+In this exercise you will do some more advance tidyverse operations such as pivoting and nesting.
 
 ## First steps
 
@@ -16,7 +16,7 @@ In this exercise you will do some more advance tidyverse operations such as pivo
 
 2.  Load the joined diabetes data set you created in exercise 1 and the glucose dataset from the data folder.
 
-3.  Have a look at the glucose dataset. The `OGTT` column contains measurements from a Oral Glucose Tolerance Test where blood glucose is measured at fasting (Glucose_0), 6 hours after glucose intake (Glucose_6), and 12 hours after (Glucose_12).
+3.  Have a look at the glucose dataset. It has three columns with measurements from a Oral Glucose Tolerance Test where blood glucose is measured at fasting (Glucose_0), 6 hours after glucose intake (Glucose_6), and 12 hours after (Glucose_12). The last columns is an ID column.
 
 4.  Restructure the glucose dataset into a long format. How many rows are there per ID? Does that make sense?
 
@@ -35,15 +35,14 @@ Have a look at slide 16 for a visual overview.
 
 :::
 
-5.  Change the glucose measurements to numeric variable.
+5. In your long format dataframe you should have one column that described which measurement the row refers to, i.e. Glucose_0, Glucose_60 or Glucose_120. Transform this column so that you only have the numerical part, i.e. **only** 0, 60 or 120. Then change the data type of that column to numeric.
 
 ::: {.callout-tip collapse="true"}
 ## Hint
 The `stringr` packages is a part of tidyverse and has many functions for manipulating strings. Find a function that can **split** the string so you can extract the numbers on the other side of the underscore. 
 :::
 
-
-6.  Nest the glucose measurements and values such that there is only one row per ID.
+6. Nest the glucose measurements and values such that there is only one row per ID and call the nested column OGTT (Oral Glucose Tolerance Test). Display the resulting tibble to confirm that you have succeeded.
 
 ::: {.callout-tip collapse="true"}
 ## Hint
@@ -58,7 +57,7 @@ group_by() %>%
 
 :::
 
-7.  Merge the nested glucose dataset with the joined diabetes.
+7.  Merge the nested glucose dataset with the joined diabetes dataset.
 
 8.  Pull the glucose measurements (`OGTT`) from your favorite ID.
 
@@ -67,30 +66,19 @@ group_by() %>%
 First `filter` for your favorite ID and then `pull` the nested column. 
 :::
 
-9.  Create a figure that visualizes glucose measurements at each time point (Measurement), stratified by patient ID. Give the plot a meaningful title.
-
-10. Calculate the mean glucose measure for each measurement.
+9. Calculate the mean glucose measure for each measurement timepoint.
 
 ::: {.callout-tip collapse="true"}
 ## Hint
 You will need to use `unnest()`, `group_by()`, and `summerize()`.
 :::
 
-11. Make the same calculation and stratify on Diabetes as well.
-
-This next exercise might be a bit more challenging. It requires multiple operations and might involve some techniques that were not explicitly shown in the presentations.
-
-12. Recreate the plot you made in Exercise 10 and include the mean value for each glucose measurement for the two Diabetes statuses (0 and 1).
+10. Calculate mean and standard deviation for all numeric columns.
 
 ::: {.callout-tip collapse="true"}
 ## Hint
-There are several ways to solve this task. There is a workflow suggestion:
-
-  - The line in the plot is connected by ID. Create new IDs for the mean values that do not already exist in the dataset. Use `RANDOM_ID %in% df$ID` to check if an ID is already present. 
-  
-  - Data from another dataset can be added to the plot like this: `+ geom_point(DATA, aes(x = VAR1, y = VAR2, group = VAR3))`
-  
+You will need to use `summarise()` and `across()`, selecting numeric columns.
 :::
 
-13. Export the final dataset. Since the dataset is nested, you cannot export it as an excel file. Export the dataset as an `.rds` file. Have a guess at what the function is called.
+11. Export the final dataset. Since the dataset is nested, you cannot export it as an excel file. Export the dataset as an `.rds` file. Have a guess at what the function is called.
 

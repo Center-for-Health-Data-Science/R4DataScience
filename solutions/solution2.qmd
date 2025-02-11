@@ -1,5 +1,5 @@
 ---
-title: "Exercise 2 - Solutions: Data Clean Up"
+title: "Exercise 2 - Solutions: Advanced Data Wrangling"
 format: html
 project:
  type: website
@@ -8,13 +8,13 @@ project:
 
 ## Introduction
 
-In this exercise you will do some more advance tidyverse operations such as pivoting and nesting, as well as create plots to brush up on your ggplot skills.
+In this exercise you will do some more advance tidyverse operations such as pivoting and nesting.
 
 ## First steps
 
 1.  Load packages.
 
-```{r message=FALSE}
+```{r message=FALSE, warning=FALSE}
 library(tidyverse)
 ```
 
@@ -25,7 +25,8 @@ diabetes_join <- readxl::read_excel('../out/diabetes_join.xlsx')
 df_glucose <- readxl::read_excel('../data/df_glucose.xlsx')
 ```
 
-3. Have a look at the glucose dataset. The `OGTT` column contains measurements from a Oral Glucose Tolerance Test where blood glucose is measured at fasting (Glucose_0), 6 hours after glucose intake (Glucose_6), and 12 hours after (Glucose_12). 
+3. Have a look at the glucose dataset. It has three columns with measurements from a Oral Glucose Tolerance Test where blood glucose is measured at fasting (Glucose_0), 6 hours after glucose intake (Glucose_6), and 12 hours after (Glucose_12). The last columns is an ID column.
+
 
 ```{r}
 head(df_glucose)
@@ -59,7 +60,16 @@ df_glucose_long <- df_glucose %>%
 head(df_glucose_long)
 ```
 
-5. Change the glucose measurements to numeric variable.
+There are three rows for each ID, corresponding to the three glucose measurements
+
+```{r}
+df_glucose_long %>%
+  count(ID) %>%
+  head()
+```
+
+
+5. In your long format dataframe you should have one column that described which measurement the row refers to, i.e. Glucose_0, Glucose_60 or Glucose_120. Transform this column so that you only have the numerical part, i.e. **only** 0, 60 or 120. Then change the data type of that column to numeric.
 
 ::: {.callout-tip collapse="true"}
 ## Hint
@@ -73,7 +83,7 @@ df_glucose_long <- df_glucose_long %>%
 head(df_glucose_long)
 ```
 
-6. Nest the glucose measurements and values such that there is only one row per ID.
+6. Nest the glucose measurements and values such that there is only one row per ID and call the nested column OGTT (Oral Glucose Tolerance Test). Display the resulting tibble to confirm that you have succeeded.
 
 ::: {.callout-tip collapse="true"}
 ## Hint
@@ -98,7 +108,8 @@ head(df_glucose_nested)
 ```
 
 
-7. Merge the nested glucose dataset with the joined diabetes. 
+7. Merge the nested glucose dataset with the joined diabetes dataset.
+
 ```{r}
 diabetes_glucose <- diabetes_join %>% 
   left_join(df_glucose_nested, by = 'ID')
@@ -119,9 +130,38 @@ diabetes_glucose %>%
   pull(OGTT)
 ```
 
+9. Calculate the mean glucose measure for each measurement timepoint.
+
+::: {.callout-tip collapse="true"}
+## Hint
+You will need to use `unnest()`, `group_by()`, and `summarise()`.
+:::
+
+```{r}
+diabetes_glucose %>%
+  unnest(OGTT) %>%
+  group_by(Measurement) %>%
+  summarise(mean = mean(`Glucose (mmol/L)`))
+```
+
+10. Calculate mean and standard deviation for all numeric columns.
+
+::: {.callout-tip collapse="true"}
+## Hint
+You will need to use `summarise()` and `across()`, selecting numeric columns.
+:::
+
+```{r}
+diabetes_glucose %>%
+  #unnest(OGTT) %>%
+  summarise(across(where(is.numeric), list(mean=mean, sd=sd), 
+                   .names = "{.col}-{.fn}"))
+```
 
 
-13. Export the final dataset. Since the dataset is nested, you cannot export it as an excel file. Export the dataset as an `.rds` file. Have a guess at what the function is called. 
+11. Export the final dataset. Since the dataset is nested, you cannot export it as an excel file. Export the dataset as an `.rds` file. Have a guess at what the function is called.
+
+
 ```{r}
 write_rds(diabetes_glucose, '../out/diabetes_glucose.rds')
 ```

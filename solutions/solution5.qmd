@@ -48,4 +48,34 @@ summary(model)
 
 6. `rm` and `crim` have a significant influence on the house price. An increase in the number of rooms increases the price since the coefficient is positive, whereas an increase in crime rate reduces the price. There is a significant difference in price between Rural and Urban zones, but not between Rural and Suburban. Rural is the reference level. Lastly, houses with 0 rooms cost -25k dollar. Perhaps the predictors should be centered before fitting the model around 0 so `rm` == 0 is the average number of rooms for better interpretability. 
 
+7. Scale the numeric predictor columns and redo the modelling. What has changed?
+
+::: {.callout-tip collapse="true"}
+## Hint
+There is a scale function, see `?scale()`.
+:::
+
+
+```{r}
+df <- df %>%
+  mutate(across(where(is.numeric), scale, .names = "standardized_{.col}"))
+
+df
+```
+
+```{r}
+# Set seed to ensure reproducibility
+set.seed(123)  
+
+train <- df %>% sample_frac(.75)
+test  <- anti_join(df, train, by = 'ID') 
+```
+
+
+```{r}
+model_std <- lm(medv ~ standardized_rm + standardized_crim + neighborhood, data = train)
+summary(model_std)
+```
+
+All significance observations stay the same since scaling can never affect that. The size of the coefficients will usually change since the range of the predictor (that they are multiplied with in the formula) has changed, but their direction stays the same. Now a house with the average number of rooms (`rm` == 0) costs 21k. 
 

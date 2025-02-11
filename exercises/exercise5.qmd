@@ -41,3 +41,10 @@ The columns are:
 
 6. Describe what information you get from the model summary. 
 
+7. Scale the numeric predictor columns and redo the modelling. What has changed?
+
+::: {.callout-tip collapse="true"}
+## Hint
+There is a scale function, see `?scale()`.
+:::
+
