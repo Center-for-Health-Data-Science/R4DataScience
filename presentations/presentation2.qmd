@@ -107,6 +107,8 @@ df_sales_longer_nested <- df_sales_longer %>%
 head(df_sales_longer_nested)
 ```
 
+You can see that the newly made column `sales_data` has the data type `list` because it contains not one value per row, like `City` or `group` do, but instead an entire little tibble. 
+
 Now we have a structured dataset which is more readable. 
 
 **Note:** Nested data cannot be exported as an Excel or CSV file. Instead, you need to export it as an RDS file, a format specifically designed to save R objects.
@@ -117,6 +119,15 @@ df_sales_longer_nested %>%
   filter(Name == 'Bob') %>% 
   pull(sales_data)
 ```
+
+For operations on the information contained in nested columns they first need to be `unnested`:
+
+```{r}
+df_sales_longer_nested %>%
+  unnest(sales_data) %>%
+  summarise(mean_sales = mean(sales, na.rm = T))
+```
+
 
 ## Tidyverse helpers: `across()` and `where()`
 

@@ -84,7 +84,6 @@ glucose_measurement_id_plot <- function(df, id){
     geom_point(color = "#03579A") + 
     geom_line(color = "#03579A") + 
     labs(title = paste("Oral Glucose Tolerance Test of ID:", id)) + 
-    scale_x_continuous(breaks = c(0, 60, 120)) + 
     theme_bw() +
     theme(text = element_text(family="Avenir")) 
   
@@ -122,7 +121,6 @@ glucose_measurement_mean_plot <- function(df, var_cat){
     scale_color_manual(values = colors) +
     labs(title = paste("Mean Oral Glucose Tolerance Test Across", var_cat), 
          y = "Mean Glucose (mmol/L)") +
-    scale_x_continuous(breaks = c(0, 60, 120)) +
     theme_bw() +
     theme(text = element_text(family="Avenir"))
 

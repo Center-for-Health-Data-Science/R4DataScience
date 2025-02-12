@@ -394,7 +394,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>df_glucose <span class="ot">&lt;-</span> readxl<span class="sc">::</span><span class="fu">read_excel</span>(<span class="st">'../data/df_glucose.xlsx'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <ol start="3" type="1">
-<li>Have a look at the glucose dataset. It has three columns with measurements from a Oral Glucose Tolerance Test where blood glucose is measured at fasting (Glucose_0), 6 hours after glucose intake (Glucose_6), and 12 hours after (Glucose_12). The last columns is an ID column.</li>
+<li>Have a look at the glucose dataset. It has three columns with measurements from a Oral Glucose Tolerance Test where blood glucose is measured at fasting (Glucose_0), 6 hours after glucose intake (Glucose_6), and 12 hours after (Glucose_12). The last columns is an ID column. Change the data type of the ID column to <code>factor</code> in both <code>diabetes_join</code> and <code>df_glucose</code>.</li>
 </ol>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(df_glucose)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -410,8 +410,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 6      6.84       7.62        8.42  8213</code></pre>
 </div>
 </div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>df_glucose<span class="sc">$</span>ID <span class="ot">&lt;-</span> <span class="fu">as.factor</span>(df_glucose<span class="sc">$</span>ID)</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>diabetes_join<span class="sc">$</span>ID <span class="ot">&lt;-</span> <span class="fu">as.factor</span>(diabetes_join<span class="sc">$</span>ID)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
 <ol start="4" type="1">
-<li>Restructure the glucose dataset into a long format. How many rows are there per ID? Does that make sense?</li>
+<li>Restructure the glucose dataset into a long format. Name the column that describes which measurement the row refers to, i.e.&nbsp;Glucose_0, Glucose_60 or Glucose_120, <code>Measurement</code>. How many rows are there per ID? Does that make sense?</li>
 </ol>
 <div class="callout callout-style-default callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
@@ -427,29 +431,29 @@ Hint
 <div class="callout-body-container callout-body">
 <p>Remember the flow:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">pivot_longer</span>(<span class="at">cols =</span> LIST_WITH_COLUMNS_TO_PIVOT,</span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>             <span class="at">names_to =</span> <span class="st">"NEW_COLUMN_CONTAINING_COLUMN_NAMES"</span>,</span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>             <span class="at">values_to =</span> <span class="st">"NEW_COLUMN_CONTAINING_COLUMN_VALUES"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">pivot_longer</span>(<span class="at">cols =</span> LIST_WITH_COLUMNS_TO_PIVOT,</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>             <span class="at">names_to =</span> <span class="st">"NEW_COLUMN_CONTAINING_COLUMN_NAMES"</span>,</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>             <span class="at">values_to =</span> <span class="st">"NEW_COLUMN_CONTAINING_COLUMN_VALUES"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Have a look at slide 16 for a visual overview.</p>
 </div>
 </div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>df_glucose_long <span class="ot">&lt;-</span> df_glucose <span class="sc">%&gt;%</span> </span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="at">cols =</span> <span class="fu">starts_with</span>(<span class="st">"Glucose"</span>),</span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>               <span class="at">names_to =</span> <span class="st">"Measurement"</span>,</span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>               <span class="at">values_to =</span> <span class="st">"Glucose (mmol/L)"</span></span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>               )</span>
-<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(df_glucose_long)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>df_glucose_long <span class="ot">&lt;-</span> df_glucose <span class="sc">%&gt;%</span> </span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="at">cols =</span> <span class="fu">starts_with</span>(<span class="st">"Glucose"</span>),</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>               <span class="at">names_to =</span> <span class="st">"Measurement"</span>,</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>               <span class="at">values_to =</span> <span class="st">"Glucose (mmol/L)"</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>               )</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(df_glucose_long)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 6 × 3
-     ID Measurement `Glucose (mmol/L)`
-  &lt;dbl&gt; &lt;chr&gt;                    &lt;dbl&gt;
-1  9046 Glucose_0                 6.65
-2  9046 Glucose_60                8.04
-3  9046 Glucose_120              10.0 
+  ID    Measurement `Glucose (mmol/L)`
+  &lt;fct&gt; &lt;chr&gt;                    &lt;dbl&gt;
+1 9046  Glucose_0                 6.65
+2 9046  Glucose_60                8.04
+3 9046  Glucose_120              10.0 
 4 51676 Glucose_0                 4.49
 5 51676 Glucose_60                5.40
 6 51676 Glucose_120               6.22</code></pre>
@@ -457,23 +461,23 @@ Hint
 </div>
 <p>There are three rows for each ID, corresponding to the three glucose measurements</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>df_glucose_long <span class="sc">%&gt;%</span></span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(ID) <span class="sc">%&gt;%</span></span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">head</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>df_glucose_long <span class="sc">%&gt;%</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(ID) <span class="sc">%&gt;%</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">head</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 6 × 2
-     ID     n
-  &lt;dbl&gt; &lt;int&gt;
-1   129     3
-2   210     3
-3   491     3
-4   530     3
-5   621     3
-6   712     3</code></pre>
+  ID        n
+  &lt;fct&gt; &lt;int&gt;
+1 129       3
+2 210       3
+3 491       3
+4 530       3
+5 621       3
+6 712       3</code></pre>
 </div>
 </div>
 <ol start="5" type="1">
-<li>In your long format dataframe you should have one column that described which measurement the row refers to, i.e.&nbsp;Glucose_0, Glucose_60 or Glucose_120. Transform this column so that you only have the numerical part, i.e.&nbsp;<strong>only</strong> 0, 60 or 120. Then change the data type of that column to numeric.</li>
+<li>In your long format dataframe you should have one column that described which measurement the row refers to, i.e.&nbsp;Glucose_0, Glucose_60 or Glucose_120. Transform this column so that you only have the numerical part, i.e.&nbsp;<strong>only</strong> 0, 60 or 120. Then change the data type of that column to <code>factor</code>. Check the order of the factor levels and if necessary change them to the proper order.</li>
 </ol>
 <div class="callout callout-style-default callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
@@ -488,28 +492,62 @@ Hint
 <div id="callout-2" class="callout-2-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p>The <code>stringr</code> packages is a part of tidyverse and has many functions for manipulating strings. Find a function that can <strong>split</strong> the string so you can extract the numbers on the other side of the underscore.</p>
+<p>Have a look at the help for factors <code>?factors</code> to see how to influence the levels.</p>
 </div>
 </div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>df_glucose_long <span class="ot">&lt;-</span> df_glucose_long <span class="sc">%&gt;%</span> </span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Measurement =</span> <span class="fu">str_split_i</span>(Measurement, <span class="st">'_'</span>, <span class="dv">2</span>) <span class="sc">%&gt;%</span> <span class="fu">as.numeric</span>())</span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(df_glucose_long)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>df_glucose_long <span class="ot">&lt;-</span> df_glucose_long <span class="sc">%&gt;%</span> </span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Measurement =</span> <span class="fu">str_split_i</span>(Measurement, <span class="st">'_'</span>, <span class="dv">2</span>) <span class="sc">%&gt;%</span> <span class="fu">as.factor</span>())</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(df_glucose_long)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 6 × 3
-     ID Measurement `Glucose (mmol/L)`
-  &lt;dbl&gt;       &lt;dbl&gt;              &lt;dbl&gt;
-1  9046           0               6.65
-2  9046          60               8.04
-3  9046         120              10.0 
-4 51676           0               4.49
-5 51676          60               5.40
-6 51676         120               6.22</code></pre>
+  ID    Measurement `Glucose (mmol/L)`
+  &lt;fct&gt; &lt;fct&gt;                    &lt;dbl&gt;
+1 9046  0                         6.65
+2 9046  60                        8.04
+3 9046  120                      10.0 
+4 51676 0                         4.49
+5 51676 60                        5.40
+6 51676 120                       6.22</code></pre>
 </div>
+</div>
+<p>Check factor levels:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">levels</span>(df_glucose_long<span class="sc">$</span>Measurement)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "0"   "120" "60" </code></pre>
+</div>
+</div>
+<p>Adjust levels to proper order:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>df_glucose_long<span class="sc">$</span>Measurement <span class="ot">&lt;-</span> <span class="fu">factor</span>(df_glucose_long<span class="sc">$</span>Measurement, <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">'0'</span>, <span class="st">'60'</span>,<span class="st">'120'</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <ol start="6" type="1">
-<li>Nest the glucose measurements and values such that there is only one row per ID and call the nested column OGTT (Oral Glucose Tolerance Test). Display the resulting tibble to confirm that you have succeeded.</li>
+<li>Merge the glucose dataset with the joined diabetes dataset.</li>
+</ol>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>diabetes_glucose <span class="ot">&lt;-</span> diabetes_join <span class="sc">%&gt;%</span> </span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(df_glucose_long, <span class="at">by =</span> <span class="st">'ID'</span>)</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(diabetes_glucose)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 6 × 13
+  ID    Sex     Age BloodPressure GeneticRisk   BMI PhysicalActivity Smoker 
+  &lt;fct&gt; &lt;chr&gt; &lt;dbl&gt;         &lt;dbl&gt;       &lt;dbl&gt; &lt;dbl&gt;            &lt;dbl&gt; &lt;chr&gt;  
+1 9046  Male     34            84       0.619  24.7               93 Unknown
+2 9046  Male     34            84       0.619  24.7               93 Unknown
+3 9046  Male     34            84       0.619  24.7               93 Unknown
+4 51676 Male     25            74       0.591  22.5              102 Unknown
+5 51676 Male     25            74       0.591  22.5              102 Unknown
+6 51676 Male     25            74       0.591  22.5              102 Unknown
+# ℹ 5 more variables: Diabetes &lt;chr&gt;, Married &lt;chr&gt;, Work &lt;chr&gt;,
+#   Measurement &lt;fct&gt;, `Glucose (mmol/L)` &lt;dbl&gt;</code></pre>
+</div>
+</div>
+<ol start="7" type="1">
+<li>Pull the glucose measurements from your favorite ID.</li>
 </ol>
 <div class="callout callout-style-default callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-3-contents" aria-controls="callout-3" aria-expanded="false" aria-label="Toggle callout">
@@ -523,57 +561,22 @@ Hint
 </div>
 <div id="callout-3" class="callout-3-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<p>Remember the flow:</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">group_by</span>() <span class="sc">%&gt;%</span> </span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">nest</span>() <span class="sc">%&gt;%</span> </span>
-<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
+<p>First <code>filter</code> for your favorite ID and then <code>pull</code> the columns.</p>
 </div>
 </div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>df_glucose_nested <span class="ot">&lt;-</span> df_glucose_long <span class="sc">%&gt;%</span> </span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(ID) <span class="sc">%&gt;%</span> </span>
-<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">nest</span>(<span class="at">OGTT =</span> <span class="fu">c</span>(Measurement, <span class="st">`</span><span class="at">Glucose (mmol/L)</span><span class="st">`</span>)) <span class="sc">%&gt;%</span> </span>
-<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>()</span>
-<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(df_glucose_nested)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>diabetes_glucose <span class="sc">%&gt;%</span> </span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(ID <span class="sc">==</span> <span class="dv">9046</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pull</span>(Measurement,<span class="st">`</span><span class="at">Glucose (mmol/L)</span><span class="st">`</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 6 × 2
-     ID OGTT            
-  &lt;dbl&gt; &lt;list&gt;          
-1  9046 &lt;tibble [3 × 2]&gt;
-2 51676 &lt;tibble [3 × 2]&gt;
-3  1665 &lt;tibble [3 × 2]&gt;
-4 12095 &lt;tibble [3 × 2]&gt;
-5 12175 &lt;tibble [3 × 2]&gt;
-6  8213 &lt;tibble [3 × 2]&gt;</code></pre>
-</div>
-</div>
-<ol start="7" type="1">
-<li>Merge the nested glucose dataset with the joined diabetes dataset.</li>
-</ol>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>diabetes_glucose <span class="ot">&lt;-</span> diabetes_join <span class="sc">%&gt;%</span> </span>
-<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(df_glucose_nested, <span class="at">by =</span> <span class="st">'ID'</span>)</span>
-<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(diabetes_glucose)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 6 × 12
-     ID Sex      Age BloodPressure GeneticRisk   BMI PhysicalActivity Smoker 
-  &lt;dbl&gt; &lt;chr&gt;  &lt;dbl&gt;         &lt;dbl&gt;       &lt;dbl&gt; &lt;dbl&gt;            &lt;dbl&gt; &lt;chr&gt;  
-1  9046 Male      34            84       0.619  24.7               93 Unknown
-2 51676 Male      25            74       0.591  22.5              102 Unknown
-3 60182 Male      50            80       0.178  34.5               98 Unknown
-4  1665 Female    27            60       0.206  26.3               82 Never  
-5 56669 Male      35            84       0.286  35                 58 Smoker 
-6 53882 Female    31            78       1.22   43.3               59 Smoker 
-# ℹ 4 more variables: Diabetes &lt;chr&gt;, Married &lt;chr&gt;, Work &lt;chr&gt;, OGTT &lt;list&gt;</code></pre>
+<pre><code>  6.652593325614 8.04416787019778  10.016298115626 
+               0               60              120 
+Levels: 0 60 120</code></pre>
 </div>
 </div>
 <ol start="8" type="1">
-<li>Pull the glucose measurements (<code>OGTT</code>) from your favorite ID.</li>
+<li>Calculate the mean glucose measure for each measurement timepoint.</li>
 </ol>
 <div class="callout callout-style-default callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-4-contents" aria-controls="callout-4" aria-expanded="false" aria-label="Toggle callout">
@@ -587,26 +590,25 @@ Hint
 </div>
 <div id="callout-4" class="callout-4-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<p>First <code>filter</code> for your favorite ID and then <code>pull</code> the nested column.</p>
+<p>You will need to use <code>group_by()</code>, and <code>summarise()</code>.</p>
 </div>
 </div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>diabetes_glucose <span class="sc">%&gt;%</span> </span>
-<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(ID <span class="sc">==</span> <span class="dv">9046</span>) <span class="sc">%&gt;%</span> </span>
-<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pull</span>(OGTT)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>diabetes_glucose <span class="sc">%&gt;%</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Measurement) <span class="sc">%&gt;%</span></span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">mean =</span> <span class="fu">mean</span>(<span class="st">`</span><span class="at">Glucose (mmol/L)</span><span class="st">`</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[[1]]
-# A tibble: 3 × 2
-  Measurement `Glucose (mmol/L)`
-        &lt;dbl&gt;              &lt;dbl&gt;
-1           0               6.65
-2          60               8.04
-3         120              10.0 </code></pre>
+<pre><code># A tibble: 3 × 2
+  Measurement  mean
+  &lt;fct&gt;       &lt;dbl&gt;
+1 0            8.06
+2 60           9.74
+3 120         11.1 </code></pre>
 </div>
 </div>
 <ol start="9" type="1">
-<li>Calculate the mean glucose measure for each measurement timepoint.</li>
+<li>Calculate mean and standard deviation for all numeric columns.</li>
 </ol>
 <div class="callout callout-style-default callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-5-contents" aria-controls="callout-5" aria-expanded="false" aria-label="Toggle callout">
@@ -620,26 +622,26 @@ Hint
 </div>
 <div id="callout-5" class="callout-5-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<p>You will need to use <code>unnest()</code>, <code>group_by()</code>, and <code>summarise()</code>.</p>
+<p>You will need to use <code>summarise()</code> and <code>across()</code>, selecting numeric columns.</p>
 </div>
 </div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>diabetes_glucose <span class="sc">%&gt;%</span></span>
-<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">unnest</span>(OGTT) <span class="sc">%&gt;%</span></span>
-<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Measurement) <span class="sc">%&gt;%</span></span>
-<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">mean =</span> <span class="fu">mean</span>(<span class="st">`</span><span class="at">Glucose (mmol/L)</span><span class="st">`</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>diabetes_glucose <span class="sc">%&gt;%</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="fu">across</span>(<span class="fu">where</span>(is.numeric), <span class="fu">list</span>(<span class="at">mean=</span>mean, <span class="at">sd=</span>sd), </span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>                   <span class="at">.names =</span> <span class="st">"{.col}-{.fn}"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 3 × 2
-  Measurement  mean
-        &lt;dbl&gt; &lt;dbl&gt;
-1           0  8.06
-2          60  9.74
-3         120 11.1 </code></pre>
+<pre><code># A tibble: 1 × 12
+  `Age-mean` `Age-sd` `BloodPressure-mean` `BloodPressure-sd` `GeneticRisk-mean`
+       &lt;dbl&gt;    &lt;dbl&gt;                &lt;dbl&gt;              &lt;dbl&gt;              &lt;dbl&gt;
+1       33.8     11.4                 72.7               12.9                 NA
+# ℹ 7 more variables: `GeneticRisk-sd` &lt;dbl&gt;, `BMI-mean` &lt;dbl&gt;, `BMI-sd` &lt;dbl&gt;,
+#   `PhysicalActivity-mean` &lt;dbl&gt;, `PhysicalActivity-sd` &lt;dbl&gt;,
+#   `Glucose (mmol/L)-mean` &lt;dbl&gt;, `Glucose (mmol/L)-sd` &lt;dbl&gt;</code></pre>
 </div>
 </div>
 <ol start="10" type="1">
-<li>Calculate mean and standard deviation for all numeric columns.</li>
+<li>Nest the glucose measurements and values such that there is only one row per ID and call the nested column OGTT (Oral Glucose Tolerance Test). Display the resulting tibble to confirm that you have succeeded.</li>
 </ol>
 <div class="callout callout-style-default callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-6-contents" aria-controls="callout-6" aria-expanded="false" aria-label="Toggle callout">
@@ -653,30 +655,41 @@ Hint
 </div>
 <div id="callout-6" class="callout-6-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<p>You will need to use <code>summarise()</code> and <code>across()</code>, selecting numeric columns.</p>
+<p>Remember the flow:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">group_by</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">nest</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
 </div>
 </div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>diabetes_glucose <span class="sc">%&gt;%</span></span>
-<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>  <span class="co">#unnest(OGTT) %&gt;%</span></span>
-<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="fu">across</span>(<span class="fu">where</span>(is.numeric), <span class="fu">list</span>(<span class="at">mean=</span>mean, <span class="at">sd=</span>sd), </span>
-<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>                   <span class="at">.names =</span> <span class="st">"{.col}-{.fn}"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>diabetes_glucose <span class="ot">&lt;-</span> diabetes_glucose <span class="sc">%&gt;%</span> </span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(ID) <span class="sc">%&gt;%</span> </span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">nest</span>(<span class="at">OGTT =</span> <span class="fu">c</span>(Measurement, <span class="st">`</span><span class="at">Glucose (mmol/L)</span><span class="st">`</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>()</span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a><span class="co">#relocate the new nested column to after BMI so we can actually see it</span></span>
+<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(<span class="fu">relocate</span>(diabetes_glucose, OGTT, <span class="at">.after =</span> BMI))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 1 × 12
-  `ID-mean` `ID-sd` `Age-mean` `Age-sd` `BloodPressure-mean` `BloodPressure-sd`
-      &lt;dbl&gt;   &lt;dbl&gt;      &lt;dbl&gt;    &lt;dbl&gt;                &lt;dbl&gt;              &lt;dbl&gt;
-1    36146.  21788.       33.8     11.4                 72.7               12.9
-# ℹ 6 more variables: `GeneticRisk-mean` &lt;dbl&gt;, `GeneticRisk-sd` &lt;dbl&gt;,
-#   `BMI-mean` &lt;dbl&gt;, `BMI-sd` &lt;dbl&gt;, `PhysicalActivity-mean` &lt;dbl&gt;,
-#   `PhysicalActivity-sd` &lt;dbl&gt;</code></pre>
+<pre><code># A tibble: 6 × 12
+  ID    Sex      Age BloodPressure GeneticRisk   BMI OGTT     PhysicalActivity
+  &lt;fct&gt; &lt;chr&gt;  &lt;dbl&gt;         &lt;dbl&gt;       &lt;dbl&gt; &lt;dbl&gt; &lt;list&gt;              &lt;dbl&gt;
+1 9046  Male      34            84       0.619  24.7 &lt;tibble&gt;               93
+2 51676 Male      25            74       0.591  22.5 &lt;tibble&gt;              102
+3 60182 Male      50            80       0.178  34.5 &lt;tibble&gt;               98
+4 1665  Female    27            60       0.206  26.3 &lt;tibble&gt;               82
+5 56669 Male      35            84       0.286  35   &lt;tibble&gt;               58
+6 53882 Female    31            78       1.22   43.3 &lt;tibble&gt;               59
+# ℹ 4 more variables: Smoker &lt;chr&gt;, Diabetes &lt;chr&gt;, Married &lt;chr&gt;, Work &lt;chr&gt;</code></pre>
 </div>
 </div>
 <ol start="11" type="1">
 <li>Export the final dataset. Since the dataset is nested, you cannot export it as an excel file. Export the dataset as an <code>.rds</code> file. Have a guess at what the function is called.</li>
 </ol>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">write_rds</span>(diabetes_glucose, <span class="st">'../out/diabetes_glucose.rds'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="fu">write_rds</span>(diabetes_glucose, <span class="st">'../out/diabetes_glucose.rds'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 
 

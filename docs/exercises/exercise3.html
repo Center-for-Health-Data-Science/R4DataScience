@@ -380,6 +380,7 @@ window.Quarto = {
   <li><a href="#plotting---part-1" id="toc-plotting---part-1" class="nav-link" data-scroll-target="#plotting---part-1">Plotting - Part 1</a></li>
   <li><a href="#plotting---part-2" id="toc-plotting---part-2" class="nav-link" data-scroll-target="#plotting---part-2">Plotting - Part 2</a></li>
   <li><a href="#plotting---part-3-pca" id="toc-plotting---part-3-pca" class="nav-link" data-scroll-target="#plotting---part-3-pca">Plotting - Part 3: PCA</a></li>
+  <li><a href="#extra-exercises" id="toc-extra-exercises" class="nav-link" data-scroll-target="#extra-exercises">Extra exercises</a></li>
   </ul>
 </nav>
     </div>
@@ -423,41 +424,11 @@ window.Quarto = {
 <section id="plotting---part-1" class="level2">
 <h2 class="anchored" data-anchor-id="plotting---part-1">Plotting - Part 1</h2>
 <p>You will first do some basic plots to get started with ggplot again.</p>
-<p>If it has been a while since you work with ggplot, have a look at the ggplot material from the FromExceltoR course: https://center-for-health-data-science.github.io/FromExceltoR/Presentations/presentation3.html.</p>
+<p>If it has been a while since you worked with ggplot, have a look at the <a href="https://center-for-health-data-science.github.io/FromExceltoR/Presentations/presentation3.html">ggplot material</a> from the FromExceltoR course.</p>
 <ol start="3" type="1">
-<li>Create a scatter plot of <code>Age</code> and <code>Blood Pressure</code>. Do you notice a trend?</li>
-</ol>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>diabetes_glucose <span class="sc">%&gt;%</span> </span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> BloodPressure, </span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>             <span class="at">y =</span> Age)) <span class="sc">+</span> </span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="exercise3_files/figure-html/unnamed-chunk-3-1.png" class="img-fluid figure-img" width="672"></p>
-</figure>
-</div>
-</div>
-</div>
-<ol start="4" type="1">
-<li>Create a scatter plot of <code>PhysicalActivity</code> and <code>BMI.</code> Do you notice a trend?</li>
-</ol>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>diabetes_glucose <span class="sc">%&gt;%</span> </span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> PhysicalActivity, </span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>             <span class="at">y =</span> BMI)) <span class="sc">+</span> </span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="exercise3_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid figure-img" width="672"></p>
-</figure>
-</div>
-</div>
-</div>
-<ol start="5" type="1">
-<li>Now, create the same two plots as before, but this time stratify them by <code>Diabetes</code>. Do you notice any trends?</li>
+<li><p>Create a scatter plot of <code>Age</code> and <code>Blood Pressure</code>. Do you notice a trend?</p></li>
+<li><p>Create a scatter plot of <code>PhysicalActivity</code> and <code>BMI.</code> Do you notice a trend?</p></li>
+<li><p>Now, create the same two plots as before, but this time stratify them by <code>Diabetes</code>. Do you notice any trends?</p></li>
 </ol>
 <div class="callout callout-style-default callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
@@ -475,97 +446,17 @@ Hint
 </div>
 </div>
 </div>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>diabetes_glucose <span class="sc">%&gt;%</span> </span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> BloodPressure, </span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>             <span class="at">y =</span> Age, </span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>             <span class="at">color =</span> Diabetes)) <span class="sc">+</span> </span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="exercise3_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid figure-img" width="672"></p>
-</figure>
-</div>
-</div>
-</div>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>diabetes_glucose <span class="sc">%&gt;%</span> </span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> PhysicalActivity, </span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>             <span class="at">y =</span> BMI, </span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>             <span class="at">color =</span> Diabetes)) <span class="sc">+</span> </span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="exercise3_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid figure-img" width="672"></p>
-</figure>
-</div>
-</div>
-</div>
 <ol start="6" type="1">
-<li>Create a boxplot of <code>BMI</code> stratified by <code>Diabaetes.</code> Give the plot a meaningful title.</li>
+<li><p>Create a boxplot of <code>BMI</code> stratified by <code>Diabetes.</code> Give the plot a meaningful title.</p></li>
+<li><p>Create a boxplot of <code>PhysicalActivity</code> stratified by <code>Smoker</code>. Give the plot a meaningful title.</p></li>
 </ol>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>diabetes_glucose <span class="sc">%&gt;%</span> </span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">y =</span> BMI, </span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>             <span class="at">x =</span> Diabetes, </span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>             <span class="at">color =</span> Diabetes)) <span class="sc">+</span> </span>
-<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>() <span class="sc">+</span> </span>
-<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">'Distribution of BMI Stratified by Diabetes'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="exercise3_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid figure-img" width="672"></p>
-</figure>
-</div>
-</div>
-</div>
-<ol start="7" type="1">
-<li>Create a boxplot of <code>PhysicalActivity</code> stratified by <code>Smoker</code>. Give the plot a meaningful title.</li>
-</ol>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>diabetes_glucose <span class="sc">%&gt;%</span> </span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">y =</span> PhysicalActivity, </span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>             <span class="at">x =</span> Smoker, </span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>             <span class="at">fill =</span> Smoker)) <span class="sc">+</span> </span>
-<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>() <span class="sc">+</span> </span>
-<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">'Distribution of Physical Activity Stratified by Smoker Status'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="exercise3_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid figure-img" width="672"></p>
-</figure>
-</div>
-</div>
-</div>
 </section>
 <section id="plotting---part-2" class="level2">
 <h2 class="anchored" data-anchor-id="plotting---part-2">Plotting - Part 2</h2>
 <p>In order to plot the data inside the nested variable, the data needs to be unnested.</p>
 <ol start="8" type="1">
-<li>Create a boxplot of the glucose measurements at time 0 stratified by <code>Diabetes</code>. Give the plot a meaningful title.</li>
-</ol>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>diabetes_glucose <span class="sc">%&gt;%</span></span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">unnest</span>(OGTT) <span class="sc">%&gt;%</span> </span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Measurement =</span> Measurement <span class="sc">%&gt;%</span> <span class="fu">as.factor</span>()) <span class="sc">%&gt;%</span> </span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(Measurement <span class="sc">==</span> <span class="dv">0</span>) <span class="sc">%&gt;%</span> </span>
-<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">y =</span> <span class="st">`</span><span class="at">Glucose (mmol/L)</span><span class="st">`</span>, </span>
-<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>             <span class="at">x =</span> Diabetes, </span>
-<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>             <span class="at">color =</span> Diabetes)) <span class="sc">+</span></span>
-<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>() <span class="sc">+</span> </span>
-<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">'Glucose Measurement for Time Point 0 (fasted)'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="exercise3_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid figure-img" width="672"></p>
-</figure>
-</div>
-</div>
-</div>
-<ol start="9" type="1">
-<li>Create boxplots of glucose measurements stratified by <code>Diabetes</code> for each time point (0, 60, 120) using faceting by <code>Measurement</code>. Give the plot a meaningful title.</li>
+<li><p>Create a boxplot of the glucose measurements at time 0 stratified by <code>Diabetes</code>. Give the plot a meaningful title.</p></li>
+<li><p>Create these boxplots for each time point (0, 60, 120) by using faceting by <code>Measurement</code>. Give the plot a meaningful title.</p></li>
 </ol>
 <div class="callout callout-style-default callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
@@ -583,44 +474,7 @@ Hint
 </div>
 </div>
 </div>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>diabetes_glucose <span class="sc">%&gt;%</span></span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">unnest</span>(OGTT) <span class="sc">%&gt;%</span> </span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Measurement =</span> Measurement <span class="sc">%&gt;%</span> <span class="fu">as.factor</span>()) <span class="sc">%&gt;%</span> </span>
-<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">y =</span> <span class="st">`</span><span class="at">Glucose (mmol/L)</span><span class="st">`</span>, </span>
-<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>             <span class="at">x =</span> Diabetes, </span>
-<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>             <span class="at">color =</span> Diabetes)) <span class="sc">+</span></span>
-<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>() <span class="sc">+</span> </span>
-<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="fu">vars</span>(Measurement)) <span class="sc">+</span> </span>
-<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">'Glucose Measurements for Time Point 0, 60, and 120'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="exercise3_files/figure-html/unnamed-chunk-10-1.png" class="img-fluid figure-img" width="672"></p>
-</figure>
-</div>
-</div>
-</div>
 <ol start="10" type="1">
-<li>Create a plot that visualizes glucose measurements across time points for each patient ID, stratified by their diabetes status. Each patient’s glucose measurements should be connected with a line, grouped by their ID, and color-coded by <code>Diabetes</code>. Give the plot a meaningful title.</li>
-</ol>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>diabetes_glucose <span class="sc">%&gt;%</span></span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">unnest</span>(OGTT) <span class="sc">%&gt;%</span> </span>
-<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> Measurement,</span>
-<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>             <span class="at">y =</span> <span class="st">`</span><span class="at">Glucose (mmol/L)</span><span class="st">`</span>)) <span class="sc">+</span></span>
-<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">color =</span> Diabetes)) <span class="sc">+</span> </span>
-<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">group =</span> ID, <span class="at">color =</span> Diabetes)) <span class="sc">+</span> </span>
-<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">'Glucose Measurements Across Time Points by Diabetes Status'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="exercise3_files/figure-html/unnamed-chunk-11-1.png" class="img-fluid figure-img" width="672"></p>
-</figure>
-</div>
-</div>
-</div>
-<ol start="11" type="1">
 <li>Calculate the mean glucose levels for each time point.</li>
 </ol>
 <div class="callout callout-style-default callout-tip callout-titled">
@@ -635,26 +489,12 @@ Hint
 </div>
 <div id="callout-3" class="callout-3-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<p>You will need to use <code>unnest()</code>, <code>group_by()</code>, and <code>summerize()</code>.</p>
+<p>You will need to use <code>unnest()</code>, <code>group_by()</code>, and <code>summerise()</code>.</p>
 </div>
 </div>
 </div>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>diabetes_glucose <span class="sc">%&gt;%</span></span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">unnest</span>(OGTT) <span class="sc">%&gt;%</span> </span>
-<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Measurement) <span class="sc">%&gt;%</span> </span>
-<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="st">`</span><span class="at">Glucose (mmol/L)</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">mean</span>(<span class="st">`</span><span class="at">Glucose (mmol/L)</span><span class="st">`</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 3 × 2
-  Measurement `Glucose (mmol/L)`
-        &lt;dbl&gt;              &lt;dbl&gt;
-1           0               8.06
-2          60               9.74
-3         120              11.1 </code></pre>
-</div>
-</div>
-<ol start="12" type="1">
-<li>Make the same calculation as above, but additionally group the results by <code>Diabetes</code>. Save the data frame in a variable.</li>
+<ol start="11" type="1">
+<li>Make the same calculation as above, but additionally group the results by <code>Diabetes</code>. Save the data frame in a variable. Compare your results to the boxplots you made above.</li>
 </ol>
 <div class="callout callout-style-default callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-4-contents" aria-controls="callout-4" aria-expanded="false" aria-label="Toggle callout">
@@ -672,38 +512,18 @@ Hint
 </div>
 </div>
 </div>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>glucose_mean <span class="ot">&lt;-</span> diabetes_glucose <span class="sc">%&gt;%</span></span>
-<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">unnest</span>(OGTT) <span class="sc">%&gt;%</span> </span>
-<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Measurement, Diabetes) <span class="sc">%&gt;%</span></span>
-<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="st">`</span><span class="at">Glucose (mmol/L)</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">mean</span>(<span class="st">`</span><span class="at">Glucose (mmol/L)</span><span class="st">`</span>)) <span class="sc">%&gt;%</span></span>
-<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>`summarise()` has grouped output by 'Measurement'. You can override using the
-`.groups` argument.</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>glucose_mean</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 6 × 3
-  Measurement Diabetes `Glucose (mmol/L)`
-        &lt;dbl&gt; &lt;chr&gt;                 &lt;dbl&gt;
-1           0 0                      5.51
-2           0 1                     10.6 
-3          60 0                      6.83
-4          60 1                     12.6 
-5         120 0                      7.89
-6         120 1                     14.2 </code></pre>
-</div>
-</div>
-<p>This next exercise might be a bit more challenging. It requires multiple operations and might involve some techniques that were not explicitly shown in the presentations.</p>
-<ol start="13" type="1">
-<li>Recreate the plot you made in Exercise 10 and include the mean value for each glucose measurement for the two diabetes statuses (0 and 1) you calculated in Exercise 12. This plot should lool like this:</li>
+<ol start="12" type="1">
+<li>Create a plot that visualizes glucose measurements across time points, with one line for each patient ID. Then color the lines by their diabetes status. In summary, each patient’s glucose measurements should be connected with a line, grouped by their ID, and color-coded by <code>Diabetes</code>. Give the plot a meaningful title.</li>
 </ol>
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="../out/figure3_13.png" class="img-fluid quarto-figure quarto-figure-center figure-img"></p>
-</figure>
-</div>
+<p>If your time points are strangely ordered have a look at the <code>levels</code> of your <code>Measurement</code> variable (the one that specifies which time point the measurement was taken at) and if necessary fix their order.</p>
+</section>
+<section id="plotting---part-3-pca" class="level2">
+<h2 class="anchored" data-anchor-id="plotting---part-3-pca">Plotting - Part 3: PCA</h2>
+<p>For this part we will use this <a href="https://cran.r-project.org/web/packages/ggfortify/vignettes/plot_pca.html">tutorial</a> to make a principal component analysis (PCA). First, we perform some preprocessing to get our data into the right format.</p>
+<ol start="13" type="1">
+<li><p>Let’s start by unnesting the OGTT data and using pivot wider so that each Glucose measurement time point gets its own column (again).</p></li>
+<li><p>Have a look at your unnested diabetes data set. Can you use all the variables to perform PCA? Subset the dataset to only include the relevant variables.</p></li>
+</ol>
 <div class="callout callout-style-default callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-5-contents" aria-controls="callout-5" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
@@ -716,82 +536,23 @@ Hint
 </div>
 <div id="callout-5" class="callout-5-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<p>There are several ways to solve this task. Here is a workflow suggestion:</p>
-<ul>
-<li><p>The line in the plot symbolize a patient ID. You will need to create new IDs for the mean values that are not present in the dataset. Use <code>RANDOM_ID %in% df$ID</code> to check if an ID is already present in the dataset as a patient ID. The ID’s should be added to the data frame created in Exercise 12.</p></li>
-<li><p>Data from another dataset can be added to the plot like this: <code>+ geom_point(DATA, aes(x = VAR1, y = VAR2, group = VAR3))</code></p></li>
-<li><p>You can stratify the mean glucose lines by <code>linetype</code>.</p></li>
-</ul>
+<p>PCA can only be performed on numerical values. Extract these (except ID!) from the dataset. Numerical columns can easily be selected with the <code>where(is.numeric)</code> helper.</p>
 </div>
 </div>
 </div>
-<p>The line in the plot symbolize a patient ID. Let’s find two ID’s (one for <code>Diabetes == 0</code> and another for <code>Diabetes == 1</code>) that are not present in the dataset. We can use the same numbers as the Diabetes status for the ID’s.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="dv">0</span> <span class="sc">%in%</span> diabetes_glucose<span class="sc">$</span>ID</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] FALSE</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="dv">1</span> <span class="sc">%in%</span> diabetes_glucose<span class="sc">$</span>ID</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] FALSE</code></pre>
-</div>
-</div>
-<p>Add ID’s to the glucose mean data frame.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>glucose_mean <span class="ot">&lt;-</span> glucose_mean <span class="sc">%&gt;%</span> </span>
-<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">ID =</span> Diabetes <span class="sc">%&gt;%</span> <span class="fu">as.double</span>())</span>
-<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>glucose_mean</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 6 × 4
-  Measurement Diabetes `Glucose (mmol/L)`    ID
-        &lt;dbl&gt; &lt;chr&gt;                 &lt;dbl&gt; &lt;dbl&gt;
-1           0 0                      5.51     0
-2           0 1                     10.6      1
-3          60 0                      6.83     0
-4          60 1                     12.6      1
-5         120 0                      7.89     0
-6         120 1                     14.2      1</code></pre>
-</div>
-</div>
-<p>Copy-paste the code in Exercise 10 and add lines with new data.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>diabetes_glucose <span class="sc">%&gt;%</span></span>
-<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">unnest</span>(OGTT) <span class="sc">%&gt;%</span> </span>
-<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> Measurement,</span>
-<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>             <span class="at">y =</span> <span class="st">`</span><span class="at">Glucose (mmol/L)</span><span class="st">`</span>)) <span class="sc">+</span></span>
-<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">color =</span> Diabetes)) <span class="sc">+</span> </span>
-<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">group =</span> ID, <span class="at">color =</span> Diabetes)) <span class="sc">+</span> </span>
-<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Glucose mean data</span></span>
-<span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">data =</span> glucose_mean, </span>
-<span id="cb24-9"><a href="#cb24-9" aria-hidden="true" tabindex="-1"></a>             <span class="fu">aes</span>(<span class="at">x =</span> Measurement, </span>
-<span id="cb24-10"><a href="#cb24-10" aria-hidden="true" tabindex="-1"></a>                 <span class="at">y =</span> <span class="st">`</span><span class="at">Glucose (mmol/L)</span><span class="st">`</span>, </span>
-<span id="cb24-11"><a href="#cb24-11" aria-hidden="true" tabindex="-1"></a>                 <span class="at">group =</span> ID)) <span class="sc">+</span> </span>
-<span id="cb24-12"><a href="#cb24-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">data =</span> glucose_mean, </span>
-<span id="cb24-13"><a href="#cb24-13" aria-hidden="true" tabindex="-1"></a>            <span class="fu">aes</span>(<span class="at">x =</span> Measurement, </span>
-<span id="cb24-14"><a href="#cb24-14" aria-hidden="true" tabindex="-1"></a>                <span class="at">y =</span> <span class="st">`</span><span class="at">Glucose (mmol/L)</span><span class="st">`</span>, </span>
-<span id="cb24-15"><a href="#cb24-15" aria-hidden="true" tabindex="-1"></a>                <span class="at">group =</span> ID, </span>
-<span id="cb24-16"><a href="#cb24-16" aria-hidden="true" tabindex="-1"></a>                <span class="at">linetype =</span> Diabetes)) <span class="sc">+</span> </span>
-<span id="cb24-17"><a href="#cb24-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Glucose Measurements with Mean by Diabetes Status"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="exercise3_files/figure-html/unnamed-chunk-16-1.png" class="img-fluid figure-img" width="672"></p>
-</figure>
-</div>
-</div>
-<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggsave</span>(<span class="st">'../out/figure3_13.png'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Saving 7 x 5 in image</code></pre>
-</div>
-</div>
-</section>
-<section id="plotting---part-3-pca" class="level2">
-<h2 class="anchored" data-anchor-id="plotting---part-3-pca">Plotting - Part 3: PCA</h2>
-<p>For this part we will use a tutorial to make a principal component analysis (PCA): https://cran.r-project.org/web/packages/ggfortify/vignettes/plot_pca.html. First, we perform some reprocessing to get the data in the right format.</p>
-<ol start="13" type="1">
-<li>Have a look at your diabetes data set. Can you use all the variables to perform PCA? Subset the dataset to only include the relevant variables.</li>
+<ol start="15" type="1">
+<li>PCA cannot handle NA’s in the dataset. Remove all rows with NA in any column in your numerical subset. Then, go back to the original unnested data <code>diabetes_glucose_unnest</code> (or what you have called it) and also here drop rows that have NAs in the numerical columns (so the same rows you dropped from the numeric subset).This is important because we want to use (categorical) columns present in the original data to later color the resulting PCA, so the two dataframes (original and only numeric columns) need to be aligned and contain the same rows.</li>
 </ol>
+<p>Now our data is ready to make a PCA.</p>
+<ol start="16" type="1">
+<li><p>Calculate the PCA by running <code>prcomp</code> on our prepared data (see the tutorial). Then, create a plot of the resulting PCA (also shown in tutorial).</p></li>
+<li><p>Color your PCA plot and add loadings. Think about which variable you want to color by. Remember to refer to the dataset that has this variable (probably not your numeric subset!)</p></li>
+<li><p>Add a ggplot <code>theme</code> and title to your plot and save it.</p></li>
+<li><p>Calculate the variance explained by each of the PC’s using the following formula:</p></li>
+</ol>
+<p><span class="math display">\[
+\text{Variance Explained} = \frac{\text{sdev}^2}{\sum \text{sdev}^2} \times 100
+\]</span></p>
 <div class="callout callout-style-default callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-6-contents" aria-controls="callout-6" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
@@ -804,54 +565,26 @@ Hint
 </div>
 <div id="callout-6" class="callout-6-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<p>PCA can only be performed on numerical values. Extract these (except ID) from the dataset. It is up to you to decide whether to include the OGTT measurements. If you include them, <code>unnest</code> the data and convert it to wide format using <code>pivot_wider</code>, ensuring only glucose measurements (not time points) are included as variables in the PCA.</p>
+<p>You can access the standard deviation from the PCA object like this: <code>pca_res$sdev</code>.</p>
 </div>
 </div>
 </div>
-<p>Extract the numerical columns, excluding the OGTT measurements.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>numerical_columns <span class="ot">&lt;-</span> <span class="fu">sapply</span>(diabetes_glucose, is.numeric)</span>
-<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>numerical_columns[<span class="st">'ID'</span>] <span class="ot">&lt;-</span> <span class="cn">FALSE</span></span>
-<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>diabetes_glucose_numerical <span class="ot">&lt;-</span> diabetes_glucose[numerical_columns]</span>
-<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(diabetes_glucose_numerical)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<p>Extract the numerical columns, including the OGTT measurements.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>diabetes_glucose_unnest_wide <span class="ot">&lt;-</span> diabetes_glucose <span class="sc">%&gt;%</span> </span>
-<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">unnest</span>(OGTT) <span class="sc">%&gt;%</span> </span>
-<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_wider</span>(<span class="at">names_from =</span> Measurement, </span>
-<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a>              <span class="at">values_from =</span> <span class="st">`</span><span class="at">Glucose (mmol/L)</span><span class="st">`</span>, </span>
-<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a>              <span class="at">names_prefix =</span> <span class="st">"Measurement_"</span></span>
-<span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a>              )</span>
-<span id="cb28-7"><a href="#cb28-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb28-8"><a href="#cb28-8" aria-hidden="true" tabindex="-1"></a>numerical_columns <span class="ot">&lt;-</span> <span class="fu">sapply</span>(diabetes_glucose_unnest_wide, is.numeric)</span>
-<span id="cb28-9"><a href="#cb28-9" aria-hidden="true" tabindex="-1"></a>numerical_columns[<span class="st">'ID'</span>] <span class="ot">&lt;-</span> <span class="cn">FALSE</span></span>
-<span id="cb28-10"><a href="#cb28-10" aria-hidden="true" tabindex="-1"></a>diabetes_glucose_numerical <span class="ot">&lt;-</span> diabetes_glucose_unnest_wide[numerical_columns]</span>
-<span id="cb28-11"><a href="#cb28-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb28-12"><a href="#cb28-12" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(diabetes_glucose_numerical)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 6 × 8
-    Age BloodPressure GeneticRisk   BMI PhysicalActivity Measurement_0
-  &lt;dbl&gt;         &lt;dbl&gt;       &lt;dbl&gt; &lt;dbl&gt;            &lt;dbl&gt;         &lt;dbl&gt;
-1    34            84       0.619  24.7               93          6.65
-2    25            74       0.591  22.5              102          4.49
-3    50            80       0.178  34.5               98         12.9 
-4    27            60       0.206  26.3               82          5.76
-5    35            84       0.286  35                 58         10.8 
-6    31            78       1.22   43.3               59         11.1 
-# ℹ 2 more variables: Measurement_60 &lt;dbl&gt;, Measurement_120 &lt;dbl&gt;</code></pre>
-</div>
-</div>
-<ol start="14" type="1">
-<li>PCA cannot handle NA’s in the dataset. Remove all rows with NA in any column. Perform this operation on both the original dataset (with all columns) and the numerical subset you created in Exercise 13.</li>
+<ol start="20" type="1">
+<li><p>Create a two column data-frame with the names of the PC’s (PC1, PC2, ect) in one column and the variance explained by that PC in the other column.</p></li>
+<li><p>Now create a bar plot (using <code>geom_col</code>), showing for each PC the amount of explained variance. This type of plot is called a scree plot.</p></li>
+<li><p>Lastly, render you quarto document and review the resulting html file.</p></li>
 </ol>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>diabetes_glucose_numerical_remove_NA <span class="ot">&lt;-</span> <span class="fu">drop_na</span>(diabetes_glucose_numerical)</span>
-<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>diabetes_glucose_remove_NA <span class="ot">&lt;-</span> <span class="fu">drop_na</span>(diabetes_glucose, <span class="fu">any_of</span>(<span class="fu">colnames</span>(diabetes_glucose_numerical)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<hr>
+</section>
+<section id="extra-exercises" class="level2">
+<h2 class="anchored" data-anchor-id="extra-exercises">Extra exercises</h2>
+<p>This exercise might be a bit more challenging. It requires multiple operations and might involve some techniques that were not explicitly shown in the presentations.</p>
+<p>e1. Recreate the plot you made in Exercise 12 and include the mean value for each glucose measurement for the two diabetes statuses (0 and 1) you calculated in Exercise 11. This plot should look like this:</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../out/figure3_13.png" class="img-fluid quarto-figure quarto-figure-center figure-img"></p>
+</figure>
 </div>
-<ol start="15" type="1">
-<li>Perform the <strong>Plotting PCA (Principal Component Analysis)</strong> part of the tutorial on your diabetes data. Think about which variables to color by.</li>
-</ol>
 <div class="callout callout-style-default callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-7-contents" aria-controls="callout-7" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
@@ -864,179 +597,15 @@ Hint
 </div>
 <div id="callout-7" class="callout-7-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
+<p>There are several ways to solve this task. Here is a workflow suggestion:</p>
 <ul>
-<li><p>Remember to install and load the <code>ggfortify</code> package.</p></li>
-<li><p>Notice how you can use the arguments <code>color</code> and <code>colour</code> interchangeably.</p></li>
+<li><p>You want to show both the raw data and the means in the same plot. Data from another dataset can be added to a plot by pointing the geom to a specific dataset like so: <code>+ geom_point(data = different_data, aes(x = VAR1, y = VAR2, group = VAR3))</code></p></li>
+<li><p><code>geom_line</code> needs a variable to group by in order to know which dots should be connected. In exercise 10, this grouping variable was the patient ID. Which variable in <code>glucose_mean</code> tells which points are connected? Pass it as group aesthetic.</p></li>
+<li><p><code>geom_line</code> has a <code>linetype</code> aestethic to define the kind of line (dashed or solid).</p></li>
 </ul>
 </div>
 </div>
 </div>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggfortify)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Warning: pakke 'ggfortify' blev bygget under R version 4.2.3</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>pca_res <span class="ot">&lt;-</span> <span class="fu">prcomp</span>(diabetes_glucose_numerical_remove_NA, <span class="at">scale. =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a><span class="fu">autoplot</span>(pca_res, <span class="at">data =</span> diabetes_glucose_remove_NA, <span class="at">color =</span> <span class="st">"Diabetes"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="exercise3_files/figure-html/unnamed-chunk-20-1.png" class="img-fluid figure-img" width="672"></p>
-</figure>
-</div>
-</div>
-</div>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="fu">autoplot</span>(pca_res, <span class="at">data =</span> diabetes_glucose_remove_NA, <span class="at">colour =</span> <span class="st">'Diabetes'</span>, <span class="at">label =</span> <span class="cn">TRUE</span>, <span class="at">label.size =</span> <span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="exercise3_files/figure-html/unnamed-chunk-21-1.png" class="img-fluid figure-img" width="672"></p>
-</figure>
-</div>
-</div>
-</div>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="fu">autoplot</span>(pca_res, <span class="at">data =</span> diabetes_glucose_remove_NA, <span class="at">colour =</span> <span class="st">'Diabetes'</span>, <span class="at">shape =</span> <span class="cn">FALSE</span>, <span class="at">label.size =</span> <span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="exercise3_files/figure-html/unnamed-chunk-22-1.png" class="img-fluid figure-img" width="672"></p>
-</figure>
-</div>
-</div>
-</div>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="fu">autoplot</span>(pca_res, <span class="at">data =</span> diabetes_glucose_remove_NA, <span class="at">colour =</span> <span class="st">'Diabetes'</span>, <span class="at">loadings =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="exercise3_files/figure-html/unnamed-chunk-23-1.png" class="img-fluid figure-img" width="672"></p>
-</figure>
-</div>
-</div>
-</div>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="fu">autoplot</span>(pca_res, <span class="at">data =</span> diabetes_glucose_remove_NA, <span class="at">colour =</span> <span class="st">'Diabetes'</span>,</span>
-<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a>         <span class="at">loadings =</span> <span class="cn">TRUE</span>, <span class="at">loadings.colour =</span> <span class="st">'blue'</span>,</span>
-<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a>         <span class="at">loadings.label =</span> <span class="cn">TRUE</span>, <span class="at">loadings.label.size =</span> <span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="exercise3_files/figure-html/unnamed-chunk-24-1.png" class="img-fluid figure-img" width="672"></p>
-</figure>
-</div>
-</div>
-</div>
-<ol start="16" type="1">
-<li>Make your last plot personal by adding a ggplot <code>theme</code>, title and whatever else you would like.</li>
-</ol>
-<div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-8-contents" aria-controls="callout-8" aria-expanded="false" aria-label="Toggle callout">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-Tip
-</div>
-<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
-</div>
-<div id="callout-8" class="callout-8-contents callout-collapse collapse">
-<div class="callout-body-container callout-body">
-<p>Want to change the size of your plot:</p>
-<ol type="1">
-<li><p>Copy-paste the plot-code to the console.</p></li>
-<li><p>Press <em>Export</em> → <em>Copy to Clipboard…</em></p></li>
-<li><p>Drag the plot in the bottom-right corner to adjust the size.</p></li>
-<li><p>Note down the width and the height and write the values to the <code>width</code> and <code>height</code> arguments of the <code>ggsave</code> function.</p></li>
-</ol>
-</div>
-</div>
-</div>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="fu">autoplot</span>(pca_res, <span class="at">data =</span> diabetes_glucose_remove_NA, <span class="at">colour =</span> <span class="st">"Diabetes"</span>,</span>
-<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a>         <span class="at">loadings =</span> <span class="cn">TRUE</span>, <span class="at">loadings.colour =</span> <span class="st">"grey30"</span>, <span class="at">loadings.label.colour =</span> <span class="st">"black"</span>,</span>
-<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a>         <span class="at">loadings.label =</span> <span class="cn">TRUE</span>, <span class="at">loadings.label.size =</span> <span class="fl">3.5</span>) <span class="sc">+</span> </span>
-<span id="cb38-4"><a href="#cb38-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span> </span>
-<span id="cb38-5"><a href="#cb38-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"PCA of Diabetes Dataset"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="exercise3_files/figure-html/unnamed-chunk-25-1.png" class="img-fluid figure-img" width="672"></p>
-</figure>
-</div>
-</div>
-<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="co"># ggsave('../figures/PCA_diabetes.png', width = 7, height = 5)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<ol start="17" type="1">
-<li>Calculate the variance explained by each of the PC’s using the following function.</li>
-</ol>
-<p><span class="math display">\[
-\text{Variance Explained} = \frac{\text{sdev}^2}{\sum \text{sdev}^2} \times 100
-\]</span></p>
-<div class="callout callout-style-default callout-tip callout-titled">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-9-contents" aria-controls="callout-9" aria-expanded="false" aria-label="Toggle callout">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-Hint
-</div>
-<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
-</div>
-<div id="callout-9" class="callout-9-contents callout-collapse collapse">
-<div class="callout-body-container callout-body">
-<p>Access the standard deviation from the PCA object like this: <code>pca_res$sdev</code>.</p>
-</div>
-</div>
-</div>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a>variance_explained <span class="ot">&lt;-</span> ((pca_res<span class="sc">$</span>sdev<span class="sc">^</span><span class="dv">2</span>) <span class="sc">/</span> <span class="fu">sum</span>(pca_res<span class="sc">$</span>sdev<span class="sc">^</span><span class="dv">2</span>)) <span class="sc">*</span> <span class="dv">100</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<ol start="18" type="1">
-<li>Make two-column-data-frame with names of the PC’s in one column and the variance explained in the other column.</li>
-</ol>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a>df_variance_explained <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">PC =</span> <span class="fu">c</span>(<span class="fu">paste0</span>(<span class="st">'PC'</span>, <span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(variance_explained))),</span>
-<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a>                                <span class="at">variance_explained =</span> variance_explained)</span>
-<span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb41-4"><a href="#cb41-4" aria-hidden="true" tabindex="-1"></a>df_variance_explained</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 8 × 2
-  PC    variance_explained
-  &lt;chr&gt;              &lt;dbl&gt;
-1 PC1              47.8   
-2 PC2              15.5   
-3 PC3              11.6   
-4 PC4               8.45  
-5 PC5               7.51  
-6 PC6               5.14  
-7 PC7               4.02  
-8 PC8               0.0897</code></pre>
-</div>
-</div>
-<ol start="19" type="1">
-<li>Use the data frame you just made to create a column plot of the variances explained.</li>
-</ol>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a>df_variance_explained <span class="sc">%&gt;%</span> </span>
-<span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> PC, </span>
-<span id="cb43-3"><a href="#cb43-3" aria-hidden="true" tabindex="-1"></a>             <span class="at">y =</span> variance_explained))<span class="sc">+</span> </span>
-<span id="cb43-4"><a href="#cb43-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>() <span class="sc">+</span> </span>
-<span id="cb43-5"><a href="#cb43-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Varinace explained for each PC"</span>, </span>
-<span id="cb43-6"><a href="#cb43-6" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Variance Explained"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="exercise3_files/figure-html/unnamed-chunk-28-1.png" class="img-fluid figure-img" width="672"></p>
-</figure>
-</div>
-</div>
-</div>
-<ol start="20" type="1">
-<li>Render you document and review the html file.</li>
-</ol>
 
 
 </section>

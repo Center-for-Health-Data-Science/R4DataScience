@@ -132,16 +132,14 @@ nrow(diabetes_clinical_clean)
 
 ## Meta Data
 
-6.  Perform step 2-5 from above and do data exploration and cleaning workflow for the `diabetes_meta_toy_messy.csv` data set. Use the `read_delim` function to load in the dataset. 
+There is some metadata to accompany the dataset you have just cleaned in `diabetes_meta_toy_messy.csv`. This is a csv file, not an excel sheet, so you need to use the `read_delim` function to load it. Load in the dataset and inspect it. 
 
-6.2. Load the data set.
+6.2. Load the meta data set.
 
 ```{r message=FALSE}
 diabetes_meta <- read_delim('../data/diabetes_meta_toy_messy.csv')
 head(diabetes_meta)
 ```
-
-Use can you either base R or/and tidyverse to solve the exercises. For now, we just explore the data.
 
 6.3. How many missing values (NA's) are there in each column. 
 
@@ -195,10 +193,8 @@ nrow(diabetes_meta_clean)
 
 7. Consider what variable the datasets should be joined on.
 
-::: {.callout-tip collapse="true"}
-## Hint
 The joining variable must be the same type in both datasets.
-:::
+
 
 8. Join the datasets by the variable you selected above.
 ```{r}
@@ -208,10 +204,7 @@ diabetes_join <- diabetes_clinical_clean %>%
 
 9. How many rows does the joined dataset have? Explain why. 
 
-::: {.callout-tip collapse="true"}
-## Hint
 Because we used `left_join`, only the IDs that are in `diabetes_clinical_clean` are kept. 
-:::
 
 ```{r}
 nrow(diabetes_join)

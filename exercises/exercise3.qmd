@@ -9,35 +9,26 @@ project:
 ## Getting started 
 
 1. Load packages. 
+
 ```{r message=FALSE, warning=FALSE}
 library(tidyverse)
 ```
 
 2. Load data from the `.rds` file you created in Exercise 2. Have a guess at what the function is called. 
+
 ```{r}
 diabetes_glucose <- read_rds('../out/diabetes_glucose.rds')
 ```
 
 ## Plotting - Part 1
+
 You will first do some basic plots to get started with ggplot again. 
 
-If it has been a while since you work with ggplot, have a look at the ggplot material from the FromExceltoR course: https://center-for-health-data-science.github.io/FromExceltoR/Presentations/presentation3.html.
+If it has been a while since you worked with ggplot, have a look at the [ggplot material](https://center-for-health-data-science.github.io/FromExceltoR/Presentations/presentation3.html) from the FromExceltoR course.
 
 3. Create a scatter plot of `Age` and `Blood Pressure`. Do you notice a trend?
-```{r}
-diabetes_glucose %>% 
-  ggplot(aes(x = BloodPressure, 
-             y = Age)) + 
-  geom_point() 
-```
 
 4. Create a scatter plot of `PhysicalActivity` and `BMI.` Do you notice a trend?
-```{r}
-diabetes_glucose %>% 
-  ggplot(aes(x = PhysicalActivity, 
-             y = BMI)) + 
-  geom_point() 
-```
 
 5. Now, create the same two plots as before, but this time stratify them by `Diabetes`. Do you notice any trends?
 
@@ -48,61 +39,20 @@ You can stratify a plot by a categorical variable in several ways, depending on 
 
 :::
 
-```{r}
-diabetes_glucose %>% 
-  ggplot(aes(x = BloodPressure, 
-             y = Age, 
-             color = Diabetes)) + 
-  geom_point()
-```
 
-```{r}
-diabetes_glucose %>% 
-  ggplot(aes(x = PhysicalActivity, 
-             y = BMI, 
-             color = Diabetes)) + 
-  geom_point() 
-```
+6. Create a boxplot of `BMI` stratified by `Diabetes.` Give the plot a meaningful title.
 
-6. Create a boxplot of `BMI` stratified by `Diabaetes.` Give the plot a meaningful title.
-```{r}
-diabetes_glucose %>% 
-  ggplot(aes(y = BMI, 
-             x = Diabetes, 
-             color = Diabetes)) + 
-  geom_boxplot() + 
-  labs(title = 'Distribution of BMI Stratified by Diabetes')
-```
 
 7. Create a boxplot of `PhysicalActivity` stratified by `Smoker`. Give the plot a meaningful title.
-```{r}
-diabetes_glucose %>% 
-  ggplot(aes(y = PhysicalActivity, 
-             x = Smoker, 
-             fill = Smoker)) + 
-  geom_boxplot() + 
-  labs(title = 'Distribution of Physical Activity Stratified by Smoker Status')
-```
-
 
 
 ## Plotting - Part 2
+
 In order to plot the data inside the nested variable, the data needs to be unnested. 
 
 8. Create a boxplot of the glucose measurements at time 0 stratified by `Diabetes`. Give the plot a meaningful title.
-```{r}
-diabetes_glucose %>%
-  unnest(OGTT) %>% 
-  mutate(Measurement = Measurement %>% as.factor()) %>% 
-  filter(Measurement == 0) %>% 
-  ggplot(aes(y = `Glucose (mmol/L)`, 
-             x = Diabetes, 
-             color = Diabetes)) +
-  geom_boxplot() + 
-  labs(title = 'Glucose Measurement for Time Point 0 (fasted)')
-```
 
-9. Create boxplots of glucose measurements stratified by `Diabetes` for each time point (0, 60, 120) using faceting by `Measurement`. Give the plot a meaningful title.
+9. Create these boxplots for each time point (0, 60, 120) by using faceting by `Measurement`. Give the plot a meaningful title.
 
 ::: {.callout-tip collapse="true"}
 ## Hint
@@ -110,45 +60,15 @@ Faceting allows you to create multiple plots based on the values of a categorica
 
 :::
 
-```{r}
-diabetes_glucose %>%
-  unnest(OGTT) %>% 
-  mutate(Measurement = Measurement %>% as.factor()) %>% 
-  ggplot(aes(y = `Glucose (mmol/L)`, 
-             x = Diabetes, 
-             color = Diabetes)) +
-  geom_boxplot() + 
-  facet_wrap(vars(Measurement)) + 
-  labs(title = 'Glucose Measurements for Time Point 0, 60, and 120')
-```
-
-10. Create a plot that visualizes glucose measurements across time points for each patient ID, stratified by their diabetes status. Each patient's glucose measurements should be connected with a line, grouped by their ID, and color-coded by `Diabetes`. Give the plot a meaningful title.
-```{r}
-diabetes_glucose %>%
-  unnest(OGTT) %>% 
-  ggplot(aes(x = Measurement,
-             y = `Glucose (mmol/L)`)) +
-  geom_point(aes(color = Diabetes)) + 
-  geom_line(aes(group = ID, color = Diabetes)) + 
-  labs(title = 'Glucose Measurements Across Time Points by Diabetes Status')
-```
-
-11. Calculate the mean glucose levels for each time point. 
+10. Calculate the mean glucose levels for each time point. 
 
 ::: {.callout-tip collapse="true"}
 ## Hint
-You will need to use `unnest()`, `group_by()`, and `summerize()`.
+You will need to use `unnest()`, `group_by()`, and `summerise()`.
 
 :::
 
-```{r}
-diabetes_glucose %>%
-  unnest(OGTT) %>% 
-  group_by(Measurement) %>% 
-  summarize(`Glucose (mmol/L)` = mean(`Glucose (mmol/L)`))
-```
-
-12. Make the same calculation as above, but additionally group the results by `Diabetes`. Save the data frame in a variable. 
+11. Make the same calculation as above, but additionally group the results by `Diabetes`. Save the data frame in a variable. Compare your results to the boxplots you made above. 
 
 ::: {.callout-tip collapse="true"}
 ## Hint
@@ -156,179 +76,39 @@ Group by several variables: `group_by(var1, var2)`.
 
 :::
 
-```{r}
-glucose_mean <- diabetes_glucose %>%
-  unnest(OGTT) %>% 
-  group_by(Measurement, Diabetes) %>%
-  summarize(`Glucose (mmol/L)` = mean(`Glucose (mmol/L)`)) %>%
-  ungroup()
+12. Create a plot that visualizes glucose measurements across time points, with one line for each patient ID. Then color the lines by their diabetes status. In summary, each patient's glucose measurements should be connected with a line, grouped by their ID, and color-coded by `Diabetes`. Give the plot a meaningful title. 
 
-glucose_mean
-```
-
-This next exercise might be a bit more challenging. It requires multiple operations and might involve some techniques that were not explicitly shown in the presentations.  
-
-13. Recreate the plot you made in Exercise 10 and include the mean value for each glucose measurement for the two diabetes statuses (0 and 1) you calculated in Exercise 12. This plot should lool like this:
-
-![](../out/figure3_13.png){fig-align="center"}
-
-::: {.callout-tip collapse="true"}
-## Hint
-There are several ways to solve this task. Here is a workflow suggestion:
-
-  - The line in the plot symbolize a patient ID. You will need to create new IDs for the mean values that are not present in the dataset. Use `RANDOM_ID %in% df$ID` to check if an ID is already present in the dataset as a patient ID. The ID's should be added to the data frame created in Exercise 12. 
-  
-  - Data from another dataset can be added to the plot like this: `+ geom_point(DATA, aes(x = VAR1, y = VAR2, group = VAR3))`
-  
-  - You can stratify the mean glucose lines by `linetype`. 
-
-::: 
-
-The line in the plot symbolize a patient ID. Let's find two ID's (one for `Diabetes == 0` and another for `Diabetes == 1`) that are not present in the dataset. We can use the same numbers as the Diabetes status for the ID's.
-```{r}
-0 %in% diabetes_glucose$ID
-1 %in% diabetes_glucose$ID
-```
-
-Add ID's to the glucose mean data frame.  
-```{r}
-glucose_mean <- glucose_mean %>% 
-  mutate(ID = Diabetes %>% as.double())
-
-glucose_mean
-```
-
-Copy-paste the code in Exercise 10 and add lines with new data. 
-```{r}
-diabetes_glucose %>%
-  unnest(OGTT) %>% 
-  ggplot(aes(x = Measurement,
-             y = `Glucose (mmol/L)`)) +
-  geom_point(aes(color = Diabetes)) + 
-  geom_line(aes(group = ID, color = Diabetes)) + 
-  # Glucose mean data
-  geom_point(data = glucose_mean, 
-             aes(x = Measurement, 
-                 y = `Glucose (mmol/L)`, 
-                 group = ID)) + 
-  geom_line(data = glucose_mean, 
-            aes(x = Measurement, 
-                y = `Glucose (mmol/L)`, 
-                group = ID, 
-                linetype = Diabetes)) + 
-  labs(title = "Glucose Measurements with Mean by Diabetes Status")
-
-ggsave('../out/figure3_13.png')
-```
+If your time points are strangely ordered have a look at the `levels` of your `Measurement` variable (the one that specifies which time point the measurement was taken at) and if necessary fix their order.
 
 ## Plotting - Part 3: PCA 
 
-For this part we will use a tutorial to make a principal component analysis (PCA): https://cran.r-project.org/web/packages/ggfortify/vignettes/plot_pca.html. First, we perform some reprocessing to get the data in the right format. 
+For this part we will use this [tutorial](https://cran.r-project.org/web/packages/ggfortify/vignettes/plot_pca.html) to make a principal component analysis (PCA). First, we perform some preprocessing to get our data into the right format. 
 
-13. Have a look at your diabetes data set. Can you use all the variables to perform PCA? Subset the dataset to only include the relevant variables.
+13. Let's start by unnesting the OGTT data and using pivot wider so that each Glucose measurement time point gets its own column (again). 
 
-::: {.callout-tip collapse="true"}
-## Hint
-PCA can only be performed on numerical values. Extract these (except ID) from the dataset. It is up to you to decide whether to include the OGTT measurements. If you include them, `unnest` the data and convert it to wide format using `pivot_wider`, ensuring only glucose measurements (not time points) are included as variables in the PCA.
-
-:::
-
-Extract the numerical columns, excluding the OGTT measurements. 
-```{r eval=FALSE}
-numerical_columns <- sapply(diabetes_glucose, is.numeric)
-numerical_columns['ID'] <- FALSE
-diabetes_glucose_numerical <- diabetes_glucose[numerical_columns]
-head(diabetes_glucose_numerical)
-```
-
-Extract the numerical columns, including the OGTT measurements. 
-```{r}
-diabetes_glucose_unnest_wide <- diabetes_glucose %>% 
-  unnest(OGTT) %>% 
-  pivot_wider(names_from = Measurement, 
-              values_from = `Glucose (mmol/L)`, 
-              names_prefix = "Measurement_"
-              )
-
-numerical_columns <- sapply(diabetes_glucose_unnest_wide, is.numeric)
-numerical_columns['ID'] <- FALSE
-diabetes_glucose_numerical <- diabetes_glucose_unnest_wide[numerical_columns]
-
-head(diabetes_glucose_numerical)
-```
-
-14. PCA cannot handle NA's in the dataset. Remove all rows with NA in any column. Perform this operation on both the original dataset (with all columns) and the numerical subset you created in Exercise 13.
-```{r}
-diabetes_glucose_numerical_remove_NA <- drop_na(diabetes_glucose_numerical)
-diabetes_glucose_remove_NA <- drop_na(diabetes_glucose, any_of(colnames(diabetes_glucose_numerical)))
-```
-
-
-15. Perform the **Plotting PCA (Principal Component Analysis)** part of the tutorial on your diabetes data. Think about which variables to color by. 
+14. Have a look at your unnested diabetes data set. Can you use all the variables to perform PCA? Subset the dataset to only include the relevant variables.
 
 ::: {.callout-tip collapse="true"}
 ## Hint
-
-- Remember to install and load the `ggfortify` package. 
-
-- Notice how you can use the arguments `color` and `colour` interchangeably. 
-
+PCA can only be performed on numerical values. Extract these (except ID!) from the dataset. 
+Numerical columns can easily be selected with the `where(is.numeric)` helper.
 :::
 
-```{r}
-library(ggfortify)
+15. PCA cannot handle NA's in the dataset. Remove all rows with NA in any column in your numerical subset. 
+Then, go back to the original unnested data `diabetes_glucose_unnest` (or what you have called it) and also here drop rows that have NAs in the numerical columns (so the same rows you dropped from the numeric subset).This is important because we want to use (categorical) columns present in the original data to later color the resulting PCA, so the two dataframes (original and only numeric columns) need to be aligned and contain the same rows.
 
-pca_res <- prcomp(diabetes_glucose_numerical_remove_NA, scale. = TRUE)
 
-autoplot(pca_res, data = diabetes_glucose_remove_NA, color = "Diabetes")
-```
+Now our data is ready to make a PCA.
 
-```{r}
-autoplot(pca_res, data = diabetes_glucose_remove_NA, colour = 'Diabetes', label = TRUE, label.size = 3)
-```
+16. Calculate the PCA by running `prcomp` on our prepared data (see the tutorial). Then, create a plot of the resulting PCA (also shown in tutorial).
 
-```{r}
-autoplot(pca_res, data = diabetes_glucose_remove_NA, colour = 'Diabetes', shape = FALSE, label.size = 3)
-```
 
-```{r}
-autoplot(pca_res, data = diabetes_glucose_remove_NA, colour = 'Diabetes', loadings = TRUE)
-```
+17. Color your PCA plot and add loadings. Think about which variable you want to color by. Remember to refer to the dataset that has this variable (probably not your numeric subset!)
 
-```{r}
-autoplot(pca_res, data = diabetes_glucose_remove_NA, colour = 'Diabetes',
-         loadings = TRUE, loadings.colour = 'blue',
-         loadings.label = TRUE, loadings.label.size = 3)
-```
+18. Add a ggplot `theme` and title to your plot and save it. 
 
-16. Make your last plot personal by adding a ggplot `theme`, title and whatever else you would like.
 
-::: {.callout-note collapse="true"}
-## Tip
-
-Want to change the size of your plot: 
-
-1. Copy-paste the plot-code to the console. 
-
-2. Press *Export* → *Copy to Clipboard...*
-
-3. Drag the plot in the bottom-right corner to adjust the size.
-
-4. Note down the width and the height and write the values to the `width` and `height` arguments of the `ggsave` function.
-
-:::
-
-```{r}
-autoplot(pca_res, data = diabetes_glucose_remove_NA, colour = "Diabetes",
-         loadings = TRUE, loadings.colour = "grey30", loadings.label.colour = "black",
-         loadings.label = TRUE, loadings.label.size = 3.5) + 
-  theme_minimal() + 
-  labs(title = "PCA of Diabetes Dataset")
-
-# ggsave('../figures/PCA_diabetes.png', width = 7, height = 5)
-```
-
-17. Calculate the variance explained by each of the PC's using the following function.
+19. Calculate the variance explained by each of the PC's using the following formula:
 
 $$
 \text{Variance Explained} = \frac{\text{sdev}^2}{\sum \text{sdev}^2} \times 100
@@ -337,31 +117,37 @@ $$
 ::: {.callout-tip collapse="true"}
 ## Hint
 
-Access the standard deviation from the PCA object like this: `pca_res$sdev`. 
+You can access the standard deviation from the PCA object like this: `pca_res$sdev`. 
 
 :::
 
-```{r}
-variance_explained <- ((pca_res$sdev^2) / sum(pca_res$sdev^2)) * 100
-```
+20. Create a two column data-frame with the names of the PC's (PC1, PC2, ect) in one column and the variance explained by that PC in the other column. 
 
-18. Make two-column-data-frame with names of the PC's in one column and the variance explained in the other column. 
-```{r}
-df_variance_explained <- tibble(PC = c(paste0('PC', 1:length(variance_explained))),
-                                variance_explained = variance_explained)
 
-df_variance_explained
-```
+21. Now create a bar plot (using `geom_col`), showing for each PC the amount of explained variance. This type of plot is called a scree plot.  
 
-19. Use the data frame you just made to create a column plot of the variances explained.
-```{r}
-df_variance_explained %>% 
-  ggplot(aes(x = PC, 
-             y = variance_explained))+ 
-  geom_col() + 
-  labs(title = "Varinace explained for each PC", 
-       y = "Variance Explained")
-```
 
-20. Render you document and review the html file.
+22. Lastly, render you quarto document and review the resulting html file.
 
+-------------------------------
+
+## Extra exercises
+
+This exercise might be a bit more challenging. It requires multiple operations and might involve some techniques that were not explicitly shown in the presentations.  
+
+e1. Recreate the plot you made in Exercise 12 and include the mean value for each glucose measurement for the two diabetes statuses (0 and 1) you calculated in Exercise 11. This plot should look like this:
+
+![](../out/figure3_13.png){fig-align="center"}
+
+
+::: {.callout-tip collapse="true"}
+## Hint
+There are several ways to solve this task. Here is a workflow suggestion:
+
+  - You want to show both the raw data and the means in the same plot. Data from another dataset can be added to a plot by pointing the geom to a specific dataset like so: `+ geom_point(data = different_data, aes(x = VAR1, y = VAR2, group = VAR3))`
+ 
+  - `geom_line` needs a variable to group by in order to know which dots should be connected. In exercise 10, this grouping variable was the patient ID. Which variable in `glucose_mean` tells which points are connected? Pass it as group aesthetic.  
+  
+  - `geom_line` has a `linetype` aestethic to define the kind of line (dashed or solid). 
+
+::: 

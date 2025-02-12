@@ -47,7 +47,7 @@ Have a look at `BloodPressure`, `BMI`, `Sex`, and `Diabetes`.
 
 ## Meta Data
 
-There is some metadata to accompany the dataset you have just cleaned. Load in the dataset `diabetes_meta_toy_messy.xlsx` and inspect it.
+There is some metadata to accompany the dataset you have just cleaned in `diabetes_meta_toy_messy.csv`. This is a csv file, not an excel sheet, so you need to use the `read_delim` function to load it. Load in the dataset and inspect it. 
 
 6. Now clean the metadata and do data exploration by repeating step 3-5 from above. 
 

@@ -25,15 +25,20 @@ diabetes_join <- readxl::read_excel('../out/diabetes_join.xlsx')
 df_glucose <- readxl::read_excel('../data/df_glucose.xlsx')
 ```
 
-3. Have a look at the glucose dataset. It has three columns with measurements from a Oral Glucose Tolerance Test where blood glucose is measured at fasting (Glucose_0), 6 hours after glucose intake (Glucose_6), and 12 hours after (Glucose_12). The last columns is an ID column.
+3. Have a look at the glucose dataset. It has three columns with measurements from a Oral Glucose Tolerance Test where blood glucose is measured at fasting (Glucose_0), 6 hours after glucose intake (Glucose_6), and 12 hours after (Glucose_12). The last columns is an ID column. Change the data type of the ID column to `factor` in both `diabetes_join` and `df_glucose`.
 
 
 ```{r}
 head(df_glucose)
 ```
 
+```{r}
+df_glucose$ID <- as.factor(df_glucose$ID)
+diabetes_join$ID <- as.factor(diabetes_join$ID)
+```
 
-4. Restructure the glucose dataset into a long format. How many rows are there per ID? Does that make sense?
+
+4. Restructure the glucose dataset into a long format. Name the column that describes which measurement the row refers to, i.e. Glucose_0, Glucose_60 or Glucose_120, `Measurement`. How many rows are there per ID? Does that make sense?
 
 ::: {.callout-tip collapse="true"}
 ## Hint
@@ -69,21 +74,83 @@ df_glucose_long %>%
 ```
 
 
-5. In your long format dataframe you should have one column that described which measurement the row refers to, i.e. Glucose_0, Glucose_60 or Glucose_120. Transform this column so that you only have the numerical part, i.e. **only** 0, 60 or 120. Then change the data type of that column to numeric.
+5. In your long format dataframe you should have one column that described which measurement the row refers to, i.e. Glucose_0, Glucose_60 or Glucose_120. Transform this column so that you only have the numerical part, i.e. **only** 0, 60 or 120. Then change the data type of that column to `factor`. Check the order of the factor levels and if necessary change them to the proper order.
 
 ::: {.callout-tip collapse="true"}
 ## Hint
 The `stringr` packages is a part of tidyverse and has many functions for manipulating strings. Find a function that can **split** the string so you can extract the numbers on the other side of the underscore. 
+
+Have a look at the help for factors `?factors` to see how to influence the levels.
 :::
 
 ```{r}
 df_glucose_long <- df_glucose_long %>% 
-  mutate(Measurement = str_split_i(Measurement, '_', 2) %>% as.numeric())
+  mutate(Measurement = str_split_i(Measurement, '_', 2) %>% as.factor())
 
 head(df_glucose_long)
 ```
 
-6. Nest the glucose measurements and values such that there is only one row per ID and call the nested column OGTT (Oral Glucose Tolerance Test). Display the resulting tibble to confirm that you have succeeded.
+Check factor levels:
+
+```{r}
+levels(df_glucose_long$Measurement)
+```
+Adjust levels to proper order:
+
+```{r}
+df_glucose_long$Measurement <- factor(df_glucose_long$Measurement, levels = c('0', '60','120'))
+```
+
+
+6. Merge the glucose dataset with the joined diabetes dataset.
+
+```{r}
+diabetes_glucose <- diabetes_join %>% 
+  left_join(df_glucose_long, by = 'ID')
+
+head(diabetes_glucose)
+```
+
+7. Pull the glucose measurements from your favorite ID. 
+
+::: {.callout-tip collapse="true"}
+## Hint
+First `filter` for your favorite ID and then `pull` the columns. 
+:::
+
+```{r}
+diabetes_glucose %>% 
+  filter(ID == 9046) %>% 
+  pull(Measurement,`Glucose (mmol/L)`)
+```
+
+8. Calculate the mean glucose measure for each measurement timepoint.
+
+::: {.callout-tip collapse="true"}
+## Hint
+You will need to use `group_by()`, and `summarise()`.
+:::
+
+```{r}
+diabetes_glucose %>%
+  group_by(Measurement) %>%
+  summarise(mean = mean(`Glucose (mmol/L)`))
+```
+
+9. Calculate mean and standard deviation for all numeric columns.
+
+::: {.callout-tip collapse="true"}
+## Hint
+You will need to use `summarise()` and `across()`, selecting numeric columns.
+:::
+
+```{r}
+diabetes_glucose %>%
+  summarise(across(where(is.numeric), list(mean=mean, sd=sd), 
+                   .names = "{.col}-{.fn}"))
+```
+
+10. Nest the glucose measurements and values such that there is only one row per ID and call the nested column OGTT (Oral Glucose Tolerance Test). Display the resulting tibble to confirm that you have succeeded.
 
 ::: {.callout-tip collapse="true"}
 ## Hint
@@ -99,65 +166,14 @@ group_by() %>%
 :::
 
 ```{r}
-df_glucose_nested <- df_glucose_long %>% 
+diabetes_glucose <- diabetes_glucose %>% 
   group_by(ID) %>% 
   nest(OGTT = c(Measurement, `Glucose (mmol/L)`)) %>% 
   ungroup()
   
-head(df_glucose_nested)
+#relocate the new nested column to after BMI so we can actually see it
+head(relocate(diabetes_glucose, OGTT, .after = BMI))
 ```
-
-
-7. Merge the nested glucose dataset with the joined diabetes dataset.
-
-```{r}
-diabetes_glucose <- diabetes_join %>% 
-  left_join(df_glucose_nested, by = 'ID')
-
-head(diabetes_glucose)
-```
-
-8. Pull the glucose measurements (`OGTT`) from your favorite ID. 
-
-::: {.callout-tip collapse="true"}
-## Hint
-First `filter` for your favorite ID and then `pull` the nested column. 
-:::
-
-```{r}
-diabetes_glucose %>% 
-  filter(ID == 9046) %>% 
-  pull(OGTT)
-```
-
-9. Calculate the mean glucose measure for each measurement timepoint.
-
-::: {.callout-tip collapse="true"}
-## Hint
-You will need to use `unnest()`, `group_by()`, and `summarise()`.
-:::
-
-```{r}
-diabetes_glucose %>%
-  unnest(OGTT) %>%
-  group_by(Measurement) %>%
-  summarise(mean = mean(`Glucose (mmol/L)`))
-```
-
-10. Calculate mean and standard deviation for all numeric columns.
-
-::: {.callout-tip collapse="true"}
-## Hint
-You will need to use `summarise()` and `across()`, selecting numeric columns.
-:::
-
-```{r}
-diabetes_glucose %>%
-  #unnest(OGTT) %>%
-  summarise(across(where(is.numeric), list(mean=mean, sd=sd), 
-                   .names = "{.col}-{.fn}"))
-```
-
 
 11. Export the final dataset. Since the dataset is nested, you cannot export it as an excel file. Export the dataset as an `.rds` file. Have a guess at what the function is called.
 

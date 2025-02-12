@@ -383,8 +383,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <ol type="1">
 <li><p>Load packages.</p></li>
 <li><p>Load the joined diabetes data set you created in exercise 1 and the glucose dataset from the data folder.</p></li>
-<li><p>Have a look at the glucose dataset. It has three columns with measurements from a Oral Glucose Tolerance Test where blood glucose is measured at fasting (Glucose_0), 6 hours after glucose intake (Glucose_6), and 12 hours after (Glucose_12). The last columns is an ID column.</p></li>
-<li><p>Restructure the glucose dataset into a long format. How many rows are there per ID? Does that make sense?</p></li>
+<li><p>Have a look at the glucose dataset. It has three columns with measurements from a Oral Glucose Tolerance Test where blood glucose is measured at fasting (Glucose_0), 6 hours after glucose intake (Glucose_6), and 12 hours after (Glucose_12). The last columns is an ID column. Change the data type of the ID column to <code>factor</code> in both <code>diabetes_join</code> and <code>df_glucose</code>.</p></li>
+<li><p>Restructure the glucose dataset into a long format. Name the column that describes which measurement the row refers to, i.e.&nbsp;Glucose_0, Glucose_60 or Glucose_120, <code>Measurement</code>. How many rows are there per ID? Does that make sense?</p></li>
 </ol>
 <div class="callout callout-style-default callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
@@ -409,7 +409,7 @@ Hint
 </div>
 </div>
 <ol start="5" type="1">
-<li>In your long format dataframe you should have one column that described which measurement the row refers to, i.e.&nbsp;Glucose_0, Glucose_60 or Glucose_120. Transform this column so that you only have the numerical part, i.e.&nbsp;<strong>only</strong> 0, 60 or 120. Then change the data type of that column to numeric.</li>
+<li>In your long format dataframe you should have one column that described which measurement the row refers to, i.e.&nbsp;Glucose_0, Glucose_60 or Glucose_120. Transform this column so that you only have the numerical part, i.e.&nbsp;<strong>only</strong> 0, 60 or 120. Then change the data type of that column to <code>factor</code>. Check the order of the factor levels and if necessary change them to the proper order.</li>
 </ol>
 <div class="callout callout-style-default callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
@@ -424,11 +424,13 @@ Hint
 <div id="callout-2" class="callout-2-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p>The <code>stringr</code> packages is a part of tidyverse and has many functions for manipulating strings. Find a function that can <strong>split</strong> the string so you can extract the numbers on the other side of the underscore.</p>
+<p>Have a look at the help for factors <code>?factors</code> to see how to influence the levels.</p>
 </div>
 </div>
 </div>
 <ol start="6" type="1">
-<li>Nest the glucose measurements and values such that there is only one row per ID and call the nested column OGTT (Oral Glucose Tolerance Test). Display the resulting tibble to confirm that you have succeeded.</li>
+<li><p>Merge the glucose dataset with the joined diabetes dataset.</p></li>
+<li><p>Pull the glucose measurements from your favorite ID.</p></li>
 </ol>
 <div class="callout callout-style-default callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-3-contents" aria-controls="callout-3" aria-expanded="false" aria-label="Toggle callout">
@@ -442,18 +444,12 @@ Hint
 </div>
 <div id="callout-3" class="callout-3-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<p>Remember the flow:</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">group_by</span>() <span class="sc">%&gt;%</span> </span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">nest</span>() <span class="sc">%&gt;%</span> </span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>First <code>filter</code> for your favorite ID and then <code>pull</code> the columns.</p>
 </div>
 </div>
 </div>
-</div>
-<ol start="7" type="1">
-<li><p>Merge the nested glucose dataset with the joined diabetes dataset.</p></li>
-<li><p>Pull the glucose measurements (<code>OGTT</code>) from your favorite ID.</p></li>
+<ol start="8" type="1">
+<li>Calculate the mean glucose measure for each measurement timepoint.</li>
 </ol>
 <div class="callout callout-style-default callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-4-contents" aria-controls="callout-4" aria-expanded="false" aria-label="Toggle callout">
@@ -467,12 +463,12 @@ Hint
 </div>
 <div id="callout-4" class="callout-4-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<p>First <code>filter</code> for your favorite ID and then <code>pull</code> the nested column.</p>
+<p>You will need to use <code>group_by()</code>, and <code>summerize()</code>.</p>
 </div>
 </div>
 </div>
 <ol start="9" type="1">
-<li>Calculate the mean glucose measure for each measurement timepoint.</li>
+<li>Calculate mean and standard deviation for all numeric columns.</li>
 </ol>
 <div class="callout callout-style-default callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-5-contents" aria-controls="callout-5" aria-expanded="false" aria-label="Toggle callout">
@@ -486,12 +482,12 @@ Hint
 </div>
 <div id="callout-5" class="callout-5-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<p>You will need to use <code>unnest()</code>, <code>group_by()</code>, and <code>summerize()</code>.</p>
+<p>You will need to use <code>summarise()</code> and <code>across()</code>, selecting numeric columns.</p>
 </div>
 </div>
 </div>
 <ol start="10" type="1">
-<li>Calculate mean and standard deviation for all numeric columns.</li>
+<li>Nest the glucose measurements and values such that there is only one row per ID and call the nested column OGTT (Oral Glucose Tolerance Test). Display the resulting tibble to confirm that you have succeeded.</li>
 </ol>
 <div class="callout callout-style-default callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-6-contents" aria-controls="callout-6" aria-expanded="false" aria-label="Toggle callout">
@@ -505,7 +501,12 @@ Hint
 </div>
 <div id="callout-6" class="callout-6-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<p>You will need to use <code>summarise()</code> and <code>across()</code>, selecting numeric columns.</p>
+<p>Remember the flow:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">group_by</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">nest</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
 </div>
 </div>
 </div>
