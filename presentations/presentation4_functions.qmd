@@ -6,7 +6,7 @@ project:
  output-dir: ../docs
 ---
 
-Here is the solution4_functions.R showed:
+Here we show the contents of `presentation4_functions.R`: 
 
 ```{r echo=FALSE}
 # Include the content of the .R file

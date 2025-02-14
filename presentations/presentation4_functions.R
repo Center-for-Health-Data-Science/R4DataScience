@@ -9,29 +9,6 @@ calculate_bmi <- function(weight_kg, height_m){
   
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 # Function to calculate BMI, with control points and error checking. 
 calculate_bmi_2 <- function(weight_kg, height_m) {
   

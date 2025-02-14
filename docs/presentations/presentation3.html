@@ -20,6 +20,40 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 
@@ -308,8 +342,24 @@ ul.task-list li input[type="checkbox"] {
 </nav>
 <div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
-        
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#load-packages" id="toc-load-packages" class="nav-link active" data-scroll-target="#load-packages">Load packages</a></li>
+  <li><a href="#load-data" id="toc-load-data" class="nav-link" data-scroll-target="#load-data">Load data</a></li>
+  <li><a href="#ggplot-recap" id="toc-ggplot-recap" class="nav-link" data-scroll-target="#ggplot-recap">ggplot recap</a>
+  <ul class="collapse">
+  <li><a href="#the-long-format-is-ggplots-best-friend" id="toc-the-long-format-is-ggplots-best-friend" class="nav-link" data-scroll-target="#the-long-format-is-ggplots-best-friend">The long format is ggplot’s best friend</a></li>
+  <li><a href="#you-can-pipe-into-ggplot" id="toc-you-can-pipe-into-ggplot" class="nav-link" data-scroll-target="#you-can-pipe-into-ggplot">You can pipe into ggplot</a></li>
+  <li><a href="#plotting-several-dataframes" id="toc-plotting-several-dataframes" class="nav-link" data-scroll-target="#plotting-several-dataframes">Plotting several dataframes</a></li>
+  <li><a href="#plots-are-objects" id="toc-plots-are-objects" class="nav-link" data-scroll-target="#plots-are-objects">Plots are objects</a></li>
+  <li><a href="#aliasing-column-names" id="toc-aliasing-column-names" class="nav-link" data-scroll-target="#aliasing-column-names">Aliasing column names</a></li>
+  </ul></li>
+  <li><a href="#eda" id="toc-eda" class="nav-link" data-scroll-target="#eda">EDA</a></li>
+  </ul>
+</nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
@@ -333,12 +383,267 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<p>We will not be going through any presentation for this part.</p>
-<p>For Exercise 3-13 we refer to the FromExceltoR material: <a href="https://center-for-health-data-science.github.io/FromExceltoR/Presentations/presentation3.html." class="uri">https://center-for-health-data-science.github.io/FromExceltoR/Presentations/presentation3.html.</a></p>
-<p>For Exercise 14-19 we refer to the this tutorial about Principal Component Analysis (PCA): <a href="https://cran.r-project.org/web/packages/ggfortify/vignettes/plot_pca.html" class="uri">https://cran.r-project.org/web/packages/ggfortify/vignettes/plot_pca.html</a>.</p>
-<p>For theory about PCA have a look at this video: <a href="https://www.youtube.com/watch?v=FgakZw6K1QQ&amp;t=799s" class="uri">https://www.youtube.com/watch?v=FgakZw6K1QQ&amp;t=799s</a>. <strong>NB:</strong> This video structures samples/mice as features and genes as observations, where as the usual structure is genes as features and samples/mice as observations.</p>
+<p>In this section we will learn some extra ggplot tricks!</p>
+<section id="load-packages" class="level2">
+<h2 class="anchored" data-anchor-id="load-packages">Load packages</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(readxl)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="load-data" class="level2">
+<h2 class="anchored" data-anchor-id="load-data">Load data</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>df_sales <span class="ot">&lt;-</span> <span class="fu">read_excel</span>(<span class="st">'../out/sales_data_2.xlsx'</span>)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>df_sales</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 10 × 12
+      ID Name      Age Sex    sales_2020 sales_2021 sales_2022 sales_2023 mood 
+   &lt;dbl&gt; &lt;chr&gt;   &lt;dbl&gt; &lt;chr&gt;       &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt; &lt;chr&gt;
+ 1     1 Alice      25 Female        100        110        120        100 happy
+ 2     2 Bob        30 Male          200        210        220        230 happy
+ 3     3 Charlie    22 Male          150        160        170        200 happy
+ 4     4 Sophie     35 Female        300        320        340        250 happy
+ 5     5 Eve        28 Female        250        240        250        270 happy
+ 6     6 Frank      NA Male           NA        260        270        280 happy
+ 7     7 Grace      40 Female        400        420        430        450 happy
+ 8     8 Hannah     29 Female        500        510         NA        500 happy
+ 9     9 Ian        21 Male          450        460        470        480 happy
+10    10 Jack       33 Male          300        310        320        290 happy
+# ℹ 3 more variables: raise &lt;chr&gt;, group &lt;chr&gt;, City &lt;chr&gt;</code></pre>
+</div>
+</div>
+</section>
+<section id="ggplot-recap" class="level2">
+<h2 class="anchored" data-anchor-id="ggplot-recap">ggplot recap</h2>
+<p>We will not go into much detail here since this section mostly serves as a recap of the <a href="https://center-for-health-data-science.github.io/FromExceltoR/Presentations/presentation3.html">ggplot material</a> covered in the previous course, From Excel to R.</p>
+<p>The creed of <code>ggplot</code> is summarized is that every information that should be put into the plot must be in a column. There is one column that describes the x-axis and one for the y-axis, and one for each additional aesthetic like color, size, shape, ect.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(df_sales, <span class="fu">aes</span>(<span class="at">x =</span> Name, <span class="at">y =</span> sales_2022, <span class="at">color =</span> Sex)) <span class="sc">+</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: Removed 1 row containing missing values or values outside the scale range
+(`geom_point()`).</code></pre>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="presentation3_files/figure-html/unnamed-chunk-3-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<section id="the-long-format-is-ggplots-best-friend" class="level3">
+<h3 class="anchored" data-anchor-id="the-long-format-is-ggplots-best-friend">The long format is ggplot’s best friend</h3>
+<p>It follows that if I need to plot all sales data, I will need to change the dataframe’s format such that all data points referring to sales are in the same column. As shown in pres 2 we do that with <code>pivot_longer</code>:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>sales_long <span class="ot">&lt;-</span> df_sales <span class="sc">%&gt;%</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="at">cols =</span> <span class="fu">starts_with</span>(<span class="st">"sales_"</span>),</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>               <span class="at">names_to =</span> <span class="st">"sales_year"</span>,</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>               <span class="at">values_to =</span> <span class="st">"sales_value"</span>)</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>sales_long</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 40 × 10
+      ID Name      Age Sex    mood  raise group     City  sales_year sales_value
+   &lt;dbl&gt; &lt;chr&gt;   &lt;dbl&gt; &lt;chr&gt;  &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;     &lt;chr&gt; &lt;chr&gt;            &lt;dbl&gt;
+ 1     1 Alice      25 Female happy no    young_fe… Miami sales_2020         100
+ 2     1 Alice      25 Female happy no    young_fe… Miami sales_2021         110
+ 3     1 Alice      25 Female happy no    young_fe… Miami sales_2022         120
+ 4     1 Alice      25 Female happy no    young_fe… Miami sales_2023         100
+ 5     2 Bob        30 Male   happy yes   mature_m… Miami sales_2020         200
+ 6     2 Bob        30 Male   happy yes   mature_m… Miami sales_2021         210
+ 7     2 Bob        30 Male   happy yes   mature_m… Miami sales_2022         220
+ 8     2 Bob        30 Male   happy yes   mature_m… Miami sales_2023         230
+ 9     3 Charlie    22 Male   happy yes   young_ma… LA    sales_2020         150
+10     3 Charlie    22 Male   happy yes   young_ma… LA    sales_2021         160
+# ℹ 30 more rows</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(sales_long, <span class="fu">aes</span>(<span class="at">x =</span> Name, <span class="at">y =</span> sales_value, <span class="at">color =</span> Sex)) <span class="sc">+</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: Removed 2 rows containing missing values or values outside the scale range
+(`geom_point()`).</code></pre>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="presentation3_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="you-can-pipe-into-ggplot" class="level3">
+<h3 class="anchored" data-anchor-id="you-can-pipe-into-ggplot">You can pipe into ggplot</h3>
+<p>You know what sucks? Having 10 million dataframes with very similar names in your environment. If you you don’t need to use your long format dataframe for anything else, instead of saving it and then plugging it into ggplot, you can pipe directly into ggplot:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>df_sales <span class="sc">%&gt;%</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="at">cols =</span> <span class="fu">starts_with</span>(<span class="st">"sales_"</span>),</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>               <span class="at">names_to =</span> <span class="st">"sales_year"</span>,</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>               <span class="at">values_to =</span> <span class="st">"sales_value"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>  <span class="co">#we omit the dataframe to plot because that is being piped into ggplot</span></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>  <span class="co">#remember that different plot layers are still combined with '+'</span></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> Name, <span class="at">y =</span> sales_value, <span class="at">color =</span> Sex)) <span class="sc">+</span></span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: Removed 2 rows containing missing values or values outside the scale range
+(`geom_point()`).</code></pre>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="presentation3_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="plotting-several-dataframes" class="level3">
+<h3 class="anchored" data-anchor-id="plotting-several-dataframes">Plotting several dataframes</h3>
+<p>Sometimes we would like to add more information to a plot. Consider the one we just made above. It shows 3 or 4 dots for each amployee, which the 3 or 4 different years we have information for. I can now calculate a mean across the 4 years per employee:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>sales_mean <span class="ot">&lt;-</span> sales_long <span class="sc">%&gt;%</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Name) <span class="sc">%&gt;%</span></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">mean =</span> <span class="fu">mean</span>(sales_value, <span class="at">na.rm =</span> T))</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>sales_mean</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 10 × 2
+   Name     mean
+   &lt;chr&gt;   &lt;dbl&gt;
+ 1 Alice    108.
+ 2 Bob      215 
+ 3 Charlie  170 
+ 4 Eve      252.
+ 5 Frank    270 
+ 6 Grace    425 
+ 7 Hannah   503.
+ 8 Ian      465 
+ 9 Jack     305 
+10 Sophie   302.</code></pre>
+</div>
+</div>
+<p>And I would like to add it to the plot:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co">#copy pasta code above</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>df_sales <span class="sc">%&gt;%</span></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="at">cols =</span> <span class="fu">starts_with</span>(<span class="st">"sales_"</span>),</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>               <span class="at">names_to =</span> <span class="st">"sales_year"</span>,</span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>               <span class="at">values_to =</span> <span class="st">"sales_value"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>  <span class="co">#we omit the dataframe to plot because that is being piped into ggplot</span></span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>  <span class="co">#remember that different plot layers are still combined with '+'</span></span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> Name, <span class="at">y =</span> sales_value, <span class="at">color =</span> Sex)) <span class="sc">+</span></span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>  <span class="co">#add mean data by switching the dataframe!</span></span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a>  <span class="co">#I need to specify a color aesthetic because there is no Sex column in sales_mean</span></span>
+<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">data =</span> sales_mean, <span class="fu">aes</span>(<span class="at">x =</span> Name, <span class="at">y =</span> mean), <span class="at">color =</span> <span class="st">'black'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: Removed 2 rows containing missing values or values outside the scale range
+(`geom_point()`).</code></pre>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="presentation3_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="plots-are-objects" class="level3">
+<h3 class="anchored" data-anchor-id="plots-are-objects">Plots are objects</h3>
+<p>ggplot plots are objects like any other R object and they can therefore be stored in a variable and displayed by invoking the variable’s name:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>awesome_plot <span class="ot">&lt;-</span> df_sales <span class="sc">%&gt;%</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="at">cols =</span> <span class="fu">starts_with</span>(<span class="st">"sales_"</span>),</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>               <span class="at">names_to =</span> <span class="st">"sales_year"</span>,</span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>               <span class="at">values_to =</span> <span class="st">"sales_value"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>  <span class="co">#we omit the dataframe to plot because that is being piped into ggplot</span></span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>  <span class="co">#remember that different plot layers are still combined with '+'</span></span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> Name, <span class="at">y =</span> sales_value, <span class="at">color =</span> Sex)) <span class="sc">+</span></span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a>  <span class="co">#add mean data by switching the dataframe!</span></span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a>  <span class="co">#I need to specify a color aesthetic because there is no Sex column in sales_mean</span></span>
+<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">data =</span> sales_mean, <span class="fu">aes</span>(<span class="at">x =</span> Name, <span class="at">y =</span> mean), <span class="at">color =</span> <span class="st">'black'</span>)</span>
+<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-13"><a href="#cb16-13" aria-hidden="true" tabindex="-1"></a>awesome_plot</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: Removed 2 rows containing missing values or values outside the scale range
+(`geom_point()`).</code></pre>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="presentation3_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>If R is every being pesky about showing you plots (e.g.&nbsp;if you want to display them in a loop) wrapping <code>print()</code> around the plot name usually helps:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(awesome_plot)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: Removed 2 rows containing missing values or values outside the scale range
+(`geom_point()`).</code></pre>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="presentation3_files/figure-html/unnamed-chunk-10-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="aliasing-column-names" class="level3">
+<h3 class="anchored" data-anchor-id="aliasing-column-names">Aliasing column names</h3>
+<p>Lastly, we’re going to show you how to alias a column name. Have you noticed that we always need to specify the literal name of the column we want to plot? What if we want to give the column name in a variable?</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>plot_this <span class="ot">&lt;-</span> <span class="st">'Name'</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(df_sales, <span class="fu">aes</span>(<span class="at">x =</span> plot_this, <span class="at">y =</span> sales_2022, <span class="at">color =</span> Sex)) <span class="sc">+</span></span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: Removed 1 row containing missing values or values outside the scale range
+(`geom_point()`).</code></pre>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="presentation3_files/figure-html/unnamed-chunk-11-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Certainly not the expected outcome! We can see that ggplot didn’t evaluate <code>plot_this</code> to the name of the actual column, <code>Name</code>. We’ll have to do it this way:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>plot_this <span class="ot">&lt;-</span> <span class="st">'Name'</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(df_sales, <span class="fu">aes</span>(<span class="at">x =</span> .data[[plot_this]], <span class="at">y =</span> sales_2022, <span class="at">color =</span> Sex)) <span class="sc">+</span></span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: Removed 1 row containing missing values or values outside the scale range
+(`geom_point()`).</code></pre>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="presentation3_files/figure-html/unnamed-chunk-12-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>We hear you say ‘But that is cumbersome!’. Unfortunately we’re neither the developers nor maintainers of <code>ggplot</code> so we all suffer together.</p>
+</section>
+</section>
+<section id="eda" class="level2">
+<h2 class="anchored" data-anchor-id="eda">EDA</h2>
+<p>Instead of having a long theoretical lecture we think you should just have a look at the data so let’s go straight to the exercise.</p>
 
 
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">

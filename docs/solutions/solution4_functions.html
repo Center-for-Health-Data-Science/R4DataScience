@@ -336,7 +336,23 @@ ul.task-list li input[type="checkbox"] {
 <p>Here is the solution4_functions.R showed:</p>
 <div class="cell">
 <div class="cell-output cell-output-stdout">
-<pre><code># 2. Function that take dataframe and a numerical value and returns a boxplot. 
+<pre><code>
+make_boxplot &lt;- function(df, plot_column){
+  
+  if (!is.numeric(df[[plot_column]])){
+    stop('The column to plot must be numcerial.')
+  }
+  
+  p &lt;- ggplot(df, aes(y = .data[[plot_column]])) +
+    geom_boxplot(fill = "#03579A") +
+    labs(title = paste("Boxplot of", plot_column)) + 
+    theme_bw()
+  
+  return(p)
+  
+}
+
+# 2. Function that take dataframe and a numerical value and returns a boxplot. 
 # Required packages: ggplot2
 boxplot &lt;- function(df, var_num){
   

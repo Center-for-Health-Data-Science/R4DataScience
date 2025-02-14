@@ -6,6 +6,8 @@ project:
  output-dir: ../docs
 ---
 
+In this section we will learn more about data manipulation in the tidyverse framework and how to get your data into the correct format for a task.
+
 ## Load packages
 ```{r warning=FALSE, message=FALSE}
 library(readxl)

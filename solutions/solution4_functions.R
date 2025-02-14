@@ -1,3 +1,19 @@
+
+make_boxplot <- function(df, plot_column){
+  
+  if (!is.numeric(df[[plot_column]])){
+    stop('The column to plot must be numcerial.')
+  }
+  
+  p <- ggplot(df, aes(y = .data[[plot_column]])) +
+    geom_boxplot(fill = "#03579A") +
+    labs(title = paste("Boxplot of", plot_column)) + 
+    theme_bw()
+  
+  return(p)
+  
+}
+
 # 2. Function that take dataframe and a numerical value and returns a boxplot. 
 # Required packages: ggplot2
 boxplot <- function(df, var_num){

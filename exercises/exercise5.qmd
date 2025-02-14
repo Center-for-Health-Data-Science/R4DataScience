@@ -1,5 +1,5 @@
 ---
-title: "Exercise 5 - Linear regression"
+title: "Exercise 5 - Modelling"
 format: html
 project:
  type: website

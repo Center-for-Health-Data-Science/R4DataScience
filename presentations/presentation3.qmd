@@ -6,10 +6,151 @@ project:
  output-dir: ../docs
 ---
 
-We will not be going through any presentation for this part.
+In this section we will learn some extra ggplot tricks! 
 
-For Exercise 3-13 we refer to the FromExceltoR material: <https://center-for-health-data-science.github.io/FromExceltoR/Presentations/presentation3.html.>
+## Load packages
+```{r warning=FALSE, message=FALSE}
+library(readxl)
+library(tidyverse)
+```
 
-For Exercise 14-19 we refer to the this tutorial about Principal Component Analysis (PCA): <https://cran.r-project.org/web/packages/ggfortify/vignettes/plot_pca.html>.
+## Load data
+```{r}
+df_sales <- read_excel('../out/sales_data_2.xlsx')
+df_sales
+```
 
-For theory about PCA have a look at this video: <https://www.youtube.com/watch?v=FgakZw6K1QQ&t=799s>. **NB:** This video structures samples/mice as features and genes as observations, where as the usual structure is genes as features and samples/mice as observations.
+## ggplot recap
+
+We will not go into much detail here since this section mostly serves as a recap of the [ggplot material](https://center-for-health-data-science.github.io/FromExceltoR/Presentations/presentation3.html) covered in the previous course, From Excel to R. 
+
+The creed of `ggplot` is summarized is that every information that should be put into the plot must be in a column. There is one column that describes the x-axis and one for the y-axis, and one for each additional aesthetic like color, size, shape, ect. 
+
+
+```{r}
+ggplot(df_sales, aes(x = Name, y = sales_2022, color = Sex)) +
+  geom_point()
+  
+```
+
+### The long format is ggplot's best friend
+
+It follows that if I need to plot all sales data, I will need to change the dataframe's format such that all data points referring to sales are in the same column. As shown in pres 2 we do that with `pivot_longer`:
+
+```{r}
+sales_long <- df_sales %>%
+  pivot_longer(cols = starts_with("sales_"),
+               names_to = "sales_year",
+               values_to = "sales_value")
+sales_long
+```
+
+```{r}
+ggplot(sales_long, aes(x = Name, y = sales_value, color = Sex)) +
+  geom_point()
+  
+```
+
+### You can pipe into ggplot
+
+You know what sucks? Having 10 million dataframes with very similar names in your environment. If you you don't need to use your long format dataframe for anything else, instead of saving it and then plugging it into ggplot, you can pipe directly into ggplot:
+
+```{r}
+df_sales %>%
+  pivot_longer(cols = starts_with("sales_"),
+               names_to = "sales_year",
+               values_to = "sales_value") %>%
+  #we omit the dataframe to plot because that is being piped into ggplot
+  #remember that different plot layers are still combined with '+'
+  ggplot(aes(x = Name, y = sales_value, color = Sex)) +
+  geom_point()
+```
+
+### Plotting several dataframes
+
+Sometimes we would like to add more information to a plot. Consider the one we just made above. It shows 3 or 4 dots for each amployee, which the 3 or 4 different years we have information for. I can now calculate a mean across the 4 years per employee:
+
+```{r}
+sales_mean <- sales_long %>%
+  group_by(Name) %>%
+  summarise(mean = mean(sales_value, na.rm = T))
+
+sales_mean
+```
+And I would like to add it to the plot:
+
+```{r}
+
+#copy pasta code above
+df_sales %>%
+  pivot_longer(cols = starts_with("sales_"),
+               names_to = "sales_year",
+               values_to = "sales_value") %>%
+  #we omit the dataframe to plot because that is being piped into ggplot
+  #remember that different plot layers are still combined with '+'
+  ggplot(aes(x = Name, y = sales_value, color = Sex)) +
+  geom_point() +
+  #add mean data by switching the dataframe!
+  #I need to specify a color aesthetic because there is no Sex column in sales_mean
+  geom_point(data = sales_mean, aes(x = Name, y = mean), color = 'black')
+
+
+```
+
+### Plots are objects
+
+ggplot plots are objects like any other R object and they can therefore be stored in a variable and displayed by invoking the variable's name:
+
+```{r}
+awesome_plot <- df_sales %>%
+  pivot_longer(cols = starts_with("sales_"),
+               names_to = "sales_year",
+               values_to = "sales_value") %>%
+  #we omit the dataframe to plot because that is being piped into ggplot
+  #remember that different plot layers are still combined with '+'
+  ggplot(aes(x = Name, y = sales_value, color = Sex)) +
+  geom_point() +
+  #add mean data by switching the dataframe!
+  #I need to specify a color aesthetic because there is no Sex column in sales_mean
+  geom_point(data = sales_mean, aes(x = Name, y = mean), color = 'black')
+
+awesome_plot
+
+```
+
+
+If R is every being pesky about showing you plots (e.g. if you want to display them in a loop) wrapping `print()` around the plot name usually helps:
+
+```{r}
+print(awesome_plot)
+```
+
+
+
+### Aliasing column names
+
+Lastly, we're going to show you how to alias a column name. Have you noticed that we always need to specify the literal name of the column we want to plot? What if we want to give the column name in a variable?
+
+```{r}
+plot_this <- 'Name'
+
+ggplot(df_sales, aes(x = plot_this, y = sales_2022, color = Sex)) +
+  geom_point()
+
+```
+
+Certainly not the expected outcome! We can see that ggplot didn't evaluate `plot_this` to the name of the actual column, `Name`. We'll have to do it this way:
+
+```{r}
+plot_this <- 'Name'
+
+ggplot(df_sales, aes(x = .data[[plot_this]], y = sales_2022, color = Sex)) +
+  geom_point()
+```
+
+We hear you say 'But that is cumbersome!'. Unfortunately we're neither the developers nor maintainers of `ggplot` so we all suffer together.
+
+## EDA
+
+Instead of having a long theoretical lecture we think you should just have a look at the data so let's go straight to the exercise.
+

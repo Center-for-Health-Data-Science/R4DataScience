@@ -6,6 +6,10 @@ project:
  output-dir: ../docs
 ---
 
+In this exercise you will do a lot of plotting with ggplot. For a reminder on how ggplot works you can have a look the [ggplot material](https://center-for-health-data-science.github.io/FromExceltoR/Presentations/presentation3.html) covered in our previous course, From Excel to R. 
+
+The second part of the exercise deals with creating a principal component analysis (PCA) plot. For a quick introduction to the main idea behind PCA you can have a look at [this video](https://www.youtube.com/watch?v=HMOI_lkzW08&t=194).  
+
 ## Getting started 
 
 1. Load packages. 

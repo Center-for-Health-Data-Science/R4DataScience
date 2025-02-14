@@ -387,7 +387,13 @@ window.Quarto = {
   <li><a href="#model-performance" id="toc-model-performance" class="nav-link" data-scroll-target="#model-performance">Model performance</a></li>
   </ul></li>
   <li><a href="#regression-with-categorical-features" id="toc-regression-with-categorical-features" class="nav-link" data-scroll-target="#regression-with-categorical-features">Regression with categorical features</a></li>
-  <li><a href="#classification" id="toc-classification" class="nav-link" data-scroll-target="#classification">Classification</a></li>
+  <li><a href="#classification" id="toc-classification" class="nav-link" data-scroll-target="#classification">Classification</a>
+  <ul class="collapse">
+  <li><a href="#training-and-test-set-with-class-data" id="toc-training-and-test-set-with-class-data" class="nav-link" data-scroll-target="#training-and-test-set-with-class-data">Training and Test set with class data</a></li>
+  <li><a href="#logistic-regression-math" id="toc-logistic-regression-math" class="nav-link" data-scroll-target="#logistic-regression-math">Logistic regression: Math</a></li>
+  <li><a href="#model-formulation-in-r" id="toc-model-formulation-in-r" class="nav-link" data-scroll-target="#model-formulation-in-r">Model formulation in R</a></li>
+  <li><a href="#model-interpretation-1" id="toc-model-interpretation-1" class="nav-link" data-scroll-target="#model-interpretation-1">Model interpretation</a></li>
+  </ul></li>
   <li><a href="#clustering" id="toc-clustering" class="nav-link" data-scroll-target="#clustering">Clustering</a></li>
   </ul>
 </nav>
@@ -419,7 +425,7 @@ window.Quarto = {
 <h2 class="anchored" data-anchor-id="load-packages">Load packages</h2>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(caret)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(caTools)</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ModelMetrics)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
@@ -427,16 +433,23 @@ window.Quarto = {
 <h2 class="anchored" data-anchor-id="load-data">Load data</h2>
 <p>In order to focus on the technical aspects we’ll use a very simple toy dataset. It contains the number of cigarettes smoked per day and how long the person lived. It is inspired by <a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC2598467/">this paper</a> if you want to take a look.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>df_smoke <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">'../data/smoking.csv'</span>)</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(df_smoke)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>df_smoke <span class="ot">&lt;-</span> <span class="fu">as_tibble</span>(<span class="fu">read.csv</span>(<span class="st">'../data/smoking_cat.csv'</span>))</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>df_smoke</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>  daily_cigarettes life
-1                7   76
-2               11   73
-3               27   72
-4               23   71
-5               13   74
-6               11   76</code></pre>
+<pre><code># A tibble: 100 × 3
+   daily_cigarettes  life exercise
+              &lt;int&gt; &lt;int&gt;    &lt;int&gt;
+ 1                7    76        0
+ 2               11    73        0
+ 3               27    72        1
+ 4               23    71        0
+ 5               13    74        0
+ 6               11    76        1
+ 7               20    71        0
+ 8                6    76        1
+ 9               23    72        1
+10               32    70        2
+# ℹ 90 more rows</code></pre>
 </div>
 </div>
 <p>We will use this to perform a linear regression.</p>
@@ -465,13 +478,15 @@ window.Quarto = {
 </div>
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(train)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>  daily_cigarettes life ID
-1               29   72 31
-2               16   73 79
-3                5   78 51
-4                3   77 14
-5                4   79 67
-6               23   71 42</code></pre>
+<pre><code># A tibble: 6 × 4
+  daily_cigarettes  life exercise    ID
+             &lt;int&gt; &lt;int&gt;    &lt;int&gt; &lt;int&gt;
+1               29    72        1    31
+2               16    73        0    79
+3                5    78        1    51
+4                3    77        0    14
+5                4    79        2    67
+6               23    71        1    42</code></pre>
 </div>
 </div>
 <p>As you can see, the ID’s in <code>train</code> are shuffled and it only has 75 rows since we asked for 75% of the data. Now all we have to do is identify the other 25%, i.e.&nbsp;the observations not in train. <code>dpylr</code> has a neat function called <code>anti_join</code> for that:</p>
@@ -484,13 +499,15 @@ window.Quarto = {
 </div>
 <div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(test)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>  daily_cigarettes life ID
-1                7   76  1
-2               11   73  2
-3               27   72  3
-4               32   70 10
-5                8   75 11
-6               16   75 24</code></pre>
+<pre><code># A tibble: 6 × 4
+  daily_cigarettes  life exercise    ID
+             &lt;int&gt; &lt;int&gt;    &lt;int&gt; &lt;int&gt;
+1                7    76        0     1
+2               11    73        0     2
+3               27    72        1     3
+4               32    70        2    10
+5                8    75        0    11
+6               16    75        2    24</code></pre>
 </div>
 </div>
 </section>
@@ -624,22 +641,13 @@ F-statistic: 431.5 on 1 and 73 DF,  p-value: &lt; 2.2e-16</code></pre>
 </section>
 <section id="regression-with-categorical-features" class="level2">
 <h2 class="anchored" data-anchor-id="regression-with-categorical-features">Regression with categorical features</h2>
-<p>Now that we know how to make a simple linear model, how can we include categorical variables and what is the interpretation of their coefficients? To investigate this we will load a second version of the dataset that contains an additional variable: Exercise level.</p>
+<p>Now that we know how to make a simple linear model, how can we include categorical variables and what is the interpretation of their coefficients? To investigate this we include the other predictor variable we have: Exercise level.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>df_smoke <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">'../data/smoking_cat.csv'</span>)</span>
-<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(df_smoke)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="fu">distinct</span>(df_smoke, exercise)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>  daily_cigarettes life exercise
-1                7   76        0
-2               11   73        0
-3               27   72        1
-4               23   71        0
-5               13   74        0
-6               11   76        1</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="fu">distinct</span>(df_smoke, exercise)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>  exercise
+<pre><code># A tibble: 3 × 1
+  exercise
+     &lt;int&gt;
 1        0
 2        1
 3        2</code></pre>
@@ -647,42 +655,44 @@ F-statistic: 431.5 on 1 and 73 DF,  p-value: &lt; 2.2e-16</code></pre>
 </div>
 <p>Alright, we have three different levels of exercise. They are: low == 0, moderate == 1 and high == 2. Before we go on, let’s have a look if our data is represented correctly:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(df_smoke)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(df_smoke)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>'data.frame':   100 obs. of  3 variables:
- $ daily_cigarettes: int  7 11 27 23 13 11 20 6 23 32 ...
- $ life            : int  76 73 72 71 74 76 71 76 72 70 ...
- $ exercise        : int  0 0 1 0 0 1 0 1 1 2 ...</code></pre>
+<pre><code>tibble [100 × 4] (S3: tbl_df/tbl/data.frame)
+ $ daily_cigarettes: int [1:100] 7 11 27 23 13 11 20 6 23 32 ...
+ $ life            : int [1:100] 76 73 72 71 74 76 71 76 72 70 ...
+ $ exercise        : int [1:100] 0 0 1 0 0 1 0 1 1 2 ...
+ $ ID              : int [1:100] 1 2 3 4 5 6 7 8 9 10 ...</code></pre>
 </div>
 </div>
 <p>We can see that the <code>exercise</code> column is interpreted as an integer. However, it is actually a category! In R categorical variables are known as <code>factors</code> and have their own datatype. Let’s convert exercise to a factor:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>df_smoke<span class="sc">$</span>exercise <span class="ot">&lt;-</span> <span class="fu">as.factor</span>(df_smoke<span class="sc">$</span>exercise)</span>
-<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(df_smoke)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>df_smoke<span class="sc">$</span>exercise <span class="ot">&lt;-</span> <span class="fu">as.factor</span>(df_smoke<span class="sc">$</span>exercise)</span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(df_smoke)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>'data.frame':   100 obs. of  3 variables:
- $ daily_cigarettes: int  7 11 27 23 13 11 20 6 23 32 ...
- $ life            : int  76 73 72 71 74 76 71 76 72 70 ...
- $ exercise        : Factor w/ 3 levels "0","1","2": 1 1 2 1 1 2 1 2 2 3 ...</code></pre>
+<pre><code>tibble [100 × 4] (S3: tbl_df/tbl/data.frame)
+ $ daily_cigarettes: int [1:100] 7 11 27 23 13 11 20 6 23 32 ...
+ $ life            : int [1:100] 76 73 72 71 74 76 71 76 72 70 ...
+ $ exercise        : Factor w/ 3 levels "0","1","2": 1 1 2 1 1 2 1 2 2 3 ...
+ $ ID              : int [1:100] 1 2 3 4 5 6 7 8 9 10 ...</code></pre>
 </div>
 </div>
 <p>As before, before fitting the model we’ll split up the data in train and test. Since we’re using the same seed we should get the same observations, i.e.&nbsp;rows into training and test as above.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Set seed to ensure reproducibility</span></span>
-<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)  </span>
-<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a><span class="co">#add an ID column to keep track of observations</span></span>
-<span id="cb34-5"><a href="#cb34-5" aria-hidden="true" tabindex="-1"></a>df_smoke<span class="sc">$</span>ID <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(df_smoke)</span>
-<span id="cb34-6"><a href="#cb34-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-7"><a href="#cb34-7" aria-hidden="true" tabindex="-1"></a>train <span class="ot">&lt;-</span> df_smoke <span class="sc">%&gt;%</span> <span class="fu">sample_frac</span>(.<span class="dv">75</span>)</span>
-<span id="cb34-8"><a href="#cb34-8" aria-hidden="true" tabindex="-1"></a>test  <span class="ot">&lt;-</span> <span class="fu">anti_join</span>(df_smoke, train, <span class="at">by =</span> <span class="st">'ID'</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Set seed to ensure reproducibility</span></span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)  </span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a><span class="co">#add an ID column to keep track of observations</span></span>
+<span id="cb32-5"><a href="#cb32-5" aria-hidden="true" tabindex="-1"></a>df_smoke<span class="sc">$</span>ID <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(df_smoke)</span>
+<span id="cb32-6"><a href="#cb32-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-7"><a href="#cb32-7" aria-hidden="true" tabindex="-1"></a>train <span class="ot">&lt;-</span> df_smoke <span class="sc">%&gt;%</span> <span class="fu">sample_frac</span>(.<span class="dv">75</span>)</span>
+<span id="cb32-8"><a href="#cb32-8" aria-hidden="true" tabindex="-1"></a>test  <span class="ot">&lt;-</span> <span class="fu">anti_join</span>(df_smoke, train, <span class="at">by =</span> <span class="st">'ID'</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>And now we extend our previous model formula with the new predictor:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>model2 <span class="ot">&lt;-</span> <span class="fu">lm</span>(life <span class="sc">~</span> daily_cigarettes <span class="sc">+</span> exercise, <span class="at">data =</span> train)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>model2 <span class="ot">&lt;-</span> <span class="fu">lm</span>(life <span class="sc">~</span> daily_cigarettes <span class="sc">+</span> exercise, <span class="at">data =</span> train)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(model2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(model2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
 Call:
@@ -738,7 +748,7 @@ F-statistic: 333.7 on 3 and 71 DF,  p-value: &lt; 2.2e-16</code></pre>
 </table>
 <p>And for our coefficients it means:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a>model2<span class="sc">$</span>coefficients</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>model2<span class="sc">$</span>coefficients</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>     (Intercept) daily_cigarettes        exercise1        exercise2 
       77.5829543       -0.2855213        1.0954747        2.3722266 </code></pre>
@@ -754,6 +764,152 @@ F-statistic: 333.7 on 3 and 71 DF,  p-value: &lt; 2.2e-16</code></pre>
 </section>
 <section id="classification" class="level2">
 <h2 class="anchored" data-anchor-id="classification">Classification</h2>
+<p>Classification is what we apply when the outcome has two or more classes.</p>
+<p>In order to have a categorical outcome, we’ll add a column to our toy data that describes whether the person died before age 75 or not.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a>df_smoke <span class="ot">&lt;-</span> df_smoke <span class="sc">%&gt;%</span></span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">early_death =</span> <span class="fu">factor</span>(<span class="fu">ifelse</span>(life <span class="sc">&lt;</span> <span class="dv">75</span>, <span class="st">'yes'</span>, <span class="st">'no'</span>)))</span>
+<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-4"><a href="#cb38-4" aria-hidden="true" tabindex="-1"></a>df_smoke <span class="sc">%&gt;%</span></span>
+<span id="cb38-5"><a href="#cb38-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(early_death)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 2 × 2
+  early_death     n
+  &lt;fct&gt;       &lt;int&gt;
+1 no             49
+2 yes            51</code></pre>
+</div>
+</div>
+<section id="training-and-test-set-with-class-data" class="level3">
+<h3 class="anchored" data-anchor-id="training-and-test-set-with-class-data">Training and Test set with class data</h3>
+<p>Let’s remake our training and test data. This time we have classes that we would like to be in the same ratios in training and test set. Therefore, we cannot just grab 75% of the data as we did before. We’ll use <code>sample.split</code> from <code>caTools</code> to achieve balanced classes:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Set seed to ensure reproducibility</span></span>
+<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb40-4"><a href="#cb40-4" aria-hidden="true" tabindex="-1"></a>split <span class="ot">&lt;-</span> <span class="fu">sample.split</span>(df_smoke<span class="sc">$</span>early_death, <span class="at">SplitRatio =</span> <span class="fl">0.75</span>)</span>
+<span id="cb40-5"><a href="#cb40-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb40-6"><a href="#cb40-6" aria-hidden="true" tabindex="-1"></a><span class="co">#split is a vector of true and false values we can now directly apply to our tibble</span></span>
+<span id="cb40-7"><a href="#cb40-7" aria-hidden="true" tabindex="-1"></a>split</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  [1]  TRUE FALSE  TRUE  TRUE FALSE FALSE  TRUE  TRUE  TRUE  TRUE FALSE  TRUE
+ [13]  TRUE FALSE  TRUE FALSE  TRUE  TRUE  TRUE  TRUE FALSE  TRUE  TRUE FALSE
+ [25]  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE FALSE  TRUE FALSE FALSE FALSE  TRUE
+ [37] FALSE  TRUE  TRUE FALSE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE FALSE FALSE
+ [49]  TRUE  TRUE  TRUE FALSE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE
+ [61]  TRUE FALSE  TRUE  TRUE FALSE  TRUE  TRUE FALSE  TRUE FALSE  TRUE  TRUE
+ [73]  TRUE  TRUE  TRUE  TRUE FALSE  TRUE FALSE  TRUE FALSE  TRUE  TRUE  TRUE
+ [85]  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE FALSE  TRUE  TRUE  TRUE
+ [97]  TRUE  TRUE  TRUE  TRUE</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a>train <span class="ot">&lt;-</span> df_smoke[split,]</span>
+<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a>test <span class="ot">&lt;-</span> df_smoke[<span class="sc">!</span>split,] <span class="co">#! negates the vector, so true becomes false and vice verse</span></span>
+<span id="cb42-3"><a href="#cb42-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-4"><a href="#cb42-4" aria-hidden="true" tabindex="-1"></a><span class="fu">count</span>(train,early_death)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 2 × 2
+  early_death     n
+  &lt;fct&gt;       &lt;int&gt;
+1 no             37
+2 yes            38</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="fu">count</span>(test, early_death)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 2 × 2
+  early_death     n
+  &lt;fct&gt;       &lt;int&gt;
+1 no             12
+2 yes            13</code></pre>
+</div>
+</div>
+<p>Now we can perform logistic regression to see whether there is an influence of the number of cigarettes and amount of exercise on the odds of the person dying before 75.</p>
+<p>Logistic regression belongs to the family of generalized linear models. They all look like this:</p>
+<p><span class="math display">\[ y \sim \beta * X \]</span></p>
+<p>with:</p>
+<ul>
+<li><span class="math inline">\(y\)</span> the outcome</li>
+<li><span class="math inline">\(\beta\)</span> the coefficient matrix</li>
+<li><span class="math inline">\(X\)</span> the matrix of predictors</li>
+<li><span class="math inline">\(\sim\)</span> the link function</li>
+</ul>
+<p>In a logistic regression model the link function is the logit. In a linear model the link function is the identity function (so ~ becomes =).</p>
+</section>
+<section id="logistic-regression-math" class="level3">
+<h3 class="anchored" data-anchor-id="logistic-regression-math">Logistic regression: Math</h3>
+<p>In order to understand what that means we’ll need a tiny bit of math.</p>
+<p>We see some issues right of the bat. Our <span class="math inline">\(y\)</span> is either 0 or 1 (the person is either dead or not). However we cannot model that so instead we will model the probability of the outcome being 1: <span class="math inline">\(P(earlydeath == 1)\)</span>. Except probabilities are bounded between 0 and 1 which is mathematically difficult to impose (it means all <span class="math inline">\(y\)</span>’s have to be between these two values and how are we gonna enforce that?) So instead, we will model the log-odds of early death:</p>
+<p><span class="math display">\[ y = \log(\frac{P(earlydeath == 1)}{1-P(earlydeath == 1)})\]</span></p>
+<p>It may not look like it but we promise you this <span class="math inline">\(y\)</span> is a well behaved number because it can be anywhere between - infinity and + infinity. So therefore our actual model is:</p>
+<p><span class="math display">\[ \log(\frac{P(earlydeath == 1)}{1-P(earlydeath == 1)} =  \beta * X\]</span></p>
+<p>And if we want to know what the means for the probability of dying we just take the logit of <span class="math inline">\(y\)</span> :</p>
+<p><span class="math display">\[ P(earlydeath == 1) = \frac{1}{1+ e^{(-y)}} \]</span></p>
+<p>Which makes the link between what we’re actually interested in (people’s chances of dying) and what we’re modelling the logit. End of math.</p>
+</section>
+<section id="model-formulation-in-r" class="level3">
+<h3 class="anchored" data-anchor-id="model-formulation-in-r">Model formulation in R</h3>
+<p>So in order to fit a logistic regression we will use the function for generalized linear models, <code>glm</code>. We will specify that we want logistic regression (using the logit as the link) by setting <code>family = binomial</code>:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a>model_log <span class="ot">&lt;-</span> <span class="fu">glm</span>(early_death <span class="sc">~</span> daily_cigarettes <span class="sc">+</span> exercise, <span class="at">data =</span> train, <span class="at">family =</span> <span class="st">"binomial"</span>)</span>
+<span id="cb46-2"><a href="#cb46-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(model_log)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+glm(formula = early_death ~ daily_cigarettes + exercise, family = "binomial", 
+    data = train)
+
+Deviance Residuals: 
+     Min        1Q    Median        3Q       Max  
+-1.49830  -0.08900   0.00052   0.01900   2.64289  
+
+Coefficients:
+                 Estimate Std. Error z value Pr(&gt;|z|)   
+(Intercept)      -11.0307     4.0190  -2.745  0.00606 **
+daily_cigarettes   0.8380     0.2836   2.955  0.00313 **
+exercise1         -1.6493     2.0986  -0.786  0.43191   
+exercise2         -2.5922     2.4751  -1.047  0.29497   
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+(Dispersion parameter for binomial family taken to be 1)
+
+    Null deviance: 103.959  on 74  degrees of freedom
+Residual deviance:  13.717  on 71  degrees of freedom
+AIC: 21.717
+
+Number of Fisher Scoring iterations: 8</code></pre>
+</div>
+</div>
+</section>
+<section id="model-interpretation-1" class="level3">
+<h3 class="anchored" data-anchor-id="model-interpretation-1">Model interpretation</h3>
+<p>We see from looking at the summary that the coefficient of exercise level 1 and level 2 is not significant. This means that we are not confident that doing a high amount of exercise (level 3) has a significant impact on the probability of dying before 75 compare to doing moderate or low amounts of exercise. This does not mean that there can be no influence, merely that we do not have enough data to detect it if it is there.</p>
+<p>Are you surprised? Exercise level was significant when we modelled the number of years lived, which is arguably a more fine-grained information than the binary split and perhaps therefore we picked up the influence.</p>
+<p>With the number of daily cigarettes predictor we have a high degree of certainty that it influences the probability of dying before 75 (in this dataset!), but what does a coefficient of 0.84 mean?</p>
+<p>We know that:</p>
+<p><span class="math display">\[ P(earlydeath == 1) = \frac{1}{1+ e^{(-y)}} \]</span></p>
+<p>and (leaving out the exercise level since it’s not significant):</p>
+<p><span class="math display">\[ y = \beta_0 + \beta_1 * cigs \]</span></p>
+<p>So how does <span class="math inline">\(y\)</span> change as <span class="math inline">\(0.84 * cigs\)</span> becomes larger? Let’s agree that <span class="math inline">\(y\)</span> becomes larger. What does that mean for the probability of dying? Is <span class="math inline">\(e^{(-y)}\)</span> a large number if <span class="math inline">\(y\)</span> is large? Luckily we have a calculator handy</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb48"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a><span class="co">#exp(b) is e^b in R</span></span>
+<span id="cb48-2"><a href="#cb48-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb48-3"><a href="#cb48-3" aria-hidden="true" tabindex="-1"></a><span class="fu">exp</span>(<span class="sc">-</span><span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.3678794</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb50"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a><span class="fu">exp</span>(<span class="sc">-</span><span class="dv">10</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 4.539993e-05</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb52"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a><span class="fu">exp</span>(<span class="sc">-</span><span class="dv">100</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 3.720076e-44</code></pre>
+</div>
+</div>
+<p>We see that <span class="math inline">\(e^{(-y)}\)</span> becomes increasingly smaller with larger <span class="math inline">\(y\)</span> which means that</p>
+<p><span class="math display">\[ P(earlydeath == 1) = \frac{1}{1+ small} \sim \frac{1}{1} \]</span></p>
+<p>So the larger <span class="math inline">\(y\)</span> the smaller <span class="math inline">\(e^{(-y)}\)</span> and the closer we get to <span class="math inline">\(P(earlydeath == 1)\)</span> being 1. That was a lot of math for: If the coefficient is positive you increase the likelihood of getting the outcome, i.e.&nbsp;dying.</p>
+</section>
 </section>
 <section id="clustering" class="level2">
 <h2 class="anchored" data-anchor-id="clustering">Clustering</h2>

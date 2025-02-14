@@ -347,8 +347,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction">Introduction</a></li>
-  <li><a href="#first-steps" id="toc-first-steps" class="nav-link" data-scroll-target="#first-steps">First steps</a></li>
+  <li><a href="#getting-started" id="toc-getting-started" class="nav-link active" data-scroll-target="#getting-started">Getting started</a></li>
+  <li><a href="#wrangling" id="toc-wrangling" class="nav-link" data-scroll-target="#wrangling">Wrangling</a></li>
   </ul>
 </nav>
     </div>
@@ -374,15 +374,17 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<section id="introduction" class="level2">
-<h2 class="anchored" data-anchor-id="introduction">Introduction</h2>
 <p>In this exercise you will do some more advance tidyverse operations such as pivoting and nesting.</p>
-</section>
-<section id="first-steps" class="level2">
-<h2 class="anchored" data-anchor-id="first-steps">First steps</h2>
+<section id="getting-started" class="level2">
+<h2 class="anchored" data-anchor-id="getting-started">Getting started</h2>
 <ol type="1">
 <li><p>Load packages.</p></li>
 <li><p>Load the joined diabetes data set you created in exercise 1 and the glucose dataset from the data folder.</p></li>
+</ol>
+</section>
+<section id="wrangling" class="level2">
+<h2 class="anchored" data-anchor-id="wrangling">Wrangling</h2>
+<ol start="3" type="1">
 <li><p>Have a look at the glucose dataset. It has three columns with measurements from a Oral Glucose Tolerance Test where blood glucose is measured at fasting (Glucose_0), 6 hours after glucose intake (Glucose_6), and 12 hours after (Glucose_12). The last columns is an ID column. Change the data type of the ID column to <code>factor</code> in both <code>diabetes_join</code> and <code>df_glucose</code>.</p></li>
 <li><p>Restructure the glucose dataset into a long format. Name the column that describes which measurement the row refers to, i.e.&nbsp;Glucose_0, Glucose_60 or Glucose_120, <code>Measurement</code>. How many rows are there per ID? Does that make sense?</p></li>
 </ol>

@@ -11,7 +11,7 @@ In this section we'll look at how to define and fit a model in R.
 ## Load packages
 ```{r warning=FALSE, message=FALSE}
 library(tidyverse)
-library(caret)
+library(caTools)
 library(ModelMetrics)
 ```
 
@@ -20,8 +20,8 @@ library(ModelMetrics)
 In order to focus on the technical aspects we'll use a very simple toy dataset. It contains the number of cigarettes smoked per day and how long the person lived. It is inspired by [this paper](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC2598467/) if you want to take a look. 
 
 ```{r}
-df_smoke <- read.csv('../data/smoking.csv')
-head(df_smoke)
+df_smoke <- as_tibble(read.csv('../data/smoking_cat.csv'))
+df_smoke
 ```
 
 
@@ -161,11 +161,9 @@ Our predictions are on average 1.7 years wrong.
 
 ## Regression with categorical features 
 
-Now that we know how to make a simple linear model, how can we include categorical variables and what is the interpretation of their coefficients? To investigate this we will load a second version of the dataset that contains an additional variable: Exercise level.
+Now that we know how to make a simple linear model, how can we include categorical variables and what is the interpretation of their coefficients? To investigate this we include the other predictor variable we have: Exercise level.
 
 ```{r}
-df_smoke <- read.csv('../data/smoking_cat.csv')
-head(df_smoke)
 distinct(df_smoke, exercise)
 ```
 
@@ -237,6 +235,119 @@ model2$coefficients
 Why is there no coefficient for exercise level 0 (low amount of exercise)? This case is covered in the Intercept. It is referred to as the **reference level** of the categorical variable. You can change which level is regarded as the reference and the effect of having this level will always be modelled in the intercept. 
 
 ## Classification
+
+Classification is what we apply when the outcome has two or more classes.
+
+In order to have a categorical outcome, we'll add a column to our toy data that describes whether the person died before age 75 or not. 
+
+```{r}
+df_smoke <- df_smoke %>%
+  mutate(early_death = factor(ifelse(life < 75, 'yes', 'no')))
+
+df_smoke %>%
+  count(early_death)
+```
+
+### Training and Test set with class data
+
+Let's remake our training and test data. This time we have classes that we would like to be in the same ratios in training and test set. Therefore, we cannot just grab 75% of the data as we did before. We'll use `sample.split` from `caTools` to achieve balanced classes: 
+
+```{r}
+# Set seed to ensure reproducibility
+set.seed(123)
+
+split <- sample.split(df_smoke$early_death, SplitRatio = 0.75)
+
+#split is a vector of true and false values we can now directly apply to our tibble
+split
+
+train <- df_smoke[split,]
+test <- df_smoke[!split,] #! negates the vector, so true becomes false and vice verse
+
+count(train,early_death)
+count(test, early_death)
+
+```
+
+
+Now we can perform logistic regression to see whether there is an influence of the number of cigarettes and amount of exercise on the odds of the person dying before 75. 
+
+Logistic regression belongs to the family of generalized linear models. They all look like this:
+
+$$ y \sim \beta * X $$
+
+with:
+
+* $y$ the outcome
+* $\beta$ the coefficient matrix
+* $X$ the matrix of predictors
+* $\sim$ the link function
+
+In a logistic regression model the link function is the logit. In a linear model the link function is the identity function (so ~ becomes =). 
+
+### Logistic regression: Math
+
+In order to understand what that means we'll need a tiny bit of math.
+
+We see some issues right of the bat. Our $y$ is either 0 or 1 (the person is either dead or not). However we cannot model that so instead we will model the probability of the outcome being 1: $P(earlydeath == 1)$. Except probabilities are bounded between 0 and 1 which is mathematically difficult to impose (it means all $y$'s have to be between these two values and how are we gonna enforce that?) So instead, we will model the log-odds of early death:
+
+$$ y = \log(\frac{P(earlydeath == 1)}{1-P(earlydeath == 1)})$$
+
+It may not look like it but we promise you this $y$ is a well behaved number because it can be anywhere between - infinity and + infinity. So therefore our actual model is:
+
+$$ \log(\frac{P(earlydeath == 1)}{1-P(earlydeath == 1)} =  \beta * X$$
+
+And if we want to know what the means for the probability of dying we just take the logit of $y$ :
+
+$$ P(earlydeath == 1) = \frac{1}{1+ e^{(-y)}} $$ 
+
+Which makes the link between what we're actually interested in (people's chances of dying) and what we're modelling the logit. End of math.
+
+### Model formulation in R
+
+So in order to fit a logistic regression we will use the function for generalized linear models, `glm`. We will specify that we want logistic regression (using the logit as the link) by setting `family = binomial`:
+
+
+```{r}
+model_log <- glm(early_death ~ daily_cigarettes + exercise, data = train, family = "binomial")
+summary(model_log)
+```
+
+### Model interpretation
+
+We see from looking at the summary that the coefficient of exercise level 1 and level 2 is not significant. This means that we are not confident that doing a high amount of exercise (level 3) has a significant impact on the probability of dying before 75 compare to doing moderate or low amounts of exercise. This does not mean that there can be no influence, merely that we do not have enough data to detect it if it is there. 
+
+Are you surprised? 
+Exercise level was significant when we modelled the number of years lived, which is arguably a more fine-grained information than the binary split and perhaps therefore we picked up the influence.
+
+With the number of daily cigarettes predictor we have a high degree of certainty that it influences the probability of dying before 75 (in this dataset!), but what does a coefficient of 0.84 mean? 
+
+We know that: 
+
+$$ P(earlydeath == 1) = \frac{1}{1+ e^{(-y)}} $$ 
+
+and (leaving out the exercise level since it's not significant):
+
+$$ y = \beta_0 + \beta_1 * cigs $$
+
+So how does $y$ change as $0.84 * cigs$ becomes larger? Let's agree that $y$ becomes larger. What does that mean for the probability of dying? Is $e^{(-y)}$ a large number if $y$ is large? Luckily we have a calculator handy
+
+```{r}
+#exp(b) is e^b in R
+
+exp(-1)
+
+exp(-10)
+
+exp(-100)
+```
+
+We see that $e^{(-y)}$ becomes increasingly smaller with larger $y$ which means that 
+
+$$ P(earlydeath == 1) = \frac{1}{1+ small} \sim \frac{1}{1} $$ 
+
+So the larger $y$ the smaller $e^{(-y)}$ and the closer we get to $P(earlydeath == 1)$ being 1. That was a lot of math for: If the coefficient is positive you increase the likelihood of getting the outcome, i.e. dying. 
+
 
 ## Clustering
 
