@@ -49,6 +49,8 @@ website:
             text: "Exercise 2: Advanced Data Wrangling"
           - href: exercises/exercise3.qmd
             text: "Exercise 3: Exploratory Data Analysis"
+          - href: exercises/exercise4.qmd
+            text: "Exercise 4: Scripting in R"            
           - href: exercises/exercise5.qmd
             text: "Exercise 5: Linear Regression"
 
@@ -63,7 +65,7 @@ website:
             - href: solutions/solution4.qmd # solutions/solution_not_up.qmd #
               text: "Exercise 4 - Solution"
             - href: solutions/solution4_functions.qmd # solutions/solution_not_up.qmd #
-              text: "Exercise 4, Function - Solution"
+              text: "Exercise 4, Functions - Solution"
             - href: solutions/solution5.qmd # solutions/solution_not_up.qmd #
               text: "Exercise 5 - Solution"
 

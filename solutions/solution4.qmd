@@ -40,23 +40,25 @@ if (bp > 100){
 } 
 
 ```
-2. Write an if-else statement that assigns people high, moderate or low diabetes risk based on their genetic risk score and BMI:
+2. Write an if-else statement that assigns people high, moderate or low health risk based on their smoking habits (variable `smoker`) and BMI:
 
-* genetic Risk greater than 1 and BMI greater than 35 -> high risk
+* Smoker and BMI greater than 35 -> high risk
 
-* genetic Risk greater than 1 or BMI greater than 35 -> moderate risk
+* Smoker or BMI greater than 35 -> moderate risk
 
 * otherwise low risk
+
+And `smoker` should be one of "Smoker", "Former", "Never", "Unknown".
 
 Verify that your statement works for different combinations of risk score and BMI
 
 ```{r}
-risk <- 0.9
+Smoker <- 'Smoker'
 BMI <- 40
 
-if (risk > 1 & BMI > 35){
+if (Smoker == 'Smoker' & BMI > 35){
   print('High risk')
-} else if (risk > 1 | BMI > 35) {
+} else if (Smoker == 'Smoker' | BMI > 35) {
   print('Moderate risk')
 } else {
   print('Low risk')
@@ -128,20 +130,20 @@ An easy way to printing several variables is to pass a vector into print: `print
 #for (i in 1:nrow(diabetes_glucose)) {
 
 for (i in 1:10) {
-  risk <- diabetes_glucose$GeneticRisk[i]
+  smoker <- diabetes_glucose$Smoker[i]
   BMI <- diabetes_glucose$BMI[i]
   
   #skip rows where either of the values is NA
-  if (is.na(risk) | is.na(BMI)){
+  if (is.na(Smoker) | is.na(BMI)){
     next
   }
     
-  if (risk > 1 & BMI > 35){
-    print(c(risk, BMI, 'High risk'))
-  } else if (risk > 1 | BMI > 35) {
-    print(c(risk, BMI,'Moderate risk'))
+  if (Smoker == 'Smoker' & BMI > 35){
+    print(c(Smoker, BMI, 'High risk'))
+  } else if (Smoker == 'Smoker' | BMI > 35) {
+    print(c(Smoker, BMI,'Moderate risk'))
   } else {
-    print(c(risk, BMI,'Low risk'))
+    print(c(Smoker, BMI,'Low risk'))
   }
 }
 

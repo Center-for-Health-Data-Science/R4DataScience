@@ -58,11 +58,6 @@ diabetes_clinical %>%
   geom_boxplot()
 ```
 
-```{r}
-diabetes_clinical %>% 
-  ggplot(aes(y = GeneticRisk)) + 
-  geom_boxplot()
-```
 Odd: Some `BMI` values are 0. 
 ```{r}
 diabetes_clinical %>% 
@@ -99,9 +94,9 @@ Have a look at `BloodPressure`, `BMI`, `Sex`, and `Diabetes`.
 
 My considerations:
 
--   When modelling, rows with NA's in the variables we want to model should be removed as we cannot model on NAs. Since there are only NA's in `GeneticRisk`, the rows can be left until we need to do a model with `GeneticRisk.`
+-   When modelling, rows with NA's in the variables we want to model should be removed as we cannot model on NAs. Since there are only NA's in `Age`, the rows can be left until we need to do a model with `Age`.
 
--   The uppercase/lowercase mistakes in `Sex` does not influence the interpretability of the variables, so they are simply changes such that the first letter is a capital letter and the remaining letter are lowercase.
+-   The different spellings in `Sex` should be regularized so that there is only spelling for each category. Since most rows have the first letter as capital letter and the remaining letter as lowercase we will use that.
 
 -   There are zeros in `BMI` and `BloodPressure`. These are considered false zeros as is does not make sense that these variables have a value of 0.
 

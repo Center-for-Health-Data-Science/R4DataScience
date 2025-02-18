@@ -109,7 +109,7 @@ ul.task-list li input[type="checkbox"] {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../solutions/solution1.html">Solutions</a></li><li class="breadcrumb-item"><a href="../solutions/solution4_functions.html">Exercise 4, Function - Solution</a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../solutions/solution1.html">Solutions</a></li><li class="breadcrumb-item"><a href="../solutions/solution4_functions.html">Exercise 4, Functions - Solution</a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
     </div>
@@ -215,6 +215,12 @@ ul.task-list li input[type="checkbox"] {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
+  <a href="../exercises/exercise4.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Exercise 4: Scripting in R</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
   <a href="../exercises/exercise5.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Exercise 5: Linear Regression</span></a>
   </div>
@@ -257,7 +263,7 @@ ul.task-list li input[type="checkbox"] {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../solutions/solution4_functions.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text">Exercise 4, Function - Solution</span></a>
+ <span class="menu-text">Exercise 4, Functions - Solution</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -314,7 +320,7 @@ ul.task-list li input[type="checkbox"] {
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../solutions/solution1.html">Solutions</a></li><li class="breadcrumb-item"><a href="../solutions/solution4_functions.html">Exercise 4, Function - Solution</a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../solutions/solution1.html">Solutions</a></li><li class="breadcrumb-item"><a href="../solutions/solution4_functions.html">Exercise 4, Functions - Solution</a></li></ol></nav>
 <div class="quarto-title">
 <h1 class="title">Exercise 4, Functions- Solutions</h1>
 </div>
@@ -333,7 +339,7 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<p>Here is the solution4_functions.R showed:</p>
+<p>Here we show the content inside <code>solution4_functions.R</code>. Remember, the file containing your outsourced functions needs to be an R script (.R), not a quarto document!</p>
 <div class="cell">
 <div class="cell-output cell-output-stdout">
 <pre><code>
@@ -348,136 +354,6 @@ make_boxplot &lt;- function(df, plot_column){
     labs(title = paste("Boxplot of", plot_column)) + 
     theme_bw()
   
-  return(p)
-  
-}
-
-# 2. Function that take dataframe and a numerical value and returns a boxplot. 
-# Required packages: ggplot2
-boxplot &lt;- function(df, var_num){
-  
-  p &lt;- df %&gt;% 
-    ggplot(aes_string(y = var_num)) + 
-    geom_boxplot(fill = "#03579A") +
-    labs(title = paste("Boxplot of", var_num)) + 
-    theme_bw() + 
-    theme(text = element_text(family="Avenir"))
-  
-  return(p)
-  
-}
-
-# 8. Function that take dataframe and a numerical value and returns a density plot. 
-# Required packages: ggplot2
-bar_plot &lt;- function(df, var_cat){
-  
-  p &lt;- df %&gt;% 
-    ggplot(aes_string(x = var_cat)) + 
-    geom_bar(fill = "#03579A") + 
-    labs(title = paste("Barplot of", var_cat)) + 
-    theme_bw() + 
-    theme(text = element_text(family="Avenir"))
-  
-  return(p)
-  
-}
-
-# 11. Like #2 boxplot, with error handling.
-# Required packages: ggplot2
-boxplot_2 &lt;- function(df, var_num){
-  
-  # Check if the numerical variable is numerical 
-  if (!is.numeric(df[[var_num]])){
-    stop('The numerical variable (var_num) must be numcerial.')
-  }
-  
-  p &lt;- df %&gt;% 
-    ggplot(aes_string(y = var_num)) + 
-    geom_boxplot(fill = "#03579A") +
-    labs(title = paste("Boxplot of", var_num)) + 
-    theme_bw() + 
-    theme(text = element_text(family="Avenir"))
-  
-  return(p)
-  
-}
-
-# 14. Like #8 density_plot, with error handling.
-# Required packages: ggplot2
-bar_plot_2 &lt;- function(df, var_cat){
-
-  # Check if the categorical variable is either character or factor
-  if (!(is.character(df[[var_cat]]) | is.factor(df[[var_cat]]))){
-    stop('The categorical variable (var_cat) must be a character or factor.')
-  } 
-  
-  p &lt;- df %&gt;% 
-    ggplot(aes_string(x = var_cat)) + 
-    geom_bar(fill = "#03579A") + 
-    labs(title = paste("Barplot of", var_cat)) + 
-    theme_bw() + 
-    theme(text = element_text(family="Avenir"))
-  
-  return(p)
-  
-}
-
-# 17. Function that takes an ID and outputs a graph of the glucose measurement over time.
-# Required packages: dplyr, ggplot2
-glucose_measurement_id_plot &lt;- function(df, id){
-  
-  # Check if id is character
-  if (!is.character(id)){
-    stop('The ID must be a character.')
-  } 
-  
-  p &lt;- df %&gt;% 
-    filter(ID == id) %&gt;% 
-    ggplot(aes_string(x = "Measurement", 
-                      y = "`Glucose (mmol/L)`")) +
-    geom_point(color = "#03579A") + 
-    geom_line(color = "#03579A") + 
-    labs(title = paste("Oral Glucose Tolerance Test of ID:", id)) + 
-    theme_bw() +
-    theme(text = element_text(family="Avenir")) 
-  
-  return(p)
-  
-}
-
-# 19. This function takes a categorical variable and a dataframe as input, calculates the mean glucose content for each category and measurement time, and outputs a line graph showing the glucose measurements over time.
-# Required packages: dplyr, ggplot2
-glucose_measurement_mean_plot &lt;- function(df, var_cat){
-
-  # Check if the categorical variable is either character or factor
-  if (!(is.character(df[[var_cat]]) | is.factor(df[[var_cat]]))){
-    stop('The categorical variable (var_cat) must be a character or factor.')
-  } 
-  
-  # Calculate the mean glucose values for each category and measurement time
-  glucose_group_mean &lt;- df %&gt;% 
-    group_by(Measurement, .data[[var_cat]]) %&gt;%
-    summarize(glucose_mean = mean(`Glucose (mmol/L)`), .groups = "drop") %&gt;%
-    ungroup()
-  
-  # Dynamically select colors based on the number of unique categories
-  colors &lt;- c("#03579A", "#3986C7", "#F9DA8C", "#404857", "#A41E23")
-  n_colors &lt;- df[[var_cat]] %&gt;% unique() %&gt;% length()
-  colors &lt;- colors[1:n_colors]
-  
-  # Create a ggplot object to visualize the mean glucose measurements
-  p &lt;- glucose_group_mean %&gt;%
-    ggplot(aes_string(x = "Measurement",
-                      y = "glucose_mean", 
-                      color = var_cat)) +
-    geom_point() +
-    geom_line() +
-    scale_color_manual(values = colors) +
-    labs(title = paste("Mean Oral Glucose Tolerance Test Across", var_cat), 
-         y = "Mean Glucose (mmol/L)") +
-    theme_bw() +
-    theme(text = element_text(family="Avenir"))
-
   return(p)
   
 }</code></pre>

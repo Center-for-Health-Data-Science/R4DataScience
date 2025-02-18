@@ -11,13 +11,14 @@ project:
 ```{r message=FALSE, warning=FALSE}
 library(tidyverse)
 library(ModelMetrics)
+library(readxl)
 ```
 ## Part 1: Linear regression
 
 2. Load the data `boston.csv` 
 
 ```{r}
-df <- read.csv('../data/boston.csv')
+df <- as_tibble(read.csv('../data/boston.csv'))
 head(df)
 ```
 
@@ -60,7 +61,7 @@ There is a scale function, see `?scale()`.
 df <- df %>%
   mutate(across(where(is.numeric), scale, .names = "standardized_{.col}"))
 
-df
+head(df)
 ```
 
 ```{r}
@@ -81,5 +82,6 @@ All significance observations stay the same since scaling can never affect that.
 
 ## Part 2: Logistic regression
 
+For this part we will use the diabetes data since it has a categorical outcome (Diabetes yes or no). We will not use the oral Glucose measurements as predictors since this is literally how you define diabetes, so we're loading the dataset without them.
 
 

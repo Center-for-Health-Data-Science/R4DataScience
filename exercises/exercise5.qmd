@@ -8,13 +8,15 @@ project:
 
 ## Introduction
 
-In this exercise you will fit and interpret a linear regression model.
-
-### Getting started
+In this exercise you will fit and interpret simple models.
 
 1. Load packages
 
-2. Load the data `boston.csv` 
+## Part 1: Linear regression
+
+We will use the dataset described below to fit a linear regression model. 
+
+2. Load the data `boston.csv` and inspect it.
 
 This dataset describes conditions surrounding the Boston housing market in the 1970s. Each row describes a zone in the Boston area (so there is more than one house in each row).
 
@@ -48,3 +50,6 @@ The columns are:
 There is a scale function, see `?scale()`.
 :::
 
+## Part 2: Logistic regression 
+
+For this 

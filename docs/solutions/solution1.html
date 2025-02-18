@@ -249,6 +249,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
+  <a href="../exercises/exercise4.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Exercise 4: Scripting in R</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
   <a href="../exercises/exercise5.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Exercise 5: Linear Regression</span></a>
   </div>
@@ -291,7 +297,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../solutions/solution4_functions.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Exercise 4, Function - Solution</span></a>
+ <span class="menu-text">Exercise 4, Functions - Solution</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -393,16 +399,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>diabetes_clinical <span class="ot">&lt;-</span> <span class="fu">read_excel</span>(<span class="st">'../data/diabetes_clinical_toy_messy.xlsx'</span>)</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(diabetes_clinical)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 6 × 9
-     ID Sex      Age BloodPressure GeneticRisk   BMI PhysicalActivity Smoker 
-  &lt;dbl&gt; &lt;chr&gt;  &lt;dbl&gt;         &lt;dbl&gt;       &lt;dbl&gt; &lt;dbl&gt;            &lt;dbl&gt; &lt;chr&gt;  
-1  9046 Male      34            84       0.619  24.7               93 Unknown
-2 51676 Male      25            74       0.591  22.5              102 Unknown
-3 31112 Male      30             0       0.839  32.3               75 Former 
-4 60182 Male      50            80       0.178  34.5               98 Unknown
-5  1665 Female    27            60       0.206  26.3               82 Never  
-6 56669 Male      35            84       0.286  35                 58 Smoker 
-# ℹ 1 more variable: Diabetes &lt;dbl&gt;</code></pre>
+<pre><code># A tibble: 6 × 8
+     ID Sex      Age BloodPressure   BMI PhysicalActivity Smoker  Diabetes
+  &lt;dbl&gt; &lt;chr&gt;  &lt;dbl&gt;         &lt;dbl&gt; &lt;dbl&gt;            &lt;dbl&gt; &lt;chr&gt;      &lt;dbl&gt;
+1  9046 Male      34            84  24.7               93 Unknown        0
+2 51676 Male      25            74  22.5              102 Unknown        0
+3 31112 Male      30             0  32.3               75 Former         1
+4 60182 Male      50            80  34.5               98 Unknown        1
+5  1665 Female    27            60  26.3               82 Never          0
+6 56669 Male      35            84  35                 58 Smoker         1</code></pre>
 </div>
 </div>
 </section>
@@ -416,11 +421,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">colSums</span>(<span class="fu">is.na</span>(diabetes_clinical))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>              ID              Sex              Age    BloodPressure 
-               0                0                0                0 
-     GeneticRisk              BMI PhysicalActivity           Smoker 
-               5                0                0                0 
-        Diabetes 
-               0 </code></pre>
+               0                0                3                0 
+             BMI PhysicalActivity           Smoker         Diabetes 
+               3                0                0                0 </code></pre>
 </div>
 </div>
 <ol start="4" type="1">
@@ -453,6 +456,10 @@ Female FEMALE   male   Male
 <div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>diabetes_clinical <span class="sc">%&gt;%</span> </span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">y =</span> Age)) <span class="sc">+</span> </span>
 <span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: Removed 3 rows containing non-finite outside the scale range
+(`stat_boxplot()`).</code></pre>
+</div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -463,9 +470,9 @@ Female FEMALE   male   Male
 </div>
 <p>Odd: Some <code>BloodPressure</code> values are 0.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>diabetes_clinical <span class="sc">%&gt;%</span> </span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">y =</span> BloodPressure)) <span class="sc">+</span> </span>
-<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>diabetes_clinical <span class="sc">%&gt;%</span> </span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">y =</span> BloodPressure)) <span class="sc">+</span> </span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -474,31 +481,19 @@ Female FEMALE   male   Male
 </div>
 </div>
 </div>
+<p>Odd: Some <code>BMI</code> values are 0.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>diabetes_clinical <span class="sc">%&gt;%</span> </span>
-<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">y =</span> GeneticRisk)) <span class="sc">+</span> </span>
-<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>diabetes_clinical <span class="sc">%&gt;%</span> </span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">y =</span> BMI)) <span class="sc">+</span> </span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
-<pre><code>Warning: Removed 5 rows containing non-finite outside the scale range
+<pre><code>Warning: Removed 3 rows containing non-finite outside the scale range
 (`stat_boxplot()`).</code></pre>
 </div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
 <p><img src="solution1_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid figure-img" width="672"></p>
-</figure>
-</div>
-</div>
-</div>
-<p>Odd: Some <code>BMI</code> values are 0.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>diabetes_clinical <span class="sc">%&gt;%</span> </span>
-<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">y =</span> BMI)) <span class="sc">+</span> </span>
-<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="solution1_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -510,7 +505,7 @@ Female FEMALE   male   Male
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="solution1_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="solution1_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -547,8 +542,8 @@ Hint
 </div>
 <p>My considerations:</p>
 <ul>
-<li><p>When modelling, rows with NA’s in the variables we want to model should be removed as we cannot model on NAs. Since there are only NA’s in <code>GeneticRisk</code>, the rows can be left until we need to do a model with <code>GeneticRisk.</code></p></li>
-<li><p>The uppercase/lowercase mistakes in <code>Sex</code> does not influence the interpretability of the variables, so they are simply changes such that the first letter is a capital letter and the remaining letter are lowercase.</p></li>
+<li><p>When modelling, rows with NA’s in the variables we want to model should be removed as we cannot model on NAs. Since there are only NA’s in <code>Age</code>, the rows can be left until we need to do a model with <code>Age</code>.</p></li>
+<li><p>The different spellings in <code>Sex</code> should be regularized so that there is only spelling for each category. Since most rows have the first letter as capital letter and the remaining letter as lowercase we will use that.</p></li>
 <li><p>There are zeros in <code>BMI</code> and <code>BloodPressure</code>. These are considered false zeros as is does not make sense that these variables have a value of 0.</p></li>
 <li><p><code>Diabetes</code> is changed to factor.</p></li>
 </ul>
@@ -577,7 +572,7 @@ Hint
 <div class="cell">
 <div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">nrow</span>(diabetes_clinical_clean)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 493</code></pre>
+<pre><code>[1] 490</code></pre>
 </div>
 </div>
 </section>
@@ -688,7 +683,7 @@ Hint
 <div class="cell">
 <div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a><span class="fu">nrow</span>(diabetes_join)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 493</code></pre>
+<pre><code>[1] 490</code></pre>
 </div>
 </div>
 <ol start="10" type="1">

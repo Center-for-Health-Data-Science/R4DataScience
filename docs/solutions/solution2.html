@@ -249,6 +249,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
+  <a href="../exercises/exercise4.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Exercise 4: Scripting in R</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
   <a href="../exercises/exercise5.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Exercise 5: Linear Regression</span></a>
   </div>
@@ -291,7 +297,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../solutions/solution4_functions.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Exercise 4, Function - Solution</span></a>
+ <span class="menu-text">Exercise 4, Functions - Solution</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -537,17 +543,16 @@ Hint
 <span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(diabetes_glucose)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 6 × 13
-  ID    Sex     Age BloodPressure GeneticRisk   BMI PhysicalActivity Smoker 
-  &lt;fct&gt; &lt;chr&gt; &lt;dbl&gt;         &lt;dbl&gt;       &lt;dbl&gt; &lt;dbl&gt;            &lt;dbl&gt; &lt;chr&gt;  
-1 9046  Male     34            84       0.619  24.7               93 Unknown
-2 9046  Male     34            84       0.619  24.7               93 Unknown
-3 9046  Male     34            84       0.619  24.7               93 Unknown
-4 51676 Male     25            74       0.591  22.5              102 Unknown
-5 51676 Male     25            74       0.591  22.5              102 Unknown
-6 51676 Male     25            74       0.591  22.5              102 Unknown
-# ℹ 5 more variables: Diabetes &lt;chr&gt;, Married &lt;chr&gt;, Work &lt;chr&gt;,
-#   Measurement &lt;fct&gt;, `Glucose (mmol/L)` &lt;dbl&gt;</code></pre>
+<pre><code># A tibble: 6 × 12
+  ID    Sex     Age BloodPressure   BMI PhysicalActivity Smoker Diabetes Married
+  &lt;fct&gt; &lt;chr&gt; &lt;dbl&gt;         &lt;dbl&gt; &lt;dbl&gt;            &lt;dbl&gt; &lt;chr&gt;  &lt;chr&gt;    &lt;chr&gt;  
+1 9046  Male     34            84  24.7               93 Unkno… 0        Yes    
+2 9046  Male     34            84  24.7               93 Unkno… 0        Yes    
+3 9046  Male     34            84  24.7               93 Unkno… 0        Yes    
+4 51676 Male     25            74  22.5              102 Unkno… 0        No     
+5 51676 Male     25            74  22.5              102 Unkno… 0        No     
+6 51676 Male     25            74  22.5              102 Unkno… 0        No     
+# ℹ 3 more variables: Work &lt;chr&gt;, Measurement &lt;fct&gt;, `Glucose (mmol/L)` &lt;dbl&gt;</code></pre>
 </div>
 </div>
 <ol start="7" type="1">
@@ -607,7 +612,7 @@ Hint
   Measurement  mean
   &lt;fct&gt;       &lt;dbl&gt;
 1 0            8.06
-2 60           9.74
+2 60           9.73
 3 120         11.1 </code></pre>
 </div>
 </div>
@@ -635,13 +640,13 @@ Hint
 <span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="fu">across</span>(<span class="fu">where</span>(is.numeric), <span class="fu">list</span>(<span class="at">mean=</span>mean, <span class="at">sd=</span>sd), </span>
 <span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>                   <span class="at">.names =</span> <span class="st">"{.col}-{.fn}"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 1 × 12
-  `Age-mean` `Age-sd` `BloodPressure-mean` `BloodPressure-sd` `GeneticRisk-mean`
-       &lt;dbl&gt;    &lt;dbl&gt;                &lt;dbl&gt;              &lt;dbl&gt;              &lt;dbl&gt;
-1       33.8     11.4                 72.7               12.9                 NA
-# ℹ 7 more variables: `GeneticRisk-sd` &lt;dbl&gt;, `BMI-mean` &lt;dbl&gt;, `BMI-sd` &lt;dbl&gt;,
-#   `PhysicalActivity-mean` &lt;dbl&gt;, `PhysicalActivity-sd` &lt;dbl&gt;,
-#   `Glucose (mmol/L)-mean` &lt;dbl&gt;, `Glucose (mmol/L)-sd` &lt;dbl&gt;</code></pre>
+<pre><code># A tibble: 1 × 10
+  `Age-mean` `Age-sd` `BloodPressure-mean` `BloodPressure-sd` `BMI-mean`
+       &lt;dbl&gt;    &lt;dbl&gt;                &lt;dbl&gt;              &lt;dbl&gt;      &lt;dbl&gt;
+1         NA       NA                 72.7               12.9       30.2
+# ℹ 5 more variables: `BMI-sd` &lt;dbl&gt;, `PhysicalActivity-mean` &lt;dbl&gt;,
+#   `PhysicalActivity-sd` &lt;dbl&gt;, `Glucose (mmol/L)-mean` &lt;dbl&gt;,
+#   `Glucose (mmol/L)-sd` &lt;dbl&gt;</code></pre>
 </div>
 </div>
 <ol start="10" type="1">
@@ -677,16 +682,16 @@ Hint
 <span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a><span class="co">#relocate the new nested column to after BMI so we can actually see it</span></span>
 <span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(<span class="fu">relocate</span>(diabetes_glucose, OGTT, <span class="at">.after =</span> BMI))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 6 × 12
-  ID    Sex      Age BloodPressure GeneticRisk   BMI OGTT     PhysicalActivity
-  &lt;fct&gt; &lt;chr&gt;  &lt;dbl&gt;         &lt;dbl&gt;       &lt;dbl&gt; &lt;dbl&gt; &lt;list&gt;              &lt;dbl&gt;
-1 9046  Male      34            84       0.619  24.7 &lt;tibble&gt;               93
-2 51676 Male      25            74       0.591  22.5 &lt;tibble&gt;              102
-3 60182 Male      50            80       0.178  34.5 &lt;tibble&gt;               98
-4 1665  Female    27            60       0.206  26.3 &lt;tibble&gt;               82
-5 56669 Male      35            84       0.286  35   &lt;tibble&gt;               58
-6 53882 Female    31            78       1.22   43.3 &lt;tibble&gt;               59
-# ℹ 4 more variables: Smoker &lt;chr&gt;, Diabetes &lt;chr&gt;, Married &lt;chr&gt;, Work &lt;chr&gt;</code></pre>
+<pre><code># A tibble: 6 × 11
+  ID    Sex      Age BloodPressure   BMI OGTT     PhysicalActivity Smoker 
+  &lt;fct&gt; &lt;chr&gt;  &lt;dbl&gt;         &lt;dbl&gt; &lt;dbl&gt; &lt;list&gt;              &lt;dbl&gt; &lt;chr&gt;  
+1 9046  Male      34            84  24.7 &lt;tibble&gt;               93 Unknown
+2 51676 Male      25            74  22.5 &lt;tibble&gt;              102 Unknown
+3 60182 Male      50            80  34.5 &lt;tibble&gt;               98 Unknown
+4 1665  Female    27            60  26.3 &lt;tibble&gt;               82 Never  
+5 56669 Male      35            84  35   &lt;tibble&gt;               58 Smoker 
+6 53882 Female    31            78  43.3 &lt;tibble&gt;               59 Smoker 
+# ℹ 3 more variables: Diabetes &lt;chr&gt;, Married &lt;chr&gt;, Work &lt;chr&gt;</code></pre>
 </div>
 </div>
 <ol start="11" type="1">

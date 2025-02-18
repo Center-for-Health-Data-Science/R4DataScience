@@ -6,7 +6,7 @@ project:
  output-dir: ../docs
 ---
 
-Here is the solution4_functions.R showed:
+Here we show the content inside `solution4_functions.R`. Remember, the file containing your outsourced functions needs to be an R script (.R), not a quarto document!
 
 ```{r echo=FALSE}
 # Include the content of the .R file

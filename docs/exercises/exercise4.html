@@ -143,7 +143,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item">Exercise 4 - Scripting in R</li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../exercises/exercise0.html">Exercises</a></li><li class="breadcrumb-item"><a href="../exercises/exercise4.html">Exercise 4: Scripting in R</a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
     </div>
@@ -216,13 +216,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="false">
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true">
  <span class="menu-text">Exercises</span></a>
-          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="false" aria-label="Toggle section">
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
-      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 ">  
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../exercises/exercise0.html" class="sidebar-item-text sidebar-link">
@@ -245,6 +245,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <div class="sidebar-item-container"> 
   <a href="../exercises/exercise3.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Exercise 3: Exploratory Data Analysis</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../exercises/exercise4.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">Exercise 4: Scripting in R</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -291,7 +297,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../solutions/solution4_functions.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Exercise 4, Function - Solution</span></a>
+ <span class="menu-text">Exercise 4, Functions - Solution</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -358,7 +364,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default">
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../exercises/exercise0.html">Exercises</a></li><li class="breadcrumb-item"><a href="../exercises/exercise4.html">Exercise 4: Scripting in R</a></li></ol></nav>
 <div class="quarto-title">
 <h1 class="title">Exercise 4 - Scripting in R</h1>
 </div>
@@ -389,21 +395,21 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>diabetes_glucose <span class="ot">&lt;-</span> <span class="fu">read_rds</span>(<span class="st">'../out/diabetes_glucose.rds'</span>)</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>diabetes_glucose</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 493 × 12
-   ID    Sex      Age BloodPressure GeneticRisk   BMI PhysicalActivity Smoker 
-   &lt;fct&gt; &lt;chr&gt;  &lt;dbl&gt;         &lt;dbl&gt;       &lt;dbl&gt; &lt;dbl&gt;            &lt;dbl&gt; &lt;chr&gt;  
- 1 9046  Male      34            84       0.619  24.7               93 Unknown
- 2 51676 Male      25            74       0.591  22.5              102 Unknown
- 3 60182 Male      50            80       0.178  34.5               98 Unknown
- 4 1665  Female    27            60       0.206  26.3               82 Never  
- 5 56669 Male      35            84       0.286  35                 58 Smoker 
- 6 53882 Female    31            78       1.22   43.3               59 Smoker 
- 7 10434 Male      52            86       1.15   33.3               58 Never  
- 8 27419 Female    54            78       0.692  35.2               74 Former 
- 9 60491 Female    41            90       0.451  39.8               67 Smoker 
-10 12109 Female    36            82       0.18   30.8               81 Smoker 
-# ℹ 483 more rows
-# ℹ 4 more variables: Diabetes &lt;chr&gt;, Married &lt;chr&gt;, Work &lt;chr&gt;, OGTT &lt;list&gt;</code></pre>
+<pre><code># A tibble: 490 × 11
+   ID    Sex      Age BloodPressure   BMI PhysicalActivity Smoker  Diabetes
+   &lt;fct&gt; &lt;chr&gt;  &lt;dbl&gt;         &lt;dbl&gt; &lt;dbl&gt;            &lt;dbl&gt; &lt;chr&gt;   &lt;chr&gt;   
+ 1 9046  Male      34            84  24.7               93 Unknown 0       
+ 2 51676 Male      25            74  22.5              102 Unknown 0       
+ 3 60182 Male      50            80  34.5               98 Unknown 1       
+ 4 1665  Female    27            60  26.3               82 Never   0       
+ 5 56669 Male      35            84  35                 58 Smoker  1       
+ 6 53882 Female    31            78  43.3               59 Smoker  1       
+ 7 10434 Male      52            86  33.3               58 Never   1       
+ 8 27419 Female    54            78  35.2               74 Former  1       
+ 9 60491 Female    41            90  39.8               67 Smoker  1       
+10 12109 Female    36            82  30.8               81 Smoker  1       
+# ℹ 480 more rows
+# ℹ 3 more variables: Married &lt;chr&gt;, Work &lt;chr&gt;, OGTT &lt;list&gt;</code></pre>
 </div>
 </div>
 </section>
