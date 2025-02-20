@@ -243,8 +243,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../exercises/exercise3.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Exercise 3: Exploratory Data Analysis</span></a>
+  <a href="../exercises/exercise3A.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Exercise 3 A: Exploratory Data Analysis - Plotting</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../exercises/exercise3B.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Exercise 3 B: Exploratory Data Analysis - PCA</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -284,8 +290,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../solutions/solution3.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Exercise 3 - Solution</span></a>
+  <a href="../solutions/solution3A.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Exercise 3 A - Solution</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../solutions/solution3B.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Exercise 3 B - Solution</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -385,13 +397,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h2 class="anchored" data-anchor-id="getting-started">Getting started</h2>
 <ol type="1">
 <li><p>Load packages.</p></li>
-<li><p>Load the joined diabetes data set you created in exercise 1 and the glucose dataset from the data folder.</p></li>
+<li><p>Load the joined diabetes data set you created in exercise 1 (e.g.&nbsp;“diabetes_join.xlsx”) and the glucose dataset <code>df_glucose.xlsx</code> from the data folder.</p></li>
 </ol>
 </section>
 <section id="wrangling" class="level2">
 <h2 class="anchored" data-anchor-id="wrangling">Wrangling</h2>
 <ol start="3" type="1">
-<li><p>Have a look at the glucose dataset. It has three columns with measurements from a Oral Glucose Tolerance Test where blood glucose is measured at fasting (Glucose_0), 6 hours after glucose intake (Glucose_6), and 12 hours after (Glucose_12). The last columns is an ID column. Change the data type of the ID column to <code>factor</code> in both <code>diabetes_join</code> and <code>df_glucose</code>.</p></li>
+<li><p>Have a look at the glucose dataset. It has three columns with measurements from a Oral Glucose Tolerance Test where blood glucose is measured at fasting (Glucose_0), 1 hour/60 mins after glucose intake (Glucose_6), and 2 hours/120 mins after (Glucose_120). The last columns is an ID column. Change the data type of the ID column to <code>factor</code> in both <code>diabetes_join</code> and <code>df_glucose</code>.</p></li>
 <li><p>Restructure the glucose dataset into a long format. Name the column that describes which measurement the row refers to, i.e.&nbsp;Glucose_0, Glucose_60 or Glucose_120, <code>Measurement</code>. How many rows are there per ID? Does that make sense?</p></li>
 </ol>
 <div class="callout callout-style-default callout-tip callout-titled">
@@ -471,7 +483,7 @@ Hint
 </div>
 <div id="callout-4" class="callout-4-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<p>You will need to use <code>group_by()</code>, and <code>summerize()</code>.</p>
+<p>You will need to use <code>group_by()</code>, and <code>summerise()</code>.</p>
 </div>
 </div>
 </div>

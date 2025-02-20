@@ -22,7 +22,7 @@ In this exercise you will practice your R skills by loading, inspecting and clea
 
 3.  How many missing values (NA's) are there in each column?
 
-4.  Check the distribution of each of the variables. Consider that they are of different data types. Do any of the distributions seem odd to you?
+4.  Check the distribution of each of the variables. Consider that the variables are of different classes. Do any values strike you as odd?
 
 ## Clean up the data
 
@@ -42,7 +42,7 @@ Consider the following:
 
 ::: {.callout-tip collapse="true"}
 ## Hint
-Have a look at `BloodPressure`, `BMI`, `Sex`, and `Diabetes`. 
+Have a look at `BloodPressure`, `BMI`, `Sex`, `Diabetes` and `ID`. 
 :::
 
 ## Meta Data

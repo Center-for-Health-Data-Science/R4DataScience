@@ -12,6 +12,7 @@ In this section we will look at some differences between base R and tidyverse an
 
 ```{r warning=FALSE, message=FALSE}
 library(tidyverse)
+library(ggforce)
 ```
 
 ## Load Dataset
@@ -33,9 +34,11 @@ Table format in tidyverse is called tibble. Have a look at the object in the ter
 class(df_tidyverse)
 ```
 
-## Base R and Tidyverse
+## Accessing and manipulating Data with Base R and Tidyverse
 
 Many operations in R can be done in several ways. We illustrate here the base R and tidyverse ways to achieve common operations. 
+
+### Accessing Data
 
 Access the `Age` column:
 
@@ -57,6 +60,21 @@ df_tidyverse$Age
 # Tidyverse 
 df_tidyverse %>% pull(Age)
 ```
+
+
+### Manipulating Data
+
+Add a column. 
+
+```{r results="hide"}
+# Base R 
+df_baseR$mood <- "happy"
+
+# Tidyverse 
+df_tidyverse <- df_tidyverse %>% 
+  mutate(mood = "happy")
+```
+
 
 Add a column containing the difference in sales in 2022 and 2022.
 
@@ -80,6 +98,38 @@ df_tidyverse <- df_tidyverse %>%
   select(-sales_diff)
 ```
 
+Adding a column with content based on a condition with `ifelse`. 
+
+```{r results="hide"}
+# Base R 
+df_baseR$raise <- ifelse(df_baseR$sales_2023 > df_baseR$sales_2022, "yes", "no")
+
+# Tidyverse 
+df_tidyverse <- df_tidyverse %>% 
+  mutate(raise = ifelse(sales_2023 > sales_2022, "yes", "no"))
+```
+
+Extension of `ifelse`: `case_when`
+
+```{r results="hide"}
+# Base R 
+df_baseR$group <- ifelse(df_baseR$Age < 30 & df_baseR$Sex == "Female", "young_female",
+                  ifelse(df_baseR$Age < 30 & df_baseR$Sex == "Male", "young_male",
+                  ifelse(df_baseR$Age >= 30 & df_baseR$Sex == "Female", "mature_female",
+                  ifelse(df_baseR$Age >= 30 & df_baseR$Sex == "Male", "mature_male", NA))))
+
+# Tidyverse 
+df_tidyverse <- df_tidyverse %>% 
+  mutate(group = case_when(Age < 30 & Sex == "Female" ~ "young_female",
+                           Age < 30 & Sex == "Male" ~ "young_male",
+                           Age >= 30 & Sex == "Female" ~ "mature_female",
+                           Age >= 30 & Sex == "Male" ~ "mature_male", 
+                           .default = NA))
+```
+
+
+### Subestting Data
+
 Select columns with sales numbers.
 
 ```{r results="hide"}
@@ -102,7 +152,7 @@ df_tidyverse %>%
   filter(Age > 25)
 ```
 
-Filter row for people that are 30 years old or younger and have sales in 2022 over 200.
+Filter rows for people that are 30 years old or younger and have sales in 2022 over 200.
 
 ```{r results="hide"}
 # Base R 
@@ -114,42 +164,51 @@ df_tidyverse %>%
   filter(Age <= 30, sales_2022 > 200)
 ```
 
-Add column. 
+Filter rows for people that are 30 years old or younger and have sales in 2022 over 200, then and select the Name and Sex column. This far, do you prefer the base R or tidyverse way? Do you see pros and cons with both?
+
 ```{r results="hide"}
-# Base R 
-df_baseR$mood <- "happy"
+# Base R, NAs not removed
+df_baseR[!is.na(df_baseR$Age) & !is.na(df_baseR$sales_2022) &
+         df_baseR$Age <= 30 & df_baseR$sales_2022 > 200 , c('Age', 'Sex')]
+
+# Shorter Base R if there are no NAs:
+#df_baseR_no_na[df_baseR_no_na$Age <= 30 & df_baseR_no_na$sales_2022 > 200 , c('Age', 'Sex')]
 
 # Tidyverse 
-df_tidyverse <- df_tidyverse %>% 
-  mutate(mood = "happy")
+df_tidyverse %>% 
+  filter(Age <= 30, sales_2022 > 200) %>% 
+  select(Age, Sex)
 ```
 
-Conditions using `ifelse`. 
+
+### Joining Dataframes
+
+The `df_location` data frame contains information about the cities of the sales people. 
+
+```{r results="hide"}
+set.seed(101)
+
+df_location <- data.frame(
+  ID = sample(10),
+  City = c("New York", "LA", "New York", "Chicago", "Miami", "Miami", "LA", "Chicago", "LA", "New York")
+)
+
+head(df_location)
+```
+
+Join `df` and `df_location`. For base R we use `merge` and for tidyverse we use `left_join`.
+
 ```{r results="hide"}
 # Base R 
-df_baseR$raise <- ifelse(df_baseR$sales_2023 > df_baseR$sales_2022, "yes", "no")
+df_baseR_merged <- merge(df_baseR, df_location, by = 'ID')
+head(df_baseR_merged)
 
 # Tidyverse 
-df_tidyverse <- df_tidyverse %>% 
-  mutate(raise = ifelse(sales_2023 > sales_2022, "yes", "no"))
+df_tidyverse_join <- df_tidyverse %>% left_join(df_location, by = 'ID')
+head(df_tidyverse_join)
 ```
 
-Conditions using `case_when`. 
-```{r results="hide"}
-# Base R 
-df_baseR$group <- ifelse(df_baseR$Age < 30 & df_baseR$Sex == "Female", "young_female",
-                  ifelse(df_baseR$Age < 30 & df_baseR$Sex == "Male", "young_male",
-                  ifelse(df_baseR$Age >= 30 & df_baseR$Sex == "Female", "mature_female",
-                  ifelse(df_baseR$Age >= 30 & df_baseR$Sex == "Male", "mature_male", NA))))
-
-# Tidyverse 
-df_tidyverse <- df_tidyverse %>% 
-  mutate(group = case_when(Age < 30 & Sex == "Female" ~ "young_female",
-                           Age < 30 & Sex == "Male" ~ "young_male",
-                           Age >= 30 & Sex == "Female" ~ "mature_female",
-                           Age >= 30 & Sex == "Male" ~ "mature_male", 
-                           .default = NA))
-```
+### Investigating Data
 
 Check which columns have NAs.
 
@@ -181,48 +240,25 @@ df_baseR[order(-df_baseR$sales_2022) ,]
 df_tidyverse %>% arrange(desc(sales_2022))
 ```
 
-Do the filtering in 4. and select the Name and Sex column. This far, do you prefer the base R or tidyverse way? Do you see pros and cons with both?
+Check variable type:
 
-```{r results="hide"}
-# Base R, NAs not removed
-df_baseR[!is.na(df_baseR$Age) & !is.na(df_baseR$sales_2022) &
-         df_baseR$Age <= 30 & df_baseR$sales_2022 > 200 , c('Age', 'Sex')]
+```{r}
+#base R
+class(df_baseR$Age)
 
-# Base R, NAs removed
-df_baseR_no_na[df_baseR_no_na$Age <= 30 & df_baseR_no_na$sales_2022 > 200 , c('Age', 'Sex')]
-
-# Tidyverse 
-df_tidyverse %>% 
-  filter(Age <= 30, sales_2022 > 200) %>% 
-  select(Age, Sex)
+#tidyserve
+df_tidyverse_join %>%
+  map_chr(typeof)
 ```
 
-The `df_location` data frame contains information about the cities of the sales people. 
+You also see variable types displayed under the column name in tibbles:
 
-```{r results="hide"}
-set.seed(101)
-
-df_location <- data.frame(
-  ID = sample(10),
-  City = c("New York", "LA", "New York", "Chicago", "Miami", "Miami", "LA", "Chicago", "LA", "New York")
-)
-
-head(df_location)
-```
-
-Join `df` and `df_location`. For base R we use `merge` and for tidyverse we use `left_join`.
-
-```{r results="hide"}
-# Base R 
-df_baseR_merged <- merge(df_baseR, df_location, by = 'ID')
-head(df_baseR_merged)
-
-# Tidyverse 
-df_tidyverse_join <- df_tidyverse %>% left_join(df_location, by = 'ID')
+```{r}
 head(df_tidyverse_join)
 ```
 
-Count the number of people in each of the unique cities.
+
+Counting the number of occurrences for each level of a categorical variable.
 
 ```{r results="hide"}
 # Base R
@@ -232,11 +268,51 @@ table(df_baseR_merged$City)
 df_tidyverse_join %>% count(City)
 ```
 
+Checking the range of a variable.
+
+```{r}
+# Base R
+range(df_baseR$Age, na.rm = TRUE)
+
+# Tidyverse 
+df_tidyverse %>%
+  summarise(min_value = min(Age, na.rm = TRUE), 
+            max_value = max(Age, na.rm = TRUE))
+```
+
+### Plotting distributions
+
+For continuous variables we may want to see how they are distributed:
+
+```{r}
+#base R
+
+#no native violin plots, but you could use the vioplot package
+
+hist(df_tidyverse_join$Age)
+```
+
+
+
+```{r}
+#tidyverse: 
+
+ggplot(df_tidyverse_join, aes(x=1,y=Age)) +
+  geom_violin()
+  #if you want to add dots for the actual data points
+  #geom_sina()
+
+ggplot(df_tidyverse_join, aes(x=Age)) +
+  geom_histogram(bins = 5)
+
+```
+
 ## String manipulation 
 
 We will do string manipulation the tidyverse way. 
 
 The `paste` function concatenates two strings to one. 
+
 ```{r}
 paste('Alice', 'Hansen')
 ```
@@ -259,7 +335,7 @@ df_tidyverse_join <- df_tidyverse_join %>%
 head(df_tidyverse_join)
 ```
 
-We use the `str_split` function to split a string into multiple parts in a list. 
+We can use the `str_split` function to split a string into multiple parts in a list. 
 ```{r}
 str_split('Alice Hansen', pattern = ' ')
 ```

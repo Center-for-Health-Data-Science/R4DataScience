@@ -1,0 +1,65 @@
+---
+title: "Exercise 3 B: Exploratory Data Analysis (EDA) - PCA"
+format: html
+project:
+ type: website
+ output-dir: ../docs
+---
+
+This exercise deals with creating and visualizing a principal component analysis (PCA). For a quick introduction to the main idea behind PCA you can have a look at [this video](https://www.youtube.com/watch?v=HMOI_lkzW08&t=194).  
+
+## Getting started 
+
+1. Load packages. 
+
+2. Load data from the `.rds` file you created in Exercise 2.
+
+## PCA 
+
+For this exercise we will use this [tutorial](https://cran.r-project.org/web/packages/ggfortify/vignettes/plot_pca.html) to make a principal component analysis (PCA). First, we perform some preprocessing to get our data into the right format. 
+
+3. Let's start by unnesting the OGTT data and using pivot wider so that each Glucose measurement time point gets its own column (again). 
+
+4. Have a look at your unnested diabetes data set. Can you use all the variables to perform PCA? Subset the dataset to only include the relevant variables.
+
+::: {.callout-tip collapse="true"}
+## Hint
+PCA can only be performed on numerical values. Extract these (except ID!) from the dataset. 
+Numerical columns can easily be selected with the `where(is.numeric)` helper.
+:::
+
+5. PCA cannot handle NA's in the dataset. Remove all rows with NA in any column in your numerical subset. 
+Then, go back to the original unnested data `diabetes_glucose_unnest` (or what you have called it) and also here drop rows that have NAs in the numerical columns (so the same rows you dropped from the numeric subset).This is important because we want to use (categorical) columns present in the original data to later color the resulting PCA, so the two dataframes (original and only numeric columns) need to be aligned and contain the same rows.
+
+
+Now our data is ready to make a PCA.
+
+6. Calculate the PCA by running `prcomp` on our prepared data (see the tutorial). Then, create a plot of the resulting PCA (also shown in tutorial).
+
+
+7. Color your PCA plot and add loadings. Think about which variable you want to color by. Remember to refer to the dataset that has this variable (probably not your numeric subset!)
+
+8. Add a ggplot `theme` and title to your plot and save it. 
+
+
+9. Calculate the variance explained by each of the PC's using the following formula:
+
+$$
+\text{Variance Explained} = \frac{\text{sdev}^2}{\sum \text{sdev}^2} \times 100
+$$
+
+::: {.callout-tip collapse="true"}
+## Hint
+
+You can access the standard deviation from the PCA object like this: `pca_res$sdev`. 
+
+:::
+
+10. Create a two column data-frame with the names of the PC's (PC1, PC2, ect) in one column and the variance explained by that PC in the other column. 
+
+
+11. Now create a bar plot (using `geom_col`), showing for each PC the amount of explained variance. This type of plot is called a scree plot.  
+
+
+12. Lastly, render you quarto document and review the resulting html file.
+

@@ -12,6 +12,8 @@ project:
 library(tidyverse)
 library(ModelMetrics)
 library(readxl)
+library(caTools)
+library(car)
 ```
 ## Part 1: Linear regression
 
@@ -83,5 +85,126 @@ All significance observations stay the same since scaling can never affect that.
 ## Part 2: Logistic regression
 
 For this part we will use the diabetes data since it has a categorical outcome (Diabetes yes or no). We will not use the oral Glucose measurements as predictors since this is literally how you define diabetes, so we're loading the dataset without them.
+
+
+```{r}
+diabetes_df <- read_excel('../out/diabetes_join.xlsx')
+head(diabetes_df)
+```
+
+We choose to make a regression model of `Diabetes` as predicted by serum calcium levels (`Serum_ca2`), `BMI` and smoking habits (`Smoker`).
+
+8. We cannot have NA values in our predictors so remove all rows with NAs and save the result into a new dataframe `diabetes_nona`.
+
+```{r}
+diabetes_nona <- drop_na(diabetes_df)
+nrow(diabetes_nona)
+nrow(diabetes_df)
+```
+
+9. Make the outcome variable into a factor if it is not already.
+
+```{r}
+class(diabetes_nona$Diabetes)
+diabetes_nona$Diabetes <- factor(diabetes_nona$Diabetes)
+class(diabetes_nona$Diabetes)
+```
+10. Scale all numeric predictors. Check your result.
+
+```{r}
+diabetes_nona <- diabetes_nona %>%
+  #scale all numeric cols
+  mutate(across(where(is.numeric), scale))
+
+head(diabetes_nona)
+```
+
+11. Split your data into training and test data. Take care that the two classes of the outcome variable are in the same ratio in both training and test data. 
+
+```{r}
+# Set seed to ensure reproducibility
+set.seed(123)
+
+split <- sample.split(diabetes_nona$Diabetes, SplitRatio = 0.75)
+
+train <- diabetes_nona[split,]
+test <- diabetes_nona[!split,] #! negates the vector, so true becomes false and vice verse
+
+count(train,Diabetes)
+count(test, Diabetes)
+
+```
+
+12. Fit a regression model with `Serum_ca2`, `BMI` and `Smoker` as predictors. Check the model summary.
+
+```{r}
+mod1 <- glm(Diabetes ~ Serum_ca2 + BMI + Smoker, data = train, family = binomial)
+summary(mod1)
+
+```
+
+13. Create a second model with only `BMI` and `Smoker` as predictors. Compare the fit of your second model to the first one (including `Serum_ca2`). Is there a significant gain, i.e. better fit when including the serum calcium levels as predictor? Which model do you think is better?
+
+```{r}
+mod2 <- glm(Diabetes ~ BMI + Smoker, data = train, family = binomial)
+summary(mod2)
+```
+
+```{r}
+anova(mod1, mod2, test = "Chisq")
+```
+
+The likelihood ratio test between the two models has an insignificant p-value. This means there is no evidence that including `Serum_ca2` improves the fit of the model. The second model `mod2` is therefore preferable. 
+
+
+--------------------
+
+## Extra exercises
+
+
+
+e1. Find the best single predictor in the Diabetes dataset. This is done by comparing the null model (no predictors) to all possible models with one predictor, i.e. `outcome ~ predictor`, `outcome ~ predictor2`, ect. The null model can be formulated like so: `outcome ~ 1` (only the intercept). Fit all possible one predictor models and compare their fit to the null model with a likelihood ratio test. Find the predictor with the lowest p-value in the likelihood ratio test. This can be done in a loop in order to avoid writing out all models. 
+
+::: {.callout-tip collapse="true"}
+## Hint
+To use a formula with a variable you will need to combine the literal part and the variable with paste, e.g. `paste("Outcome ~", my_pred)`.
+:::
+
+
+
+```{r}
+
+# Define the null model (intercept-only model)
+null_model <- glm(Diabetes ~ 1, data = train, family = binomial)
+
+# Get predictor names (excluding the outcome variable)
+predictors <- setdiff(names(diabetes_nona), c("Diabetes", "ID"))
+
+# Initialize an empty data frame to store results
+results <- data.frame(Predictor = character(), ChiSq = numeric(), P_Value = numeric(), stringsAsFactors = FALSE)
+
+# Loop through each predictor and fit a logistic regression model
+for (pred in predictors) {
+  
+  # Fit model with single predictor
+  model_pred <- glm(paste("Diabetes ~", pred), data = train, family = binomial)
+  
+  # Perform Likelihood Ratio Test
+  test_result <- anova(null_model, model_pred, test = "Chisq")
+  
+  # Extract Chi-square statistic and p-value
+  chi_sq <- test_result$Deviance[2]  # The second row corresponds to the predictor model
+  p_value <- test_result$`Pr(>Chi)`[2]
+  
+  # Store results
+  results <- rbind(results, data.frame(Predictor = pred, ChiSq = chi_sq, P_Value = p_value))
+}
+
+# Print the results sorted by p-value
+results <- results %>% arrange(P_Value)
+print(results)
+
+```
+
 
 

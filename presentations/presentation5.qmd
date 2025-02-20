@@ -349,6 +349,35 @@ $$ P(earlydeath == 1) = \frac{1}{1+ small} \sim \frac{1}{1} $$
 So the larger $y$ the smaller $e^{(-y)}$ and the closer we get to $P(earlydeath == 1)$ being 1. That was a lot of math for: If the coefficient is positive you increase the likelihood of getting the outcome, i.e. dying. 
 
 
+### Model comparison
+
+So now we know how to fit linear models and interpret the results. But often there are several predictors we could include or not include, so how do we know that one model is better than another? 
+
+There are several ways to compare models. One is the likelihood ratio test which tests whether adding predictors significantly improves model fit by comparing the log-likelihoods of the two models. Another much used comparison is to look at the AIC (Akaike Information Criterion) or BIC (Bayesian Information Criterion). Lower AIC/BIC values generally indicate a better trade-off between model fit and complexity.
+
+For example we have made this model above:
+
+```{r}
+summary(model_log)
+```
+
+But `exercise` does not have a significant p-value. Perhaps we would have a better model if we only use `dialy_cigarettes`? 
+
+Let's compare them:
+
+```{r}
+model_reduced <- glm(early_death ~ daily_cigarettes, data = train, family = "binomial")
+summary(model_reduced)
+```
+
+We can use an anova with the Chi-square test to compare the log-likelihood of the two models:
+
+```{r}
+anova(model_log, model_reduced, test = 'Chisq')
+```
+
+The p-value of the Chi-square test tells us if there is evidence that the difference in log-likelihoods is significant. If it is not significant, we do not have evidence that one model is a better fit than the other and we would therefore choose the less complex model with fewer predictors since that gives us more statistical power and less overfitting.
+
 ## Clustering
 
 

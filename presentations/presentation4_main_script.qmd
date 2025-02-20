@@ -8,7 +8,7 @@ project:
 
 In this section we will learn more about flow control and how to make more complex code constructs in R.
 
-```{r}
+```{r message=FALSE, warning=FALSE}
 library(tidyverse)
 ```
 

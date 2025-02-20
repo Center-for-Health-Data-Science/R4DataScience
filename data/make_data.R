@@ -150,16 +150,24 @@ df <- df %>%
   #select(-ID)
 
 
-#distance to city center and nr rooms are pretty good predictors of price
-ggplot(df, aes(x=dis,y=medv,color=rm)) +
-  geom_point()
-
-ggplot(df, aes(x=rm,y=medv,color=dis)) +
-  geom_point()
-
-#crime doesn't matter much because the influence is pretty much 
-ggplot(df, aes(x=crim,y=medv,color=dis)) +
-  geom_point()
-
 write_csv(df, './boston.csv')
 
+############ Add serum calcium levels to Diabetes data ############ 
+
+#HZ path
+setwd('C:/Users/pnv719/Documents/HeaDS/Courses/R4DS/R4DataScience/data/')
+
+diabetes_clinical <- read_excel('../data/diabetes_clinical_toy_messy.xlsx')
+head(diabetes_clinical)
+
+#https://www.uclahealth.org/medical-services/surgery/endocrine-surgery/patient-resources/patient-education/normal-calcium-levels
+# High calcium levels in the blood may result from overactive parathyroid glands (hyperparathyroidism), certain cancers, or excessive vitamin D intake. 
+# Low calcium levels can arise from conditions such as vitamin D deficiency, kidney disease, or insufficient parathyroid hormone production.
+#normal range: 8.6 - 10.3 mg/dL 
+#extrapolated low range: 7.3 - 8.5 mg/dL 
+#extrapolated 
+
+diabetes_clinical <- diabetes_clinical %>%
+  mutate(Serum_ca2 = round(rnorm(nrow(diabetes_clinical), mean = 9.45, sd = 0.25),1))
+
+writexl::write_xlsx(diabetes_clinical, './diabetes_clinical_toy_messy.xlsx')

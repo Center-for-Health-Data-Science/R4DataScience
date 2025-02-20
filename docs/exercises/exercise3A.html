@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Exercise 3: Exploratory Data Analysis (EDA) – R for Data Science</title>
+<title>Exercise 3 A: Exploratory Data Analysis (EDA) - Plotting – R for Data Science</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -19,40 +19,6 @@ ul.task-list li input[type="checkbox"] {
   width: 0.8em;
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
-}
-/* CSS for syntax highlighting */
-pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { line-height: 1.25; }
-pre > code.sourceCode > span:empty { height: 1.2em; }
-.sourceCode { overflow: visible; }
-code.sourceCode > span { color: inherit; text-decoration: inherit; }
-div.sourceCode { margin: 1em 0; }
-pre.sourceCode { margin: 0; }
-@media screen {
-div.sourceCode { overflow: auto; }
-}
-@media print {
-pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
-}
-pre.numberSource code
-  { counter-reset: source-line 0; }
-pre.numberSource code > span
-  { position: relative; left: -4em; counter-increment: source-line; }
-pre.numberSource code > span > a:first-child::before
-  { content: counter(source-line);
-    position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; display: inline-block;
-    -webkit-touch-callout: none; -webkit-user-select: none;
-    -khtml-user-select: none; -moz-user-select: none;
-    -ms-user-select: none; user-select: none;
-    padding: 0 4px; width: 4em;
-  }
-pre.numberSource { margin-left: 3em;  padding-left: 4px; }
-div.sourceCode
-  {   }
-@media screen {
-pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 </style>
 
@@ -103,35 +69,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   }
 }</script>
 
-  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
-  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
-
-<script type="text/javascript">
-const typesetMath = (el) => {
-  if (window.MathJax) {
-    // MathJax Typeset
-    window.MathJax.typeset([el]);
-  } else if (window.katex) {
-    // KaTeX Render
-    var mathElements = el.getElementsByClassName("math");
-    var macros = [];
-    for (var i = 0; i < mathElements.length; i++) {
-      var texText = mathElements[i].firstChild;
-      if (mathElements[i].tagName == "SPAN") {
-        window.katex.render(texText.data, mathElements[i], {
-          displayMode: mathElements[i].classList.contains('display'),
-          throwOnError: false,
-          macros: macros,
-          fleqn: false
-        });
-      }
-    }
-  }
-}
-window.Quarto = {
-  typesetMath
-};
-</script>
 
 </head>
 
@@ -172,7 +109,7 @@ window.Quarto = {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../exercises/exercise0.html">Exercises</a></li><li class="breadcrumb-item"><a href="../exercises/exercise3.html">Exercise 3: Exploratory Data Analysis</a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../exercises/exercise0.html">Exercises</a></li><li class="breadcrumb-item"><a href="../exercises/exercise3A.html">Exercise 3 A: Exploratory Data Analysis - Plotting</a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
     </div>
@@ -272,8 +209,14 @@ window.Quarto = {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../exercises/exercise3.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text">Exercise 3: Exploratory Data Analysis</span></a>
+  <a href="../exercises/exercise3A.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">Exercise 3 A: Exploratory Data Analysis - Plotting</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../exercises/exercise3B.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Exercise 3 B: Exploratory Data Analysis - PCA</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -313,8 +256,14 @@ window.Quarto = {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../solutions/solution3.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Exercise 3 - Solution</span></a>
+  <a href="../solutions/solution3A.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Exercise 3 A - Solution</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../solutions/solution3B.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Exercise 3 B - Solution</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -385,7 +334,6 @@ window.Quarto = {
   <li><a href="#getting-started" id="toc-getting-started" class="nav-link active" data-scroll-target="#getting-started">Getting started</a></li>
   <li><a href="#plotting---part-1" id="toc-plotting---part-1" class="nav-link" data-scroll-target="#plotting---part-1">Plotting - Part 1</a></li>
   <li><a href="#plotting---part-2" id="toc-plotting---part-2" class="nav-link" data-scroll-target="#plotting---part-2">Plotting - Part 2</a></li>
-  <li><a href="#plotting---part-3-pca" id="toc-plotting---part-3-pca" class="nav-link" data-scroll-target="#plotting---part-3-pca">Plotting - Part 3: PCA</a></li>
   <li><a href="#extra-exercises" id="toc-extra-exercises" class="nav-link" data-scroll-target="#extra-exercises">Extra exercises</a></li>
   </ul>
 </nav>
@@ -393,9 +341,9 @@ window.Quarto = {
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../exercises/exercise0.html">Exercises</a></li><li class="breadcrumb-item"><a href="../exercises/exercise3.html">Exercise 3: Exploratory Data Analysis</a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../exercises/exercise0.html">Exercises</a></li><li class="breadcrumb-item"><a href="../exercises/exercise3A.html">Exercise 3 A: Exploratory Data Analysis - Plotting</a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title">Exercise 3: Exploratory Data Analysis (EDA)</h1>
+<h1 class="title">Exercise 3 A: Exploratory Data Analysis (EDA) - Plotting</h1>
 </div>
 
 
@@ -413,21 +361,12 @@ window.Quarto = {
 
 
 <p>In this exercise you will do a lot of plotting with ggplot. For a reminder on how ggplot works you can have a look the <a href="https://center-for-health-data-science.github.io/FromExceltoR/Presentations/presentation3.html">ggplot material</a> covered in our previous course, From Excel to R.</p>
-<p>The second part of the exercise deals with creating a principal component analysis (PCA) plot. For a quick introduction to the main idea behind PCA you can have a look at <a href="https://www.youtube.com/watch?v=HMOI_lkzW08&amp;t=194">this video</a>.</p>
 <section id="getting-started" class="level2">
 <h2 class="anchored" data-anchor-id="getting-started">Getting started</h2>
 <ol type="1">
-<li>Load packages.</li>
+<li><p>Load packages.</p></li>
+<li><p>Load data from the <code>.rds</code> file you created in Exercise 2. Have a guess at what the function is called.</p></li>
 </ol>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<ol start="2" type="1">
-<li>Load data from the <code>.rds</code> file you created in Exercise 2. Have a guess at what the function is called.</li>
-</ol>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>diabetes_glucose <span class="ot">&lt;-</span> <span class="fu">read_rds</span>(<span class="st">'../out/diabetes_glucose.rds'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
 </section>
 <section id="plotting---part-1" class="level2">
 <h2 class="anchored" data-anchor-id="plotting---part-1">Plotting - Part 1</h2>
@@ -524,64 +463,6 @@ Hint
 <li>Create a plot that visualizes glucose measurements across time points, with one line for each patient ID. Then color the lines by their diabetes status. In summary, each patient’s glucose measurements should be connected with a line, grouped by their ID, and color-coded by <code>Diabetes</code>. Give the plot a meaningful title.</li>
 </ol>
 <p>If your time points are strangely ordered have a look at the <code>levels</code> of your <code>Measurement</code> variable (the one that specifies which time point the measurement was taken at) and if necessary fix their order.</p>
-</section>
-<section id="plotting---part-3-pca" class="level2">
-<h2 class="anchored" data-anchor-id="plotting---part-3-pca">Plotting - Part 3: PCA</h2>
-<p>For this part we will use this <a href="https://cran.r-project.org/web/packages/ggfortify/vignettes/plot_pca.html">tutorial</a> to make a principal component analysis (PCA). First, we perform some preprocessing to get our data into the right format.</p>
-<ol start="13" type="1">
-<li><p>Let’s start by unnesting the OGTT data and using pivot wider so that each Glucose measurement time point gets its own column (again).</p></li>
-<li><p>Have a look at your unnested diabetes data set. Can you use all the variables to perform PCA? Subset the dataset to only include the relevant variables.</p></li>
-</ol>
-<div class="callout callout-style-default callout-tip callout-titled">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-5-contents" aria-controls="callout-5" aria-expanded="false" aria-label="Toggle callout">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-Hint
-</div>
-<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
-</div>
-<div id="callout-5" class="callout-5-contents callout-collapse collapse">
-<div class="callout-body-container callout-body">
-<p>PCA can only be performed on numerical values. Extract these (except ID!) from the dataset. Numerical columns can easily be selected with the <code>where(is.numeric)</code> helper.</p>
-</div>
-</div>
-</div>
-<ol start="15" type="1">
-<li>PCA cannot handle NA’s in the dataset. Remove all rows with NA in any column in your numerical subset. Then, go back to the original unnested data <code>diabetes_glucose_unnest</code> (or what you have called it) and also here drop rows that have NAs in the numerical columns (so the same rows you dropped from the numeric subset).This is important because we want to use (categorical) columns present in the original data to later color the resulting PCA, so the two dataframes (original and only numeric columns) need to be aligned and contain the same rows.</li>
-</ol>
-<p>Now our data is ready to make a PCA.</p>
-<ol start="16" type="1">
-<li><p>Calculate the PCA by running <code>prcomp</code> on our prepared data (see the tutorial). Then, create a plot of the resulting PCA (also shown in tutorial).</p></li>
-<li><p>Color your PCA plot and add loadings. Think about which variable you want to color by. Remember to refer to the dataset that has this variable (probably not your numeric subset!)</p></li>
-<li><p>Add a ggplot <code>theme</code> and title to your plot and save it.</p></li>
-<li><p>Calculate the variance explained by each of the PC’s using the following formula:</p></li>
-</ol>
-<p><span class="math display">\[
-\text{Variance Explained} = \frac{\text{sdev}^2}{\sum \text{sdev}^2} \times 100
-\]</span></p>
-<div class="callout callout-style-default callout-tip callout-titled">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-6-contents" aria-controls="callout-6" aria-expanded="false" aria-label="Toggle callout">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-Hint
-</div>
-<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
-</div>
-<div id="callout-6" class="callout-6-contents callout-collapse collapse">
-<div class="callout-body-container callout-body">
-<p>You can access the standard deviation from the PCA object like this: <code>pca_res$sdev</code>.</p>
-</div>
-</div>
-</div>
-<ol start="20" type="1">
-<li><p>Create a two column data-frame with the names of the PC’s (PC1, PC2, ect) in one column and the variance explained by that PC in the other column.</p></li>
-<li><p>Now create a bar plot (using <code>geom_col</code>), showing for each PC the amount of explained variance. This type of plot is called a scree plot.</p></li>
-<li><p>Lastly, render you quarto document and review the resulting html file.</p></li>
-</ol>
 <hr>
 </section>
 <section id="extra-exercises" class="level2">
@@ -594,7 +475,7 @@ Hint
 </figure>
 </div>
 <div class="callout callout-style-default callout-tip callout-titled">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-7-contents" aria-controls="callout-7" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-5-contents" aria-controls="callout-5" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -603,7 +484,7 @@ Hint
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-7" class="callout-7-contents callout-collapse collapse">
+<div id="callout-5" class="callout-5-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p>There are several ways to solve this task. Here is a workflow suggestion:</p>
 <ul>

@@ -76,7 +76,7 @@ Since we want to be able to pass the name of the column to plot as a variable we
 7. Create a variable `plot_column` and assign "Age" to it. Now make a boxplot of that column. Switch `plot_column` to a different column in `diabetes_glucose`. Does it work?
 
 
-8. Wrap your code for the boxplot into a function. The function should take two arguments: the dataframe to use and the name of the column to plot. Test your function. Add some customization to the plot like a theme of colors. 
+8. Wrap your code for the boxplot into a function. The function should take two arguments: the dataframe to use and the name of the column to plot. Test your function. Add some customization to the plot like a theme or colors. 
 
 ::: {.callout-tip collapse="true"}
 ## Hint

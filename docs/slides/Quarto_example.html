@@ -244,8 +244,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../exercises/exercise3.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Exercise 3: Exploratory Data Analysis</span></a>
+  <a href="../exercises/exercise3A.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Exercise 3 A: Exploratory Data Analysis - Plotting</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../exercises/exercise3B.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Exercise 3 B: Exploratory Data Analysis - PCA</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -285,8 +291,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../solutions/solution3.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Exercise 3 - Solution</span></a>
+  <a href="../solutions/solution3A.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Exercise 3 A - Solution</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../solutions/solution3B.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Exercise 3 B - Solution</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -408,14 +420,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="cell">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(diabetes)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 532   8</code></pre>
+<pre><code>[1] 532   9</code></pre>
 </div>
 </div>
 <p>Check structure of data</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(diabetes)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>tibble [532 × 8] (S3: tbl_df/tbl/data.frame)
+<pre><code>tibble [532 × 9] (S3: tbl_df/tbl/data.frame)
  $ ID              : num [1:532] 9046 51676 31112 60182 1665 ...
  $ Sex             : chr [1:532] "Male" "Male" "Male" "Male" ...
  $ Age             : num [1:532] 34 25 30 50 27 35 31 52 54 41 ...
@@ -423,7 +435,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
  $ BMI             : num [1:532] 24.7 22.5 32.3 34.5 26.3 35 43.3 33.3 35.2 39.8 ...
  $ PhysicalActivity: num [1:532] 93 102 75 98 82 58 59 58 74 67 ...
  $ Smoker          : chr [1:532] "Unknown" "Unknown" "Former" "Unknown" ...
- $ Diabetes        : num [1:532] 0 0 1 1 0 1 1 1 1 1 ...</code></pre>
+ $ Diabetes        : num [1:532] 0 0 1 1 0 1 1 1 1 1 ...
+ $ Serum_ca2       : num [1:532] 9.8 9.5 9.3 9.4 9 9.3 9.6 9.1 9.3 9.1 ...</code></pre>
 </div>
 </div>
 <p>Check for NA’s in each column</p>
@@ -433,7 +446,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <pre><code>              ID              Sex              Age    BloodPressure 
                0                0                3                0 
              BMI PhysicalActivity           Smoker         Diabetes 
-               3                0                0                0 </code></pre>
+               3                0                0                0 
+       Serum_ca2 
+               0 </code></pre>
 </div>
 </div>
 </section>

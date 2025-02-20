@@ -47,8 +47,10 @@ website:
             text: "Exercise 1: Data Cleanup"
           - href: exercises/exercise2.qmd
             text: "Exercise 2: Advanced Data Wrangling"
-          - href: exercises/exercise3.qmd
-            text: "Exercise 3: Exploratory Data Analysis"
+          - href: exercises/exercise3A.qmd
+            text: "Exercise 3 A: Exploratory Data Analysis - Plotting"
+          - href: exercises/exercise3B.qmd
+            text: "Exercise 3 B: Exploratory Data Analysis - PCA"
           - href: exercises/exercise4.qmd
             text: "Exercise 4: Scripting in R"            
           - href: exercises/exercise5.qmd
@@ -60,8 +62,10 @@ website:
               text: "Exercise 1 - Solution"
             - href: solutions/solution2.qmd # solutions/solution_not_up.qmd #
               text: "Exercise 2 - Solution"
-            - href: solutions/solution3.qmd # solutions/solution_not_up.qmd #
-              text: "Exercise 3 - Solution"
+            - href: solutions/solution3A.qmd # solutions/solution_not_up.qmd #
+              text: "Exercise 3 A - Solution"
+            - href: solutions/solution3B.qmd # solutions/solution_not_up.qmd #
+              text: "Exercise 3 B - Solution"
             - href: solutions/solution4.qmd # solutions/solution_not_up.qmd #
               text: "Exercise 4 - Solution"
             - href: solutions/solution4_functions.qmd # solutions/solution_not_up.qmd #

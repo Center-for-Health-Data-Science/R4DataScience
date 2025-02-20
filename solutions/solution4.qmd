@@ -125,12 +125,12 @@ An easy way to printing several variables is to pass a vector into print: `print
 
 :::
 
-```{r results='hide'}
+```{r}
 #We'll only show the first 10 rows here for brevity
 #for (i in 1:nrow(diabetes_glucose)) {
 
 for (i in 1:10) {
-  smoker <- diabetes_glucose$Smoker[i]
+  Smoker <- diabetes_glucose$Smoker[i]
   BMI <- diabetes_glucose$BMI[i]
   
   #skip rows where either of the values is NA
@@ -167,7 +167,7 @@ ggplot(diabetes_glucose, aes(y = .data[[plot_column]])) +
   geom_boxplot()
 
 ```
-8. Wrap your code for the boxplot into a function. The function should take two arguments: the dataframe to use and the name of the column to plot. Test your function. Add some customization to the plot like a theme of colors. 
+8. Wrap your code for the boxplot into a function. The function should take two arguments: the dataframe to use and the name of the column to plot. Test your function. Add some customization to the plot like a theme or colors. 
 
 ::: {.callout-tip collapse="true"}
 ## Hint

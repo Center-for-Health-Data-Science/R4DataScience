@@ -243,8 +243,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../exercises/exercise3.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Exercise 3: Exploratory Data Analysis</span></a>
+  <a href="../exercises/exercise3A.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Exercise 3 A: Exploratory Data Analysis - Plotting</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../exercises/exercise3B.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Exercise 3 B: Exploratory Data Analysis - PCA</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -284,8 +290,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../solutions/solution3.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Exercise 3 - Solution</span></a>
+  <a href="../solutions/solution3A.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Exercise 3 A - Solution</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../solutions/solution3B.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Exercise 3 B - Solution</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -395,7 +407,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>diabetes_glucose <span class="ot">&lt;-</span> <span class="fu">read_rds</span>(<span class="st">'../out/diabetes_glucose.rds'</span>)</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>diabetes_glucose</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 490 × 11
+<pre><code># A tibble: 490 × 12
    ID    Sex      Age BloodPressure   BMI PhysicalActivity Smoker  Diabetes
    &lt;fct&gt; &lt;chr&gt;  &lt;dbl&gt;         &lt;dbl&gt; &lt;dbl&gt;            &lt;dbl&gt; &lt;chr&gt;   &lt;chr&gt;   
  1 9046  Male      34            84  24.7               93 Unknown 0       
@@ -409,7 +421,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
  9 60491 Female    41            90  39.8               67 Smoker  1       
 10 12109 Female    36            82  30.8               81 Smoker  1       
 # ℹ 480 more rows
-# ℹ 3 more variables: Married &lt;chr&gt;, Work &lt;chr&gt;, OGTT &lt;list&gt;</code></pre>
+# ℹ 4 more variables: Serum_ca2 &lt;dbl&gt;, Married &lt;chr&gt;, Work &lt;chr&gt;, OGTT &lt;list&gt;</code></pre>
 </div>
 </div>
 </section>
@@ -476,7 +488,7 @@ Hint
 <p>Since we want to be able to pass the name of the column to plot as a variable we will need to use the syntax for aliased column names. We showed how to do that in the end of presentation 3 if you need a refresher.</p>
 <ol start="7" type="1">
 <li><p>Create a variable <code>plot_column</code> and assign “Age” to it. Now make a boxplot of that column. Switch <code>plot_column</code> to a different column in <code>diabetes_glucose</code>. Does it work?</p></li>
-<li><p>Wrap your code for the boxplot into a function. The function should take two arguments: the dataframe to use and the name of the column to plot. Test your function. Add some customization to the plot like a theme of colors.</p></li>
+<li><p>Wrap your code for the boxplot into a function. The function should take two arguments: the dataframe to use and the name of the column to plot. Test your function. Add some customization to the plot like a theme or colors.</p></li>
 </ol>
 <div class="callout callout-style-default callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-3-contents" aria-controls="callout-3" aria-expanded="false" aria-label="Toggle callout">

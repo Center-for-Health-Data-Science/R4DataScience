@@ -32,44 +32,66 @@ Use can you either base R or/and tidyverse to solve the exercises.
 colSums(is.na(diabetes_clinical))
 ```
 
-4.  Check the distribution of each of the variables. Consider that the variables are of different classes. Do any of the distributions seem odd to you?
+4.  Check the ranges and distribution of each of the variables. Consider that the variables are of different classes. Do any values strike you as odd?
 
-For the categorical variables:
+
+For the categorical variables we can use `table`:
 
 The `Sex` values are not consistent. 
+
 ```{r}
 table(diabetes_clinical$Sex)
 table(diabetes_clinical$Smoker)
 table(diabetes_clinical$Diabetes)
 ```
 
-For the numerical variables:
+For the numerical variables we'll plot and check the range:
 
 ```{r}
+range(diabetes_clinical$Age, na.rm = TRUE)
+
 diabetes_clinical %>% 
-  ggplot(aes(y = Age)) + 
-  geom_boxplot()
+  ggplot(aes(y = Age, x = 1)) + 
+  geom_violin()
 ```
 
 Odd: Some `BloodPressure` values are 0. 
+
 ```{r}
+range(diabetes_clinical$BloodPressure, na.rm = TRUE)
+
 diabetes_clinical %>% 
-  ggplot(aes(y = BloodPressure)) + 
-  geom_boxplot()
+  ggplot(aes(y = BloodPressure, x = 1)) + 
+  geom_violin() 
+  
 ```
 
 Odd: Some `BMI` values are 0. 
+
 ```{r}
+range(diabetes_clinical$BMI, na.rm = TRUE)
+
 diabetes_clinical %>% 
-  ggplot(aes(y = BMI)) + 
-  geom_boxplot()
+  ggplot(aes(y = BMI, x = 1)) + 
+  geom_violin()
 ```
 
 ```{r}
+range(diabetes_clinical$PhysicalActivity, na.rm = TRUE)
+
 diabetes_clinical %>% 
-  ggplot(aes(y = PhysicalActivity)) + 
-  geom_boxplot()
+  ggplot(aes(y = PhysicalActivity, x = 1)) + 
+  geom_violin()
 ```
+
+```{r}
+range(diabetes_clinical$Serum_ca2, na.rm = TRUE)
+
+diabetes_clinical %>% 
+  ggplot(aes(y = Serum_ca2, x = 1)) + 
+  geom_violin()
+```
+
 
 ## Clean up the data
 
@@ -89,20 +111,20 @@ Consider the following:
 
 ::: {.callout-tip collapse="true"}
 ## Hint
-Have a look at `BloodPressure`, `BMI`, `Sex`, and `Diabetes`. 
+Have a look at `ID`, `BloodPressure`, `BMI`, `Sex`, and `Diabetes`. 
 :::
 
 My considerations:
 
--   When modelling, rows with NA's in the variables we want to model should be removed as we cannot model on NAs. Since there are only NA's in `Age`, the rows can be left until we need to do a model with `Age`.
+-   When modelling, rows with NA's in the variables we want to model should be removed as we cannot model on NAs. Since there are only NA's in `Age` and `BMI`, the rows can be left until we need to do a model with these columns.
 
--   The different spellings in `Sex` should be regularized so that there is only spelling for each category. Since most rows have the first letter as capital letter and the remaining letter as lowercase we will use that.
+-   The different spellings in `Sex` should be regularized so that there is only one spelling for each category. Since most rows have the first letter as capital letter and the remaining letter as lowercase we will use that.
 
 -   There are zeros in `BMI` and `BloodPressure`. These are considered false zeros as is does not make sense that these variables have a value of 0.
 
--   `Diabetes` is changed to factor. 
+-   `Diabetes` and `ID` are changed to factor. 
 
-Access number of rows before cleaning.
+Check number of rows before cleaning.
 ```{r}
 nrow(diabetes_clinical)
 ```
@@ -111,7 +133,8 @@ Cleaning data according to considerations.
 ```{r}
 diabetes_clinical_clean <- diabetes_clinical %>% 
   mutate(Sex = str_to_title(Sex),
-         Diabetes = Diabetes %>% factor()) %>% 
+         ID = factor(ID),
+         Diabetes = factor(Diabetes)) %>% 
   filter(BMI != 0, BloodPressure != 0) 
 ```
 
@@ -120,7 +143,7 @@ Check the unique sexes now.
 diabetes_clinical_clean$Sex %>% unique()
 ```
 
-Access number of rows after cleaning. 
+Check number of rows after cleaning. 
 ```{r}
 nrow(diabetes_clinical_clean)
 ```
@@ -161,9 +184,9 @@ My considerations:
 
 -   The `Married` variable has whitespace in the some of the values. The values "Yes" and "Yes " will be interpreted as different values. We can confidently remove all the whitespaces in this variable. 
 
--   `ID` is changed to numerical to match the `diabetes_clean` dataset. 
+-   `ID` is changed to factor to match the `diabetes_clean` dataset. 
 
-Access number of rows before cleaning.
+Check number of rows before cleaning.
 ```{r}
 nrow(diabetes_meta)
 ```
@@ -171,7 +194,7 @@ nrow(diabetes_meta)
 ```{r}
 diabetes_meta_clean <- diabetes_meta %>% 
   mutate(Married = str_trim(Married),
-         ID = as.numeric(ID))
+         ID = factor(ID))
 ```
 
 Check the unique marital status now.
@@ -179,7 +202,7 @@ Check the unique marital status now.
 unique(diabetes_meta_clean$Married)
 ```
 
-Access number of rows after cleaning.
+Check number of rows after cleaning.
 ```{r}
 nrow(diabetes_meta_clean)
 ```

@@ -12,11 +12,11 @@ In this exercise you will do some more advance tidyverse operations such as pivo
 
 1.  Load packages.
 
-2.  Load the joined diabetes data set you created in exercise 1 and the glucose dataset from the data folder.
+2.  Load the joined diabetes data set you created in exercise 1 (e.g. "diabetes_join.xlsx") and the glucose dataset `df_glucose.xlsx` from the data folder.
 
 ## Wrangling
 
-3.  Have a look at the glucose dataset. It has three columns with measurements from a Oral Glucose Tolerance Test where blood glucose is measured at fasting (Glucose_0), 6 hours after glucose intake (Glucose_6), and 12 hours after (Glucose_12). The last columns is an ID column. Change the data type of the ID column to `factor` in both `diabetes_join` and `df_glucose`.
+3.  Have a look at the glucose dataset. It has three columns with measurements from a Oral Glucose Tolerance Test where blood glucose is measured at fasting (Glucose_0), 1 hour/60 mins after glucose intake (Glucose_6), and 2 hours/120 mins after (Glucose_120). The last columns is an ID column. Change the data type of the ID column to `factor` in both `diabetes_join` and `df_glucose`.
 
 4.  Restructure the glucose dataset into a long format. Name the column that describes which measurement the row refers to, i.e. Glucose_0, Glucose_60 or Glucose_120, `Measurement`. How many rows are there per ID? Does that make sense?
 
@@ -57,7 +57,7 @@ First `filter` for your favorite ID and then `pull` the columns.
 
 ::: {.callout-tip collapse="true"}
 ## Hint
-You will need to use `group_by()`, and `summerize()`.
+You will need to use `group_by()`, and `summerise()`.
 :::
 
 9. Calculate mean and standard deviation for all numeric columns.
