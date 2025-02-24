@@ -54,7 +54,7 @@ website:
           - href: exercises/exercise4.qmd
             text: "Exercise 4: Scripting in R"            
           - href: exercises/exercise5.qmd
-            text: "Exercise 5: Linear Regression"
+            text: "Exercise 5: Modelling in R"
 
       - section: "Solutions"
         contents:

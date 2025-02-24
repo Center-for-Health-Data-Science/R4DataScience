@@ -63,3 +63,8 @@ You can access the standard deviation from the PCA object like this: `pca_res$sd
 
 12. Lastly, render you quarto document and review the resulting html file.
 
+---------------------------
+
+## Extra exercises
+
+e1. The Oral Glucose Tolerance Test is used to diagnose diabetes so we are not surprised that it separates the dataset well. In this part, we will look at a PCA without the OGTT measurements and see how we fare. Omit the Glucose measurement columns, calculate a PCA and create the plot.

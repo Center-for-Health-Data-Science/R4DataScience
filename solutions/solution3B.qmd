@@ -37,7 +37,6 @@ diabetes_glucose_unnest <-  diabetes_glucose %>%
 diabetes_glucose_unnest
 ```
 
-
 4. Have a look at your unnested diabetes data set. Can you use all the variables to perform PCA? Subset the dataset to only include the relevant variables.
 
 ::: {.callout-tip collapse="true"}
@@ -148,8 +147,28 @@ df_variance_explained %>%
 
 12. Lastly, render you quarto document and review the resulting html file.
 
+---------------------------
+
+## Extra exercises
+
+e1. The Oral Glucose Tolerance Test is used to diagnose diabetes so we are not surprised that it separates the dataset well. In this part, we will look at a PCA without the OGTT measurements and see how we fare. Omit the Glucose measurement columns, calculate a PCA and create the plot.
+
+```{r}
+pca_no_gluc <-diabetes_glucose_numerical %>%
+  select(-Glucose_0,-Glucose_60,-Glucose_120) %>%
+  prcomp(scale. = TRUE)
+
+```
 
 
+```{r}
+autoplot(pca_no_gluc, data = diabetes_glucose_unnest, colour = "Diabetes",
+         loadings = TRUE, loadings.colour = "grey30", loadings.label.colour = "black",
+         loadings.label = TRUE, loadings.label.size = 3.5) + 
+  theme_minimal() + 
+  labs(title = "PCA of Diabetes Dataset")
+```
 
+Without the Glucose measurement data our strongest separating variables are BMI and Physical Activity.
 
 

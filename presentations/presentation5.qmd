@@ -13,6 +13,8 @@ In this section we'll look at how to define and fit a model in R.
 library(tidyverse)
 library(caTools)
 library(ModelMetrics)
+library(ggfortify)
+library(readxl)
 ```
 
 ## Load data
@@ -380,5 +382,224 @@ The p-value of the Chi-square test tells us if there is evidence that the differ
 
 ## Clustering
 
+Clustering is a type of unsupervised learning technique used to group similar data points together based on their features. The goal is to find inherent patterns or structures within the data, e.g. to see whether the data points fall into distinct groups with distinct features or not. 
 
+### Wine dataset
+
+For this we will use the wine data set as an example: 
+
+
+```{r}
+library(ContaminatedMixt)
+data('wine') #load dataset
+df_wine <- wine #convert to tibble
+df_wine
+```
+
+This dataset contains 178 wine, each corresponding to one of three different cultivars of wine. It has 13 numerical columns that record different features of the wine.
+
+We will try out a popular method, k-means clustering. It works by initializing K centroids and assigning each data point to the nearest centroid. The algorithm then recalculates the centroids as the mean of the points in each cluster, repeating the process until the clusters stabilize. You can see an illustration of the process below. Its weakness is that we need to define the number of centroids, i.e. clusters, beforehand.
+
+
+![](../figures/kmeans.jpg){fig-align="center"}
+
+### Running k-means
+
+For k-means it is very important that the data is numeric and scaled so we will do that before running the algorithm.
+
+```{r}
+# Set seed to ensure reproducibility
+set.seed(123)  
+
+#run kmeans
+kmeans_res <- df_wine %>%
+  select(where(is.numeric)) %>%
+  #scale all numeric cols
+  mutate(across(where(is.numeric), scale)) %>%
+  kmeans(centers = 4, nstart = 25)
+
+kmeans_res
+
+```
+
+We get a lot of results. `kmeans_res$cluster` is the cluster assigned to every wine bottle, i.e. row:
+
+```{r}
+kmeans_res$cluster
+```
+
+And `kmeans_res$centers` shows us at which values the centroids are:
+
+```{r}
+kmeans_res$centers
+```
+
+For example the center of cluster 1 is placed at the coordinates -0.79 for Alcohol, 0.04 for Malic Acid, 0.22 for Ash and so on. Since our data has 13 dimensions, i.e. features, the cluster centers also do. 
+
+This is not super practical if we would like to visually inspect the clustering since we cannot plot in 13 dimensions. How could we solve this?
+
+### Visualizing k-means results
+
+We would like to see where our wine bottles and their clusters lie in a low-dimensional space so we will calculate a PCA of the wine data and map the cluster centers to the PCA space.
+
+Since we want the PCA space and the clustering to have the same mapping we'll scale the data before running `prcomp()`. Basically we are making sure that the PCA is calculated on the same data as we passed into the clustering algorithm.
+
+```{r}
+pca_wine <- df_wine %>%
+  select(where(is.numeric)) %>%
+  #scale all numeric cols
+  mutate(across(where(is.numeric), scale)) %>%
+  prcomp()
+
+```
+
+Let's have a look. Since there is no missing data in this set we can easily use the original dataframe to color by wine type:
+
+```{r}
+autoplot(pca_wine, data = df_wine, color = 'Type',
+         loadings = TRUE, loadings.colour = "grey30", 
+         loadings.label.colour = "black",
+         loadings.label = TRUE, loadings.label.size = 3.5,
+         scale = 0)
+```
+
+Now we would like to add the cluster centriods to the plot. Just as a wine bottle with 13 dimensions has a certain PC1/PC2 coordinate, the centriod also does:
+
+```{r}
+#this is the first wine bottle in the set
+df_wine[1,]
+```
+
+```{r}
+#this bottle is placed at -3.3/1.4 in the PCA plot
+pca_wine$x[1,]
+```
+We can find the PC1/PC2 coordinates of cluster 1, 2 and 3 by putting their position in the original 13-dim space into the PCA object:
+
+```{r}
+#project cluster centers from kmeans into the pca space
+centers_pca <- predict(pca_wine, newdata = kmeans_res$centers)
+centers_pca
+kmeans_res$centers
+```
+
+Let's make this into a dataframe and add labels:
+
+```{r}
+#project cluster centers from kmeans into the pca space
+centers_pca <- predict(pca_wine, newdata = kmeans_res$centers) %>% as.data.frame()
+# Label clusters
+centers_pca$cluster <- as.factor(1:nrow(centers_pca))  
+centers_pca
+```
+
+Alright! The last step is to add these 4 points, one for each cluster, to the autoplot. Did you know you can add ggplot geoms to autoplots?
+
+```{r}
+autoplot(pca_wine, data = df_wine, color = 'Type',
+         loadings = TRUE, loadings.colour = "grey30", 
+         loadings.label.colour = "black",
+         loadings.label = TRUE, loadings.label.size = 3.5,
+         scale = 0) +
+  # Cluster centers
+  geom_point(data = centers_pca, aes(x = PC1, y = PC2, color = cluster),
+             shape = 8, size = 6, stroke = 2)
+  
+```
+
+We are still coloring the PCA plot by the known wine type. Let's switch it to instead display which cluster each bottle has been assigned to by k-means:
+
+```{r}
+#add cluster info to the dataframe
+df_wine$Cluster <- factor(kmeans_res$cluster)
+
+autoplot(pca_wine, data = df_wine, color = 'Cluster',
+         loadings = TRUE, loadings.colour = "grey30", 
+         loadings.label.colour = "black",
+         loadings.label = TRUE, loadings.label.size = 3.5,
+         scale = 0) +
+  # Cluster centers
+  geom_point(data = centers_pca, aes(x = PC1, y = PC2, color = cluster),
+             shape = 8, size = 6, stroke = 2)
+```
+
+Well the centroids are in the middle of their respective clusters but this does not look ideal. Perhaps 4 is not the best number of clusters for this dataset. 
+
+### Optimal number of clusters
+
+There are several ways to investigate the ideal number of clusters and `fviz_nbclust` from the factoextra package provides three of them: 
+
+The so-called elbow method observes how the sum of squared errors (sse) changes as we vary the number of clusters. This is also sometimes referred to as "within sum of square" (wss).
+
+```{r}
+library(factoextra)
+
+df_wine %>%
+  select(where(is.numeric)) %>%
+  #scale all numeric cols
+  mutate(across(where(is.numeric), scale)) %>%
+  fviz_nbclust(kmeans, method = "wss")
+```
+
+The silhouette coefficient is a measure of cluster cohesion and separation. It quantifies how well a data point fits into its assigned cluster, by looking at how close it is to other points in its cluster and how far from points of other clusters. You need to have at least 2 clusters for the silhouette coefficient to be defined.
+
+Unlike the elbow of the sums of square errors, the silhouette score is supposed to peak:
+
+```{r}
+df_wine %>%
+  select(where(is.numeric)) %>%
+  #scale all numeric cols
+  mutate(across(where(is.numeric), scale)) %>%
+  fviz_nbclust(kmeans, method = "silhouette")
+```
+
+The gap statistic compares the within-cluster variation (how compact the clusters are) for different values of K to the expected variation under a null reference distribution (i.e., random clustering).
+
+```{r}
+df_wine %>%
+  select(where(is.numeric)) %>%
+  #scale all numeric cols
+  mutate(across(where(is.numeric), scale)) %>%
+  fviz_nbclust(kmeans, method = "gap_stat")
+```
+
+All three of them tell us there should be three clusters and we also know there are three cultivars of wine in the dataset. Let's redo k-means with three centroids.
+
+
+```{r}
+# Set seed to ensure reproducibility
+set.seed(123)  
+
+#run kmeans
+kmeans_res <- df_wine %>%
+  select(where(is.numeric)) %>%
+  #scale all numeric cols
+  mutate(across(where(is.numeric), scale)) %>%
+  kmeans(centers = 3, nstart = 25)
+
+#project cluster centers from kmeans into the pca space
+centers_pca <- predict(pca_wine, newdata = kmeans_res$centers) %>% as.data.frame()
+# Label clusters
+centers_pca$cluster <- as.factor(1:nrow(centers_pca))
+centers_pca
+
+```
+
+```{r}
+#add updated cluster info to the dataframe
+df_wine$Cluster <- factor(kmeans_res$cluster)
+
+autoplot(pca_wine, data = df_wine, color = 'Cluster',
+         loadings = TRUE, loadings.colour = "grey30", 
+         loadings.label.colour = "black",
+         loadings.label = TRUE, loadings.label.size = 3.5,
+         scale = 0) +
+  # Cluster centers
+  geom_point(data = centers_pca, aes(x = PC1, y = PC2, color = cluster),
+             shape = 8, size = 6, stroke = 2)
+```
+
+Indeed this looks better! 
+
+That concludes our foray into modelling for now and it's time for the exercise. 
 

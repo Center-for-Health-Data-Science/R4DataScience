@@ -14,13 +14,14 @@ library(ModelMetrics)
 library(readxl)
 library(caTools)
 library(car)
+library(ggfortify)
 ```
 ## Part 1: Linear regression
 
 2. Load the data `boston.csv` 
 
 ```{r}
-df <- as_tibble(read.csv('../data/boston.csv'))
+df <- as_tibble(read.delim('../data/boston.csv', sep = ','))
 head(df)
 ```
 
@@ -84,7 +85,7 @@ All significance observations stay the same since scaling can never affect that.
 
 ## Part 2: Logistic regression
 
-For this part we will use the diabetes data since it has a categorical outcome (Diabetes yes or no). We will not use the oral Glucose measurements as predictors since this is literally how you define diabetes, so we're loading the dataset without them.
+For this part we will use the joined diabetes data since it has a categorical outcome (Diabetes yes or no). We will not use the oral Glucose measurements as predictors since this is literally how you define diabetes, so we're loading the joined dataset we created in exercise 1, e.g. 'diabetes_join.xlsx' or what you have named it. 
 
 
 ```{r}
@@ -157,6 +158,201 @@ anova(mod1, mod2, test = "Chisq")
 The likelihood ratio test between the two models has an insignificant p-value. This means there is no evidence that including `Serum_ca2` improves the fit of the model. The second model `mod2` is therefore preferable. 
 
 
+## Part 3: Clustering
+
+In this part we will run clustering on the joined diabetes dataset from exercise 1. Load it here if you don't have it already from Part 2. 
+
+```{r}
+#in case
+diabetes_df <- read_excel('../out/diabetes_join.xlsx')
+head(diabetes_df)
+```
+
+14. Run the k-means clustering algorithm with 4 centers on the data. Consider which columns you can use and if you have to manipulate them before. If you get an error, check whether you have values that might not be admissible, such as NA. 
+
+```{r}
+# Set seed to ensure reproducibility
+set.seed(123)  
+
+#run kmeans
+kmeans_res <- diabetes_df %>%
+  select(where(is.numeric)) %>%
+  #drop missing values
+  drop_na() %>%
+  #scale all numeric cols
+  mutate(across(where(is.numeric), scale)) %>%
+  kmeans(centers = 4, nstart = 25)
+
+kmeans_res
+```
+
+15. Check whether the data you have run k-means on has the same number of rows as the dataframe with meta information, e.g. whether the person had diabetes. If they are not aligned, create a dataframe with Diabetes info that matches the dataframe you ran clustering on. 
+
+::: {.callout-tip collapse="true"}
+## Hint
+`drop_na()` takes an argument that tells which columns to look at for NA values.
+:::
+
+The full data:
+
+```{r}
+nrow(diabetes_df)
+```
+
+How many rows did we run clustering on?
+
+```{r}
+diabetes_df %>%
+  select(where(is.numeric)) %>%
+  #drop missing values
+  drop_na() %>%
+  #scale all numeric cols
+  mutate(across(where(is.numeric), scale)) %>%
+  nrow()
+```
+We could also have checked the length of `kmeans_res$cluster`:
+
+```{r}
+length(kmeans_res$cluster)
+```
+
+So we have omitted some rows. We need to omit the same rows from the original dataframe so our k-means clustering results are aligned with it.
+
+```{r}
+diabetes_df <- diabetes_df %>%
+  drop_na(where(is.numeric))
+nrow(diabetes_df)
+```
+
+16. Visualize the results of your clustering.  
+
+We first need to calculate a PCA. This is basically the same we have done in exercise 3B.
+
+```{r}
+pca_res <- diabetes_df %>%
+  select(where(is.numeric)) %>%
+  #drop missing values
+  drop_na() %>%
+  #scale all numeric cols
+  mutate(across(where(is.numeric), scale)) %>%
+  prcomp()
+```
+
+Now we project the k-means centroids in the PCA space 
+
+```{r}
+#project cluster centers from kmeans into the pca space
+centers_pca <- predict(pca_res, newdata = kmeans_res$centers) %>% as.data.frame()
+# Label clusters
+centers_pca$cluster <- as.factor(1:nrow(centers_pca))  
+centers_pca
+```
+
+And add cluster assignments to the `diabetes_df`:
+
+```{r}
+diabetes_df$Cluster <- factor(kmeans_res$cluster)
+```
+
+Finally we can plot:
+
+```{r}
+autoplot(pca_res, data = diabetes_df, color = 'Cluster',
+         loadings = TRUE, loadings.colour = "grey30", 
+         loadings.label.colour = "black",
+         loadings.label = TRUE, loadings.label.size = 3.5,
+         scale = 0) + 
+  theme_minimal() +
+  labs(title = "PCA of Diabetes Dataset") +
+  # Cluster centers
+  geom_point(data = centers_pca, aes(x = PC1, y = PC2, color = cluster),
+             shape = 8, size = 6, stroke = 2)  
+```
+
+Well the separation was not that good in exercise 3B so perhaps we should not expect very clean clusters. 
+
+17. Investigate the best number of clusters.
+
+```{r}
+library(factoextra)
+
+diabetes_df %>%
+  select(where(is.numeric)) %>%
+  #drop missing values
+  drop_na() %>%
+  #scale all numeric cols
+  mutate(across(where(is.numeric), scale)) %>%
+  fviz_nbclust(kmeans, method = "wss")
+```
+
+```{r}
+diabetes_df %>%
+  select(where(is.numeric)) %>%
+  #drop missing values
+  drop_na() %>%
+  #scale all numeric cols
+  mutate(across(where(is.numeric), scale)) %>%
+  fviz_nbclust(kmeans, method = "silhouette")
+```
+
+
+```{r}
+diabetes_df %>%
+  select(where(is.numeric)) %>%
+  #drop missing values
+  drop_na() %>%
+  #scale all numeric cols
+  mutate(across(where(is.numeric), scale)) %>%
+  fviz_nbclust(kmeans, method = "gap_stat")
+```
+
+The elbow is not very clear but the silhouette and gap statistic favor 2 clusters - which kind of makes sense since we have two outcomes, diabetic and non-diabetic.
+
+18. Re-do the clustering (plus visualization) with that number.
+
+```{r}
+# Set seed to ensure reproducibility
+set.seed(123)  
+
+#run kmeans
+kmeans_res <- diabetes_df %>%
+  select(where(is.numeric)) %>%
+  #drop missing values
+  drop_na() %>%
+  #scale all numeric cols
+  mutate(across(where(is.numeric), scale)) %>%
+  kmeans(centers = 2, nstart = 25)
+
+kmeans_res
+```
+
+```{r}
+#project cluster centers from kmeans into the pca space
+centers_pca <- predict(pca_res, newdata = kmeans_res$centers) %>% as.data.frame()
+# Label clusters
+centers_pca$cluster <- as.factor(1:nrow(centers_pca))  
+centers_pca
+```
+
+```{r}
+diabetes_df$Cluster <- factor(kmeans_res$cluster)
+```
+
+
+```{r}
+autoplot(pca_res, data = diabetes_df, color = 'Cluster',
+         loadings = TRUE, loadings.colour = "grey30", 
+         loadings.label.colour = "black",
+         loadings.label = TRUE, loadings.label.size = 3.5,
+         scale = 0) + 
+  theme_minimal() +
+  labs(title = "PCA of Diabetes Dataset") +
+  # Cluster centers
+  geom_point(data = centers_pca, aes(x = PC1, y = PC2, color = cluster),
+             shape = 8, size = 6, stroke = 2)  
+```
+
+
 --------------------
 
 ## Extra exercises
@@ -205,6 +401,8 @@ results <- results %>% arrange(P_Value)
 print(results)
 
 ```
+
+e2. Write a function that handles visualization of k-means clustering results. Think about which information you need to pass and what it should return. 
 
 
 

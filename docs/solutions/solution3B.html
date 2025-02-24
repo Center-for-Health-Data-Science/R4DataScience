@@ -291,7 +291,7 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../exercises/exercise5.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Exercise 5: Linear Regression</span></a>
+ <span class="menu-text">Exercise 5: Modelling in R</span></a>
   </div>
 </li>
       </ul>
@@ -396,6 +396,7 @@ window.Quarto = {
   <ul>
   <li><a href="#getting-started" id="toc-getting-started" class="nav-link active" data-scroll-target="#getting-started">Getting started</a></li>
   <li><a href="#plotting---part-3-pca" id="toc-plotting---part-3-pca" class="nav-link" data-scroll-target="#plotting---part-3-pca">Plotting - Part 3: PCA</a></li>
+  <li><a href="#extra-exercises" id="toc-extra-exercises" class="nav-link" data-scroll-target="#extra-exercises">Extra exercises</a></li>
   </ul>
 </nav>
     </div>
@@ -670,6 +671,31 @@ Hint
 <ol start="12" type="1">
 <li>Lastly, render you quarto document and review the resulting html file.</li>
 </ol>
+<hr>
+</section>
+<section id="extra-exercises" class="level2">
+<h2 class="anchored" data-anchor-id="extra-exercises">Extra exercises</h2>
+<p>e1. The Oral Glucose Tolerance Test is used to diagnose diabetes so we are not surprised that it separates the dataset well. In this part, we will look at a PCA without the OGTT measurements and see how we fare. Omit the Glucose measurement columns, calculate a PCA and create the plot.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>pca_no_gluc <span class="ot">&lt;-</span>diabetes_glucose_numerical <span class="sc">%&gt;%</span></span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>Glucose_0,<span class="sc">-</span>Glucose_60,<span class="sc">-</span>Glucose_120) <span class="sc">%&gt;%</span></span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">prcomp</span>(<span class="at">scale. =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">autoplot</span>(pca_no_gluc, <span class="at">data =</span> diabetes_glucose_unnest, <span class="at">colour =</span> <span class="st">"Diabetes"</span>,</span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>         <span class="at">loadings =</span> <span class="cn">TRUE</span>, <span class="at">loadings.colour =</span> <span class="st">"grey30"</span>, <span class="at">loadings.label.colour =</span> <span class="st">"black"</span>,</span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>         <span class="at">loadings.label =</span> <span class="cn">TRUE</span>, <span class="at">loadings.label.size =</span> <span class="fl">3.5</span>) <span class="sc">+</span> </span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span> </span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"PCA of Diabetes Dataset"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="solution3B_files/figure-html/unnamed-chunk-14-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Without the Glucose measurement data our strongest separating variables are BMI and Physical Activity.</p>
 
 
 </section>

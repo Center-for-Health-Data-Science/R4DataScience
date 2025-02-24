@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Exercise 5 - Modelling – R for Data Science</title>
+<title>Exercise 5 - Modelling in R – R for Data Science</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -109,7 +109,7 @@ ul.task-list li input[type="checkbox"] {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../exercises/exercise0.html">Exercises</a></li><li class="breadcrumb-item"><a href="../exercises/exercise5.html">Exercise 5: Linear Regression</a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../exercises/exercise0.html">Exercises</a></li><li class="breadcrumb-item"><a href="../exercises/exercise5.html">Exercise 5: Modelling in R</a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
     </div>
@@ -228,7 +228,7 @@ ul.task-list li input[type="checkbox"] {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../exercises/exercise5.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text">Exercise 5: Linear Regression</span></a>
+ <span class="menu-text">Exercise 5: Modelling in R</span></a>
   </div>
 </li>
       </ul>
@@ -338,6 +338,7 @@ ul.task-list li input[type="checkbox"] {
   <li><a href="#making-a-model" id="toc-making-a-model" class="nav-link" data-scroll-target="#making-a-model">Making a model</a></li>
   </ul></li>
   <li><a href="#part-2-logistic-regression" id="toc-part-2-logistic-regression" class="nav-link" data-scroll-target="#part-2-logistic-regression">Part 2: Logistic regression</a></li>
+  <li><a href="#part-3-clustering" id="toc-part-3-clustering" class="nav-link" data-scroll-target="#part-3-clustering">Part 3: Clustering</a></li>
   <li><a href="#extra-exercises" id="toc-extra-exercises" class="nav-link" data-scroll-target="#extra-exercises">Extra exercises</a></li>
   </ul>
 </nav>
@@ -345,9 +346,9 @@ ul.task-list li input[type="checkbox"] {
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../exercises/exercise0.html">Exercises</a></li><li class="breadcrumb-item"><a href="../exercises/exercise5.html">Exercise 5: Linear Regression</a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../exercises/exercise0.html">Exercises</a></li><li class="breadcrumb-item"><a href="../exercises/exercise5.html">Exercise 5: Modelling in R</a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title">Exercise 5 - Modelling</h1>
+<h1 class="title">Exercise 5 - Modelling in R</h1>
 </div>
 
 
@@ -419,7 +420,7 @@ Hint
 </section>
 <section id="part-2-logistic-regression" class="level2">
 <h2 class="anchored" data-anchor-id="part-2-logistic-regression">Part 2: Logistic regression</h2>
-<p>For this part we will use the joined diabetes data since it has a categorical outcome (Diabetes yes or no). We will not use the oral Glucose measurements as predictors since this is literally how you define diabetes, so we’re loading the joined dataset we created in exercise 2, e.g.&nbsp;‘diabetes_join.xlsx’ or what you have named it.</p>
+<p>For this part we will use the joined diabetes data since it has a categorical outcome (Diabetes yes or no). We will not use the oral Glucose measurements as predictors since this is literally how you define diabetes, so we’re loading the joined dataset we created in exercise 1, e.g.&nbsp;‘diabetes_join.xlsx’ or what you have named it.</p>
 <p>We choose to make a regression model of <code>Diabetes</code> as predicted by serum calcium levels (<code>Serum_ca2</code>), <code>BMI</code> and smoking habits (<code>Smoker</code>).</p>
 <ol start="8" type="1">
 <li><p>We cannot have NA values in our predictors so remove all rows with NAs and save the result into a new dataframe <code>diabetes_nona</code>.</p></li>
@@ -428,6 +429,17 @@ Hint
 <li><p>Split your data into training and test data. Take care that the two classes of the outcome variable are in the same ratio in both training and test data.</p></li>
 <li><p>Fit a regression model with <code>Serum_ca2</code>, <code>BMI</code> and <code>Smoker</code> as predictors. Check the model summary.</p></li>
 <li><p>Create a second model with only <code>BMI</code> and <code>Smoker</code> as predictors. Compare the fit of your second model to the first one (including <code>Serum_ca2</code>). Is there a significant gain, i.e.&nbsp;better fit when including the serum calcium levels as predictor? Which model do you think is better?</p></li>
+</ol>
+</section>
+<section id="part-3-clustering" class="level2">
+<h2 class="anchored" data-anchor-id="part-3-clustering">Part 3: Clustering</h2>
+<p>In this part we will run clustering on the joined diabetes dataset from exercise 1. Load it here if you don’t have it already from Part 2.</p>
+<ol start="14" type="1">
+<li><p>Run the k-means clustering algorithm with 4 centers on the data. Consider which columns you can use and if you have to manipulate them before. If you get an error, check whether you have values that might not be admissible, such as NA.</p></li>
+<li><p>Check whether the data you have run k-means on has the same number of rows as the dataframe with meta information, e.g.&nbsp;whether the person had diabetes. If they are not aligned, create a dataframe with Diabetes info that matches the dataframe you ran clustering on.</p></li>
+<li><p>Visualize the results of your clustering.</p></li>
+<li><p>Investigate the best number of clusters.</p></li>
+<li><p>Re-do the clustering (plus visualization) with that number.</p></li>
 </ol>
 <hr>
 </section>
@@ -450,6 +462,7 @@ Hint
 </div>
 </div>
 </div>
+<p>e2. Write a function that handles visualization of k-means clustering results. Think about which information you need to pass and what it should return.</p>
 
 
 </section>
