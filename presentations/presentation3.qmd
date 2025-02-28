@@ -6,7 +6,7 @@ project:
  output-dir: ../docs
 ---
 
-In this section we will learn some extra ggplot tricks! 
+In exercises 3A and B you will a deeper look at the diabetes data. To prepare for that, we will hear learn some extra ggplot tricks! 
 
 ## Load packages
 ```{r warning=FALSE, message=FALSE}
@@ -150,7 +150,4 @@ ggplot(df_sales, aes(x = .data[[plot_this]], y = sales_2022, color = Sex)) +
 
 We hear you say 'But that is cumbersome!'. Unfortunately we're neither the developers nor maintainers of `ggplot` so we all suffer together.
 
-## EDA
-
-Instead of having a long theoretical lecture we think you should just have a look at the data so let's go straight to the exercise.
 

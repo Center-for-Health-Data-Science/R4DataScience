@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Exercise 4 - Scripting in R – R for Data Science</title>
+<title>R Objects: S4 Objects – R for Data Science</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -143,7 +143,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../exercises/exercise0.html">Exercises</a></li><li class="breadcrumb-item"><a href="../exercises/exercise4.html">Exercise 4: Scripting in R</a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item">R Objects: S4 Objects</li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
     </div>
@@ -222,13 +222,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true">
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="false">
  <span class="menu-text">Exercises</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="false" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
-      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 ">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../exercises/exercise0.html" class="sidebar-item-text sidebar-link">
@@ -261,7 +261,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../exercises/exercise4.html" class="sidebar-item-text sidebar-link active">
+  <a href="../exercises/exercise4.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Exercise 4: Scripting in R</span></a>
   </div>
 </li>
@@ -371,20 +371,22 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#getting-started" id="toc-getting-started" class="nav-link active" data-scroll-target="#getting-started">Getting started</a></li>
-  <li><a href="#if-else-statements" id="toc-if-else-statements" class="nav-link" data-scroll-target="#if-else-statements">If-else statements</a></li>
-  <li><a href="#loops" id="toc-loops" class="nav-link" data-scroll-target="#loops">Loops</a></li>
-  <li><a href="#user-defined-functions" id="toc-user-defined-functions" class="nav-link" data-scroll-target="#user-defined-functions">User defined Functions</a></li>
-  <li><a href="#extra-exercises" id="toc-extra-exercises" class="nav-link" data-scroll-target="#extra-exercises">Extra exercises</a></li>
+  <li><a href="#s4-objects" id="toc-s4-objects" class="nav-link active" data-scroll-target="#s4-objects">S4 objects</a>
+  <ul class="collapse">
+  <li><a href="#an-example-the-airway-dataset" id="toc-an-example-the-airway-dataset" class="nav-link" data-scroll-target="#an-example-the-airway-dataset">An example: The airway dataset</a></li>
+  <li><a href="#accessing-slots" id="toc-accessing-slots" class="nav-link" data-scroll-target="#accessing-slots">Accessing slots</a></li>
+  <li><a href="#metadata" id="toc-metadata" class="nav-link" data-scroll-target="#metadata">Metadata</a></li>
+  <li><a href="#subsetting-rangedsummarizedexperiment-objects" id="toc-subsetting-rangedsummarizedexperiment-objects" class="nav-link" data-scroll-target="#subsetting-rangedsummarizedexperiment-objects">Subsetting <code>(Ranged)SummarizedExperiment</code> objects</a></li>
+  </ul></li>
   </ul>
 </nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../exercises/exercise0.html">Exercises</a></li><li class="breadcrumb-item"><a href="../exercises/exercise4.html">Exercise 4: Scripting in R</a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Exercise 4 - Scripting in R</h1>
+<h1 class="title">R Objects: S4 Objects</h1>
 </div>
 
 
@@ -401,136 +403,420 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<p>In this exercise you will practice your scripting.</p>
-<section id="getting-started" class="level2">
-<h2 class="anchored" data-anchor-id="getting-started">Getting started</h2>
-<p>Load libaries and data</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(glue)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>diabetes_glucose <span class="ot">&lt;-</span> <span class="fu">read_rds</span>(<span class="st">'../out/diabetes_glucose.rds'</span>)</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>diabetes_glucose</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 490 × 12
-   ID    Sex      Age BloodPressure   BMI PhysicalActivity Smoker  Diabetes
-   &lt;fct&gt; &lt;chr&gt;  &lt;dbl&gt;         &lt;dbl&gt; &lt;dbl&gt;            &lt;dbl&gt; &lt;chr&gt;   &lt;chr&gt;   
- 1 9046  Male      34            84  24.7               93 Unknown 0       
- 2 51676 Male      25            74  22.5              102 Unknown 0       
- 3 60182 Male      50            80  34.5               98 Unknown 1       
- 4 1665  Female    27            60  26.3               82 Never   0       
- 5 56669 Male      35            84  35                 58 Smoker  1       
- 6 53882 Female    31            78  43.3               59 Smoker  1       
- 7 10434 Male      52            86  33.3               58 Never   1       
- 8 27419 Female    54            78  35.2               74 Former  1       
- 9 60491 Female    41            90  39.8               67 Smoker  1       
-10 12109 Female    36            82  30.8               81 Smoker  1       
-# ℹ 480 more rows
-# ℹ 4 more variables: Serum_ca2 &lt;dbl&gt;, Married &lt;chr&gt;, Work &lt;chr&gt;, OGTT &lt;list&gt;</code></pre>
-</div>
-</div>
-</section>
-<section id="if-else-statements" class="level2">
-<h2 class="anchored" data-anchor-id="if-else-statements">If-else statements</h2>
-<p>In these exercises we don’t use the dataframe yet, that comes later when we have loops. For this part, just declare variables to test your statements, e.g.&nbsp;<code>bp &lt;- 120</code>.</p>
-<ol type="1">
-<li><p>Write an if-else statement that prints whether a person has high (more than 100), low (lower than 50) or normal blood pressure (between 50 and 100).</p></li>
-<li><p>Write an if-else statement that assigns people high, moderate or low diabetes risk based on their genetic risk score and BMI:</p></li>
-</ol>
+<section id="s4-objects" class="level2">
+<h2 class="anchored" data-anchor-id="s4-objects">S4 objects</h2>
+<p>Bioconductor packages often use S4 objects to store their data. Some examples:</p>
 <ul>
-<li><p>genetic Risk greater than 1 and BMI greater than 35 -&gt; high risk</p></li>
-<li><p>genetic Risk greater than 1 or BMI greater than 35 -&gt; moderate risk</p></li>
-<li><p>otherwise low risk</p></li>
+<li><p><code>(Ranged)SummarizedExperiment</code> is an object that holds rectangular matrices of high-throughput omics data (RNA-Seq, ChIP-Seq, ATAC-Seq)</p></li>
+<li><p><code>pyholoseq</code> is an objects that stores phylogenetic data such as OTU tables, taxonomy ect for e.g.&nbsp;microbiome and general metagenomics</p></li>
+<li><p><code>DESeqDataSet</code> is an object that stores counts, transformations and metadata for RNAseq analysis. It is subclass of <code>(Ranged)SummarizedExperiment</code></p></li>
 </ul>
-<p>Verify that your statement works for different combinations of risk score and BMI</p>
-</section>
-<section id="loops" class="level2">
-<h2 class="anchored" data-anchor-id="loops">Loops</h2>
-<ol start="3" type="1">
-<li><p>Create a vector with at least 5 elements and loop over it.</p></li>
-<li><p>Loop over all column names of diabetes_glucose.</p></li>
-</ol>
-<div class="callout callout-style-default callout-tip callout-titled">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-Hint
-</div>
-<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
-</div>
-<div id="callout-1" class="callout-1-contents callout-collapse collapse">
-<div class="callout-body-container callout-body">
-<p><code>colnames(df)</code> creates a vector of column names.</p>
-</div>
-</div>
-</div>
-<ol start="5" type="1">
-<li><p>Loop over all rows of diabetes_glucose and determine whether the person’s blood pressure is high, low or normal with the same conditions as in 1.</p></li>
-<li><p>Loop over all rows of diabetes_glucose and determine the risk based on genetic risk score and BMI, with the same conditions as in 2. Print the genetic risk score and BMI as well as the risk level to make it easier to see whether your code works correctly.</p></li>
-</ol>
-<div class="callout callout-style-default callout-tip callout-titled">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-Hint
-</div>
-<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
-</div>
-<div id="callout-2" class="callout-2-contents callout-collapse collapse">
-<div class="callout-body-container callout-body">
-<p>An easy way to printing several variables is to pass a vector into print: <code>print(c(this,and_that,and_this_too))</code></p>
-</div>
-</div>
-</div>
-</section>
-<section id="user-defined-functions" class="level2">
-<h2 class="anchored" data-anchor-id="user-defined-functions">User defined Functions</h2>
-<p>In this part we will write some functions that create plots.</p>
-<p>Since we want to be able to pass the name of the column to plot as a variable we will need to use the syntax for aliased column names. We showed how to do that in the end of presentation 3 if you need a refresher.</p>
-<ol start="7" type="1">
-<li><p>Create a variable <code>plot_column</code> and assign “Age” to it. Now make a boxplot of that column. Switch <code>plot_column</code> to a different column in <code>diabetes_glucose</code>. Does it work?</p></li>
-<li><p>Wrap your code for the boxplot into a function. The function should take two arguments: the dataframe to use and the name of the column to plot. Test your function. Add some customization to the plot like a theme or colors.</p></li>
-</ol>
-<div class="callout callout-style-default callout-tip callout-titled">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-3-contents" aria-controls="callout-3" aria-expanded="false" aria-label="Toggle callout">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-Hint
-</div>
-<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
-</div>
-<div id="callout-3" class="callout-3-contents callout-collapse collapse">
-<div class="callout-body-container callout-body">
-<p>Functions are good at returning objects so make your plot into an object and return that.</p>
-</div>
-</div>
-</div>
-<ol start="9" type="1">
-<li><p>Add a check to your function whether the supplied column is numeric. Note here that you need to test the data type of the column you want to plot, not the data type of it’s name. Confirm that your check works.</p></li>
-<li><p>Write code to apply your boxplot function to each numerical column in the dataframe. There are different ways to achieve this.</p></li>
-<li><p>Create an R script file to contain your functions. Copy your functions there and remove them from your global environment with <code>rm(list="name_of_your_function")</code>. Now source the function R script in your quarto document and test that the functions work.</p></li>
-</ol>
-<hr>
-</section>
-<section id="extra-exercises" class="level2">
-<h2 class="anchored" data-anchor-id="extra-exercises">Extra exercises</h2>
-<p>First, unnest diabetes_glucose so you get back the Measurement and Glucose columns.</p>
+<p>Unlike the S3 objects (named lists with a class) we looked at before, S4 objects have clearly defined elements called ‘slots’.</p>
+<p>A slot must have:</p>
+<ul>
+<li>a name</li>
+<li>a defined data type</li>
+<li>it may have validation rules</li>
+</ul>
+<p>They are usually accessed by specialized functions. Let’s have a look at a <code>SummarizedExperiment</code> objects.</p>
+<section id="an-example-the-airway-dataset" class="level3">
+<h3 class="anchored" data-anchor-id="an-example-the-airway-dataset">An example: The airway dataset</h3>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>diabetes_glucose_unnest <span class="ot">&lt;-</span> diabetes_glucose <span class="sc">%&gt;%</span></span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">unnest</span>(OGTT)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(SummarizedExperiment)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Indlæser krævet pakke: MatrixGenerics</code></pre>
 </div>
-<p>e1. Calculate the mean <code>Glucose (mmol/L)</code> for each measuring time point (i.e.&nbsp;one value for 0, 60 and 120). Now stratify this mean by a second variable, Sex. You should have 6 mean values since there are 6 groups (0_female, 0_male, 60_female, ect). Now, create a variable <code>category</code> to which you pass the name of the column to stratify by (e.g.&nbsp;<code>category &lt;- 'Sex'</code>) and use <code>category</code> in your code instead of the literal variable name.</p>
-<p>e2. We would like to make a plot that shows the means you calculated above. Again, use your <code>category</code> variable instead of the literal column name.</p>
-<p>e3. Wrap the code from e1 and e2 into a function <code>show_mean_by_catergory</code> so that you can call: <code>show_mean_by_catergory(diabetes_glucose_unnest, 'Sex')</code> and it will make you the plot. Test with different columns.</p>
+<div class="cell-output cell-output-stderr">
+<pre><code>Indlæser krævet pakke: matrixStats</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>
+Vedhæfter pakke: 'MatrixGenerics'</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>De følgende objekter er maskerede fra 'package:matrixStats':
+
+    colAlls, colAnyNAs, colAnys, colAvgsPerRowSet, colCollapse,
+    colCounts, colCummaxs, colCummins, colCumprods, colCumsums,
+    colDiffs, colIQRDiffs, colIQRs, colLogSumExps, colMadDiffs,
+    colMads, colMaxs, colMeans2, colMedians, colMins, colOrderStats,
+    colProds, colQuantiles, colRanges, colRanks, colSdDiffs, colSds,
+    colSums2, colTabulates, colVarDiffs, colVars, colWeightedMads,
+    colWeightedMeans, colWeightedMedians, colWeightedSds,
+    colWeightedVars, rowAlls, rowAnyNAs, rowAnys, rowAvgsPerColSet,
+    rowCollapse, rowCounts, rowCummaxs, rowCummins, rowCumprods,
+    rowCumsums, rowDiffs, rowIQRDiffs, rowIQRs, rowLogSumExps,
+    rowMadDiffs, rowMads, rowMaxs, rowMeans2, rowMedians, rowMins,
+    rowOrderStats, rowProds, rowQuantiles, rowRanges, rowRanks,
+    rowSdDiffs, rowSds, rowSums2, rowTabulates, rowVarDiffs, rowVars,
+    rowWeightedMads, rowWeightedMeans, rowWeightedMedians,
+    rowWeightedSds, rowWeightedVars</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Indlæser krævet pakke: GenomicRanges</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Indlæser krævet pakke: stats4</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Indlæser krævet pakke: BiocGenerics</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>
+Vedhæfter pakke: 'BiocGenerics'</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>De følgende objekter er maskerede fra 'package:stats':
+
+    IQR, mad, sd, var, xtabs</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>De følgende objekter er maskerede fra 'package:base':
+
+    anyDuplicated, aperm, append, as.data.frame, basename, cbind,
+    colnames, dirname, do.call, duplicated, eval, evalq, Filter, Find,
+    get, grep, grepl, intersect, is.unsorted, lapply, Map, mapply,
+    match, mget, order, paste, pmax, pmax.int, pmin, pmin.int,
+    Position, rank, rbind, Reduce, rownames, sapply, setdiff, sort,
+    table, tapply, union, unique, unsplit, which.max, which.min</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Indlæser krævet pakke: S4Vectors</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>
+Vedhæfter pakke: 'S4Vectors'</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>De følgende objekter er maskerede fra 'package:base':
+
+    expand.grid, I, unname</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Indlæser krævet pakke: IRanges</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>
+Vedhæfter pakke: 'IRanges'</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Det følgende objekt er maskeret fra 'package:grDevices':
+
+    windows</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Indlæser krævet pakke: GenomeInfoDb</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Indlæser krævet pakke: Biobase</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Welcome to Bioconductor
+
+    Vignettes contain introductory material; view with
+    'browseVignettes()'. To cite Bioconductor, see
+    'citation("Biobase")', and for packages 'citation("pkgname")'.</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>
+Vedhæfter pakke: 'Biobase'</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Det følgende objekt er maskeret fra 'package:MatrixGenerics':
+
+    rowMedians</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>De følgende objekter er maskerede fra 'package:matrixStats':
+
+    anyMissing, rowMedians</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(airway)</span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: pakke 'ggplot2' blev bygget under R version 4.2.3</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: pakke 'tibble' blev bygget under R version 4.2.3</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: pakke 'dplyr' blev bygget under R version 4.2.3</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
+✔ dplyr     1.1.2     ✔ readr     2.1.4
+✔ forcats   1.0.0     ✔ stringr   1.5.0
+✔ ggplot2   3.5.1     ✔ tibble    3.2.1
+✔ lubridate 1.9.2     ✔ tidyr     1.3.0
+✔ purrr     1.0.1     </code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
+✖ lubridate::%within%() masks IRanges::%within%()
+✖ dplyr::collapse()     masks IRanges::collapse()
+✖ dplyr::combine()      masks Biobase::combine(), BiocGenerics::combine()
+✖ dplyr::count()        masks matrixStats::count()
+✖ dplyr::desc()         masks IRanges::desc()
+✖ tidyr::expand()       masks S4Vectors::expand()
+✖ dplyr::filter()       masks stats::filter()
+✖ dplyr::first()        masks S4Vectors::first()
+✖ dplyr::lag()          masks stats::lag()
+✖ ggplot2::Position()   masks BiocGenerics::Position(), base::Position()
+✖ purrr::reduce()       masks GenomicRanges::reduce(), IRanges::reduce()
+✖ dplyr::rename()       masks S4Vectors::rename()
+✖ lubridate::second()   masks S4Vectors::second()
+✖ lubridate::second&lt;-() masks S4Vectors::second&lt;-()
+✖ dplyr::slice()        masks IRanges::slice()
+ℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="co">#load the airway dataset</span></span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(airway, <span class="at">package =</span> <span class="st">'airway'</span>)</span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a><span class="co">#You can read about the dataset by doing:</span></span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a><span class="co">#?airway</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="fu">typeof</span>(airway)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "S4"</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="fu">class</span>(airway)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "RangedSummarizedExperiment"
+attr(,"package")
+[1] "SummarizedExperiment"</code></pre>
+</div>
+</div>
+<p><code>airway</code> is a RangedSummarizedExperiment object. We can get a good overview of the content of Bioconductor S4 objects by just accessing them:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>airway</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>class: RangedSummarizedExperiment 
+dim: 64102 8 
+metadata(1): ''
+assays(1): counts
+rownames(64102): ENSG00000000003 ENSG00000000005 ... LRG_98 LRG_99
+rowData names(0):
+colnames(8): SRR1039508 SRR1039509 ... SRR1039520 SRR1039521
+colData names(9): SampleName cell ... Sample BioSample</code></pre>
+</div>
+</div>
+<p>There is only one assay and it is count data. We might have several assays in the same RangedSummarizedExperiment object, i.e.&nbsp;one for raw counts and one for normalized counts or rlog transformed counts.</p>
+<p>Our rows are genes with Ensembl Gene Identifiers (ENSG00000000003, ect) and our columns are samples. There have been 64102 genes measured (look at the dimensions).</p>
+</section>
+<section id="accessing-slots" class="level3">
+<h3 class="anchored" data-anchor-id="accessing-slots">Accessing slots</h3>
+<p>We generally access slots by functions that have the same name as the slot. The (raw) counts for example are in the assay slot:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a>count_matrix <span class="ot">&lt;-</span> <span class="fu">assay</span>(airway, <span class="st">'counts'</span>)</span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(count_matrix)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                SRR1039508 SRR1039509 SRR1039512 SRR1039513 SRR1039516
+ENSG00000000003        679        448        873        408       1138
+ENSG00000000005          0          0          0          0          0
+ENSG00000000419        467        515        621        365        587
+ENSG00000000457        260        211        263        164        245
+ENSG00000000460         60         55         40         35         78
+ENSG00000000938          0          0          2          0          1
+                SRR1039517 SRR1039520 SRR1039521
+ENSG00000000003       1047        770        572
+ENSG00000000005          0          0          0
+ENSG00000000419        799        417        508
+ENSG00000000457        331        233        229
+ENSG00000000460         63         76         60
+ENSG00000000938          0          0          0</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="fu">class</span>(count_matrix)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "matrix" "array" </code></pre>
+</div>
+</div>
+<p>The count data is in an array/matrix where each row is a gene and each column is a sample and the gene names are in the row names. They don’t have their own column because unlike dataframes matrices can only have numeric values.</p>
+<p>We haven’t explicitly worked with this data type before, but many functions in R can be applied to different types of objects so let’s try getting the row sums:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="fu">rowSums</span>(count_matrix) <span class="sc">%&gt;%</span> <span class="fu">head</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>ENSG00000000003 ENSG00000000005 ENSG00000000419 ENSG00000000457 ENSG00000000460 
+           5935               0            4279            1936             467 
+ENSG00000000938 
+              3 </code></pre>
+</div>
+</div>
+<p>We can see that gene ENSG00000000005 does not have counts in any of our sample (the row sum is 0). How many of such genes are there?</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(<span class="fu">rowSums</span>(count_matrix) <span class="sc">==</span> <span class="dv">0</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 30633</code></pre>
+</div>
+</div>
+<p>About half of the genes in the catalog have not been seen.</p>
+<p>Remember these are raw counts so we’re not going to do too much with them. If we are going to compare counts across samples or genes we will have to normalize them first. This is a topic for the <a href="https://heads.ku.dk/course/introduction_to_bulk_rna-seq/">RNAseq course</a>! (insert shameless self promotion).</p>
+</section>
+<section id="metadata" class="level3">
+<h3 class="anchored" data-anchor-id="metadata">Metadata</h3>
+<p>The metadata slot contains the experimental data underlying the counts:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="fu">metadata</span>(airway)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[[1]]
+Experiment data
+  Experimenter name: Himes BE 
+  Laboratory: NA 
+  Contact information:  
+  Title: RNA-Seq transcriptome profiling identifies CRISPLD2 as a glucocorticoid responsive gene that modulates cytokine function in airway smooth muscle cells. 
+  URL: http://www.ncbi.nlm.nih.gov/pubmed/24926665 
+  PMIDs: 24926665 
+
+  Abstract: A 226 word abstract is available. Use 'abstract' method.</code></pre>
+</div>
+</div>
+<p>What we would traditionally describe as metadata in for example an RNAseq experiment is in the <code>colData</code> slot instead:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb47"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a><span class="fu">colData</span>(airway)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>DataFrame with 8 rows and 9 columns
+           SampleName     cell      dex    albut        Run avgLength
+             &lt;factor&gt; &lt;factor&gt; &lt;factor&gt; &lt;factor&gt;   &lt;factor&gt; &lt;integer&gt;
+SRR1039508 GSM1275862  N61311     untrt    untrt SRR1039508       126
+SRR1039509 GSM1275863  N61311     trt      untrt SRR1039509       126
+SRR1039512 GSM1275866  N052611    untrt    untrt SRR1039512       126
+SRR1039513 GSM1275867  N052611    trt      untrt SRR1039513        87
+SRR1039516 GSM1275870  N080611    untrt    untrt SRR1039516       120
+SRR1039517 GSM1275871  N080611    trt      untrt SRR1039517       126
+SRR1039520 GSM1275874  N061011    untrt    untrt SRR1039520       101
+SRR1039521 GSM1275875  N061011    trt      untrt SRR1039521        98
+           Experiment    Sample    BioSample
+             &lt;factor&gt;  &lt;factor&gt;     &lt;factor&gt;
+SRR1039508  SRX384345 SRS508568 SAMN02422669
+SRR1039509  SRX384346 SRS508567 SAMN02422675
+SRR1039512  SRX384349 SRS508571 SAMN02422678
+SRR1039513  SRX384350 SRS508572 SAMN02422670
+SRR1039516  SRX384353 SRS508575 SAMN02422682
+SRR1039517  SRX384354 SRS508576 SAMN02422673
+SRR1039520  SRX384357 SRS508579 SAMN02422683
+SRR1039521  SRX384358 SRS508580 SAMN02422677</code></pre>
+</div>
+</div>
+<p>This dataframe tells us for each sample whether it was treated with dexamethasone (<code>dex</code>) or albuterol (<code>albut</code>), as well the Run ID, Experiment II and some other identifiers.</p>
+<p>A cool thing about <code>(Ranged)SummarizedExperiment</code> objects is that the <code>$</code> syntax directly indexes the <code>colData</code>. For example we can get a vector of sample names or whether the samples were treated with dexamethasone like so:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb49"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a><span class="co">#the $ syntax directly indexes the metadata, i.e.</span></span>
+<span id="cb49-2"><a href="#cb49-2" aria-hidden="true" tabindex="-1"></a>airway<span class="sc">$</span>SampleName</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] GSM1275862 GSM1275863 GSM1275866 GSM1275867 GSM1275870 GSM1275871 GSM1275874
+[8] GSM1275875
+8 Levels: GSM1275862 GSM1275863 GSM1275866 GSM1275867 ... GSM1275875</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb51"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a>airway<span class="sc">$</span>dex</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] untrt trt   untrt trt   untrt trt   untrt trt  
+Levels: trt untrt</code></pre>
+</div>
+</div>
+</section>
+<section id="subsetting-rangedsummarizedexperiment-objects" class="level3">
+<h3 class="anchored" data-anchor-id="subsetting-rangedsummarizedexperiment-objects">Subsetting <code>(Ranged)SummarizedExperiment</code> objects</h3>
+<p>Another neat thing about <code>(Ranged)SummarizedExperiment</code> objects is that they can be subset like matrices.</p>
+<p>Let’s have brief example of a matrix:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb53"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a>mat <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">12</span>, <span class="at">nrow =</span> <span class="dv">3</span>, <span class="at">ncol =</span> <span class="dv">4</span>)</span>
+<span id="cb53-2"><a href="#cb53-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb53-3"><a href="#cb53-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Assign row and column names</span></span>
+<span id="cb53-4"><a href="#cb53-4" aria-hidden="true" tabindex="-1"></a><span class="fu">rownames</span>(mat) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"Gene1"</span>, <span class="st">"Gene2"</span>, <span class="st">"Gene3"</span>)</span>
+<span id="cb53-5"><a href="#cb53-5" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(mat) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"Sample1"</span>, <span class="st">"Sample2"</span>, <span class="st">"Sample3"</span>, <span class="st">"Sample4"</span>)</span>
+<span id="cb53-6"><a href="#cb53-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb53-7"><a href="#cb53-7" aria-hidden="true" tabindex="-1"></a>mat</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>      Sample1 Sample2 Sample3 Sample4
+Gene1       1       4       7      10
+Gene2       2       5       8      11
+Gene3       3       6       9      12</code></pre>
+</div>
+</div>
+<p>Matrices are subset with this syntax:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb55"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb55-1"><a href="#cb55-1" aria-hidden="true" tabindex="-1"></a>mat[rows,columns]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Lets say we only want to look at Genes 1 and 2 we can indicate that by:</p>
+<ul>
+<li>rownames</li>
+<li>rowindices</li>
+<li>a boolean vector</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb56"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb56-1"><a href="#cb56-1" aria-hidden="true" tabindex="-1"></a><span class="co">#rownames</span></span>
+<span id="cb56-2"><a href="#cb56-2" aria-hidden="true" tabindex="-1"></a>mat[<span class="fu">c</span>(<span class="st">"Gene1"</span>, <span class="st">"Gene2"</span>), ]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>      Sample1 Sample2 Sample3 Sample4
+Gene1       1       4       7      10
+Gene2       2       5       8      11</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb58"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb58-1"><a href="#cb58-1" aria-hidden="true" tabindex="-1"></a><span class="co">#rowindices</span></span>
+<span id="cb58-2"><a href="#cb58-2" aria-hidden="true" tabindex="-1"></a>mat[<span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">3</span>),]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>      Sample1 Sample2 Sample3 Sample4
+Gene1       1       4       7      10
+Gene3       3       6       9      12</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb60"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb60-1"><a href="#cb60-1" aria-hidden="true" tabindex="-1"></a><span class="co">#boolean vector</span></span>
+<span id="cb60-2"><a href="#cb60-2" aria-hidden="true" tabindex="-1"></a>keep <span class="ot">&lt;-</span> <span class="fu">c</span>(T,F,T)</span>
+<span id="cb60-3"><a href="#cb60-3" aria-hidden="true" tabindex="-1"></a>mat[keep,]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>      Sample1 Sample2 Sample3 Sample4
+Gene1       1       4       7      10
+Gene3       3       6       9      12</code></pre>
+</div>
+</div>
+<p>And similarly for columns in the second field:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb62"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb62-1"><a href="#cb62-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Select Sample1 &amp; Sample3 (all rows)</span></span>
+<span id="cb62-2"><a href="#cb62-2" aria-hidden="true" tabindex="-1"></a>mat[, <span class="fu">c</span>(<span class="st">"Sample1"</span>, <span class="st">"Sample3"</span>)]  </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>      Sample1 Sample3
+Gene1       1       7
+Gene2       2       8
+Gene3       3       9</code></pre>
+</div>
+</div>
+<p>We can use that syntax to subset the entire <code>(Ranged)SummarizedExperiment</code> object (not just the count matrix in the <code>assay</code> slot)!</p>
+<p>For example we can make a new <code>(Ranged)SummarizedExperiment</code> object with only the samples treated with dexamethasone.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb64"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb64-1"><a href="#cb64-1" aria-hidden="true" tabindex="-1"></a><span class="co">#create a boolean vector of which samples to select</span></span>
+<span id="cb64-2"><a href="#cb64-2" aria-hidden="true" tabindex="-1"></a>airway<span class="sc">$</span>dex</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] untrt trt   untrt trt   untrt trt   untrt trt  
+Levels: trt untrt</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb66"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb66-1"><a href="#cb66-1" aria-hidden="true" tabindex="-1"></a>keep <span class="ot">&lt;-</span> airway<span class="sc">$</span>dex <span class="sc">==</span> <span class="st">'trt'</span></span>
+<span id="cb66-2"><a href="#cb66-2" aria-hidden="true" tabindex="-1"></a>keep</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] FALSE  TRUE FALSE  TRUE FALSE  TRUE FALSE  TRUE</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb68"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb68-1"><a href="#cb68-1" aria-hidden="true" tabindex="-1"></a><span class="co">#use the vector to subset the object as if were a matrix!</span></span>
+<span id="cb68-2"><a href="#cb68-2" aria-hidden="true" tabindex="-1"></a>dex_treated_samples <span class="ot">&lt;-</span> airway[, airway<span class="sc">$</span>dex <span class="sc">==</span> <span class="st">"trt"</span>]</span>
+<span id="cb68-3"><a href="#cb68-3" aria-hidden="true" tabindex="-1"></a><span class="fu">class</span>(dex_treated_samples)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "RangedSummarizedExperiment"
+attr(,"package")
+[1] "SummarizedExperiment"</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb70"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb70-1"><a href="#cb70-1" aria-hidden="true" tabindex="-1"></a>dex_treated_samples</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>class: RangedSummarizedExperiment 
+dim: 64102 4 
+metadata(1): ''
+assays(1): counts
+rownames(64102): ENSG00000000003 ENSG00000000005 ... LRG_98 LRG_99
+rowData names(0):
+colnames(4): SRR1039509 SRR1039513 SRR1039517 SRR1039521
+colData names(9): SampleName cell ... Sample BioSample</code></pre>
+</div>
+</div>
+<p>That’s all for now!</p>
 
 
+</section>
 </section>
 
 </main> <!-- /main -->

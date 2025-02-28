@@ -171,3 +171,120 @@ diabetes_clinical <- diabetes_clinical %>%
   mutate(Serum_ca2 = round(rnorm(nrow(diabetes_clinical), mean = 9.45, sd = 0.25),1))
 
 writexl::write_xlsx(diabetes_clinical, './diabetes_clinical_toy_messy.xlsx')
+
+###################### Make data for script exercise #####################
+
+#Background: https://www.verywellhealth.com/high-cholesterol-high-blood-pressure-5204455
+#High blood pressure and high cholesterol both damage the inner lining of blood 
+#vessels, known as the endothelium. Over time, endothelial damage contributes 
+#to the buildup of cholesterol plaques and inflammatory cells in the blood 
+#vessels throughout the body, known as atherosclerosis.
+
+#high bp and high chol together may be bad/high risk for cardiovascular events
+
+n_pat <- 50
+
+#run set.seed every time before running rnorm or you wil lget different results
+set.seed(123)
+patient_data <- tibble(
+  patient_id = sample(1:9999, n_pat),
+  age = sample(30:80, n_pat, replace = TRUE),
+  sex = sample(c("M", "F"), n_pat, replace = TRUE),
+  hdl = round(rnorm(n_pat, mean = 56, sd = 12),0),
+  ldl = pmax(round(rnorm(n_pat, mean = 125, sd = 35),0),60),
+  tg = round(rnorm(n_pat, mean = 150, sd = 45),0) #triglycerides
+  )
+
+#check total cholesterol
+patient_data$total_chl <- round(patient_data$hdl + patient_data$ldl + (patient_data$tg/5),0)
+
+#for females hdl should not be < 50
+patient_data %>%
+  count(sex == 'F' & hdl < 50)
+
+#for males hdl should not be < 40
+patient_data %>%
+  count(sex == 'M' & hdl < 40)
+
+#fix a bit
+patient_data[patient_data$patient_id == 7989, 'tg'] <- 185
+patient_data[patient_data$patient_id == 3995, 'hdl'] <- 62
+patient_data[patient_data$patient_id == 6746, 'hdl'] <- 55
+patient_data[patient_data$patient_id == 6672, 'hdl'] <- 57
+patient_data[patient_data$patient_id == 4761, 'ldl'] <- 62
+patient_data[patient_data$patient_id == 2504, 'hdl'] <- 52
+patient_data[patient_data$patient_id == 9209, 'tg'] <- 220
+patient_data[patient_data$patient_id == 9506, 'tg'] <- 140
+patient_data[patient_data$patient_id == 7391, 'tg'] <- 167
+
+
+#add specific mess:
+patient_data[patient_data$patient_id == 8469, 'sex'] <- 'f'
+patient_data[patient_data$patient_id == 2980, 'sex'] <- 'f'
+patient_data[patient_data$patient_id == 2504, 'sex'] <- 'm'
+patient_data[patient_data$patient_id == 1614, 'sex'] <- 'f'
+patient_data[patient_data$patient_id == 3937, 'sex'] <- 'm'
+
+
+#drop total chol column since this will be calculated in the analysis script
+patient_data <- patient_data %>%
+  select(-total_chl)
+
+#introduce some NA values
+#choose 3 random indices
+make_na <- c(2,12,28)
+patient_data$ldl[make_na] <- NA
+make_na <- c(45,33)
+patient_data$tg[make_na] <- NA
+
+
+#generate blood pressure data
+
+#create a vector with bp status
+set.seed(123)
+bp_status <- sample(c("Normal", "Elevated", "Hypertension"), 
+                    size = n_pat, replace = TRUE, prob = c(0.6, 0.29, 0.11))
+
+table(bp_status)
+
+# Generate Systolic Blood Pressure (SBP) based on category
+set.seed(123)
+sbp <- ifelse(bp_status == "Normal", 
+              round(rnorm(n_pat, mean = 110, sd = 5),0),  # Normal BP
+              ifelse(bp_status == "Elevated",
+                     round(rnorm(n_pat, mean = 130, sd = 4),0),  # Elevated BP
+                     round(rnorm(n_pat, mean = 150, sd = 6),0)))  # Hypertension
+
+
+#expand to five measurements per person
+
+# Generate 4 additional SBP measurements per original value
+sbp_expanded <- sapply(sbp, function(x) round(rnorm(4, mean = x, sd = 2),0))
+
+sum(colMeans(sbp_expanded) > 140)
+sum(colMeans(sbp_expanded) < 120) #normal
+sum(colMeans(sbp_expanded) > 120 & sbp < 140) #elevated
+
+#wrangle into tibble in long format
+sbp_total <- rbind(sbp, sbp_expanded)
+rownames(sbp_total) <- paste0('bp',1:nrow(sbp_total))  
+sbp_total <- as_tibble(t(sbp_total))
+sbp_total$patient_id <- patient_data$patient_id
+sbp_total <- sbp_total %>% 
+  pivot_longer(cols = starts_with('bp'),
+               names_to = 'time_point',
+               values_to = 'blood_pressure')
+
+#join with patient data
+patient_data <- patient_data %>%
+  left_join(sbp_total, by = 'patient_id')
+
+#nest
+patient_data <- patient_data %>%
+  group_by(patient_id) %>%
+  nest(bp_readings = c(time_point, blood_pressure)) %>%
+  ungroup()
+
+#HZ path
+setwd('C:/Users/pnv719/Documents/HeaDS/Courses/R4DS/R4DataScience/data/')
+write_rds(patient_data, 'patient_data.rds')

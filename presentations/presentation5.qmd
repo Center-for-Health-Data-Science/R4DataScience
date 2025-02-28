@@ -87,7 +87,16 @@ model <- lm(life ~ daily_cigarettes, data = train)
 
 ### Modelling results
 
-By calling `lm` we have already trained our model! Lets have a look at the results. The summary gives us a lot of information about the model we trained:
+By calling `lm` we have already trained our model! The return of `lm()` is, just like the return of `prcomp()`, a named list.
+
+```{r}
+typeof(model)
+class(model)
+names(model)
+```
+
+
+Lets have a look at the results. The summary gives us a lot of information about the model we trained:
 
 ```{r}
 # View model summary
@@ -389,7 +398,7 @@ Clustering is a type of unsupervised learning technique used to group similar da
 For this we will use the wine data set as an example: 
 
 
-```{r}
+```{r warning=FALSE, message=FALSE}
 library(ContaminatedMixt)
 data('wine') #load dataset
 df_wine <- wine #convert to tibble

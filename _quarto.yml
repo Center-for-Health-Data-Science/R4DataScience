@@ -28,7 +28,9 @@ website:
           - href: presentations/presentation2.qmd
             text: "Presentation 2: Advanced Data Wrangling" 
           - href: presentations/presentation3.qmd
-            text: "Presentation 3: Exploratory Data Analysis" 
+            text: "Presentation 3: Exploratory Data Analysis"
+          - href: presentations/named_lists.qmd
+            text: "R Objects: Named Lists"            
           - href: presentations/presentation4_main_script.qmd
             text: "Presentation 4: Scripting in R" 
           - href: presentations/presentation4_functions.qmd

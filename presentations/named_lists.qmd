@@ -1,0 +1,67 @@
+---
+title: "R Objects: Named lists"
+format: html
+project:
+ type: website
+ output-dir: ../docs
+---
+
+In our last exercise '3B: PCA' we encountered the object `pca_res <- prcomp(df, scale. = TRUE)` (or what you have named it). Lets have a deeper look at its structure because this is a type of object you will encounter many times while using R.
+
+## Creating a PCA object
+
+```{r}
+#build-in dataset: Iris
+head(iris)
+```
+
+```{r}
+#create PCA object
+pca_res <- prcomp(iris[1:4], scale. = TRUE)
+```
+
+`pca_res` is a named list:
+
+```{r}
+typeof(pca_res)
+```
+
+This is means it has several elements inside it and they are named. You can investigate them by clicking on `pca_res` in the Environment which will show their name, type and some example values. Lists are great because their elements can have different data types while vectors cannot. 
+
+We can also list the elements of a named list (or any other named object such as dataframes/tibbles):
+
+```{r}
+names(pca_res)
+names(iris)
+```
+
+Elements of a named list are always accessed with the `$` symbol:
+
+```{r}
+#the standard deviations of the principal components
+pca_res$sdev
+```
+
+Elements of a named list (or any list) can themselves be multi-dimensional, such as the coordinates of each data point in the PC space, `x`: 
+
+```{r}
+head(pca_res$x)
+```
+
+Many named list objects have a summary:
+
+```{r}
+summary(pca_res)
+```
+
+Some named list objects also have a class attribute. Named lists with a class attribute are also referred to as S3 objects. Or the other way around: S3 objects are named lists that have a class.
+
+```{r}
+class(pca_res)
+```
+
+R uses the `class` to figure out how to process the object, for example inside `summary()`. So `class` is about what the object is whereas `Type` (as in `typeof()`) is about the structure of an object and how you can interact with it.
+
+Bonus info: A ggplot is also an S3 object. Bet you didn't know that! 
+
+

@@ -1,0 +1,174 @@
+---
+title: "R Objects: S4 Objects"
+format: html
+project:
+ type: website
+ output-dir: ../docs
+---
+
+## S4 objects
+
+Bioconductor packages often use S4 objects to store their data. Some examples:
+
+* `(Ranged)SummarizedExperiment` is an object that holds rectangular matrices of high-throughput omics data (RNA-Seq, ChIP-Seq, ATAC-Seq)
+
+* `pyholoseq` is an objects that stores phylogenetic data such as OTU tables, taxonomy ect for e.g. microbiome and general metagenomics
+
+* `DESeqDataSet` is an object that stores counts, transformations and metadata for RNAseq analysis. It is subclass of `(Ranged)SummarizedExperiment`
+
+Unlike the S3 objects (named lists with a class) we looked at before, S4 objects have clearly defined elements called 'slots'. 
+
+A slot must have:
+
+* a name
+* a defined data type
+* it may have validation rules
+
+They are usually accessed by specialized functions. Let's have a look at a `SummarizedExperiment` objects.
+
+### An example: The airway dataset
+
+```{r}
+library(SummarizedExperiment)
+library(airway)
+library(tidyverse)
+
+#load the airway dataset
+data(airway, package = 'airway')
+#You can read about the dataset by doing:
+#?airway
+```
+
+
+```{r}
+typeof(airway)
+class(airway)
+```
+
+`airway` is a RangedSummarizedExperiment object. We can get a good overview of the content of Bioconductor S4 objects by just accessing them:
+
+```{r}
+airway
+```
+
+There is only one assay and it is count data. We might have several assays in the same RangedSummarizedExperiment object, i.e. one for raw counts and one for normalized counts or rlog transformed counts. 
+
+Our rows are genes with Ensembl Gene Identifiers (ENSG00000000003, ect) and our columns are samples. There have been 64102 genes measured (look at the dimensions). 
+
+### Accessing slots
+
+We generally access slots by functions that have the same name as the slot. The (raw) counts for example are in the assay slot: 
+
+```{r}
+count_matrix <- assay(airway, 'counts')
+head(count_matrix)
+class(count_matrix)
+```
+
+The count data is in an array/matrix where each row is a gene and each column is a sample and the gene names are in the row names. They don't have their own column because unlike dataframes matrices can only have numeric values. 
+
+We haven't explicitly worked with this data type before, but many functions in R can be applied to different types of objects so let's try getting the row sums:
+
+```{r}
+rowSums(count_matrix) %>% head()
+```
+
+We can see that gene ENSG00000000005 does not have counts in any of our sample (the row sum is 0). How many of such genes are there?
+
+```{r}
+sum(rowSums(count_matrix) == 0)
+```
+
+About half of the genes in the catalog have not been seen.
+
+Remember these are raw counts so we're not going to do too much with them. If we are going to compare counts across samples or genes we will have to normalize them first. This is a topic for the [RNAseq course](https://heads.ku.dk/course/introduction_to_bulk_rna-seq/)! (insert shameless self promotion).
+
+### Metadata
+
+The metadata slot contains the experimental data underlying the counts:
+
+```{r}
+metadata(airway)
+```
+
+What we would traditionally describe as metadata in for example an RNAseq experiment is in the `colData` slot instead:
+
+```{r}
+colData(airway)
+```
+
+This dataframe tells us for each sample whether it was treated with dexamethasone (`dex`) or albuterol (`albut`), as well the Run ID, Experiment II and some other identifiers.  
+
+A cool thing about `(Ranged)SummarizedExperiment` objects is that the `$` syntax directly indexes the `colData`. For example we can get a vector of sample names or whether the samples were treated with dexamethasone like so:
+
+```{r}
+#the $ syntax directly indexes the metadata, i.e.
+airway$SampleName
+airway$dex
+```
+
+### Subsetting `(Ranged)SummarizedExperiment` objects
+
+Another neat thing about `(Ranged)SummarizedExperiment` objects is that they can be subset like matrices. 
+
+Let's have brief example of a matrix:
+
+```{r}
+mat <- matrix(1:12, nrow = 3, ncol = 4)
+
+# Assign row and column names
+rownames(mat) <- c("Gene1", "Gene2", "Gene3")
+colnames(mat) <- c("Sample1", "Sample2", "Sample3", "Sample4")
+
+mat
+```
+Matrices are subset with this syntax:
+
+```{r eval=FALSE}
+mat[rows,columns]
+```
+
+Lets say we only want to look at Genes 1 and 2 we can indicate that by:
+
+* rownames
+* rowindices
+* a boolean vector 
+
+```{r}
+#rownames
+mat[c("Gene1", "Gene2"), ]
+
+#rowindices
+mat[c(1,3),]
+
+#boolean vector
+keep <- c(T,F,T)
+mat[keep,]
+
+```
+And similarly for columns in the second field:
+
+```{r}
+# Select Sample1 & Sample3 (all rows)
+mat[, c("Sample1", "Sample3")]  
+```
+
+We can use that syntax to subset the entire `(Ranged)SummarizedExperiment` object (not just the count matrix in the `assay` slot)!
+
+For example we can make a new `(Ranged)SummarizedExperiment` object with only the samples treated with dexamethasone.
+
+```{r}
+#create a boolean vector of which samples to select
+airway$dex
+keep <- airway$dex == 'trt'
+keep
+```
+
+```{r}
+#use the vector to subset the object as if were a matrix!
+dex_treated_samples <- airway[, airway$dex == "trt"]
+class(dex_treated_samples)
+dex_treated_samples
+```
+
+That's all for now!

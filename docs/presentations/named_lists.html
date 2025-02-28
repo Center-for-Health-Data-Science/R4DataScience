@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Exercise 4 - Scripting in R – R for Data Science</title>
+<title>R Objects: Named lists – R for Data Science</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -143,7 +143,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../exercises/exercise0.html">Exercises</a></li><li class="breadcrumb-item"><a href="../exercises/exercise4.html">Exercise 4: Scripting in R</a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../presentations/presentation1.html">Presentations</a></li><li class="breadcrumb-item"><a href="../presentations/named_lists.html">R Objects: Named Lists</a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
     </div>
@@ -163,13 +163,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="false">
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
  <span class="menu-text">Presentations</span></a>
-          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="false" aria-label="Toggle section">
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
-      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 ">  
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../presentations/presentation1.html" class="sidebar-item-text sidebar-link">
@@ -190,7 +190,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../presentations/named_lists.html" class="sidebar-item-text sidebar-link">
+  <a href="../presentations/named_lists.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text">R Objects: Named Lists</span></a>
   </div>
 </li>
@@ -222,13 +222,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true">
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="false">
  <span class="menu-text">Exercises</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="false" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
-      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 ">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../exercises/exercise0.html" class="sidebar-item-text sidebar-link">
@@ -261,7 +261,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../exercises/exercise4.html" class="sidebar-item-text sidebar-link active">
+  <a href="../exercises/exercise4.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Exercise 4: Scripting in R</span></a>
   </div>
 </li>
@@ -371,20 +371,16 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#getting-started" id="toc-getting-started" class="nav-link active" data-scroll-target="#getting-started">Getting started</a></li>
-  <li><a href="#if-else-statements" id="toc-if-else-statements" class="nav-link" data-scroll-target="#if-else-statements">If-else statements</a></li>
-  <li><a href="#loops" id="toc-loops" class="nav-link" data-scroll-target="#loops">Loops</a></li>
-  <li><a href="#user-defined-functions" id="toc-user-defined-functions" class="nav-link" data-scroll-target="#user-defined-functions">User defined Functions</a></li>
-  <li><a href="#extra-exercises" id="toc-extra-exercises" class="nav-link" data-scroll-target="#extra-exercises">Extra exercises</a></li>
+  <li><a href="#creating-a-pca-object" id="toc-creating-a-pca-object" class="nav-link active" data-scroll-target="#creating-a-pca-object">Creating a PCA object</a></li>
   </ul>
 </nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../exercises/exercise0.html">Exercises</a></li><li class="breadcrumb-item"><a href="../exercises/exercise4.html">Exercise 4: Scripting in R</a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../presentations/presentation1.html">Presentations</a></li><li class="breadcrumb-item"><a href="../presentations/named_lists.html">R Objects: Named Lists</a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title">Exercise 4 - Scripting in R</h1>
+<h1 class="title">R Objects: Named lists</h1>
 </div>
 
 
@@ -401,134 +397,86 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<p>In this exercise you will practice your scripting.</p>
-<section id="getting-started" class="level2">
-<h2 class="anchored" data-anchor-id="getting-started">Getting started</h2>
-<p>Load libaries and data</p>
+<p>In our last exercise ‘3B: PCA’ we encountered the object <code>pca_res &lt;- prcomp(df, scale. = TRUE)</code> (or what you have named it). Lets have a deeper look at its structure because this is a type of object you will encounter many times while using R.</p>
+<section id="creating-a-pca-object" class="level2">
+<h2 class="anchored" data-anchor-id="creating-a-pca-object">Creating a PCA object</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(glue)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>diabetes_glucose <span class="ot">&lt;-</span> <span class="fu">read_rds</span>(<span class="st">'../out/diabetes_glucose.rds'</span>)</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>diabetes_glucose</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">#build-in dataset: Iris</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(iris)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 490 × 12
-   ID    Sex      Age BloodPressure   BMI PhysicalActivity Smoker  Diabetes
-   &lt;fct&gt; &lt;chr&gt;  &lt;dbl&gt;         &lt;dbl&gt; &lt;dbl&gt;            &lt;dbl&gt; &lt;chr&gt;   &lt;chr&gt;   
- 1 9046  Male      34            84  24.7               93 Unknown 0       
- 2 51676 Male      25            74  22.5              102 Unknown 0       
- 3 60182 Male      50            80  34.5               98 Unknown 1       
- 4 1665  Female    27            60  26.3               82 Never   0       
- 5 56669 Male      35            84  35                 58 Smoker  1       
- 6 53882 Female    31            78  43.3               59 Smoker  1       
- 7 10434 Male      52            86  33.3               58 Never   1       
- 8 27419 Female    54            78  35.2               74 Former  1       
- 9 60491 Female    41            90  39.8               67 Smoker  1       
-10 12109 Female    36            82  30.8               81 Smoker  1       
-# ℹ 480 more rows
-# ℹ 4 more variables: Serum_ca2 &lt;dbl&gt;, Married &lt;chr&gt;, Work &lt;chr&gt;, OGTT &lt;list&gt;</code></pre>
+<pre><code>  Sepal.Length Sepal.Width Petal.Length Petal.Width Species
+1          5.1         3.5          1.4         0.2  setosa
+2          4.9         3.0          1.4         0.2  setosa
+3          4.7         3.2          1.3         0.2  setosa
+4          4.6         3.1          1.5         0.2  setosa
+5          5.0         3.6          1.4         0.2  setosa
+6          5.4         3.9          1.7         0.4  setosa</code></pre>
 </div>
 </div>
-</section>
-<section id="if-else-statements" class="level2">
-<h2 class="anchored" data-anchor-id="if-else-statements">If-else statements</h2>
-<p>In these exercises we don’t use the dataframe yet, that comes later when we have loops. For this part, just declare variables to test your statements, e.g.&nbsp;<code>bp &lt;- 120</code>.</p>
-<ol type="1">
-<li><p>Write an if-else statement that prints whether a person has high (more than 100), low (lower than 50) or normal blood pressure (between 50 and 100).</p></li>
-<li><p>Write an if-else statement that assigns people high, moderate or low diabetes risk based on their genetic risk score and BMI:</p></li>
-</ol>
-<ul>
-<li><p>genetic Risk greater than 1 and BMI greater than 35 -&gt; high risk</p></li>
-<li><p>genetic Risk greater than 1 or BMI greater than 35 -&gt; moderate risk</p></li>
-<li><p>otherwise low risk</p></li>
-</ul>
-<p>Verify that your statement works for different combinations of risk score and BMI</p>
-</section>
-<section id="loops" class="level2">
-<h2 class="anchored" data-anchor-id="loops">Loops</h2>
-<ol start="3" type="1">
-<li><p>Create a vector with at least 5 elements and loop over it.</p></li>
-<li><p>Loop over all column names of diabetes_glucose.</p></li>
-</ol>
-<div class="callout callout-style-default callout-tip callout-titled">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-Hint
-</div>
-<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
-</div>
-<div id="callout-1" class="callout-1-contents callout-collapse collapse">
-<div class="callout-body-container callout-body">
-<p><code>colnames(df)</code> creates a vector of column names.</p>
-</div>
-</div>
-</div>
-<ol start="5" type="1">
-<li><p>Loop over all rows of diabetes_glucose and determine whether the person’s blood pressure is high, low or normal with the same conditions as in 1.</p></li>
-<li><p>Loop over all rows of diabetes_glucose and determine the risk based on genetic risk score and BMI, with the same conditions as in 2. Print the genetic risk score and BMI as well as the risk level to make it easier to see whether your code works correctly.</p></li>
-</ol>
-<div class="callout callout-style-default callout-tip callout-titled">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-Hint
-</div>
-<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
-</div>
-<div id="callout-2" class="callout-2-contents callout-collapse collapse">
-<div class="callout-body-container callout-body">
-<p>An easy way to printing several variables is to pass a vector into print: <code>print(c(this,and_that,and_this_too))</code></p>
-</div>
-</div>
-</div>
-</section>
-<section id="user-defined-functions" class="level2">
-<h2 class="anchored" data-anchor-id="user-defined-functions">User defined Functions</h2>
-<p>In this part we will write some functions that create plots.</p>
-<p>Since we want to be able to pass the name of the column to plot as a variable we will need to use the syntax for aliased column names. We showed how to do that in the end of presentation 3 if you need a refresher.</p>
-<ol start="7" type="1">
-<li><p>Create a variable <code>plot_column</code> and assign “Age” to it. Now make a boxplot of that column. Switch <code>plot_column</code> to a different column in <code>diabetes_glucose</code>. Does it work?</p></li>
-<li><p>Wrap your code for the boxplot into a function. The function should take two arguments: the dataframe to use and the name of the column to plot. Test your function. Add some customization to the plot like a theme or colors.</p></li>
-</ol>
-<div class="callout callout-style-default callout-tip callout-titled">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-3-contents" aria-controls="callout-3" aria-expanded="false" aria-label="Toggle callout">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-Hint
-</div>
-<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
-</div>
-<div id="callout-3" class="callout-3-contents callout-collapse collapse">
-<div class="callout-body-container callout-body">
-<p>Functions are good at returning objects so make your plot into an object and return that.</p>
-</div>
-</div>
-</div>
-<ol start="9" type="1">
-<li><p>Add a check to your function whether the supplied column is numeric. Note here that you need to test the data type of the column you want to plot, not the data type of it’s name. Confirm that your check works.</p></li>
-<li><p>Write code to apply your boxplot function to each numerical column in the dataframe. There are different ways to achieve this.</p></li>
-<li><p>Create an R script file to contain your functions. Copy your functions there and remove them from your global environment with <code>rm(list="name_of_your_function")</code>. Now source the function R script in your quarto document and test that the functions work.</p></li>
-</ol>
-<hr>
-</section>
-<section id="extra-exercises" class="level2">
-<h2 class="anchored" data-anchor-id="extra-exercises">Extra exercises</h2>
-<p>First, unnest diabetes_glucose so you get back the Measurement and Glucose columns.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>diabetes_glucose_unnest <span class="ot">&lt;-</span> diabetes_glucose <span class="sc">%&gt;%</span></span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">unnest</span>(OGTT)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co">#create PCA object</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>pca_res <span class="ot">&lt;-</span> <span class="fu">prcomp</span>(iris[<span class="dv">1</span><span class="sc">:</span><span class="dv">4</span>], <span class="at">scale. =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>e1. Calculate the mean <code>Glucose (mmol/L)</code> for each measuring time point (i.e.&nbsp;one value for 0, 60 and 120). Now stratify this mean by a second variable, Sex. You should have 6 mean values since there are 6 groups (0_female, 0_male, 60_female, ect). Now, create a variable <code>category</code> to which you pass the name of the column to stratify by (e.g.&nbsp;<code>category &lt;- 'Sex'</code>) and use <code>category</code> in your code instead of the literal variable name.</p>
-<p>e2. We would like to make a plot that shows the means you calculated above. Again, use your <code>category</code> variable instead of the literal column name.</p>
-<p>e3. Wrap the code from e1 and e2 into a function <code>show_mean_by_catergory</code> so that you can call: <code>show_mean_by_catergory(diabetes_glucose_unnest, 'Sex')</code> and it will make you the plot. Test with different columns.</p>
+<p><code>pca_res</code> is a named list:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">typeof</span>(pca_res)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "list"</code></pre>
+</div>
+</div>
+<p>This is means it has several elements inside it and they are named. You can investigate them by clicking on <code>pca_res</code> in the Environment which will show their name, type and some example values. Lists are great because their elements can have different data types while vectors cannot.</p>
+<p>We can also list the elements of a named list (or any other named object such as dataframes/tibbles):</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(pca_res)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "sdev"     "rotation" "center"   "scale"    "x"       </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(iris)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "Sepal.Length" "Sepal.Width"  "Petal.Length" "Petal.Width"  "Species"     </code></pre>
+</div>
+</div>
+<p>Elements of a named list are always accessed with the <code>$</code> symbol:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co">#the standard deviations of the principal components</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>pca_res<span class="sc">$</span>sdev</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 1.7083611 0.9560494 0.3830886 0.1439265</code></pre>
+</div>
+</div>
+<p>Elements of a named list (or any list) can themselves be multi-dimensional, such as the coordinates of each data point in the PC space, <code>x</code>:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(pca_res<span class="sc">$</span>x)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>           PC1        PC2         PC3          PC4
+[1,] -2.257141 -0.4784238  0.12727962  0.024087508
+[2,] -2.074013  0.6718827  0.23382552  0.102662845
+[3,] -2.356335  0.3407664 -0.04405390  0.028282305
+[4,] -2.291707  0.5953999 -0.09098530 -0.065735340
+[5,] -2.381863 -0.6446757 -0.01568565 -0.035802870
+[6,] -2.068701 -1.4842053 -0.02687825  0.006586116</code></pre>
+</div>
+</div>
+<p>Many named list objects have a summary:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(pca_res)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Importance of components:
+                          PC1    PC2     PC3     PC4
+Standard deviation     1.7084 0.9560 0.38309 0.14393
+Proportion of Variance 0.7296 0.2285 0.03669 0.00518
+Cumulative Proportion  0.7296 0.9581 0.99482 1.00000</code></pre>
+</div>
+</div>
+<p>Some named list objects also have a class attribute. Named lists with a class attribute are also referred to as S3 objects. Or the other way around: S3 objects are named lists that have a class.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">class</span>(pca_res)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "prcomp"</code></pre>
+</div>
+</div>
+<p>R uses the <code>class</code> to figure out how to process the object, for example inside <code>summary()</code>. So <code>class</code> is about what the object is whereas <code>Type</code> (as in <code>typeof()</code>) is about the structure of an object and how you can interact with it.</p>
+<p>Bonus info: A ggplot is also an S3 object. Bet you didn’t know that!</p>
 
 
 </section>
