@@ -1,0 +1,11 @@
+---
+title: "Exercise 6: Understanding and improving an R script"
+format: html
+project:
+ type: website
+ output-dir: ../docs
+---
+
+In this exercise you got through the script `analysis.R` together with your neighbors, find out what the data is that is being worked and which analysis is done and how. There are also some things that could be an issue, so have an eye out and try to think how you could improve the script.
+
+
