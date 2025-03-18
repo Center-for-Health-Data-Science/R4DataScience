@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Exercise 3 A: Exploratory Data Analysis (EDA) - Plotting – R for Data Science</title>
+<title>Exercise 6: Understanding and improving an R script – R for Data Science</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -109,7 +109,7 @@ ul.task-list li input[type="checkbox"] {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../exercises/exercise0.html">Exercises</a></li><li class="breadcrumb-item"><a href="../exercises/exercise3A.html">Exercise 3 A: Exploratory Data Analysis - Plotting</a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../exercises/exercise0.html">Exercises</a></li><li class="breadcrumb-item"><a href="../exercises/exercise6.html">Exercise 6: Understanding and improving an R script</a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
     </div>
@@ -221,7 +221,7 @@ ul.task-list li input[type="checkbox"] {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../exercises/exercise3A.html" class="sidebar-item-text sidebar-link active">
+  <a href="../exercises/exercise3A.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Exercise 3 A: Exploratory Data Analysis - Plotting</span></a>
   </div>
 </li>
@@ -245,7 +245,7 @@ ul.task-list li input[type="checkbox"] {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../exercises/exercise6.html" class="sidebar-item-text sidebar-link">
+  <a href="../exercises/exercise6.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text">Exercise 6: Understanding and improving an R script</span></a>
   </div>
 </li>
@@ -350,24 +350,15 @@ ul.task-list li input[type="checkbox"] {
 </nav>
 <div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        <nav id="TOC" role="doc-toc" class="toc-active">
-    <h2 id="toc-title">On this page</h2>
-   
-  <ul>
-  <li><a href="#getting-started" id="toc-getting-started" class="nav-link active" data-scroll-target="#getting-started">Getting started</a></li>
-  <li><a href="#plotting---part-1" id="toc-plotting---part-1" class="nav-link" data-scroll-target="#plotting---part-1">Plotting - Part 1</a></li>
-  <li><a href="#plotting---part-2" id="toc-plotting---part-2" class="nav-link" data-scroll-target="#plotting---part-2">Plotting - Part 2</a></li>
-  <li><a href="#extra-exercises" id="toc-extra-exercises" class="nav-link" data-scroll-target="#extra-exercises">Extra exercises</a></li>
-  </ul>
-</nav>
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
+        
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../exercises/exercise0.html">Exercises</a></li><li class="breadcrumb-item"><a href="../exercises/exercise3A.html">Exercise 3 A: Exploratory Data Analysis - Plotting</a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../exercises/exercise0.html">Exercises</a></li><li class="breadcrumb-item"><a href="../exercises/exercise6.html">Exercise 6: Understanding and improving an R script</a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title">Exercise 3 A: Exploratory Data Analysis (EDA) - Plotting</h1>
+<h1 class="title">Exercise 6: Understanding and improving an R script</h1>
 </div>
 
 
@@ -384,144 +375,9 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<p>In this exercise you will do a lot of plotting with ggplot. For a reminder on how ggplot works you can have a look the <a href="https://center-for-health-data-science.github.io/FromExceltoR/Presentations/presentation3.html">ggplot material</a> covered in our previous course, From Excel to R.</p>
-<section id="getting-started" class="level2">
-<h2 class="anchored" data-anchor-id="getting-started">Getting started</h2>
-<ol type="1">
-<li><p>Load packages.</p></li>
-<li><p>Load data from the <code>.rds</code> file you created in Exercise 2. Have a guess at what the function is called.</p></li>
-</ol>
-</section>
-<section id="plotting---part-1" class="level2">
-<h2 class="anchored" data-anchor-id="plotting---part-1">Plotting - Part 1</h2>
-<p>You will first do some basic plots to get started with ggplot again.</p>
-<p>If it has been a while since you worked with ggplot, have a look at the <a href="https://center-for-health-data-science.github.io/FromExceltoR/Presentations/presentation3.html">ggplot material</a> from the FromExceltoR course.</p>
-<ol start="3" type="1">
-<li><p>Create a scatter plot of <code>Age</code> and <code>Blood Pressure</code>. Do you notice a trend?</p></li>
-<li><p>Create a scatter plot of <code>PhysicalActivity</code> and <code>BMI.</code> Do you notice a trend?</p></li>
-<li><p>Now, create the same two plots as before, but this time stratify them by <code>Diabetes</code>. Do you notice any trends?</p></li>
-</ol>
-<div class="callout callout-style-default callout-tip callout-titled">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-Hint
-</div>
-<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
-</div>
-<div id="callout-1" class="callout-1-contents callout-collapse collapse">
-<div class="callout-body-container callout-body">
-<p>You can stratify a plot by a categorical variable in several ways, depending on the type of plot. The purpose of stratification is to distinguish samples based on their categorical values, making patterns or differences easier to identify. This can be done using aesthetics like <code>color</code>, <code>fill</code>, <code>shape</code>.</p>
-</div>
-</div>
-</div>
-<ol start="6" type="1">
-<li><p>Create a boxplot of <code>BMI</code> stratified by <code>Diabetes.</code> Give the plot a meaningful title.</p></li>
-<li><p>Create a boxplot of <code>PhysicalActivity</code> stratified by <code>Smoker</code>. Give the plot a meaningful title.</p></li>
-</ol>
-</section>
-<section id="plotting---part-2" class="level2">
-<h2 class="anchored" data-anchor-id="plotting---part-2">Plotting - Part 2</h2>
-<p>In order to plot the data inside the nested variable, the data needs to be unnested.</p>
-<ol start="8" type="1">
-<li><p>Create a boxplot of the glucose measurements at time 0 stratified by <code>Diabetes</code>. Give the plot a meaningful title.</p></li>
-<li><p>Create these boxplots for each time point (0, 60, 120) by using faceting by <code>Measurement</code>. Give the plot a meaningful title.</p></li>
-</ol>
-<div class="callout callout-style-default callout-tip callout-titled">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-Hint
-</div>
-<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
-</div>
-<div id="callout-2" class="callout-2-contents callout-collapse collapse">
-<div class="callout-body-container callout-body">
-<p>Faceting allows you to create multiple plots based on the values of a categorical variable, making it easier to compare patterns across groups. In ggplot2, you can use <code>facet_wrap</code> for a single variable or <code>facet_grid</code> for multiple variables.</p>
-</div>
-</div>
-</div>
-<ol start="10" type="1">
-<li>Calculate the mean glucose levels for each time point.</li>
-</ol>
-<div class="callout callout-style-default callout-tip callout-titled">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-3-contents" aria-controls="callout-3" aria-expanded="false" aria-label="Toggle callout">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-Hint
-</div>
-<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
-</div>
-<div id="callout-3" class="callout-3-contents callout-collapse collapse">
-<div class="callout-body-container callout-body">
-<p>You will need to use <code>unnest()</code>, <code>group_by()</code>, and <code>summerise()</code>.</p>
-</div>
-</div>
-</div>
-<ol start="11" type="1">
-<li>Make the same calculation as above, but additionally group the results by <code>Diabetes</code>. Save the data frame in a variable. Compare your results to the boxplots you made above.</li>
-</ol>
-<div class="callout callout-style-default callout-tip callout-titled">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-4-contents" aria-controls="callout-4" aria-expanded="false" aria-label="Toggle callout">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-Hint
-</div>
-<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
-</div>
-<div id="callout-4" class="callout-4-contents callout-collapse collapse">
-<div class="callout-body-container callout-body">
-<p>Group by several variables: <code>group_by(var1, var2)</code>.</p>
-</div>
-</div>
-</div>
-<ol start="12" type="1">
-<li>Create a plot that visualizes glucose measurements across time points, with one line for each patient ID. Then color the lines by their diabetes status. In summary, each patient’s glucose measurements should be connected with a line, grouped by their ID, and color-coded by <code>Diabetes</code>. Give the plot a meaningful title.</li>
-</ol>
-<p>If your time points are strangely ordered have a look at the <code>levels</code> of your <code>Measurement</code> variable (the one that specifies which time point the measurement was taken at) and if necessary fix their order.</p>
-<hr>
-</section>
-<section id="extra-exercises" class="level2">
-<h2 class="anchored" data-anchor-id="extra-exercises">Extra exercises</h2>
-<p>This exercise might be a bit more challenging. It requires multiple operations and might involve some techniques that were not explicitly shown in the presentations.</p>
-<p>e1. Recreate the plot you made in Exercise 12 and include the mean value for each glucose measurement for the two diabetes statuses (0 and 1) you calculated in Exercise 11. This plot should look like this:</p>
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="../out/figure3_13.png" class="img-fluid quarto-figure quarto-figure-center figure-img"></p>
-</figure>
-</div>
-<div class="callout callout-style-default callout-tip callout-titled">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-5-contents" aria-controls="callout-5" aria-expanded="false" aria-label="Toggle callout">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-Hint
-</div>
-<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
-</div>
-<div id="callout-5" class="callout-5-contents callout-collapse collapse">
-<div class="callout-body-container callout-body">
-<p>There are several ways to solve this task. Here is a workflow suggestion:</p>
-<ul>
-<li><p>You want to show both the raw data and the means in the same plot. Data from another dataset can be added to a plot by pointing the geom to a specific dataset like so: <code>+ geom_point(data = different_data, aes(x = VAR1, y = VAR2, group = VAR3))</code></p></li>
-<li><p><code>geom_line</code> needs a variable to group by in order to know which dots should be connected. In exercise 10, this grouping variable was the patient ID. Which variable in <code>glucose_mean</code> tells which points are connected? Pass it as group aesthetic.</p></li>
-<li><p><code>geom_line</code> has a <code>linetype</code> aestethic to define the kind of line (dashed or solid).</p></li>
-</ul>
-</div>
-</div>
-</div>
+<p>In this exercise you got through the script <code>analysis.R</code> together with your neighbors, find out what the data is that is being worked and which analysis is done and how. There are also some things that could be an issue, so have an eye out and try to think how you could improve the script.</p>
 
 
-</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">

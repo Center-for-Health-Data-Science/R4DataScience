@@ -36,7 +36,9 @@ website:
           - href: presentations/presentation4_functions.qmd
             text: "Presentation 4, Functions: Scripting in R"
           - href: presentations/presentation5.qmd
-            text: "Presentation 5: Intro to Modelling in R" 
+            text: "Presentation 5: Intro to Modelling in R"
+          - href: presentations/s4_objects.qmd
+            text: "R objects: S4 objects" 
 
       - href: data/data.qmd
         text: "Data️"
@@ -57,6 +59,8 @@ website:
             text: "Exercise 4: Scripting in R"            
           - href: exercises/exercise5.qmd
             text: "Exercise 5: Modelling in R"
+          - href: exercises/exercise6.qmd
+            text: "Exercise 6: Understanding and improving an R script"
 
       - section: "Solutions"
         contents:
@@ -74,6 +78,8 @@ website:
               text: "Exercise 4, Functions - Solution"
             - href: solutions/solution5.qmd # solutions/solution_not_up.qmd #
               text: "Exercise 5 - Solution"
+            - href: solutions/solution6.qmd # solutions/solution_not_up.qmd #
+              text: "Exercise 6 - Solution"
 
       - section: "Cheat Sheets"
         contents:

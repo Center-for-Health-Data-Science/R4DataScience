@@ -1365,5 +1365,17 @@
       "Solutions",
       "Exercise 5 - Solution"
     ]
+  },
+  {
+    "objectID": "exercises/exercise6.html",
+    "href": "exercises/exercise6.html",
+    "title": "Exercise 6: Understanding and improving an R script",
+    "section": "",
+    "text": "In this exercise you got through the script analysis.R together with your neighbors, find out what the data is that is being worked and which analysis is done and how. There are also some things that could be an issue, so have an eye out and try to think how you could improve the script.",
+    "crumbs": [
+      "Course Material",
+      "Exercises",
+      "Exercise 6: Understanding and improving an R script"
+    ]
   }
 ]

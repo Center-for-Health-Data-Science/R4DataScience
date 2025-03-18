@@ -1,0 +1,111 @@
+---
+title: "Exercise 6: Understanding and improving an R script"
+format: html
+project:
+ type: website
+ output-dir: ../docs
+---
+
+In this exercise you got through the script `analysis.R` together with your neighbors, find out what the data is that is being worked and which analysis is done and how. There are also some things that could be an issue, so have an eye out and try to think how you could improve the script.
+
+
+```{r}
+library(tidyverse)
+library(ggplot2)
+
+df <- read_rds('../data/patient_data.rds')
+head(df)
+str(df)
+```
+
+Libraries and data are being loaded. The data is an R dataset (rds). The user then has a look at what the data contains with `head` and `str`. We can see that there are 7 columns. The last one, `bp_readings` is nested. Perhaps `str` is not such a good idea for this type of data since the output becomes very long due to the nesting. 
+
+```{r}
+colSums(is.na(df))
+df <- na.omit(df)
+colSums(is.na(df))
+```
+
+The author of the script is checking for NA values in the data, then omitting them and checking again.
+
+```{r}
+df$total_chol <- df$hdl + df$ldl + (df$tg/5) 
+```
+
+The author adds a new column which is the total cholesterol after the Friedewald equation. 
+
+$$ Total Cholesterol = HDL + LDL + \frac{Triglycerides}{5} $$
+```{r}
+high_chol_patients <- df %>%
+  filter(total_chol > 240) %>%
+  select(patient_id, age, total_chol, sex)
+
+table(high_chol_patients$sex)
+```
+
+A subset of patients with high total cholesterol is made. The author investigates the distribution of sexes in the subset and discovers that in some rows female is coded as 'f' instead of 'F'.
+
+
+```{r}
+high_chol_patients <- high_chol_patients %>%
+  mutate(sex_fixed = ifelse(sex == 'f', 'F', sex))
+```
+
+The author fixes the lower case 'f' but only in the subset, not the whole dataset. They also do not investigate whether the same problem is present for 'm'/'M' in the whole dataset. 
+
+
+```{r}
+bp1 <- df %>%
+  unnest(bp_readings) %>%
+  select(patient_id, time_point, blood_pressure)
+
+bp2 <- bp1 %>% pivot_wider(names_from = time_point, values_from = blood_pressure)
+mean_bp <- rowMeans(bp2[,2:6])
+bp2$mean <- mean_bp
+```
+
+The author unnests the original dataset into a new dataframe (which is fine). They then create another new dataframe which has the same information in wide format. This could have been done in one step to avoid having too many very similar dataframes. Also, it is not very clear from the naming what is in the `mean` column, and generally names that are also function names should be avoided since especially in tidyverse it is not always clear whether code refers to the column `mean` or the function `mean`. 
+
+A mean value is calculated across the 5 blood pressure measurements and added to the newest dataframe.
+
+```{r}
+for (i in 1:nrow(bp2)) {
+  if (bp2$mean[i] > 140) {
+    bp2$bp_category[i] <- "Hypertension"
+  } else if (bp2$mean[i] < 120) {
+    bp2$bp_category[i] <- "elevated BP"
+  } else {
+    bp2$bp_category[i] <- "Normal BP"
+  }
+}
+```
+
+The author new iterates over the new mean column and creates a new column that contains an evaluation of the blood pressure. This could have been done more elegantly with mutate and case_when. The more severe problem is that the second condition is the wrong way around: `bp2$mean[i] < 120`. Blood pressure levels are considered elevated at above 120, not below. This is also has a consequence that the elevated and normal labels are switched. Lastly, the elevated label is spelled with a lower case letter whereas the other categories begin with an upper case letter (inconsistent naming).   
+
+```{r}
+merge_df <- merge(df, bp2, by = 'patient_id')
+```
+
+The author now chooses to merge the blood pressure dataframe back into the original dataset. This is messy because the blood pressure measurements now exist twice. They should at least have dropped the nested column. 
+
+
+```{r}
+men <- merge_df %>%
+  filter(sex == 'M')
+women <- merge_df %>%
+  filter(sex == 'F')
+```
+
+The author now divides the merged data including the blood pressure category into two more dataframes for men and women. They loose some of the data because they have not investigated and fixed misspellings of 'M' and 'F' in the original dataframe. 
+
+
+```{r}
+
+ggplot(men, aes(x = age, fill = bp_category)) +
+  geom_histogram(position = 'dodge', binwidth = 10)
+ggplot(women, aes(x = age, fill = bp_category)) +
+  geom_histogram(position = 'dodge', binwidth = 10)
+
+```
+
+The plots are fine, though they are missing data points as discussed above. The same could have been achived without two extra dataframes by using filter on the merged dataframe and then piping into ggplot. 
