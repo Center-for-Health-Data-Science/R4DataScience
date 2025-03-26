@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.6.40">
+<meta name="generator" content="quarto-1.5.57">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -69,12 +69,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-549806ee2085284f45b00abea8c6df48.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark-8ea72dc5fed832574809a9c94082fbbb.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-04036d7ca062c87eb51b7d53d6467559.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="../site_libs/bootstrap/bootstrap-dark-d0e44dc943948f2bb6610a3a265026c7.min.css" rel="prefetch" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-dark.min.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -241,6 +241,12 @@ window.Quarto = {
  <span class="menu-text">Presentation 5: Intro to Modelling in R</span></a>
   </div>
 </li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../presentations/s4_objects.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">R objects: S4 objects</span></a>
+  </div>
+</li>
       </ul>
   </li>
         <li class="sidebar-item">
@@ -300,6 +306,12 @@ window.Quarto = {
  <span class="menu-text">Exercise 5: Modelling in R</span></a>
   </div>
 </li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../exercises/exercise6.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Exercise 6: Understanding and improving an R script</span></a>
+  </div>
+</li>
       </ul>
   </li>
         <li class="sidebar-item sidebar-item-section">
@@ -351,6 +363,12 @@ window.Quarto = {
   <div class="sidebar-item-container"> 
   <a href="../solutions/solution5.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Exercise 5 - Solution</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../solutions/solution6.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Exercise 6 - Solution</span></a>
   </div>
 </li>
       </ul>
@@ -907,10 +925,6 @@ Call:
 glm(formula = early_death ~ daily_cigarettes + exercise, family = "binomial", 
     data = train)
 
-Deviance Residuals: 
-     Min        1Q    Median        3Q       Max  
--1.49830  -0.08900   0.00052   0.01900   2.64289  
-
 Coefficients:
                  Estimate Std. Error z value Pr(&gt;|z|)   
 (Intercept)      -11.0307     4.0190  -2.745  0.00606 **
@@ -973,10 +987,6 @@ Call:
 glm(formula = early_death ~ daily_cigarettes + exercise, family = "binomial", 
     data = train)
 
-Deviance Residuals: 
-     Min        1Q    Median        3Q       Max  
--1.49830  -0.08900   0.00052   0.01900   2.64289  
-
 Coefficients:
                  Estimate Std. Error z value Pr(&gt;|z|)   
 (Intercept)      -11.0307     4.0190  -2.745  0.00606 **
@@ -1005,10 +1015,6 @@ Number of Fisher Scoring iterations: 8</code></pre>
 Call:
 glm(formula = early_death ~ daily_cigarettes, family = "binomial", 
     data = train)
-
-Deviance Residuals: 
-     Min        1Q    Median        3Q       Max  
--1.45758  -0.07341   0.00096   0.03880   2.56010  
 
 Coefficients:
                  Estimate Std. Error z value Pr(&gt;|z|)   
@@ -1551,11 +1557,11 @@ Available components:
 <span id="cb78-2"><a href="#cb78-2" aria-hidden="true" tabindex="-1"></a>pca_wine<span class="sc">$</span>x[<span class="dv">1</span>,]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>        PC1         PC2         PC3         PC4         PC5         PC6 
--3.30742097  1.43940225 -0.16527283  0.21502463  0.69109335  0.22325037 
+-3.30742097 -1.43940225 -0.16527283 -0.21502463 -0.69109335 -0.22325037 
         PC7         PC8         PC9        PC10        PC11        PC12 
- 0.59474883 -0.06495586 -0.63963836  1.01808396  0.45029317  0.53928914 
+ 0.59474883  0.06495586 -0.63963836 -1.01808396  0.45029317 -0.53928914 
        PC13 
--0.06605231 </code></pre>
+ 0.06605231 </code></pre>
 </div>
 </div>
 <p>We can find the PC1/PC2 coordinates of cluster 1, 2 and 3 by putting their position in the original 13-dim space into the PCA object:</p>
@@ -1565,20 +1571,20 @@ Available components:
 <span id="cb80-3"><a href="#cb80-3" aria-hidden="true" tabindex="-1"></a>centers_pca</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>         PC1        PC2         PC3         PC4        PC5         PC6
-1 -1.0206234 -0.8723669  1.09853134 -0.60290901  0.7830261 -0.09575498
-2 -2.3751274  0.9408631 -0.32103480  0.10604257 -0.2867197  0.19871649
-3  2.7362113  1.2107751 -0.17674684 -0.07667507  0.0919792 -0.10663848
-4  0.6113385 -1.9464455 -0.09156296  0.32666993 -0.2305646 -0.07159330
+1 -1.0206234  0.8723669  1.09853134  0.60290901 -0.7830261  0.09575498
+2 -2.3751274 -0.9408631 -0.32103480 -0.10604257  0.2867197 -0.19871649
+3  2.7362113 -1.2107751 -0.17674684  0.07667507 -0.0919792  0.10663848
+4  0.6113385  1.9464455 -0.09156296 -0.32666993  0.2305646  0.07159330
            PC7          PC8           PC9        PC10        PC11          PC12
-1  0.186100194 -0.136838314 -0.0104191856 -0.13765106  0.09655731 -0.0858676784
-2 -0.008947737 -0.005075841  0.0739699820  0.06932845 -0.01239409  0.0008655842
-3 -0.072766741  0.040644444  0.0002573087 -0.05571503  0.00485592  0.0042899679
-4 -0.025425819  0.047203159 -0.0858486648  0.06004162 -0.04994390  0.0476803079
+1  0.186100194  0.136838314 -0.0104191856  0.13765106  0.09655731  0.0858676784
+2 -0.008947737  0.005075841  0.0739699820 -0.06932845 -0.01239409 -0.0008655842
+3 -0.072766741 -0.040644444  0.0002573087  0.05571503  0.00485592 -0.0042899679
+4 -0.025425819 -0.047203159 -0.0858486648 -0.06004162 -0.04994390 -0.0476803079
          PC13
-1 -0.09281421
-2  0.04132451
-3 -0.06520735
-4  0.07732857</code></pre>
+1  0.09281421
+2 -0.04132451
+3  0.06520735
+4 -0.07732857</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb82"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb82-1"><a href="#cb82-1" aria-hidden="true" tabindex="-1"></a>kmeans_res<span class="sc">$</span>centers</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -1608,20 +1614,20 @@ Available components:
 <span id="cb84-5"><a href="#cb84-5" aria-hidden="true" tabindex="-1"></a>centers_pca</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>         PC1        PC2         PC3         PC4        PC5         PC6
-1 -1.0206234 -0.8723669  1.09853134 -0.60290901  0.7830261 -0.09575498
-2 -2.3751274  0.9408631 -0.32103480  0.10604257 -0.2867197  0.19871649
-3  2.7362113  1.2107751 -0.17674684 -0.07667507  0.0919792 -0.10663848
-4  0.6113385 -1.9464455 -0.09156296  0.32666993 -0.2305646 -0.07159330
+1 -1.0206234  0.8723669  1.09853134  0.60290901 -0.7830261  0.09575498
+2 -2.3751274 -0.9408631 -0.32103480 -0.10604257  0.2867197 -0.19871649
+3  2.7362113 -1.2107751 -0.17674684  0.07667507 -0.0919792  0.10663848
+4  0.6113385  1.9464455 -0.09156296 -0.32666993  0.2305646  0.07159330
            PC7          PC8           PC9        PC10        PC11          PC12
-1  0.186100194 -0.136838314 -0.0104191856 -0.13765106  0.09655731 -0.0858676784
-2 -0.008947737 -0.005075841  0.0739699820  0.06932845 -0.01239409  0.0008655842
-3 -0.072766741  0.040644444  0.0002573087 -0.05571503  0.00485592  0.0042899679
-4 -0.025425819  0.047203159 -0.0858486648  0.06004162 -0.04994390  0.0476803079
+1  0.186100194  0.136838314 -0.0104191856  0.13765106  0.09655731  0.0858676784
+2 -0.008947737  0.005075841  0.0739699820 -0.06932845 -0.01239409 -0.0008655842
+3 -0.072766741 -0.040644444  0.0002573087  0.05571503  0.00485592 -0.0042899679
+4 -0.025425819 -0.047203159 -0.0858486648 -0.06004162 -0.04994390 -0.0476803079
          PC13 cluster
-1 -0.09281421       1
-2  0.04132451       2
-3 -0.06520735       3
-4  0.07732857       4</code></pre>
+1  0.09281421       1
+2 -0.04132451       2
+3  0.06520735       3
+4 -0.07732857       4</code></pre>
 </div>
 </div>
 <p>Alright! The last step is to add these 4 points, one for each cluster, to the autoplot. Did you know you can add ggplot geoms to autoplots?</p>
@@ -1672,16 +1678,13 @@ Available components:
 <div class="cell">
 <div class="sourceCode cell-code" id="cb88"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb88-1"><a href="#cb88-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(factoextra)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
-<pre><code>Warning: pakke 'factoextra' blev bygget under R version 4.2.3</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
 <pre><code>Welcome! Want to learn more? See two factoextra-related books at https://goo.gl/ve3WBa</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb91"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb91-1"><a href="#cb91-1" aria-hidden="true" tabindex="-1"></a>df_wine <span class="sc">%&gt;%</span></span>
-<span id="cb91-2"><a href="#cb91-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="fu">where</span>(is.numeric)) <span class="sc">%&gt;%</span></span>
-<span id="cb91-3"><a href="#cb91-3" aria-hidden="true" tabindex="-1"></a>  <span class="co">#scale all numeric cols</span></span>
-<span id="cb91-4"><a href="#cb91-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="fu">across</span>(<span class="fu">where</span>(is.numeric), scale)) <span class="sc">%&gt;%</span></span>
-<span id="cb91-5"><a href="#cb91-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fviz_nbclust</span>(kmeans, <span class="at">method =</span> <span class="st">"wss"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb90"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb90-1"><a href="#cb90-1" aria-hidden="true" tabindex="-1"></a>df_wine <span class="sc">%&gt;%</span></span>
+<span id="cb90-2"><a href="#cb90-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="fu">where</span>(is.numeric)) <span class="sc">%&gt;%</span></span>
+<span id="cb90-3"><a href="#cb90-3" aria-hidden="true" tabindex="-1"></a>  <span class="co">#scale all numeric cols</span></span>
+<span id="cb90-4"><a href="#cb90-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="fu">across</span>(<span class="fu">where</span>(is.numeric), scale)) <span class="sc">%&gt;%</span></span>
+<span id="cb90-5"><a href="#cb90-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fviz_nbclust</span>(kmeans, <span class="at">method =</span> <span class="st">"wss"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -1693,11 +1696,11 @@ Available components:
 <p>The silhouette coefficient is a measure of cluster cohesion and separation. It quantifies how well a data point fits into its assigned cluster, by looking at how close it is to other points in its cluster and how far from points of other clusters. You need to have at least 2 clusters for the silhouette coefficient to be defined.</p>
 <p>Unlike the elbow of the sums of square errors, the silhouette score is supposed to peak:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb92"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb92-1"><a href="#cb92-1" aria-hidden="true" tabindex="-1"></a>df_wine <span class="sc">%&gt;%</span></span>
-<span id="cb92-2"><a href="#cb92-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="fu">where</span>(is.numeric)) <span class="sc">%&gt;%</span></span>
-<span id="cb92-3"><a href="#cb92-3" aria-hidden="true" tabindex="-1"></a>  <span class="co">#scale all numeric cols</span></span>
-<span id="cb92-4"><a href="#cb92-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="fu">across</span>(<span class="fu">where</span>(is.numeric), scale)) <span class="sc">%&gt;%</span></span>
-<span id="cb92-5"><a href="#cb92-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fviz_nbclust</span>(kmeans, <span class="at">method =</span> <span class="st">"silhouette"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb91"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb91-1"><a href="#cb91-1" aria-hidden="true" tabindex="-1"></a>df_wine <span class="sc">%&gt;%</span></span>
+<span id="cb91-2"><a href="#cb91-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="fu">where</span>(is.numeric)) <span class="sc">%&gt;%</span></span>
+<span id="cb91-3"><a href="#cb91-3" aria-hidden="true" tabindex="-1"></a>  <span class="co">#scale all numeric cols</span></span>
+<span id="cb91-4"><a href="#cb91-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="fu">across</span>(<span class="fu">where</span>(is.numeric), scale)) <span class="sc">%&gt;%</span></span>
+<span id="cb91-5"><a href="#cb91-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fviz_nbclust</span>(kmeans, <span class="at">method =</span> <span class="st">"silhouette"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -1708,11 +1711,11 @@ Available components:
 </div>
 <p>The gap statistic compares the within-cluster variation (how compact the clusters are) for different values of K to the expected variation under a null reference distribution (i.e., random clustering).</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb93"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb93-1"><a href="#cb93-1" aria-hidden="true" tabindex="-1"></a>df_wine <span class="sc">%&gt;%</span></span>
-<span id="cb93-2"><a href="#cb93-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="fu">where</span>(is.numeric)) <span class="sc">%&gt;%</span></span>
-<span id="cb93-3"><a href="#cb93-3" aria-hidden="true" tabindex="-1"></a>  <span class="co">#scale all numeric cols</span></span>
-<span id="cb93-4"><a href="#cb93-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="fu">across</span>(<span class="fu">where</span>(is.numeric), scale)) <span class="sc">%&gt;%</span></span>
-<span id="cb93-5"><a href="#cb93-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fviz_nbclust</span>(kmeans, <span class="at">method =</span> <span class="st">"gap_stat"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb92"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb92-1"><a href="#cb92-1" aria-hidden="true" tabindex="-1"></a>df_wine <span class="sc">%&gt;%</span></span>
+<span id="cb92-2"><a href="#cb92-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="fu">where</span>(is.numeric)) <span class="sc">%&gt;%</span></span>
+<span id="cb92-3"><a href="#cb92-3" aria-hidden="true" tabindex="-1"></a>  <span class="co">#scale all numeric cols</span></span>
+<span id="cb92-4"><a href="#cb92-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="fu">across</span>(<span class="fu">where</span>(is.numeric), scale)) <span class="sc">%&gt;%</span></span>
+<span id="cb92-5"><a href="#cb92-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fviz_nbclust</span>(kmeans, <span class="at">method =</span> <span class="st">"gap_stat"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -1723,48 +1726,48 @@ Available components:
 </div>
 <p>All three of them tell us there should be three clusters and we also know there are three cultivars of wine in the dataset. Let’s redo k-means with three centroids.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb94"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb94-1"><a href="#cb94-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Set seed to ensure reproducibility</span></span>
-<span id="cb94-2"><a href="#cb94-2" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)  </span>
-<span id="cb94-3"><a href="#cb94-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb94-4"><a href="#cb94-4" aria-hidden="true" tabindex="-1"></a><span class="co">#run kmeans</span></span>
-<span id="cb94-5"><a href="#cb94-5" aria-hidden="true" tabindex="-1"></a>kmeans_res <span class="ot">&lt;-</span> df_wine <span class="sc">%&gt;%</span></span>
-<span id="cb94-6"><a href="#cb94-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="fu">where</span>(is.numeric)) <span class="sc">%&gt;%</span></span>
-<span id="cb94-7"><a href="#cb94-7" aria-hidden="true" tabindex="-1"></a>  <span class="co">#scale all numeric cols</span></span>
-<span id="cb94-8"><a href="#cb94-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="fu">across</span>(<span class="fu">where</span>(is.numeric), scale)) <span class="sc">%&gt;%</span></span>
-<span id="cb94-9"><a href="#cb94-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kmeans</span>(<span class="at">centers =</span> <span class="dv">3</span>, <span class="at">nstart =</span> <span class="dv">25</span>)</span>
-<span id="cb94-10"><a href="#cb94-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb94-11"><a href="#cb94-11" aria-hidden="true" tabindex="-1"></a><span class="co">#project cluster centers from kmeans into the pca space</span></span>
-<span id="cb94-12"><a href="#cb94-12" aria-hidden="true" tabindex="-1"></a>centers_pca <span class="ot">&lt;-</span> <span class="fu">predict</span>(pca_wine, <span class="at">newdata =</span> kmeans_res<span class="sc">$</span>centers) <span class="sc">%&gt;%</span> <span class="fu">as.data.frame</span>()</span>
-<span id="cb94-13"><a href="#cb94-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Label clusters</span></span>
-<span id="cb94-14"><a href="#cb94-14" aria-hidden="true" tabindex="-1"></a>centers_pca<span class="sc">$</span>cluster <span class="ot">&lt;-</span> <span class="fu">as.factor</span>(<span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(centers_pca))</span>
-<span id="cb94-15"><a href="#cb94-15" aria-hidden="true" tabindex="-1"></a>centers_pca</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb93"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb93-1"><a href="#cb93-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Set seed to ensure reproducibility</span></span>
+<span id="cb93-2"><a href="#cb93-2" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)  </span>
+<span id="cb93-3"><a href="#cb93-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb93-4"><a href="#cb93-4" aria-hidden="true" tabindex="-1"></a><span class="co">#run kmeans</span></span>
+<span id="cb93-5"><a href="#cb93-5" aria-hidden="true" tabindex="-1"></a>kmeans_res <span class="ot">&lt;-</span> df_wine <span class="sc">%&gt;%</span></span>
+<span id="cb93-6"><a href="#cb93-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="fu">where</span>(is.numeric)) <span class="sc">%&gt;%</span></span>
+<span id="cb93-7"><a href="#cb93-7" aria-hidden="true" tabindex="-1"></a>  <span class="co">#scale all numeric cols</span></span>
+<span id="cb93-8"><a href="#cb93-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="fu">across</span>(<span class="fu">where</span>(is.numeric), scale)) <span class="sc">%&gt;%</span></span>
+<span id="cb93-9"><a href="#cb93-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kmeans</span>(<span class="at">centers =</span> <span class="dv">3</span>, <span class="at">nstart =</span> <span class="dv">25</span>)</span>
+<span id="cb93-10"><a href="#cb93-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb93-11"><a href="#cb93-11" aria-hidden="true" tabindex="-1"></a><span class="co">#project cluster centers from kmeans into the pca space</span></span>
+<span id="cb93-12"><a href="#cb93-12" aria-hidden="true" tabindex="-1"></a>centers_pca <span class="ot">&lt;-</span> <span class="fu">predict</span>(pca_wine, <span class="at">newdata =</span> kmeans_res<span class="sc">$</span>centers) <span class="sc">%&gt;%</span> <span class="fu">as.data.frame</span>()</span>
+<span id="cb93-13"><a href="#cb93-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Label clusters</span></span>
+<span id="cb93-14"><a href="#cb93-14" aria-hidden="true" tabindex="-1"></a>centers_pca<span class="sc">$</span>cluster <span class="ot">&lt;-</span> <span class="fu">as.factor</span>(<span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(centers_pca))</span>
+<span id="cb93-15"><a href="#cb93-15" aria-hidden="true" tabindex="-1"></a>centers_pca</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>          PC1        PC2          PC3         PC4         PC5         PC6
-1  2.71238444  1.1224849 -0.238420685 -0.06228125  0.07346875 -0.09964414
-2 -2.26979079  0.9294322  0.001523733  0.13511700 -0.13453261  0.21766922
-3  0.03685265 -1.7672542  0.185615130 -0.08001400  0.07067870 -0.12944063
+1  2.71238444 -1.1224849 -0.238420685  0.06228125 -0.07346875  0.09964414
+2 -2.26979079 -0.9294322  0.001523733 -0.13511700  0.13453261 -0.21766922
+3  0.03685265  1.7672542  0.185615130  0.08001400 -0.07067870  0.12944063
            PC7          PC8         PC9        PC10         PC11         PC12
-1 -0.060213318  0.007367207 -0.01997059 -0.06129547  0.008093155 -0.003445464
-2  0.051963343 -0.024894027  0.05014407  0.07446923 -0.021230820  0.007417378
-3 -0.002320739  0.017964647 -0.03216049 -0.02293882  0.013900922 -0.004371673
+1 -0.060213318 -0.007367207 -0.01997059  0.06129547  0.008093155  0.003445464
+2  0.051963343  0.024894027  0.05014407 -0.07446923 -0.021230820 -0.007417378
+3 -0.002320739 -0.017964647 -0.03216049  0.02293882  0.013900922  0.004371673
           PC13 cluster
-1 -0.050408713       1
-2  0.050476861       2
-3 -0.008595707       3</code></pre>
+1  0.050408713       1
+2 -0.050476861       2
+3  0.008595707       3</code></pre>
 </div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb96"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb96-1"><a href="#cb96-1" aria-hidden="true" tabindex="-1"></a><span class="co">#add updated cluster info to the dataframe</span></span>
-<span id="cb96-2"><a href="#cb96-2" aria-hidden="true" tabindex="-1"></a>df_wine<span class="sc">$</span>Cluster <span class="ot">&lt;-</span> <span class="fu">factor</span>(kmeans_res<span class="sc">$</span>cluster)</span>
-<span id="cb96-3"><a href="#cb96-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb96-4"><a href="#cb96-4" aria-hidden="true" tabindex="-1"></a><span class="fu">autoplot</span>(pca_wine, <span class="at">data =</span> df_wine, <span class="at">color =</span> <span class="st">'Cluster'</span>,</span>
-<span id="cb96-5"><a href="#cb96-5" aria-hidden="true" tabindex="-1"></a>         <span class="at">loadings =</span> <span class="cn">TRUE</span>, <span class="at">loadings.colour =</span> <span class="st">"grey30"</span>, </span>
-<span id="cb96-6"><a href="#cb96-6" aria-hidden="true" tabindex="-1"></a>         <span class="at">loadings.label.colour =</span> <span class="st">"black"</span>,</span>
-<span id="cb96-7"><a href="#cb96-7" aria-hidden="true" tabindex="-1"></a>         <span class="at">loadings.label =</span> <span class="cn">TRUE</span>, <span class="at">loadings.label.size =</span> <span class="fl">3.5</span>,</span>
-<span id="cb96-8"><a href="#cb96-8" aria-hidden="true" tabindex="-1"></a>         <span class="at">scale =</span> <span class="dv">0</span>) <span class="sc">+</span></span>
-<span id="cb96-9"><a href="#cb96-9" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Cluster centers</span></span>
-<span id="cb96-10"><a href="#cb96-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">data =</span> centers_pca, <span class="fu">aes</span>(<span class="at">x =</span> PC1, <span class="at">y =</span> PC2, <span class="at">color =</span> cluster),</span>
-<span id="cb96-11"><a href="#cb96-11" aria-hidden="true" tabindex="-1"></a>             <span class="at">shape =</span> <span class="dv">8</span>, <span class="at">size =</span> <span class="dv">6</span>, <span class="at">stroke =</span> <span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb95"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb95-1"><a href="#cb95-1" aria-hidden="true" tabindex="-1"></a><span class="co">#add updated cluster info to the dataframe</span></span>
+<span id="cb95-2"><a href="#cb95-2" aria-hidden="true" tabindex="-1"></a>df_wine<span class="sc">$</span>Cluster <span class="ot">&lt;-</span> <span class="fu">factor</span>(kmeans_res<span class="sc">$</span>cluster)</span>
+<span id="cb95-3"><a href="#cb95-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb95-4"><a href="#cb95-4" aria-hidden="true" tabindex="-1"></a><span class="fu">autoplot</span>(pca_wine, <span class="at">data =</span> df_wine, <span class="at">color =</span> <span class="st">'Cluster'</span>,</span>
+<span id="cb95-5"><a href="#cb95-5" aria-hidden="true" tabindex="-1"></a>         <span class="at">loadings =</span> <span class="cn">TRUE</span>, <span class="at">loadings.colour =</span> <span class="st">"grey30"</span>, </span>
+<span id="cb95-6"><a href="#cb95-6" aria-hidden="true" tabindex="-1"></a>         <span class="at">loadings.label.colour =</span> <span class="st">"black"</span>,</span>
+<span id="cb95-7"><a href="#cb95-7" aria-hidden="true" tabindex="-1"></a>         <span class="at">loadings.label =</span> <span class="cn">TRUE</span>, <span class="at">loadings.label.size =</span> <span class="fl">3.5</span>,</span>
+<span id="cb95-8"><a href="#cb95-8" aria-hidden="true" tabindex="-1"></a>         <span class="at">scale =</span> <span class="dv">0</span>) <span class="sc">+</span></span>
+<span id="cb95-9"><a href="#cb95-9" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Cluster centers</span></span>
+<span id="cb95-10"><a href="#cb95-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">data =</span> centers_pca, <span class="fu">aes</span>(<span class="at">x =</span> PC1, <span class="at">y =</span> PC2, <span class="at">color =</span> cluster),</span>
+<span id="cb95-11"><a href="#cb95-11" aria-hidden="true" tabindex="-1"></a>             <span class="at">shape =</span> <span class="dv">8</span>, <span class="at">size =</span> <span class="dv">6</span>, <span class="at">stroke =</span> <span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -2007,6 +2010,8 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   });
   clipboard.on('success', onCopySuccess);
   if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    // For code content inside modals, clipBoardJS needs to be initialized with a container option
+    // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
     const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
       text: getTextToCopy,
       container: window.document.getElementById('quarto-embedded-source-code-modal')
@@ -2117,6 +2122,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       if (window.Quarto?.typesetMath) {
         window.Quarto.typesetMath(note);
       }
+      // TODO in 1.5, we should make sure this works without a callout special case
       if (note.classList.contains("callout")) {
         return note.outerHTML;
       } else {
