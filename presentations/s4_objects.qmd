@@ -28,7 +28,7 @@ They are usually accessed by specialized functions. Let's have a look at a `Summ
 
 ### An example: The airway dataset
 
-```{r}
+```{r, warning=FALSE, message=FALSE}
 library(SummarizedExperiment)
 library(airway)
 library(tidyverse)
