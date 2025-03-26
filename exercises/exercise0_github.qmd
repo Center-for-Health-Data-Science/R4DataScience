@@ -1,0 +1,108 @@
+---
+title: "Exercise 0: R script and Quarto"
+format: html
+project:
+ type: website
+ output-dir: ../docs
+---
+
+## File Management & Data Download
+
+1.  To get this material you went to the github repository of this course: https://github.com/Center-for-Health-Data-Science/R4DataScience, pressed **Clone** → **Download ZIP** and downloaded the directory with the course material called *R4DataScience* or *R4DataScience-main*. This folder contains several sub directory with more and less relevant material. The files you need for this course is:
+
+-   `slides/R4datascience_slides.pdf`: contains the lecture slides in pdf format.
+-   `presentations/*`: all the scripts that the lectures will go through in plenum during the course.
+-   `exercises/*`: all the exercises that you will go through yourselves. You are currently looking at `exercises/exercise0.qmd`.
+-   `data/*`: all the data you need for the exercises.
+
+Ignore or delete the material that is not mentioned above.
+
+2.  Under the course directory, make a sub directory for the outputs that you will generate doing the exercises.
+
+Your file tree should look something like this:
+
+![](../figures/file_tree.jpg){fig-align="center"}
+
+## Working directories
+
+3.  As you have Rstudio open, **access your current working directory** by typing `getwd()` in the console.
+
+The working directory in R (or other programming environments) is the folder on your computer where R looks for files to read or write by default. When you load or save data, R will use the working directory unless you specify another path. A path can either be **absolute** or **relative**:
+
+-   **Absolute path**: The path from the root of your file system to the input file.
+
+-   **Relative path**: The path from the working directory to the input file.
+
+## R Script
+
+4.  Create an R script and save it in your exercise folder.
+
+An R script is a plain text file containing a series of R commands and code used for data analysis. R scripts have a `.R` extension and can be executed line-by-line in an interactive R session or as a whole script. They are ideal for automating workflows and keeping your analyses reproducible and organized. R scripts can be submitted to a job on a supercomputer unlike Quarto documents.
+
+5.  Type `getwd()` in your R script and run the line. Compare the working directory with the one from the console.
+
+6. Change the working directory using `setwd()`.
+
+7. Run `getwd()` again.
+
+8. Type in a few lines of code and some comments and re-save the file.
+
+## Quarto
+
+9. Create an Quarto document and save it in your exercise folder.
+
+Quarto is an open-source publishing system designed to help you create dynamic, reproducible documents, presentations, and websites. It extends the ideas of tools like R Markdown, combining simplicity with powerful customization options for modern scientific and technical communication.
+
+10. Type `getwd()` in a code chunk in your Quarto document and run the line. Compare the working directory with the one from the console.
+
+11. Change the working directory in one chuck using `setwd()`.
+
+12. Run `getwd()` in the same chunk as `setwd()` AND in another chunk. What do you observe?
+
+::: {.callout-tip collapse="true"}
+## Hint
+
+```{r eval=FALSE}
+setwd('PATH')
+getwd()
+```
+
+```{r eval=FALSE}
+getwd()
+```
+:::
+
+13. Create some code chunks, write text and headers. Re-save the file.
+
+14. Render the Quarto document and have a look at the html file.
+
+::: {.callout-note collapse="true"}
+## Resources for Quarto
+
+-   [Quarto website](https://quarto.org)\
+
+-   ["Get started with Quarto" tutorial for RStudio](https://quarto.org/docs/get-started/hello/rstudio.html)\
+
+-   ["Get started with Quarto" video for RStudio\
+    ](https://www.youtube.com/watch?v=_f3latmOhew)[Comprehensive guides to Quarto basics](https://quarto.org/docs/guide/)
+:::
+
+## R project
+
+An R project in RStudio creates a self-contained working environment tied to a specific folder, which becomes the default working directory for all scripts, data, and outputs. This structure helps organize files, ensures reproducibility, and simplifies path management. By default, a Quarto document’s working directory is its file location. While this can be changed chunk-wise, the working directory for R scripts can be set globally for all scripts in a folder by creating an R project. The R project is a small configuration file, usually placed in the root of the project folder, and requires no manual interaction—it quietly ensures your workflows remain well-organized.
+
+![](../figures/file_tree_Rproject.jpg){fig-align="center"}
+
+15. Create an R project by clicking the *Project (None)* in the top right → *New Project* → *Existing Directory* and choose an appropriate location. Look at the top-right corner to check that you are in your R project.
+
+16. Reopen the the R script and Quarto document you created in Exercise 4 and 9 respectively. Check each of their working directories. Are they as you expect? Explain.
+
+::: {.callout-tip collapse="true"}
+## Hint
+
+-   The working directory of the R script is the same as the location of the `.Rproj` file.
+
+-   The working directory of the Quarto document is always the same as the location of the document.
+:::
+
+17. If you like the flow of the R project, keep it. If not, delete it. It is not necessary to have an R project. **NB** If you delete it, click the R project drop-down menu in the top-right corner → *Close Project*.
