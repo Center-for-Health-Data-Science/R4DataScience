@@ -1,5 +1,5 @@
 ---
-title: "Presentation 2: Advanced Data Wrangling"
+title: "Presentation 2: Data Transformation and Integration"
 format: html
 project:
  type: website
@@ -31,23 +31,14 @@ The goal of this section is to make a plot like this where we visualize the sale
 
 The data is now in wide format. Can we make the plot in the way the data is formatted now?
 
-<div>
-  <a href="#hint-section" class="collapse-toggle" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="hint-section" style="text-decoration: none; font-size: 1em;">
-    Hint
-  </a>
-  <div class="collapse" id="hint-section" style="margin-top: 10px;">
-    
-  No. To create the plot, we need a column for the years to use on the x-axis, a column for sales in thousands DKK, and a column for Names. While the Names column is already present, the sales data is spread across four separate columns, and there is no column for the year.
-
-  </div>
-</div>
+No. To create the plot, we need a column for the years to use on the x-axis, a column for sales in thousands DKK, and a column for Names. While the `Names` column is already present, the sales data is spread across four separate columns, and there is no column for the year.
 
 ```{r}
 head(df_sales)
 ```
 
 
-The data set is in wide format. The data can be restructured to long format such that there is one line per year per person. For this we use the `pivot_longer` function. 
+The data set is in wide format. The data can be reformatted to long format such that there is one line per year per person. For this we use the `pivot_longer` function. 
 ```{r}
 df_sales_longer <- df_sales %>% 
   pivot_longer(cols = starts_with("sales_"),
@@ -66,7 +57,7 @@ df_sales_longer <- df_sales_longer %>%
 head(df_sales_longer)
 ```
 
-Make the plot explained above (scatter and line plot over the sales development over the years for each person). 
+Make the plot explained above: scatter and line plot over the sales development over the years for each person. 
 ```{r warning=FALSE}
 df_sales_longer %>% 
   ggplot(aes(x = year, 
@@ -82,14 +73,14 @@ df_sales_longer %>%
 
 ### Pivot back into wide format 
 
-The `pivot_wider` function is used to get data to wide format. 
+The `pivot_wider` function is used to transform data to wide format. 
 ```{r}
 df_sales_wider <- df_sales_longer %>% 
   pivot_wider(names_from = year, 
               values_from = sales,
               names_prefix = 'sales_')
 
-# Same content
+# Same content 
 head(df_sales)
 head(df_sales_wider)
 ```
@@ -191,8 +182,7 @@ df_sales %>%
   summarise(across(num_range('sales_', 2020:2023), mean))
 ```
 
-Lastly, we can always straight up supply the names of the columns we want to select
-in a vector:
+Lastly, we can always straight up supply the names of the columns we want to select in a vector:
 
 ```{r}
 df_sales %>%
@@ -328,3 +318,7 @@ df_sales %>%
 
 
 This is it for now but there will be user-defined functions later! 
+
+
+
+

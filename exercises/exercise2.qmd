@@ -20,21 +20,6 @@ In this exercise you will do some more advance tidyverse operations such as pivo
 
 4.  Restructure the glucose dataset into a long format. Name the column that describes which measurement the row refers to, i.e. Glucose_0, Glucose_60 or Glucose_120, `Measurement`. How many rows are there per ID? Does that make sense?
 
-::: {.callout-tip collapse="true"}
-## Hint
-
-Remember the flow:
-
-```{r eval = FALSE}
-pivot_longer(cols = LIST_WITH_COLUMNS_TO_PIVOT,
-             names_to = "NEW_COLUMN_CONTAINING_COLUMN_NAMES",
-             values_to = "NEW_COLUMN_CONTAINING_COLUMN_VALUES")
-```
-
-Have a look at slide 16 for a visual overview.
-
-:::
-
 5. In your long format dataframe you should have one column that described which measurement the row refers to, i.e. Glucose_0, Glucose_60 or Glucose_120. Transform this column so that you only have the numerical part, i.e. **only** 0, 60 or 120. Then change the data type of that column to `factor`. Check the order of the factor levels and if necessary change them to the proper order.
 
 ::: {.callout-tip collapse="true"}
@@ -44,21 +29,11 @@ The `stringr` packages is a part of tidyverse and has many functions for manipul
 Have a look at the help for factors `?factors` to see how to influence the levels.
 :::
 
-6. Merge the glucose dataset with the joined diabetes dataset.
+6. Merge the long formatted glucose dataset you made in **4** with the joined diabetes dataset you loaded in **2**.
 
 7.  Pull the glucose measurements from your favorite ID.
 
-::: {.callout-tip collapse="true"}
-## Hint
-First `filter` for your favorite ID and then `pull` the columns. 
-:::
-
-8. Calculate the mean glucose measure for each measurement timepoint.
-
-::: {.callout-tip collapse="true"}
-## Hint
-You will need to use `group_by()`, and `summerise()`.
-:::
+8. Calculate the mean glucose measure for each measurement time point.
 
 9. Calculate mean and standard deviation for all numeric columns.
 

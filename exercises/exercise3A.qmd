@@ -14,6 +14,13 @@ In this exercise you will do a lot of plotting with ggplot. For a reminder on ho
 
 2. Load data from the `.rds` file you created in Exercise 2. Have a guess at what the function is called. 
 
+## SECTION IN PROGRESS - CHECK NORMAL DISTRIBUTION
+
+```{r}
+
+```
+
+
 ## Plotting - Part 1
 
 You will first do some basic plots to get started with ggplot again. 
@@ -26,33 +33,17 @@ If it has been a while since you worked with ggplot, have a look at the [ggplot 
 
 5. Now, create the same two plots as before, but this time stratify them by `Diabetes`. Do you notice any trends?
 
-::: {.callout-tip collapse="true"}
-## Hint
-
-You can stratify a plot by a categorical variable in several ways, depending on the type of plot. The purpose of stratification is to distinguish samples based on their categorical values, making patterns or differences easier to identify. This can be done using aesthetics like `color`, `fill`, `shape`. 
-
-:::
-
-
 6. Create a boxplot of `BMI` stratified by `Diabetes.` Give the plot a meaningful title.
 
-
-7. Create a boxplot of `PhysicalActivity` stratified by `Smoker`. Give the plot a meaningful title.
-
+7. Create a geom_violin of `PhysicalActivity` stratified by `Smoker`. Add horizontal lines at the 25%, 50%, and 75% quantiles of each violin plot. Give the plot a meaningful title.
 
 ## Plotting - Part 2
 
 In order to plot the data inside the nested variable, the data needs to be unnested. 
 
-8. Create a boxplot of the glucose measurements at time 0 stratified by `Diabetes`. Give the plot a meaningful title.
+8. Create a `ggridges::geom_density_ridges` plot of the glucose measurements at time 0 stratified by `Diabetes`. What kind of plot is this? Give the plot a meaningful title.
 
 9. Create these boxplots for each time point (0, 60, 120) by using faceting by `Measurement`. Give the plot a meaningful title.
-
-::: {.callout-tip collapse="true"}
-## Hint
-Faceting allows you to create multiple plots based on the values of a categorical variable, making it easier to compare patterns across groups. In ggplot2, you can use `facet_wrap` for a single variable or `facet_grid` for multiple variables.
-
-:::
 
 10. Calculate the mean glucose levels for each time point. 
 

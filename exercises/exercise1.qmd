@@ -20,9 +20,13 @@ In this exercise you will practice your R skills by loading, inspecting and clea
 
 ## Explore the data
 
-3.  How many missing values (NA's) are there in each column?
+3. Do summary stats by checking the number of observations (rows) and variables (columns) as well as their data types.
 
-4.  Check the distribution of each of the variables. Consider that the variables are of different classes. Do any values strike you as odd?
+4. For each variable evaluate the data type and change the ones you find necessary. 
+
+5. (Include/exclude?) How many missing values (NA's) are there in each column? 
+
+6.  Check the distribution of each variable by plotting the categorical variables in bar plots and the continuous in box plots. Does any values strike you as odd?
 
 ## Clean up the data
 
@@ -36,39 +40,27 @@ Consider the following:
 
 -   Are there zeros in the data? Are they true zeros or errors?
 
--   Do you want to change any of the data types of the variables?
-
-5.  Clean the data according to your considerations.
-
-::: {.callout-tip collapse="true"}
-## Hint
-Have a look at `BloodPressure`, `BMI`, `Sex`, `Diabetes` and `ID`. 
-:::
+7.  Clean the data according to your considerations.
 
 ## Meta Data
 
-There is some metadata to accompany the dataset you have just cleaned in `diabetes_meta_toy_messy.csv`. This is a csv file, not an excel sheet, so you need to use the `read_delim` function to load it. Load in the dataset and inspect it. 
+There is some metadata to accompany the dataset you have just cleaned in `diabetes_meta_toy_messy.csv`. This is a csv file, not an excel sheet, so you need to use the `read_csv` function to load it. Load in the dataset and inspect it. 
 
-6. Now clean the metadata and do data exploration by repeating step 3-5 from above. 
+8. Now clean the metadata and do data exploration by repeating step **3**-**7** from above. 
 
 ## Join the datasets
 
 We will combine both datasets together into one tibble.
 
-7. Consider what variable the datasets should be joined on.
+9. Consider which variable the datasets should be joined on.
 
 ::: {.callout-tip collapse="true"}
 ## Hint
 The joining variable must be the same type in both datasets.
 :::
 
-8. Join the datasets by the variable you selected above.
+10. Join the datasets by the variable you selected above.
 
-9. How many rows does the joined dataset have? Explain why. 
+11. How many rows does the joined dataset have? Explain why. 
 
-::: {.callout-tip collapse="true"}
-## Hint
-Because we used left_join, only the IDs that are in `diabetes_clinical_clean` are kept. 
-:::
-
-10. Export the joined dataset. Think about which directory you want to save the file in. 
+12. Export the joined dataset. Think about which directory you want to save the file in. 

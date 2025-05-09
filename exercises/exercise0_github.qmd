@@ -45,7 +45,7 @@ An R script is a plain text file containing a series of R commands and code used
 
 7. Run `getwd()` again.
 
-8. Type in a few lines of code and some comments and re-save the file.
+8. Read in the file from `data/diabetes.csv` using the `read_csv()` function and check the structure of the data with the `str()` function. Re-save the file.
 
 ## Quarto
 
@@ -72,7 +72,7 @@ getwd()
 ```
 :::
 
-13. Create some code chunks, write text and headers. Re-save the file.
+13. Create a code chunks and write the same code as you did in **8**. Write a description of what you did above the code chunk. Re-save the file.
 
 14. Render the Quarto document and have a look at the html file.
 

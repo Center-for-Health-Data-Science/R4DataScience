@@ -21,6 +21,68 @@ diabetes_glucose <- read_rds('../out/diabetes_glucose.rds')
 head(diabetes_glucose)
 ```
 
+## SECTION IN PROGRESS - CHECK NORMAL DISTRIBUTION
+
+qqnorm plot of BMI. Is the BMI variable normally distributed?
+```{r}
+qqnorm(diabetes_glucose$BMI, pch = 1)
+qqline(diabetes_glucose$BMI, col = "red", lwd = 2)
+```
+
+Cooks distance
+
+
+shapiro test 
+```{r}
+shapiro.test(diabetes_glucose$BMI)
+```
+
+
+
+qqnorm plot of glucose 0. Is the glucose measurement at time 0 variable normally distributed?
+```{r}
+glucose_0 <- diabetes_glucose %>% 
+  unnest(OGTT) %>% 
+  filter(Measurement == 0) %>% 
+  select(`Glucose (mmol/L)`) %>% 
+  unlist() 
+
+glucose_60 <- diabetes_glucose %>% 
+  unnest(OGTT) %>% 
+  filter(Measurement == 60) %>% 
+  select(`Glucose (mmol/L)`) %>% 
+  unlist() 
+
+glucose_120 <- diabetes_glucose %>% 
+  unnest(OGTT) %>% 
+  filter(Measurement == 120) %>% 
+  select(`Glucose (mmol/L)`) %>% 
+  unlist() 
+```
+
+```{r}
+qqnorm(glucose_0, pch = 1)
+qqline(glucose_0, col = "red", lwd = 2)
+```
+
+```{r}
+qqnorm(glucose_60, pch = 1)
+qqline(glucose_60, col = "red", lwd = 2)
+```
+
+```{r}
+qqnorm(glucose_120, pch = 1)
+qqline(glucose_120, col = "red", lwd = 2)
+```
+
+shapiro test 
+```{r}
+shapiro.test(glucose_0)
+shapiro.test(glucose_60)
+shapiro.test(glucose_120)
+```
+
+
 ## Plotting - Part 1
 You will first do some basic plots to get started with ggplot again. 
 
@@ -44,13 +106,6 @@ diabetes_glucose %>%
 ```
 
 5. Now, create the same two plots as before, but this time stratify them by `Diabetes`. Do you notice any trends?
-
-::: {.callout-tip collapse="true"}
-## Hint
-
-You can stratify a plot by a categorical variable in several ways, depending on the type of plot. The purpose of stratification is to distinguish samples based on their categorical values, making patterns or differences easier to identify. This can be done using aesthetics like `color`, `fill`, `shape`. 
-
-:::
 
 ```{r}
 diabetes_glucose %>% 
@@ -78,41 +133,34 @@ diabetes_glucose %>%
   labs(title = 'Distribution of BMI Stratified by Diabetes')
 ```
 
-7. Create a boxplot of `PhysicalActivity` stratified by `Smoker`. Give the plot a meaningful title.
+7. Create a geom_violin of `PhysicalActivity` stratified by `Smoker`. Add horizontal lines at the 25%, 50%, and 75% quantiles of each violin plot. Give the plot a meaningful title.
 ```{r}
 diabetes_glucose %>% 
   ggplot(aes(y = PhysicalActivity, 
              x = Smoker, 
-             fill = Smoker)) + 
-  geom_boxplot() + 
+             color = Smoker)) + 
+  geom_violin(draw_quantiles = c(0.25, 0.5, 0.75)) + 
   labs(title = 'Distribution of Physical Activity Stratified by Smoker Status')
 ```
-
-
 
 ## Plotting - Part 2
 In order to plot the data inside the nested variable, the data needs to be unnested. 
 
-8. Create a boxplot of the glucose measurements at time 0 stratified by `Diabetes`. Give the plot a meaningful title.
-
+8. Create a `ggridges::geom_density_ridges` plot of the glucose measurements at time 0 stratified by `Diabetes`. What kind of plot is this? Give the plot a meaningful title.
 ```{r}
+library(ggridges)
+
 diabetes_glucose %>%
   unnest(OGTT) %>% 
   filter(Measurement == 0) %>% 
-  ggplot(aes(y = `Glucose (mmol/L)`, 
-             x = Diabetes, 
-             color = Diabetes)) +
-  geom_boxplot() + 
+  ggplot(aes(x = `Glucose (mmol/L)`, 
+             y = Diabetes,
+             group = Diabetes)) +
+  geom_density_ridges(alpha = 0.5) + 
   labs(title = 'Glucose Measurement for Time Point 0 (fasted)')
 ```
 
 9. Create these boxplots for each time point (0, 60, 120) by using faceting by `Measurement`. Give the plot a meaningful title.
-
-::: {.callout-tip collapse="true"}
-## Hint
-Faceting allows you to create multiple plots based on the values of a categorical variable, making it easier to compare patterns across groups. In ggplot2, you can use `facet_wrap` for a single variable or `facet_grid` for multiple variables.
-
-:::
 
 ```{r}
 diabetes_glucose %>%
@@ -175,11 +223,8 @@ diabetes_glucose %>%
 ```
 
 
--------------------------------
 
-## Extra
-
-e1. Recreate the plot you made in Exercise 12 and include the mean value for each glucose measurement for the two diabetes statuses (0 and 1) you calculated in Exercise 11. This plot should look like this:
+13. Recreate the plot you made in **12** and include the mean value for each glucose measurement for the two diabetes statuses (0 and 1) you calculated in Exercise 11. This plot should look like this:
 
 ![](../out/figure3_13.png){fig-align="center"}
 

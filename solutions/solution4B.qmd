@@ -1,16 +1,16 @@
 ---
-title: "Exercise 4 - Solutions"
+title: "Exercise 4B - Solutions"
 format: html
 project:
  type: website
  output-dir: ../docs
 ---
 
-In this exercise you will practice your scripting. 
+In this exercise you will practice your scripting in R. 
 
 ## Getting started
 
-Load libaries and data
+Load libraries and data
 
 ```{r message=FALSE, warning=FALSE}
 library(tidyverse)
@@ -22,133 +22,6 @@ diabetes_glucose <- read_rds('../out/diabetes_glucose.rds')
 diabetes_glucose
 ```
 
-## If-else statements
-
-In these exercises we don't use the dataframe yet, that comes later when we have loops. For this part, just declare variables to test your statements, e.g. `bp <- 120`. 
-
-1. Write an if-else statement that prints whether a person has high (more than 100), low (lower than 50) or normal blood pressure (between 50 and 100).
-
-```{r}
-bp <- 80
-
-if (bp > 100){
-  print('High blood pressure')
-} else if (bp < 50) {
-  print('Low blood pressure')
-} else {
-  print('Normal blood pressure')
-} 
-
-```
-2. Write an if-else statement that assigns people high, moderate or low health risk based on their smoking habits (variable `smoker`) and BMI:
-
-* Smoker and BMI greater than 35 -> high risk
-
-* Smoker or BMI greater than 35 -> moderate risk
-
-* otherwise low risk
-
-And `smoker` should be one of "Smoker", "Former", "Never", "Unknown".
-
-Verify that your statement works for different combinations of risk score and BMI
-
-```{r}
-Smoker <- 'Smoker'
-BMI <- 40
-
-if (Smoker == 'Smoker' & BMI > 35){
-  print('High risk')
-} else if (Smoker == 'Smoker' | BMI > 35) {
-  print('Moderate risk')
-} else {
-  print('Low risk')
-}
-
-```
-
-## Loops
-
-3. Create a vector with at least 5 elements and loop over it.
-
-```{r}
-my_v <- c(1, 78, 5, 'hello', 7)
-
-for (el in my_v) {
-  print(el)
-}
-
-```
-
-
-4. Loop over all column names of diabetes_glucose. 
-
-::: {.callout-tip collapse="true"}
-## Hint
-
-`colnames(df)` creates a vector of column names.
-
-:::
-
-
-```{r}
-for (col in colnames(diabetes_glucose)) {
-  print(col)
-}
-```
-
-
-5. Loop over all rows of diabetes_glucose and determine whether the person's blood pressure is high, low or normal with the same conditions as in 1.
-
-```{r}
-#We'll only show the first 10 rows here for brevity
-#for (i in 1:nrow(diabetes_glucose)) {
-
-for (i in 1:10) {
-  bp <- diabetes_glucose$BloodPressure[i]
-
-  if (bp > 100){
-    print('High blood pressure')
-  } else if (bp < 50) {
-    print('Low blood pressure')
-  } else {
-    print('Normal blood pressure')
-  } 
-}
-```
-
-6. Loop over all rows of diabetes_glucose and determine the risk based on genetic risk score and BMI, with the same conditions as in 2. Print the genetic risk score and BMI as well as the risk level to make it easier to see whether your code works correctly.
-
-::: {.callout-tip collapse="true"}
-## Hint
-
-An easy way to printing several variables is to pass a vector into print: `print(c(this,and_that,and_this_too))`
-
-:::
-
-```{r}
-#We'll only show the first 10 rows here for brevity
-#for (i in 1:nrow(diabetes_glucose)) {
-
-for (i in 1:10) {
-  Smoker <- diabetes_glucose$Smoker[i]
-  BMI <- diabetes_glucose$BMI[i]
-  
-  #skip rows where either of the values is NA
-  if (is.na(Smoker) | is.na(BMI)){
-    next
-  }
-    
-  if (Smoker == 'Smoker' & BMI > 35){
-    print(c(Smoker, BMI, 'High risk'))
-  } else if (Smoker == 'Smoker' | BMI > 35) {
-    print(c(Smoker, BMI,'Moderate risk'))
-  } else {
-    print(c(Smoker, BMI,'Low risk'))
-  }
-}
-
-```
-
 ## User defined Functions
 
 In this part we will write some functions that create plots. 
@@ -156,7 +29,7 @@ In this part we will write some functions that create plots.
 Since we want to be able to pass the name of the column to plot as a variable we will need to use the syntax for aliased column names. We showed how to do that in the end of presentation 3 if you need a refresher.  
 
 
-7. Create a variable `plot_column` and assign "Age" to it. Now make a boxplot of that column. Switch `plot_column` to a different column in `diabetes_glucose`. Does it work?
+1. Create a variable `plot_column` and assign "Age" to it. Now make a boxplot of that column. Switch `plot_column` to a different column in `diabetes_glucose`. Does it work?
 
 ```{r}
 #the column we want to plot
@@ -167,7 +40,8 @@ ggplot(diabetes_glucose, aes(y = .data[[plot_column]])) +
   geom_boxplot()
 
 ```
-8. Wrap your code for the boxplot into a function. The function should take two arguments: the dataframe to use and the name of the column to plot. Test your function. Add some customization to the plot like a theme or colors. 
+
+2. Wrap your code for the boxplot into a function. The function should take two arguments: the dataframe to use and the name of the column to plot. Test your function. Add some customization to the plot like a theme or colors. 
 
 ::: {.callout-tip collapse="true"}
 ## Hint
@@ -319,5 +193,4 @@ show_mean_by_catergory <- function(df,category){
 ```{r}
 show_mean_by_catergory(diabetes_glucose_unnest, 'Smoker')
 ```
-
 

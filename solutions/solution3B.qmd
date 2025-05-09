@@ -75,7 +75,7 @@ nrow(diabetes_glucose_unnest)
 
 Now our data is ready to make a PCA.
 
-6. Calculate the PCA by running `prcomp` on our prepared data (see the tutorial). Then, create a plot of the resulting PCA (also shown in tutorial).
+6. Calculate the PCA by running `prcomp` on our prepared data and create a plot of the resulting PCA (see the tutorial). 
 
 ```{r}
 library(ggfortify)
@@ -85,7 +85,7 @@ pca_res <- prcomp(diabetes_glucose_numerical, scale. = TRUE)
 autoplot(pca_res)
 ```
 
-7. Color your PCA plot and add loadings. Think about which variable you want to color by. Remember to refer to the dataset that has this variable (probably not your numeric subset!)
+7. Color your PCA plot by the outcome variable (`Diaetes`) and add loadings. Think about which variable you want to color by. Remember to refer to the dataset that has this variable (probably not your numeric subset!)
 
 ```{r}
 autoplot(pca_res, data = diabetes_glucose_unnest, colour = 'Diabetes',

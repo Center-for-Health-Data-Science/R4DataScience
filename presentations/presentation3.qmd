@@ -6,15 +6,17 @@ project:
  output-dir: ../docs
 ---
 
-In exercises 3A and B you will a deeper look at the diabetes data. To prepare for that, we will hear learn some extra ggplot tricks! 
+In exercises 3A and B you will a deeper look at the diabetes data. To prepare for that, we will learn some extra ggplot tricks!
 
 ## Load packages
+
 ```{r warning=FALSE, message=FALSE}
 library(readxl)
 library(tidyverse)
 ```
 
 ## Load data
+
 ```{r}
 df_sales <- read_excel('../out/sales_data_2.xlsx')
 df_sales
@@ -22,10 +24,9 @@ df_sales
 
 ## ggplot recap
 
-We will not go into much detail here since this section mostly serves as a recap of the [ggplot material](https://center-for-health-data-science.github.io/FromExceltoR/Presentations/presentation3.html) covered in the previous course, From Excel to R. 
+We will not go into much detail here since this section mostly serves as a recap of the [ggplot material](https://center-for-health-data-science.github.io/FromExceltoR/Presentations/presentation3.html) covered in the previous course, From Excel to R.
 
-The creed of `ggplot` is summarized is that every information that should be put into the plot must be in a column. There is one column that describes the x-axis and one for the y-axis, and one for each additional aesthetic like color, size, shape, ect. 
-
+The creed of `ggplot` is summarized is that every information that should be put into the plot must be in a column. There is one column that describes the x-axis, one for the y-axis, and one for each additional aesthetic like color, size, shape, ect.
 
 ```{r}
 ggplot(df_sales, aes(x = Name, y = sales_2022, color = Sex)) +
@@ -35,7 +36,7 @@ ggplot(df_sales, aes(x = Name, y = sales_2022, color = Sex)) +
 
 ### The long format is ggplot's best friend
 
-It follows that if I need to plot all sales data, I will need to change the dataframe's format such that all data points referring to sales are in the same column. As shown in pres 2 we do that with `pivot_longer`:
+It follows that if I need to plot all sales data, I will need to change the dataframe's format such that all data points referring to sales are in the same column. As shown in presentation 2 we do that with `pivot_longer`:
 
 ```{r}
 sales_long <- df_sales %>%
@@ -48,7 +49,6 @@ sales_long
 ```{r}
 ggplot(sales_long, aes(x = Name, y = sales_value, color = Sex)) +
   geom_point()
-  
 ```
 
 ### You can pipe into ggplot
@@ -60,8 +60,8 @@ df_sales %>%
   pivot_longer(cols = starts_with("sales_"),
                names_to = "sales_year",
                values_to = "sales_value") %>%
-  #we omit the dataframe to plot because that is being piped into ggplot
-  #remember that different plot layers are still combined with '+'
+  # we omit the dataframe to plot because that is being piped into ggplot
+  # remember that different ggplot layers are still combined with '+'
   ggplot(aes(x = Name, y = sales_value, color = Sex)) +
   geom_point()
 ```
@@ -73,10 +73,11 @@ Sometimes we would like to add more information to a plot. Consider the one we j
 ```{r}
 sales_mean <- sales_long %>%
   group_by(Name) %>%
-  summarise(mean = mean(sales_value, na.rm = T))
+  summarise(mean = mean(sales_value, na.rm = TRUE))
 
 sales_mean
 ```
+
 And I would like to add it to the plot:
 
 ```{r}
@@ -86,14 +87,13 @@ df_sales %>%
   pivot_longer(cols = starts_with("sales_"),
                names_to = "sales_year",
                values_to = "sales_value") %>%
-  #we omit the dataframe to plot because that is being piped into ggplot
-  #remember that different plot layers are still combined with '+'
+  # we omit the dataframe to plot because that is being piped into ggplot
+  # remember that different plot layers are still combined with '+'
   ggplot(aes(x = Name, y = sales_value, color = Sex)) +
   geom_point() +
-  #add mean data by switching the dataframe!
-  #I need to specify a color aesthetic because there is no Sex column in sales_mean
+  # add mean data by switching the dataframe!
+  # I need to specify a color aesthetic because there is no Sex column in sales_mean
   geom_point(data = sales_mean, aes(x = Name, y = mean), color = 'black')
-
 
 ```
 
@@ -118,14 +118,11 @@ awesome_plot
 
 ```
 
-
 If R is every being pesky about showing you plots (e.g. if you want to display them in a loop) wrapping `print()` around the plot name usually helps:
 
 ```{r}
 print(awesome_plot)
 ```
-
-
 
 ### Aliasing column names
 
@@ -150,4 +147,10 @@ ggplot(df_sales, aes(x = .data[[plot_this]], y = sales_2022, color = Sex)) +
 
 We hear you say 'But that is cumbersome!'. Unfortunately we're neither the developers nor maintainers of `ggplot` so we all suffer together.
 
+Another solution is `aes_string`:
+```{r}
+plot_this <- 'Name'
 
+ggplot(df_sales, aes_string(x = plot_this, y = 'sales_2022', color = 'Sex')) +
+  geom_point()
+```

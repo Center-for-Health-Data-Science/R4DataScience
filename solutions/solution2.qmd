@@ -42,21 +42,6 @@ diabetes_join$ID <- as.factor(diabetes_join$ID)
 
 4. Restructure the glucose dataset into a long format. Name the column that describes which measurement the row refers to, i.e. Glucose_0, Glucose_60 or Glucose_120, `Measurement`. How many rows are there per ID? Does that make sense?
 
-::: {.callout-tip collapse="true"}
-## Hint
-
-Remember the flow:
-
-```{r eval = FALSE}
-pivot_longer(cols = LIST_WITH_COLUMNS_TO_PIVOT,
-             names_to = "NEW_COLUMN_CONTAINING_COLUMN_NAMES",
-             values_to = "NEW_COLUMN_CONTAINING_COLUMN_VALUES")
-```
-
-Have a look at slide 16 for a visual overview.
-
-:::
-
 ```{r}
 df_glucose_long <- df_glucose %>% 
   pivot_longer(cols = starts_with("Glucose"),
@@ -115,23 +100,13 @@ head(diabetes_glucose)
 
 7. Pull the glucose measurements from your favorite ID. 
 
-::: {.callout-tip collapse="true"}
-## Hint
-First `filter` for your favorite ID and then `pull` the columns. 
-:::
-
 ```{r}
 diabetes_glucose %>% 
   filter(ID == 9046) %>% 
   pull(Measurement,`Glucose (mmol/L)`)
 ```
 
-8. Calculate the mean glucose measure for each measurement timepoint.
-
-::: {.callout-tip collapse="true"}
-## Hint
-You will need to use `group_by()`, and `summarise()`.
-:::
+8. Calculate the mean glucose measure for each measurement time point.
 
 ```{r}
 diabetes_glucose %>%
@@ -149,7 +124,7 @@ You will need to use `summarise()` and `across()`, selecting numeric columns.
 ```{r}
 diabetes_glucose %>%
   summarise(across(where(is.numeric), list(mean=mean, sd=sd), 
-                   .names = "{.col}-{.fn}"))
+                   na.rm = TRUE))
 ```
 
 10. Nest the glucose measurements and values such that there is only one row per ID and call the nested column OGTT (Oral Glucose Tolerance Test). Display the resulting tibble to confirm that you have succeeded.
