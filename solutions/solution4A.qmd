@@ -1,5 +1,5 @@
 ---
-title: "Exercise 4A - Solutions"
+title: "Exercise 4A - Solutions: Scripting in R - Conditions and For-loops"
 format: html
 project:
  type: website
@@ -143,6 +143,5 @@ for (i in 1:10) {
 }
 
 ```
-
 
 

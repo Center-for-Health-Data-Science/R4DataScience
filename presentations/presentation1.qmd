@@ -128,13 +128,19 @@ df_location <- data.frame(
 head(df_location)
 ```
 
-Join `df` and `df_location` with `full_join`, `left_join` and `rigth_join`.
+Join `df` and `df_location` with `full_join`, `inner_join`, `left_join` and `rigth_join`.
 
 `full_join` keeps all observations in both data sets.
 
 ```{r}
 df %>% 
   full_join(df_location, by = 'ID')
+```
+
+`ìnner_join` keeps observations that occurs in both datasets.
+```{r}
+df %>% 
+  inner_join(df_location, by = 'ID')
 ```
 
 `left_join` keeps all observations in `df`.

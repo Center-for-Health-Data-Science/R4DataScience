@@ -1,4 +1,4 @@
-# Exercise 4B - Solutions
+# Exercise 4B - Solutions: Scripting in R - Functions
 
 make_boxplot <- function(df, plot_column){
   
@@ -14,4 +14,3 @@ make_boxplot <- function(df, plot_column){
   return(p)
   
 }
-

@@ -1,5 +1,5 @@
 ---
-title: "Presentation 4B: Functions - Main Script"
+title: "Presentation 4B: Scripting in R - Functions"
 format: html
 project:
  type: website

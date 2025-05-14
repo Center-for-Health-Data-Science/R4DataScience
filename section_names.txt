@@ -1,0 +1,16 @@
+Exercise 0: Getting started
+Presentation 1: Data Cleanup & Summary Statistics
+Exercise 1: Data Cleanup and Summary Statistics
+Presentation 2: Data Transformation and Integration
+Exercise 2: Data Transformation and Integration
+Presentation 3 - Exploratory Data Analysis (EDA)
+Exercise 3, 3A, 3B ???
+Presentation 4A: Scripting in R - Conditions and For-loops
+Exercise 4A: Scripting in R - Conditions and For-loops
+Presentation 4B: Scripting in R - Functions
+Exercise 4B: Scripting in R - Functions
+
+5: Modelling
+
+
+

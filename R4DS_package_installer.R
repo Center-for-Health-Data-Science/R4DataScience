@@ -26,9 +26,9 @@ if(as.numeric(base::version$major) < 4){
 #####################
 
 # list package names that are needed from CRAN
-packages_needed = c("tidyverse","readxl", "writexl",
+packages_needed = c("tidyverse", "readxl", "writexl",
                     "table1","knitr","GGally","emmeans", "ggpubr",
-                    "quarto", "broom")
+                    "quarto", "broom", "patchwork", "quarto")
 
 finished = FALSE
 

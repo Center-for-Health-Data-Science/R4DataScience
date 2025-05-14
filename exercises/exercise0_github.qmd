@@ -1,5 +1,5 @@
 ---
-title: "Exercise 0: R script and Quarto"
+title: "Exercise 0: Getting started"
 format: html
 project:
  type: website

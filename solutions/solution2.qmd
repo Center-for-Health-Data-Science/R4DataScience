@@ -1,5 +1,5 @@
 ---
-title: "Exercise 2 - Solutions: Advanced Data Wrangling"
+title: "Exercise 2 - Solutions: Data Transformation and Integration"
 format: html
 project:
  type: website
@@ -89,7 +89,7 @@ df_glucose_long$Measurement <- factor(df_glucose_long$Measurement, levels = c('0
 ```
 
 
-6. Merge the glucose dataset with the joined diabetes dataset.
+6. Merge the long formatted glucose dataset you made in **4** with the joined diabetes dataset you loaded in **2**.
 
 ```{r}
 diabetes_glucose <- diabetes_join %>% 
@@ -154,8 +154,71 @@ head(relocate(diabetes_glucose, OGTT, .after = BMI))
 
 11. Export the final dataset. Since the dataset is nested, you cannot export it as an excel file. Export the dataset as an `.rds` file. Have a guess at what the function is called.
 
-
 ```{r}
 write_rds(diabetes_glucose, '../out/diabetes_glucose.rds')
 ```
+
+## Simple plotting
+
+Before we move on, let's refresh the plotting package in tidyverse: `ggplot2`. 
+
+12. For p1, plot the density of the glucose measurements at time 0. For p2, make the same plot as p1 but add stratification on the diabetes status. Give the plot a meaningful title. Consider the densities - do they make sense?
+```{r}
+p1 <- diabetes_glucose %>% 
+  unnest(OGTT) %>% 
+  filter(Measurement == 0) %>% 
+  ggplot(aes(x = `Glucose (mmol/L)`)) + 
+  geom_density()
+
+p2 <- diabetes_glucose %>% 
+  unnest(OGTT) %>% 
+  filter(Measurement == 0) %>% 
+  ggplot(aes(x = `Glucose (mmol/L)`,
+             linetype = Diabetes)) + 
+  geom_density()
+
+# Get plots side by side.
+library(patchwork)
+p1 + p2 + plot_annotation(title = "Glucose measurements at time 0")
+```
+
+13. Do the same for the glucose measurements at time 60.
+```{r}
+p1 <- diabetes_glucose %>% 
+  unnest(OGTT) %>% 
+  filter(Measurement == 60) %>% 
+  ggplot(aes(x = `Glucose (mmol/L)`)) + 
+  geom_density()
+
+p2 <- diabetes_glucose %>% 
+  unnest(OGTT) %>% 
+  filter(Measurement == 60) %>% 
+  ggplot(aes(x = `Glucose (mmol/L)`)) + 
+  geom_density(aes(linetype = Diabetes))
+
+# Get plots side by side.
+library(patchwork)
+p1 + p2 + plot_annotation(title = "Glucose measurements at time 60")
+```
+
+14. Now, create one plot for the glucose measurement where the densities are stratified on measurement time (0, 60, 120) and diabetes status (0, 1). You should see 6 density curves in your plot. 
+
+::: {.callout-tip collapse="true"}
+## Hint
+There two ways of stratifying a density plot in ggplot2: `color` and `linetype`.
+:::
+
+```{r}
+p1 <- diabetes_glucose %>% 
+  unnest(OGTT) %>% 
+  ggplot(aes(x = `Glucose (mmol/L)`, 
+             color = Measurement,
+             linetype = Diabetes)) + 
+  geom_density() + 
+  labs(title = "Glucose measurements at time 0, 60, and 120 across diabetes status")
+
+p1
+```
+
+
 

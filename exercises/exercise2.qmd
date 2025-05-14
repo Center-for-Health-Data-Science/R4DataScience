@@ -1,5 +1,5 @@
 ---
-title: "Exercise 2: Advanced Wrangling"
+title: "Exercise 2: Data Transformation and Integration"
 format: html
 project:
  type: website
@@ -57,6 +57,30 @@ group_by() %>%
 
 :::
 
-
 11. Export the final dataset. Since the dataset is nested, you cannot export it as an excel file. Export the dataset as an `.rds` file. Have a guess at what the function is called.
+
+## Simple plotting
+
+Before we move on, let's refresh the plotting package in tidyverse: `ggplot2`. 
+
+12. For p1, plot the density of the glucose measurements at time 0. For p2, make the same plot as p1 but add stratification on the diabetes status. Give the plot a meaningful title. Consider the densities - do they make sense?
+```{r}
+p1 <- # code for p1
+
+p2 <- # code for p2
+
+# Get plots side by side.
+library(patchwork)
+p1 + p2 + plot_annotation(title = "TITLE")
+```
+
+13. Do the same for the glucose measurements at time 60.
+
+14. Now, create one plot for the glucose measurement where the densities are stratified on measurement time (0, 60, 120) and diabetes status (0, 1). You should see 6 density curves in your plot. 
+
+::: {.callout-tip collapse="true"}
+## Hint
+There two ways of stratifying a density plot in ggplot2: `color` and `linetype`.
+:::
+
 

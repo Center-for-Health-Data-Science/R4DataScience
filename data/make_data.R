@@ -29,8 +29,8 @@ diabetes <- read_csv('diabetes.csv')
 diabetes_clinical <- diabetes %>% select(ID, Sex, Age, BloodPressure, GeneticRisk, BMI, PhysicalActivity, Smoker, Diabetes)
 diabetes_meta <- diabetes %>% select(ID, Married, Work)
 
-# Randomize the order of rows
-diabetes_meta <- diabetes_meta[sample(1:nrow(diabetes_meta)), ]
+# Randomize the order of rows and remove 18 samples
+diabetes_meta <- diabetes_meta[sample(18:nrow(diabetes_meta)), ]
 
 # Make the data messy 
 # remotes::install_github("nrennie/messy")

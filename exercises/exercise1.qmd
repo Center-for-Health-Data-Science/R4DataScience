@@ -1,32 +1,24 @@
 ---
-title: "Exercise 1: Data Cleanup (Base R and Tidyverse)"
+title: "Exercise 1 - Solutions: Data Cleanup and Summary Statistics"
 format: html
 project:
  type: website
  output-dir: ../docs
 ---
 
-In this exercise you will practice your R skills by loading, inspecting and cleaning a dataset. You can use base R and/or tidyverse to solve the exercises, it is up to you. 
-
 ## Getting started
 
-1.  Load the packages you think you will need. There is no need to spend too much time on this part. If you later realize you need another package just add it here and re-run the chunk.
+1.  Load packages.
 
-```{r}
-#your packages here
-```
-
-2.  Load in the data set `diabetes_clinical_toy_messy.xlsx`.
+2.  Load in the `diabetes_clinical_toy_messy.xlsx` data set.
 
 ## Explore the data
 
-3. Do summary stats by checking the number of observations (rows) and variables (columns) as well as their data types.
+Use can you either base R or/and tidyverse to solve the exercises. 
 
-4. For each variable evaluate the data type and change the ones you find necessary. 
+3.  How many missing values (NA's) are there in each column. 
 
-5. (Include/exclude?) How many missing values (NA's) are there in each column? 
-
-6.  Check the distribution of each variable by plotting the categorical variables in bar plots and the continuous in box plots. Does any values strike you as odd?
+4.  Check the ranges and distribution of each of the variables in the dataset. Remember, the variables might be different types. Do any values seem weird or unexpected?
 
 ## Clean up the data
 
@@ -34,33 +26,43 @@ Now that we have had a look at the data, it is time to correct fixable mistakes 
 
 Consider the following:
 
--   What should we do with the rows that contain NAs? Do we remove them or keep them?
+-   What should we do with the rows that contain NA's? Do we remove them or keep them?
 
--   Which mistakes in the data can be corrected, and which cannot?
+-   Which odd things in the data can we correct with confidence and which cannot?
 
 -   Are there zeros in the data? Are they true zeros or errors?
 
-7.  Clean the data according to your considerations.
+-   Do you want to change any of the classes of the variables?
 
-## Meta Data
-
-There is some metadata to accompany the dataset you have just cleaned in `diabetes_meta_toy_messy.csv`. This is a csv file, not an excel sheet, so you need to use the `read_csv` function to load it. Load in the dataset and inspect it. 
-
-8. Now clean the metadata and do data exploration by repeating step **3**-**7** from above. 
-
-## Join the datasets
-
-We will combine both datasets together into one tibble.
-
-9. Consider which variable the datasets should be joined on.
+5.  Make a clean version of the dataset according to your considerations.
 
 ::: {.callout-tip collapse="true"}
 ## Hint
-The joining variable must be the same type in both datasets.
+Have a look at `ID`, `BloodPressure`, `BMI`, `Sex`, and `Diabetes`. 
 :::
 
-10. Join the datasets by the variable you selected above.
+## Meta Data
 
-11. How many rows does the joined dataset have? Explain why. 
+There is some metadata to accompany the dataset you have just cleaned in `diabetes_meta_toy_messy.csv`. This is a csv file, not an excel sheet, so you need to use the `read_delim` function to load it. Load in the dataset and inspect it. 
 
-12. Export the joined dataset. Think about which directory you want to save the file in. 
+6.2. Load the meta data set.
+
+6.3. How many missing values (NA's) are there in each column. 
+
+6.4. Check the distribution of each of the variables. Consider that the variables are of different classes. Do any of the distributions seam odd to you?
+
+6. 5. Make a clean version of the dataset according to your considerations.
+
+## Join the datasets
+
+7. Consider which variable the datasets should be joined on.
+
+8. Consider how you want to join the datasets. Do you want to use `full_join`, `inner_join`, `left_join` and `rigth_join`?
+
+The joining variable must be the same type in both datasets.
+
+10. How many rows does the joined dataset have? Explain how the join-function you used resulted in the given number of rows. 
+
+11. Export the joined dataset. Think about which directory you want to save the file in. 
+
+

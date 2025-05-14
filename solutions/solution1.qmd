@@ -1,5 +1,5 @@
 ---
-title: "Exercise 1 - Solutions: Data Cleanup (Base R and Tidyverse)"
+title: "Exercise 1 - Solutions: Data Cleanup and Summary Statistics"
 format: html
 project:
  type: website
@@ -32,7 +32,7 @@ Use can you either base R or/and tidyverse to solve the exercises.
 colSums(is.na(diabetes_clinical))
 ```
 
-4.  Check the ranges and distribution of each of the variables. Consider that the variables are of different classes. Do any values strike you as odd?
+4.  Check the ranges and distribution of each of the variables. Remember, the variables might be different types. Do any values seem weird or unexpected?
 
 
 For the categorical variables we can use `table`:
@@ -107,7 +107,7 @@ Consider the following:
 
 -   Do you want to change any of the classes of the variables?
 
-5.  Clean the data according to your considerations.
+5.  Make a clean version of the dataset according to your considerations.
 
 ::: {.callout-tip collapse="true"}
 ## Hint
@@ -178,7 +178,7 @@ By investigating the unique values of the `Married` variable we see that some of
 unique(diabetes_meta$Married)
 ```
 
-6. 5.  Clean the data according to your considerations.
+6. 5. Make a clean version of the dataset according to your considerations.
 
 My considerations:
 
@@ -209,26 +209,30 @@ nrow(diabetes_meta_clean)
 
 ## Join the datasets
 
-7. Consider what variable the datasets should be joined on.
+7. Consider which variable the datasets should be joined on.
+
+8. Consider how you want to join the datasets. Do you want to use `full_join`, `inner_join`, `left_join` and `rigth_join`?
 
 The joining variable must be the same type in both datasets.
 
-
-8. Join the datasets by the variable you selected above.
+9. Join the cleaned versions of the clinical and meta dataset by the variable and with the function you considered above.
 ```{r}
+# We use full_join to keep all observations before we know which variables we are interested in. 
 diabetes_join <- diabetes_clinical_clean %>% 
-  left_join(diabetes_meta_clean, by = 'ID')
-```
+  full_join(diabetes_meta_clean, by = 'ID')
 
-9. How many rows does the joined dataset have? Explain why. 
-
-Because we used `left_join`, only the IDs that are in `diabetes_clinical_clean` are kept. 
-
-```{r}
 nrow(diabetes_join)
 ```
 
-10. Export the joined dataset. Think about which directory you want to save the file in. 
+10. How many rows does the joined dataset have? Explain how the join-function you used resulted in the given number of rows. 
+
+```{r}
+# Because we used `full_join`, all the unique IDs across both data sets are kept.
+c(diabetes_clinical_clean$ID, diabetes_meta_clean$ID) %>% unique() %>% length()
+nrow(diabetes_join)
+```
+
+11. Export the joined dataset. Think about which directory you want to save the file in. 
 ```{r}
 writexl::write_xlsx(diabetes_join, '../out/diabetes_join.xlsx')
 ```

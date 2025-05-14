@@ -1,5 +1,5 @@
 ---
-title: "Exercise 4B - Solutions"
+title: "Exercise 4B - Solutions: Scripting in R - Functions"
 format: html
 project:
  type: website
@@ -122,7 +122,7 @@ rm(list = "make_boxplot")
 ```
 
 ```{r}
-source('solution4_functions.R')
+source('solution4B.R')
 ```
 
 ```{r}
