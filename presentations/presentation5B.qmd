@@ -1,0 +1,16 @@
+---
+title: "Exercise 5B - Solutions"
+format: html
+project:
+  type: website
+  output-dir: ../docs
+---
+
+In lasso regression, the hyperparameter lambda (λ), also known as the L1 penalty, balances the tradeoff between bias and variance in the resulting coefficients. As λ increases, the bias increases, and the variance decreases, leading to a simpler model with fewer parameters.
+
+Finding the Optimal Lambda:
+The goal is to find the lambda that minimizes the cross-validation error. This corresponds to the point where the model is neither:
+
+Too complex (overfitting) — where the model fits the training data too closely and performs poorly on new, unseen data.
+
+Too simple (underfitting) — where the model is too heavily regularized and doesn't capture the underlying patterns in the data.

@@ -292,7 +292,6 @@ write_rds(patient_data, 'patient_data.rds')
 
 
 
-
 ############ OBSTETRICS DATASET ############ 
 
 #install.packages("medicaldata")
@@ -308,55 +307,48 @@ opt <- medicaldata::opt %>%
   as_tibble()
 
 # Cutoff for number of missing values 30% 
-NAcutoff <- round(nrow(opt)*0.3)
-
-# General columns to keep based on (https://higgi13425.github.io/medicaldata/reference/opt.html)
-keep <- 
-  c('PID', 'Clinic', 'Group', 'Age', 'Black',
-  'White', 'Nat.Am', 'Asian', 'Hisp', 'Education',
-  'Hypertension', 'Diabetes', 'BL.Diab.Type', 
-  'BMI', 'Use.Tob', 'BL.Cig.Day', 'Use.Alc',
-  'BL.Drks.Day', 'X..Vis.Att', 'N.prev.preg', 
-  'Any.stillbirth', 'Spont.ab', 'Any.live.ptb.sb.sp.ab.in.ab',
-  'Birth.outcome', 'Preg.ended...37.wk', 'GA.at.outcome', 
-  'Prev.preg', 'Any.SAE.', 'Birthweight', 'Fetal.congenital.anomaly',
-  'Apgar1', 'Apgar5', 'Bact.vag', 'Gest.diab', 'Strep.B', 'UTI',
-  'Pre.eclamp', 'BL.DNA', 'V5.DNA', 'BL.Antibio', 'V5.Antibio',
-  'Tx.comp.', 'Tx.time', 'Local.anes', 'Topical.Anest', 
-  'EDC.necessary.', 'Completed.EDC', 'N.extractions', 
-  'N.qualifying.teeth','BL.GE', 'BL.CAL.avg', 
-  'BL.PD.avg', 'BL..BOP', 'BL.Calc.I', 'BL.Pl.I',
-  'V5.CAL.avg', 'V5.PD.avg', 'V5..BOP','BL.S7', 'V5.S7')
+NAcutoff <- round(nrow(opt)*0.30)
 
 
-# Select columns
-# Keep only variables with less than 1/3 missing values
 # Trim trailing whitespace
 # Sub empty fields with NA
-# Make combined race/ethnicity variable (long form)
+# Missing values denoted by . are sub. with NA
+# Combined factor for race
 
 opt <- opt %>%
-  select(all_of(keep)) %>%
   mutate(across(where(is.factor), ~ str_trim(.)),
          PID = as.character(PID),
          Hisp=ifelse(Hisp=="", "No", as.character(Hisp)),
          Hypertension = ifelse(Hypertension=='Y', "Yes", "No"),
-         N.prev.preg=ifelse(Prev.preg=='No', 0, N.prev.preg)) %>% 
-  select(-Prev.preg) %>%
+         N.prev.preg=ifelse(Prev.preg=='No', 0, N.prev.preg),
+         Birthweight= as.numeric(Birthweight), 
+         BMI=as.numeric(BMI)) %>% 
   mutate(across(everything(), ~ ifelse(.=="", NA, .)),
          combin = paste0(Black, White, Nat.Am, Asian, Hisp)) %>%
+  mutate(across(everything(), ~ ifelse(.==".", NA, .)))
+
+
+# Remove any NA in outcomes before imputation 
+# Remove too unbalanced factor vars before imputation
+# Remove columns with > 30% missing
+
+opt <- opt %>% 
+  filter(!if_any(all_of(c("Apgar1", "Apgar5", "Birthweight", "Any.SAE.", 
+                          "Fetal.congenital.anomaly", "Preg.ended...37.wk", "GA.at.outcome")), is.na)) %>%
+  select(-c(Prev.preg, Birth.outcome, Drug.Add, Polyhyd, Mom.HIV.status,
+            X..Vis.Elig, X1st.Miss.Vis, BL.Cortico, O1B1, O1B5, O61, O65, 
+            O81, O85, OTNF1, Oligo)) %>%
   select(where(~sum(is.na(.)) < NAcutoff))
-  
-  
+
 
 # Make combined race/ethnicity variable (short integer form)
 # Vary rare race/ethnicity are removed (e.g. not enough data points)
 Race <- opt %>% 
   group_by(combin) %>% 
   summarise(each = n()) %>%
-  filter(each >= 7) %>% # The cutoff of 7 was picked based on results of summary output
+  filter(each >= 20) %>% # The cutoff of 7 was picked based on results of summary output
   select(-each) %>%
-  mutate(Race = 1:nrow(.))
+  mutate(Race = as.character(1:nrow(.)))
 
 
 # Joining new short race/ethnicity variable with full dataset, remove redundant columns.
@@ -365,22 +357,42 @@ opt <- left_join(opt, Race) %>%
   select(-c(combin, Black:Hisp)) %>%
   relocate(Race, .after = Age) 
 
-# Mutate subset variables to correct type before imputation
-opt <- opt %>% 
-  filter(!Birth.outcome %in% c("Elective abortion", "Lost to FU")) %>%
-  mutate(BMI = log2(as.numeric(BMI)),
-         Birth.outcome= ifelse(Birth.outcome =="Live birth", 0, 1),
-         Preg.ended...37.wk= ifelse(Preg.ended...37.wk =="Yes", 1, 0),
-         Birthweight= as.numeric(Birthweight),
-         N.prev.preg = as.integer(N.prev.preg),
-         BL.Antibio = as.factor(BL.Antibio),
-         V5.Antibio= as.factor(V5.Antibio)) %>%
-  mutate(across(.cols = where(is.character) & !any_of(c("PID","Clinic", "Group", "Education", "Race")), .fns = as.factor))
+
+# Systematically mutate serum and medication treatment columns
+Serum <- c(names(opt[,grep("^O", names(opt))]), "ETXU_CAT5")
+Treat <- names(opt[,grep("Anti|Cortico|Bac", names(opt))])
+
+
+opt <- opt %>%
+  mutate(across(all_of(Serum), ~ as.numeric(.))) %>%
+  mutate(across(all_of(Treat), ~ as.factor(.))) %>%
+  mutate(across(.cols = where(is.character) & !any_of(c("PID")), .fns = as.factor)) %>%
+  mutate(N.PAL.sites = as.factor(ifelse(N.PAL.sites >= 2 , "3-33", as.character(N.PAL.sites)))) 
+
+
 
 
 # Remove ID (should not be used for imputation)
+#Outcomes <- c(
+#  "PID", 
+#  "Apgar1", 
+#  "Apgar5",
+#  "Any.SAE.",
+#  "Birthweight", 
+#  "Fetal.congenital.anomaly", 
+#  "Preg.ended...37.wk", 
+#  "GA...1st.SAE",
+#  "GA.at.outcome")
+
+#optOut <- opt %>% 
+#  select(all_of(Outcomes))
+
+#opt <- opt %>% 
+#  select(-all_of(Outcomes))
+
 PID <- opt %>% 
   select(PID)
+
 
 # Pattern of missingness
 md.pattern(opt[,-1], rotate.names = TRUE)
@@ -391,17 +403,12 @@ meth <-  init$method
 meth
 
 # Impute missing values
-optImp <- mice(opt[,-1], maxit=20, method = meth, seed = 1234) 
+optImp <- mice(opt[,-1], maxit=10, method = meth, seed = 1234) 
 
 
-# Strip plots to check imputation for each variable
-# ...and no, it cannot be done in a loop cause the funtion is STUPID!
 
-stripplot(optImp, BMI, col=c("grey",mdc(2)),pch=c(1,20))
-stripplot(optImp, Apgar1, col=c("grey",mdc(2)),pch=c(1,20))
-stripplot(optImp, Apgar5, col=c("grey",mdc(2)),pch=c(1,20))
+# Check imputed
 stripplot(optImp, Use.Tob, col=c("grey",mdc(2)),pch=c(1,20))
-stripplot(optImp, Use.Alc, col=c("grey",mdc(2)),pch=c(1,20))
 stripplot(optImp, N.prev.preg, col=c("grey",mdc(2)),pch=c(1,20))
 stripplot(optImp, Any.stillbirth, col=c("grey",mdc(2)),pch=c(1,20))
 stripplot(optImp, Any.live.ptb.sb.sp.ab.in.ab, col=c("grey",mdc(2)),pch=c(1,20))
@@ -414,14 +421,48 @@ stripplot(optImp, EDC.necessary., col=c("grey",mdc(2)),pch=c(1,20))
 stripplot(optImp, V5.CAL.avg, col=c("grey",mdc(2)),pch=c(1,20))
 stripplot(optImp, V5.PD.avg, col=c("grey",mdc(2)),pch=c(1,20))
 stripplot(optImp, V5..BOP, col=c("grey",mdc(2)),pch=c(1,20))
+stripplot(optImp, V5.Bac.vag, col=c("grey",mdc(2)),pch=c(1,20))
+stripplot(optImp, V3.Anti.inf, col=c("grey",mdc(2)),pch=c(1,20))
+stripplot(optImp, OFIBRIN1, col=c("grey",mdc(2)),pch=c(1,20))
+stripplot(optImp, OCRP5, col=c("grey",mdc(2)),pch=c(1,20))
+
+
+#optImp <- bind_cols(optOut, complete(optImp, 1))
+
+
+# Bind PID back to dataset
+optImp <- bind_cols(PID, complete(optImp, 1))
+
+# Full clean version to have
+write_csv(optImp, file = 'Obstetrics_Periodontal_Therapy.csv')
 
 
 
 
-optImp <- bind_cols(PID, complete(optImp, 1)) %>%
-  mutate(across(.cols = where(is.factor), .fns = as.character))
 
-write_csv(optImp, file = '~/R4DataScience/data/Obstetrics_Periodontal_Therapy.csv')
+# Check balance of factor variables for ML
+factor_counts <- optImp  %>%
+  dplyr::select(where(is.factor)) %>%
+  map(~ as.data.frame(table(.))) %>%
+  imap(~ setNames(.x, c("Level", "Count")) %>% mutate(Variable = .y)) %>%
+  bind_rows() %>%
+  relocate(Variable, .before = Level)
 
+
+factor_counts
+
+# Smaller more balanced version for LASSO and R
+optML <- optImp %>% 
+  dplyr::select(-c(Diabetes, 
+                   Use.Alc,
+                   Fetal.congenital.anomaly,  
+                   Any.stillbirth, 
+                   Hypertension,
+                   Traumatic.Inj,
+                   BL.Bac.vag,
+                   ETXU_CAT1)) 
+
+
+save(optML, file = 'Obt_Perio_ML.Rdata')
 
 
