@@ -39,11 +39,12 @@ Birthweight - Weight of baby at birth (grams)
 Apgar1 - Apgar score, a summary of a newborn infant's 'appearance at birth, range: 0-10 
 Apgar5 - Apgar score at 5 minutes, numeric, range: 0-10
 Preg.ended...37.wk - Pregnancy ended before week 37, categorical (0 = no, 1 = yes)
+Any.SAE. - Whether participant experienced any serious adverse events (Yes, No)
 ```
 
 The remaining 28 variables we will consider as potential explanatory variables for these outcomes.
 
-3.  Do some basic summary statistics and distributional plots to get a feel for the data. Which types of variables do we have?
+3.  Do some basic summary statistics. How many categorical variables and how many numeric variables do you have? Try to make distributional plots for a couple of your numeric variables (or all if you would like) to get a feel for some of the data distributions you have.
 
 4.  Make count tables for all your categorical/factor variables, are they balanced?
 
@@ -51,11 +52,9 @@ The remaining 28 variables we will consider as potential explanatory variables f
 
 Elastic Net regression is part of the family of penalized regressions, which also includes Ridge regression and LASSO regression. Penalized regressions are especially useful when dealing with many predictors, as they help eliminate less informative ones while retaining the important predictors, making them ideal for high-dimensional datasets. One of the key advantages of Elastic Net over other types of penalized regression is its ability to handle multicollinearity and situations where the number of predictors exceeds the number of observations.
 
-As described above we have five variables which could be considered outcomes as these where all measured at the end of pregnancy. We can only work with one outcome at a time so we have combined these into a single variable named `Outcome.Birth`.
+As described above we have five variables which could be considered outcomes as these where all measured at the end of pregnancy. We can only work with one outcome at a time and we will pick `Preg.ended...37.wk`. This variable is a factor variable which denotes if a women gave birth prematurely (1=yes, 0=no).
 
-The variable `Outcome.Birth` represents any kind of 'critical' birth outcome, reflected by a low Apgar score, premature birth or critically low birth weight (defined as \< 1500 grams). `Outcome.Birth` is a factor variable where; 0 = no event and 1 = event.
-
-5.  As you will use the response `Outcome.Birth`, you should remove the original five outcome measures from your dataset.
+5.  As you will use the response `Preg.ended...37.wk`, you should remove the other five outcome measures from your dataset.
 
 6.  Elastic net regression can be sensitive to large differences in the range of numeric/integer variables, as such these variables should be scaled. Scale all numeric/integer variables in your dataset.
 
@@ -65,11 +64,11 @@ The variable `Outcome.Birth` represents any kind of 'critical' birth outcome, re
 mutate(across(...))
 :::
 
-7.  Split your dataset into train and test set, you should have 70% of the data in the training set and 30% in the test set. How you chose to split is up to you, BUT afterwards you should ensure that for the categorical/factor variables all levels are represented in both sets.
+7.  Split your dataset into train and test set, you should have 75% of the data in the training set and 30% in the test set. How you chose to split is up to you, BUT afterwards you should ensure that for the categorical/factor variables all levels are represented in both sets.
 
-8.  After dividing into train and test set pull out the response variable `Outcome.Birth` into its own vector for both datasets, name these: `y_train` and `y_test`.
+8.  After dividing into train and test set pull out the response variable `Preg.ended...37.wk` into its own vector for both datasets, name these: `y_train` and `y_test`.
 
-9.  Remove the response variable `Outcome.Birth` from the train and test set, as well as `PID` (if you have not already done so), as we should obviously not use this for training or testing.
+9.  Remove the response variable `Preg.ended...37.wk` from the train and test set, as well as `PID` (if you have not already done so), as we should obviously not use this for training or testing.
 
 You will employ the package `glmnet` to perform Elastic Net Regression. The main function from this package is `glmnet()` which we will use to fit the model. Additionally, you will also perform cross validation with `cv.glmnet()` to obtain the best value of the model hyper-parameter, lambda (λ).
 
@@ -114,4 +113,4 @@ coeffsDat <- as.data.frame(as.matrix(coeffs))
 
 16. Make a plot that shows the absolute importance of the variables retained in your model. This could be barplot with variable names on the x-axis and the height of the bars denoting absolute size of coefficient).
 
-17. Make a logistic regression using this dataset (you already have your train data, test data, y_train and y_test). Do you get similar results?
+17. Make a logistic regression using this same dataset (you already have your train data, test data, y_train and y_test). Do you get similar results?

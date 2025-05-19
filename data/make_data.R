@@ -335,10 +335,11 @@ opt <- opt %>%
 opt <- opt %>% 
   filter(!if_any(all_of(c("Apgar1", "Apgar5", "Birthweight", "Any.SAE.", 
                           "Fetal.congenital.anomaly", "Preg.ended...37.wk", "GA.at.outcome")), is.na)) %>%
-  select(-c(Prev.preg, Birth.outcome, Drug.Add, Polyhyd, Mom.HIV.status,
-            X..Vis.Elig, X1st.Miss.Vis, BL.Cortico, O1B1, O1B5, O61, O65, 
-            O81, O85, OTNF1, Oligo)) %>%
-  select(where(~sum(is.na(.)) < NAcutoff))
+  dplyr::select(-c(Prev.preg, Use.Alc, Drug.Add, Birth.outcome, Polyhyd, 
+                   Mom.HIV.status, V3.Cortico, BL.Cortico, V5.Cortico, 
+                   O1B1, O1B5, O61, O65, O81, 
+                   O85, OTNF1, OTNF5, Oligo)) %>%
+  dplyr::select(where(~sum(is.na(.)) < NAcutoff))
 
 
 # Make combined race/ethnicity variable (short integer form)
@@ -346,15 +347,15 @@ opt <- opt %>%
 Race <- opt %>% 
   group_by(combin) %>% 
   summarise(each = n()) %>%
-  filter(each >= 20) %>% # The cutoff of 7 was picked based on results of summary output
-  select(-each) %>%
+  dplyr::filter(each >= 20) %>% # The cutoff of 7 was picked based on results of summary output
+  dplyr::select(-each) %>%
   mutate(Race = as.character(1:nrow(.)))
 
 
 # Joining new short race/ethnicity variable with full dataset, remove redundant columns.
 opt <- left_join(opt, Race) %>%
-  filter(!is.na(Race)) %>%
-  select(-c(combin, Black:Hisp)) %>%
+  dplyr::filter(!is.na(Race)) %>%
+  dplyr::select(-c(combin, Black:Hisp)) %>%
   relocate(Race, .after = Age) 
 
 
@@ -370,40 +371,27 @@ opt <- opt %>%
   mutate(N.PAL.sites = as.factor(ifelse(N.PAL.sites >= 2 , "3-33", as.character(N.PAL.sites)))) 
 
 
+outvars <- c("PID", "Apgar1", "Apgar5", "Birthweight", "GA.at.outcome", "Any.SAE.", "Preg.ended...37.wk")
 
+outcomes <- opt %>% 
+  dplyr::select(outvars)
 
-# Remove ID (should not be used for imputation)
-#Outcomes <- c(
-#  "PID", 
-#  "Apgar1", 
-#  "Apgar5",
-#  "Any.SAE.",
-#  "Birthweight", 
-#  "Fetal.congenital.anomaly", 
-#  "Preg.ended...37.wk", 
-#  "GA...1st.SAE",
-#  "GA.at.outcome")
+opt <- opt %>% 
+  dplyr::select(-outvars)
 
-#optOut <- opt %>% 
-#  select(all_of(Outcomes))
-
-#opt <- opt %>% 
-#  select(-all_of(Outcomes))
-
-PID <- opt %>% 
-  select(PID)
 
 
 # Pattern of missingness
-md.pattern(opt[,-1], rotate.names = TRUE)
+md.pattern(opt, rotate.names = TRUE)
 
 # Check the methods used for imputing each variable
-init <-  mice(opt[,-1], maxit=0) 
+init <-  mice(opt, maxit=0)
 meth <-  init$method
 meth
 
-# Impute missing values
-optImp <- mice(opt[,-1], maxit=10, method = meth, seed = 1234) 
+# Impute missing values - AND YES I KNOW I AM USING THE OUTCOME VARIABLES AS WELL, BAD BUT I NEED THE
+optImp <- mice(opt, maxit=10, method = meth, seed = 1234)
+
 
 
 
@@ -430,11 +418,16 @@ stripplot(optImp, OCRP5, col=c("grey",mdc(2)),pch=c(1,20))
 #optImp <- bind_cols(optOut, complete(optImp, 1))
 
 
-# Bind PID back to dataset
-optImp <- bind_cols(PID, complete(optImp, 1))
+# # Bind PID back to dataset
+# optImp <- bind_cols(PID, complete(optImp, 1))
+
+# Bind outcomes and PIDs  back to dataset
+optImp <- bind_cols(outcomes, complete(optImp, 1))
+
 
 # Full clean version to have
 write_csv(optImp, file = 'Obstetrics_Periodontal_Therapy.csv')
+
 
 
 
@@ -451,17 +444,55 @@ factor_counts <- optImp  %>%
 
 factor_counts
 
+
+
+
+
 # Smaller more balanced version for LASSO and R
 optML <- optImp %>% 
-  dplyr::select(-c(Diabetes, 
-                   Use.Alc,
-                   Fetal.congenital.anomaly,  
-                   Any.stillbirth, 
+  dplyr::select(-c(X..Vis.Elig,
+                   Diabetes,
+                   Fetal.congenital.anomaly,
                    Hypertension,
                    Traumatic.Inj,
                    BL.Bac.vag,
-                   ETXU_CAT1)) 
+                   ETXU_CAT1)) %>%
+  mutate(Any.SAE.= as.factor(ifelse(Any.SAE. == 'Yes', 1, 0)), 
+         Preg.ended...37.wk = as.factor(ifelse(Preg.ended...37.wk == 'Yes', 1, 0)))
 
+
+# Upsample to get more examples of rare class output
+optML <- optML %>% 
+  dplyr::select(-PID)
+
+optML <- upSample(x = optML[, -which(names(optML) == "Preg.ended...37.wk")], y = optML$Preg.ended...37.wk, yname = "Preg.ended...37.wk") %>% 
+  as_tibble()
+
+optML <- optML %>% 
+  mutate(PID= paste0('P', 1:nrow(optML))) %>% 
+  relocate(PID, .before = Clinic)
+
+
+
+# Sample rows to remove 20% from the upsampled class
+set.seed(123)
+
+nclass1 <- optML %>% 
+  filter(Preg.ended...37.wk == "1")
+
+down1 <- round(0.35 * nrow(nclass1))
+
+PID1 <- nclass1 %>% 
+  slice_sample(n = down1) %>%
+  pull(PID)
+
+
+# Combine with other class
+optML <- optML %>% 
+  dplyr::filter(!PID %in% PID1)
+
+
+# Up-sample sparse class
 
 save(optML, file = 'Obt_Perio_ML.Rdata')
 
