@@ -52,7 +52,7 @@ The remaining 28 variables we will consider as potential explanatory variables f
 
 Elastic Net regression is part of the family of penalized regressions, which also includes Ridge regression and LASSO regression. Penalized regressions are especially useful when dealing with many predictors, as they help eliminate less informative ones while retaining the important predictors, making them ideal for high-dimensional datasets. One of the key advantages of Elastic Net over other types of penalized regression is its ability to handle multicollinearity and situations where the number of predictors exceeds the number of observations.
 
-As described above we have five variables which could be considered outcomes as these where all measured at the end of pregnancy. We can only work with one outcome at a time and we will pick `Preg.ended...37.wk`. This variable is a factor variable which denotes if a women gave birth prematurely (1=yes, 0=no).
+As described above we have five variables which could be considered outcomes as these where all measured at the end of pregnancy. We can only work with one outcome at a time and we will pick `Preg.ended...37.wk` for now. This variable is a factor variable which denotes if a women gave birth prematurely (1=yes, 0=no).
 
 5.  As you will use the response `Preg.ended...37.wk`, you should remove the other five outcome measures from your dataset.
 
@@ -99,7 +99,12 @@ Now, lets see how well your model performed.
 
 14. Predict if a individual is likely to give birth before the 37th week using your model and your test set. See pseudo-code below.
 
-15. Just like for the logistic regression model you can calculate the accuracy of the prediction by first converting the predicted probabilities back into class labels (0, 1) and then comparing these to `y_test` with `confusionMatrix()`. Do you have a good accuracy? N.B look at the 2x2 contingency table, what does it tell you?
+```{r, eval = FALSE}
+y_pred <- predict(model, test, type = 'class')
+
+```
+
+15. Just like for the logistic regression model you can calculate the accuracy of the prediction by comparing it to `y_test` with `confusionMatrix()`. Do you have a good accuracy? N.B look at the 2x2 contingency table, what does it tell you?
 
 16. Lastly, lets extract the variables which were retained in the model (e.g. not penalized out). We do this by calling the coefficient with `coef()` on our model. See pseudo-code below.
 
@@ -113,4 +118,78 @@ coeffsDat <- as.data.frame(as.matrix(coeffs))
 
 16. Make a plot that shows the absolute importance of the variables retained in your model. This could be barplot with variable names on the x-axis and the height of the bars denoting absolute size of coefficient).
 
-17. Make a logistic regression using this same dataset (you already have your train data, test data, y_train and y_test). Do you get similar results?
+## Part 2: Random Forest
+
+Now, we will make a Random Forest.
+
+We will continue using the `Obt_Perio_ML.Rdata` with `Preg.ended...37.wk` as outcome.
+
+18. Just like in the section on EN above:
+
+    -   Load the dataset (if you have not already)
+
+    -   Remove the outcome variables you will not be using.
+
+    -   Split the dataset into test and train set - this time keep the outcome variable `Preg.ended...37.wk` in the dataset.
+
+    -   Remember to remove the `PID` column before training!
+
+19. Set up a Random Forest model with cross-validation. See pseudo-code below. Remember to set a seed.
+
+First the cross-validation parameters:
+
+```{r, , eval=FALSE}
+set.seed(123)
+
+# Set up cross-validation: 5-fold CV
+RFcv <- trainControl(
+  method = "cv",
+  number = 5,
+  classProbs = TRUE,
+  summaryFunction = twoClassSummary,
+  savePredictions = "final"
+)
+```
+
+Next we train the model:
+
+```{r, eval=FALSE}
+# Train Random Forest
+set.seed(123)
+rf_model <- train(
+  Outcome ~ .,
+  data = Trainingdata,
+  method = "rf",
+  trControl = RFcv,
+  metric = "ROC",
+  tuneLength = 5           
+)
+
+
+# Model summary
+print(rf_model)
+```
+
+20. Plot your model fit. How does your model improve when you add 10, 20, 30, etc. predictors?
+
+```{r, eval=FALSE}
+# Best parameters
+rf_model$bestTune
+
+# Plot performance
+plot(rf_model)
+
+
+```
+
+21. Use your test set to evaluate your model performance. How does the random forest compare to the elastic net regression?
+
+22. Extract the predictive variables with the greatest importance from your fit.
+
+```{r, eval=FALSE}
+varImpOut <- varImp(rf_model)
+
+varImpOut$importance
+```
+
+23. Make a logistic regression using the same dataset (you already have your train data, test data, y_train and y_test). How do the results of Elastic Net regression and Random Forest compare to the output of your glm.

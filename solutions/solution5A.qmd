@@ -6,28 +6,27 @@ project:
   output-dir: ../docs
 ---
 
-1. Load packages
+1.  Load packages
 
 ```{r message=FALSE, warning=FALSE}
 library(tidyverse)
-library(ModelMetrics)
 library(readxl)
-library(caTools)
-library(car)
 library(ggfortify)
+library(factoextra)
 ```
+
 ## Part 1: Linear regression
 
-2. Load the data `boston.csv` 
+2.  Load the data `boston.csv`
 
 ```{r}
 df <- as_tibble(read.delim('../data/boston.csv', sep = ','))
 head(df)
 ```
 
-3. `Neighborhood` is a categorical variable. We could make it a factor but it will also work as a character column (in the case of using `lm`). 
+3.  `Neighborhood` is a categorical variable. We could make it a factor but it will also work as a character column (in the case of using `lm`).
 
-4. Split the dataset into test and training data.
+4.  Split the dataset into test and training data.
 
 ```{r}
 # Set seed to ensure reproducibility
@@ -40,7 +39,7 @@ train <- df %>% sample_frac(.75)
 test  <- anti_join(df, train, by = 'ID') 
 ```
 
-5. Fit the model
+5.  Fit the model
 
 ```{r}
 model <- lm(medv ~ rm + crim + neighborhood, data = train)
@@ -50,101 +49,117 @@ model <- lm(medv ~ rm + crim + neighborhood, data = train)
 summary(model)
 ```
 
-6. `rm` and `crim` have a significant influence on the house price. An increase in the number of rooms increases the price since the coefficient is positive, whereas an increase in crime rate reduces the price. There is a significant difference in price between Rural and Urban zones, but not between Rural and Suburban. Rural is the reference level. Lastly, houses with 0 rooms cost -25k dollar. Perhaps the predictors should be centered before fitting the model around 0 so `rm` == 0 is the average number of rooms for better interpretability. 
+6.  `rm` and `crim` have a significant influence on the house price. An increase in the number of rooms increases the price since the coefficient is positive, whereas an increase in crime rate reduces the price. There is a significant difference in price between Rural and Urban zones, but not between Rural and Suburban. Rural is the reference level. Lastly, houses with 0 rooms cost -25k dollar. Perhaps the predictors should be centered before fitting the model around 0 so `rm` == 0 is the average number of rooms for better interpretability.
 
-7. Scale the numeric predictor columns and redo the modelling. What has changed?
+7.  If you wanted to know if there is a difference in the value of houses between the `Suburban` and `Urban` neighborhood what could you do to the variable `neighborhood` before modelling?
 
-::: {.callout-tip collapse="true"}
-## Hint
-There is a scale function, see `?scale()`.
-:::
-
-
-```{r}
-df <- df %>%
-  mutate(across(where(is.numeric), scale, .names = "standardized_{.col}"))
-
-head(df)
+```{r, eval=FALSE}
+df <- df %>% 
+  mutate(neighborhood= factor(neighborhood, levels=c("Urban", "Suburban", "Rural")))
 ```
 
-```{r}
-# Set seed to ensure reproducibility
-set.seed(123)  
+8.  For linear regression there is an assumption that the model residuals (errors) are normally distributed. An easy way visualize this is by simply calling `plot()` on your model (see below). What do you think based on the plots?
 
-train <- df %>% sample_frac(.75)
-test  <- anti_join(df, train, by = 'ID') 
+```{r, eval=FALSE}
+#RMSE
+par(mfrow=c(2,2))
+plot(model)
 ```
 
+Overall the plots look okay. There are some outlines, but all of them are within cooks distance, i.e. they are not extreme enough that they majorly effect the model. The model residuals are close to normally distributed.
+
+9.  Now, use our test set to predict the response `medv` (`median value per house in 1000s`).
 
 ```{r}
-model_std <- lm(medv ~ standardized_rm + standardized_crim + neighborhood, data = train)
-summary(model_std)
+y_pred <- predict(model, newdata = test)
 ```
 
-All significance observations stay the same since scaling can never affect that. The size of the coefficients will usually change since the range of the predictor (that they are multiplied with in the formula) has changed, but their direction stays the same. Now a house with the average number of rooms (`rm` == 0) costs 21k. 
+10. Evaluate how well our model performs. There are different ways of doing this but lets use the classic measure of RMSE (Root Mean Square Error).
+
+```{r, eval=FALSE}
+#RMSE
+rmse <- sqrt(mean((test$medv - y_pred)^2))
+
+rmse
+
+```
+
+11. Make a scatter plot to visualize your model fit.
+
+```{r}
+
+predPlot <- tibble(y_test = test$medv, y_pred=y_pred)
+  
+ggplot(predPlot, aes(x = y_test, y=y_pred)) +
+  geom_point(alpha = 0.7, size = 2) +  # scatter points
+  geom_smooth(method = "lm", se = TRUE, color = "blue", linewidth = 1) +
+  theme_minimal()
+```
 
 ## Part 2: Logistic regression
 
-For this part we will use the joined diabetes data since it has a categorical outcome (Diabetes yes or no). We will not use the oral Glucose measurements as predictors since this is literally how you define diabetes, so we're loading the joined dataset we created in exercise 1, e.g. 'diabetes_join.xlsx' or what you have named it. 
+For this part we will use the joined diabetes data since it has a categorical outcome (Diabetes yes or no). We will not use the oral Glucose measurements as predictors since this is literally how you define diabetes, so we're loading the joined dataset we created in exercise 1, e.g. 'diabetes_join.xlsx' or what you have named it.
 
+For this part we will use the joined diabetes, so lets load the joined dataset we created in exercise 1, e.g. 'diabetes_join.xlsx' or what you have named it.
+
+As the outcome we are studying, `Diabetes`, is categorical variable we will perform logistic regression. We select serum calcium levels (`Serum_ca2`), `BMI` and smoking habits (`Smoker`) as predictive variables.
+
+12. Read in the diabetes_join.xlsx dataset.
 
 ```{r}
 diabetes_df <- read_excel('../out/diabetes_join.xlsx')
 head(diabetes_df)
 ```
 
-We choose to make a regression model of `Diabetes` as predicted by serum calcium levels (`Serum_ca2`), `BMI` and smoking habits (`Smoker`).
-
-8. We cannot have NA values in our predictors so remove all rows with NAs and save the result into a new dataframe `diabetes_nona`.
+13. Logistic regression does not allow for any missing values in the outcome variable. Ensure that the variable `Diabetes` does not have missing values AND that it is a factor variable.
 
 ```{r}
-diabetes_nona <- drop_na(diabetes_df)
-nrow(diabetes_nona)
-nrow(diabetes_df)
+diabetes_df <- diabetes_df %>% 
+  filter(!is.na(Diabetes)) %>%
+  mutate(Diabetes= as.factor(Diabetes))
 ```
 
-9. Make the outcome variable into a factor if it is not already.
+14. Split your data into training and test data. Take care that the two classes of the outcome variables are represented in both training and test data, and at similar ratios.
 
 ```{r}
-class(diabetes_nona$Diabetes)
-diabetes_nona$Diabetes <- factor(diabetes_nona$Diabetes)
-class(diabetes_nona$Diabetes)
-```
-10. Scale all numeric predictors. Check your result.
+set.seed(123)  
 
-```{r}
-diabetes_nona <- diabetes_nona %>%
-  #scale all numeric cols
-  mutate(across(where(is.numeric), scale))
 
-head(diabetes_nona)
-```
-
-11. Split your data into training and test data. Take care that the two classes of the outcome variable are in the same ratio in both training and test data. 
-
-```{r}
-# Set seed to ensure reproducibility
-set.seed(123)
-
-split <- sample.split(diabetes_nona$Diabetes, SplitRatio = 0.75)
-
-train <- diabetes_nona[split,]
-test <- diabetes_nona[!split,] #! negates the vector, so true becomes false and vice verse
-
-count(train,Diabetes)
-count(test, Diabetes)
+train <- diabetes_df %>% sample_frac(.75)
+test  <- anti_join(diabetes_df, train, by = 'ID') 
 
 ```
 
-12. Fit a regression model with `Serum_ca2`, `BMI` and `Smoker` as predictors. Check the model summary.
+```{r}
+train_counts <- train[,-1] %>%
+  dplyr::select(where(is.character)) %>%
+  pivot_longer(everything(), names_to = "Variable", values_to = "Level") %>%
+  count(Variable, Level, name = "Count")
+
+
+train_counts
+
+
+
+test_counts <- test[,-1] %>%
+  dplyr::select(where(is.character)) %>%
+  pivot_longer(everything(), names_to = "Variable", values_to = "Level") %>%
+  count(Variable, Level, name = "Count")
+
+
+test_counts
+
+```
+
+15. Fit a logistic regression model with `Serum_ca2`, `BMI` and `Smoker` as predictors and `Diabetes` as outcome, using your training data.
 
 ```{r}
-mod1 <- glm(Diabetes ~ Serum_ca2 + BMI + Smoker, data = train, family = binomial)
+mod1 <- glm(Diabetes ~ Serum_ca2 + BMI + Smoker, data = train, family = 'binomial')
 summary(mod1)
 
 ```
 
-13. Create a second model with only `BMI` and `Smoker` as predictors. Compare the fit of your second model to the first one (including `Serum_ca2`). Is there a significant gain, i.e. better fit when including the serum calcium levels as predictor? Which model do you think is better?
+16. Check the model summary and try to determine whether you could potentially drop one of your variables? If so, make this alternative model and compare it to the original model. Is there a significant loss/gain, i.e. better fit when including the serum calcium levels as predictor?
 
 ```{r}
 mod2 <- glm(Diabetes ~ BMI + Smoker, data = train, family = binomial)
@@ -155,12 +170,23 @@ summary(mod2)
 anova(mod1, mod2, test = "Chisq")
 ```
 
-The likelihood ratio test between the two models has an insignificant p-value. This means there is no evidence that including `Serum_ca2` improves the fit of the model. The second model `mod2` is therefore preferable. 
+17. Now, use your model to predict Diabetes class based on your test set. What does the output of the prediction mean?
 
+```{r}
+y_pred <- predict(mod2, test, type = "response")
+```
+
+18. Lets evaluate the performance of our model. As we are performing classification, measures such as mse/rmse will not work, instead we will calculate the accuracy. In order to get the accuracy you must first convert our predictions into Diabetes class labels (e.g. 0 or 1).
+
+```{r}
+y_pred <- as.factor(ifelse(y_pred > 0.5, 1, 0))
+
+caret::confusionMatrix(y_pred, test$Diabetes)
+```
 
 ## Part 3: Clustering
 
-In this part we will run clustering on the joined diabetes dataset from exercise 1. Load it here if you don't have it already from Part 2. 
+In this part we will run clustering on the joined diabetes dataset from exercise 1. Load it here if you don't have it already from Part 2.
 
 ```{r}
 #in case
@@ -168,7 +194,17 @@ diabetes_df <- read_excel('../out/diabetes_join.xlsx')
 head(diabetes_df)
 ```
 
-14. Run the k-means clustering algorithm with 4 centers on the data. Consider which columns you can use and if you have to manipulate them before. If you get an error, check whether you have values that might not be admissible, such as NA. 
+In this part we will run clustering on the joined diabetes dataset (`diabetes_join.xlsx`) from exercise 1. Load it here if you don't have it already from Part 2 above.
+
+19. Before running K-means clustering. Remove any missing values across all variables in your dataset.
+
+```{r}
+
+diabetes_df <- drop_na(diabetes_df)
+
+```
+
+20. Run the k-means clustering algorithm with 4 centers on the data. Consider which columns you can use and if you have to do anything to them before clustering?
 
 ```{r}
 # Set seed to ensure reproducibility
@@ -176,9 +212,7 @@ set.seed(123)
 
 #run kmeans
 kmeans_res <- diabetes_df %>%
-  select(where(is.numeric)) %>%
-  #drop missing values
-  drop_na() %>%
+  dplyr::select(where(is.numeric)) %>%
   #scale all numeric cols
   mutate(across(where(is.numeric), scale)) %>%
   kmeans(centers = 4, nstart = 25)
@@ -186,59 +220,19 @@ kmeans_res <- diabetes_df %>%
 kmeans_res
 ```
 
-15. Check whether the data you have run k-means on has the same number of rows as the dataframe with meta information, e.g. whether the person had diabetes. If they are not aligned, create a dataframe with Diabetes info that matches the dataframe you ran clustering on. 
-
-::: {.callout-tip collapse="true"}
-## Hint
-`drop_na()` takes an argument that tells which columns to look at for NA values.
-:::
-
-The full data:
-
-```{r}
-nrow(diabetes_df)
-```
-
-How many rows did we run clustering on?
-
-```{r}
-diabetes_df %>%
-  select(where(is.numeric)) %>%
-  #drop missing values
-  drop_na() %>%
-  #scale all numeric cols
-  mutate(across(where(is.numeric), scale)) %>%
-  nrow()
-```
-We could also have checked the length of `kmeans_res$cluster`:
-
-```{r}
-length(kmeans_res$cluster)
-```
-
-So we have omitted some rows. We need to omit the same rows from the original dataframe so our k-means clustering results are aligned with it.
-
-```{r}
-diabetes_df <- diabetes_df %>%
-  drop_na(where(is.numeric))
-nrow(diabetes_df)
-```
-
-16. Visualize the results of your clustering.  
+21. Visualize the results of your clustering.
 
 We first need to calculate a PCA. This is basically the same we have done in exercise 3B.
 
 ```{r}
 pca_res <- diabetes_df %>%
-  select(where(is.numeric)) %>%
-  #drop missing values
-  drop_na() %>%
+  dplyr::select(where(is.numeric)) %>%
   #scale all numeric cols
   mutate(across(where(is.numeric), scale)) %>%
   prcomp()
 ```
 
-Now we project the k-means centroids in the PCA space 
+Now we project the k-means centroids in the PCA space
 
 ```{r}
 #project cluster centers from kmeans into the pca space
@@ -247,8 +241,6 @@ centers_pca <- predict(pca_res, newdata = kmeans_res$centers) %>% as.data.frame(
 centers_pca$cluster <- as.factor(1:nrow(centers_pca))  
 centers_pca
 ```
-
-And add cluster assignments to the `diabetes_df`:
 
 ```{r}
 diabetes_df$Cluster <- factor(kmeans_res$cluster)
@@ -269,46 +261,17 @@ autoplot(pca_res, data = diabetes_df, color = 'Cluster',
              shape = 8, size = 6, stroke = 2)  
 ```
 
-Well the separation was not that good in exercise 3B so perhaps we should not expect very clean clusters. 
-
-17. Investigate the best number of clusters.
-
-```{r}
-library(factoextra)
-
-diabetes_df %>%
-  select(where(is.numeric)) %>%
-  #drop missing values
-  drop_na() %>%
-  #scale all numeric cols
-  mutate(across(where(is.numeric), scale)) %>%
-  fviz_nbclust(kmeans, method = "wss")
-```
+22. Investigate the best number of clusters.
 
 ```{r}
 diabetes_df %>%
-  select(where(is.numeric)) %>%
-  #drop missing values
-  drop_na() %>%
-  #scale all numeric cols
-  mutate(across(where(is.numeric), scale)) %>%
-  fviz_nbclust(kmeans, method = "silhouette")
-```
-
-
-```{r}
-diabetes_df %>%
-  select(where(is.numeric)) %>%
-  #drop missing values
-  drop_na() %>%
+  dplyr::select(where(is.numeric)) %>%
   #scale all numeric cols
   mutate(across(where(is.numeric), scale)) %>%
   fviz_nbclust(kmeans, method = "gap_stat")
 ```
 
-The elbow is not very clear but the silhouette and gap statistic favor 2 clusters - which kind of makes sense since we have two outcomes, diabetic and non-diabetic.
-
-18. Re-do the clustering (plus visualization) with that number.
+23. Re-do the clustering (plus visualization) with that number.
 
 ```{r}
 # Set seed to ensure reproducibility
@@ -316,7 +279,7 @@ set.seed(123)
 
 #run kmeans
 kmeans_res <- diabetes_df %>%
-  select(where(is.numeric)) %>%
+  dplyr::select(where(is.numeric)) %>%
   #drop missing values
   drop_na() %>%
   #scale all numeric cols
@@ -338,7 +301,6 @@ centers_pca
 diabetes_df$Cluster <- factor(kmeans_res$cluster)
 ```
 
-
 ```{r}
 autoplot(pca_res, data = diabetes_df, color = 'Cluster',
          loadings = TRUE, loadings.colour = "grey30", 
@@ -351,58 +313,3 @@ autoplot(pca_res, data = diabetes_df, color = 'Cluster',
   geom_point(data = centers_pca, aes(x = PC1, y = PC2, color = cluster),
              shape = 8, size = 6, stroke = 2)  
 ```
-
-
---------------------
-
-## Extra exercises
-
-
-
-e1. Find the best single predictor in the Diabetes dataset. This is done by comparing the null model (no predictors) to all possible models with one predictor, i.e. `outcome ~ predictor`, `outcome ~ predictor2`, ect. The null model can be formulated like so: `outcome ~ 1` (only the intercept). Fit all possible one predictor models and compare their fit to the null model with a likelihood ratio test. Find the predictor with the lowest p-value in the likelihood ratio test. This can be done in a loop in order to avoid writing out all models. 
-
-::: {.callout-tip collapse="true"}
-## Hint
-To use a formula with a variable you will need to combine the literal part and the variable with paste, e.g. `paste("Outcome ~", my_pred)`.
-:::
-
-
-
-```{r}
-
-# Define the null model (intercept-only model)
-null_model <- glm(Diabetes ~ 1, data = train, family = binomial)
-
-# Get predictor names (excluding the outcome variable)
-predictors <- setdiff(names(diabetes_nona), c("Diabetes", "ID"))
-
-# Initialize an empty data frame to store results
-results <- data.frame(Predictor = character(), ChiSq = numeric(), P_Value = numeric(), stringsAsFactors = FALSE)
-
-# Loop through each predictor and fit a logistic regression model
-for (pred in predictors) {
-  
-  # Fit model with single predictor
-  model_pred <- glm(paste("Diabetes ~", pred), data = train, family = binomial)
-  
-  # Perform Likelihood Ratio Test
-  test_result <- anova(null_model, model_pred, test = "Chisq")
-  
-  # Extract Chi-square statistic and p-value
-  chi_sq <- test_result$Deviance[2]  # The second row corresponds to the predictor model
-  p_value <- test_result$`Pr(>Chi)`[2]
-  
-  # Store results
-  results <- rbind(results, data.frame(Predictor = pred, ChiSq = chi_sq, P_Value = p_value))
-}
-
-# Print the results sorted by p-value
-results <- results %>% arrange(P_Value)
-print(results)
-
-```
-
-e2. Write a function that handles visualization of k-means clustering results. Think about which information you need to pass and what it should return. 
-
-
-

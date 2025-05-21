@@ -1,0 +1,76 @@
+---
+  title: "Extra Exercise 5 - Models and Model Evaluation in R"
+format: html
+project:
+  type: website
+output-dir: ../docs
+---
+  
+## Extra exercises
+  
+e1. Find the best single predictor in the Diabetes dataset. This is done by comparing the null model (no predictors) to all possible models with one predictor, i.e. `outcome ~ predictor`, `outcome ~ predictor2`, ect. The null model can be formulated like so: `outcome ~ 1` (only the intercept). Fit all possible one predictor models and compare their fit to the null model with a likelihood ratio test. Find the predictor with the lowest p-value in the likelihood ratio test. This can be done in a loop in order to avoid writing out all models.
+
+::: {.callout-tip collapse="true"}
+## Hint
+
+To use a formula with a variable you will need to combine the literal part and the variable with paste, e.g. `paste("Outcome ~", my_pred)`.
+:::
+  
+```{r}
+
+# Define the null model (intercept-only model)
+null_model <- glm(Diabetes ~ 1, data = train, family = binomial)
+
+# Get predictor names (excluding the outcome variable)
+predictors <- setdiff(names(diabetes_nona), c("Diabetes", "ID"))
+
+# Initialize an empty data frame to store results
+results <- data.frame(Predictor = character(), ChiSq = numeric(), P_Value = numeric(), stringsAsFactors = FALSE)
+
+# Loop through each predictor and fit a logistic regression model
+for (pred in predictors) {
+  
+  # Fit model with single predictor
+  model_pred <- glm(paste("Diabetes ~", pred), data = train, family = binomial)
+  
+  # Perform Likelihood Ratio Test
+  test_result <- anova(null_model, model_pred, test = "Chisq")
+  
+  # Extract Chi-square statistic and p-value
+  chi_sq <- test_result$Deviance[2]  # The second row corresponds to the predictor model
+  p_value <- test_result$`Pr(>Chi)`[2]
+  
+  # Store results
+  results <- rbind(results, data.frame(Predictor = pred, ChiSq = chi_sq, P_Value = p_value))
+}
+
+# Print the results sorted by p-value
+results <- results %>% arrange(P_Value)
+print(results)
+
+```
+
+e2. Write a function that handles visualization of k-means clustering results. Think about which information you need to pass and what it should return.
+
+---
+
+## Quarto
+
+Quarto enables you to weave together content and executable code into a finished document. To learn more about Quarto see <https://quarto.org>.
+
+## Running Code
+
+When you click the **Render** button a document will be generated that includes both content and the output of embedded code. You can embed code like this:
+
+```{r}
+1 + 1
+```
+
+You can add options to executable code like this
+
+```{r}
+#| echo: false
+2 * 2
+```
+
+The `echo: false` option disables the printing of code (only output is displayed).

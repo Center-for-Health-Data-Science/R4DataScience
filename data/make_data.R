@@ -371,7 +371,10 @@ opt <- opt %>%
   mutate(N.PAL.sites = as.factor(ifelse(N.PAL.sites >= 2 , "3-33", as.character(N.PAL.sites)))) 
 
 
+
 outvars <- c("PID", "Apgar1", "Apgar5", "Birthweight", "GA.at.outcome", "Any.SAE.", "Preg.ended...37.wk")
+
+
 
 outcomes <- opt %>% 
   dplyr::select(outvars)
@@ -431,19 +434,18 @@ write_csv(optImp, file = 'Obstetrics_Periodontal_Therapy.csv')
 
 
 
+# ------------------------------------------------------------------------
+#  Balanced version for LASSO and RF
+
 
 
 # Check balance of factor variables for ML
-factor_counts <- optImp  %>%
-  dplyr::select(where(is.factor)) %>%
-  map(~ as.data.frame(table(.))) %>%
-  imap(~ setNames(.x, c("Level", "Count")) %>% mutate(Variable = .y)) %>%
-  bind_rows() %>%
-  relocate(Variable, .before = Level)
-
+factor_counts <- optImp %>%
+  dplyr::select(where(is.character)) %>%
+  pivot_longer(everything(), names_to = "Variable", values_to = "Level") %>%
+  count(Variable, Level, name = "Count")
 
 factor_counts
-
 
 
 
@@ -451,14 +453,15 @@ factor_counts
 # Smaller more balanced version for LASSO and R
 optML <- optImp %>% 
   dplyr::select(-c(X..Vis.Elig,
+                   GA...1st.SAE,
                    Diabetes,
                    Fetal.congenital.anomaly,
                    Hypertension,
                    Traumatic.Inj,
                    BL.Bac.vag,
                    ETXU_CAT1)) %>%
-  mutate(Any.SAE.= as.factor(ifelse(Any.SAE. == 'Yes', 1, 0)), 
-         Preg.ended...37.wk = as.factor(ifelse(Preg.ended...37.wk == 'Yes', 1, 0)))
+  mutate(Preg.ended...37.wk = as.factor(ifelse(Preg.ended...37.wk == 'Yes', 1, 0)))
+
 
 
 # Upsample to get more examples of rare class output
@@ -470,26 +473,27 @@ optML <- upSample(x = optML[, -which(names(optML) == "Preg.ended...37.wk")], y =
 
 optML <- optML %>% 
   mutate(PID= paste0('P', 1:nrow(optML))) %>% 
-  relocate(PID, .before = Clinic)
+  relocate(PID, .before = Apgar1)
 
 
 
-# Sample rows to remove 20% from the upsampled class
+# Sample rows to remove 50% from the upsampled class
 set.seed(123)
 
 nclass1 <- optML %>% 
   filter(Preg.ended...37.wk == "1")
 
-down1 <- round(0.35 * nrow(nclass1))
+down1 <- round(0.5 * nrow(nclass1))
 
 PID1 <- nclass1 %>% 
   slice_sample(n = down1) %>%
   pull(PID)
 
 
-# Combine with other class
+# Filter class 1
 optML <- optML %>% 
-  dplyr::filter(!PID %in% PID1)
+  dplyr::filter(!PID %in% PID1) %>%
+  sample_frac(1) # shuffle_rows
 
 
 # Up-sample sparse class

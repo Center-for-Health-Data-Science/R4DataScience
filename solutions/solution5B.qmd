@@ -6,14 +6,6 @@ project:
   output-dir: ../docs
 ---
 
-In lasso regression, the hyperparameter lambda (λ), also known as the L1 penalty, balances the tradeoff between bias and variance in the resulting coefficients. As λ increases, the bias increases, and the variance decreases, leading to a simpler model with fewer parameters.
-
-Finding the Optimal Lambda: The goal is to find the lambda that minimizes the cross-validation error. This corresponds to the point where the model is neither:
-
-Too complex (overfitting) — where the model fits the training data too closely and performs poorly on new, unseen data.
-
-Too simple (underfitting) — where the model is too heavily regularized and doesn't capture the underlying patterns in the data.
-
 1.  Load th R packages needed for analysis:
 
 ```{r, warning=FALSE, message=FALSE}
@@ -21,6 +13,7 @@ library(tidyverse)
 library(caret)
 library(glmnet)
 library(MASS)
+library(randomForest)
 ```
 
 ## Summary Statistics
@@ -54,12 +47,11 @@ ggplot(long_data, aes(x = value)) +
 ```{r}
 # Count observations per level/group for each categorical variable
 
-factor_counts <- optML  %>%
-  dplyr::select(where(is.factor)) %>%
-  map(~ as.data.frame(table(.))) %>%
-  imap(~ setNames(.x, c("Level", "Count")) %>% mutate(Variable = .y)) %>%
-  bind_rows() %>%
-  relocate(Variable, .before = Level)
+
+factor_counts <- optML[,-1] %>%
+  dplyr::select(where(is.character)) %>%
+  pivot_longer(everything(), names_to = "Variable", values_to = "Level") %>%
+  count(Variable, Level, name = "Count")
 
 factor_counts
 
@@ -70,7 +62,6 @@ factor_counts
 5.  As you will use the response `Preg.ended...37.wk`, you should remove the other five outcome measures from your dataset.
 
 6.  Elastic net regression can be sensitive to large differences in the range of numeric/integer variables, as such these variables should be scaled. Scale all numeric/integer variables in your dataset.
-
 
 ```{r}
 optML <- optML %>% 
@@ -90,32 +81,29 @@ train <- optML %>%
   sample_frac(0.70) 
 
 # Check group levels
-train_counts <- train  %>%
-  dplyr::select(where(is.factor)) %>%
-  map(~ as.data.frame(table(.))) %>%
-  imap(~ setNames(.x, c("Level", "Count")) %>% mutate(Variable = .y)) %>%
-  bind_rows() %>%
-  relocate(Variable, .before = Level)
+train_counts <- train[,-1] %>%
+  dplyr::select(where(is.character)) %>%
+  pivot_longer(everything(), names_to = "Variable", values_to = "Level") %>%
+  count(Variable, Level, name = "Count")
 
 train_counts
 
 
 
 
-# Training set
-test <- optML %>% 
-  filter(!PID %in% train$PID)
+test  <- anti_join(optML, train, by = 'PID') 
+
 
 
 # Check group levels
-#test_counts <- test  %>%
-#  dplyr::select(where(is.factor)) %>%
-#  map(~ as.data.frame(table(.))) %>%
-#  imap(~ setNames(.x, c("Level", "Count")) %>% mutate(Variable = .y)) %>%
-#  bind_rows() %>%
-#  relocate(Variable, .before = Level)
+#test_counts <- optML[,-1] %>%
+#  dplyr::select(where(is.character)) %>%
+#  pivot_longer(everything(), names_to = "Variable", values_to = "Level") %>%
+#  count(Variable, Level, name = "Count")
 
 #test_counts
+
+
 
 ```
 
@@ -159,14 +147,14 @@ Note that the `- 1` in the `model.matrix()` formula which means, drop the interc
 11. Create your Elastic Net Regression model with `glmnet()`.
 
 ```{r}
-EN_model <- glmnet(modTrain, y_train, alpha = 1, family = "binomial")
+EN_model <- glmnet(modTrain, y_train, alpha = 0.5, family = "binomial")
 ```
 
 12. Use `cv.glmnet()` to attain the best value of the hyperparameter lambda (λ). Remember to set a seed for reproducible results.
 
 ```{r}
-set.seed(321)
-cv_model <- cv.glmnet(modTrain, y_train, alpha = 1, family = "binomial")
+set.seed(123)
+cv_model <- cv.glmnet(modTrain, y_train, alpha = 0.5, family = "binomial")
 ```
 
 13. Plot all the values of lambda tested during cross validation by calling `plot()` on the output of your `cv.glmnet()`. Extract the best lambda value from the `cv.glmnet()` model and save it as an object.
@@ -182,15 +170,15 @@ Now, lets see how well your model performed.
 14. Predict if a individual is likely to give birth before the 37th week using your model and your test set. See pseudo-code below
 
 ```{r}
-y_pred <- predict(EN_model, s = bestLambda, newx = modTest, type = 'response')
+y_pred <- predict(EN_model, s = bestLambda, newx = modTest, type = 'class')
 ```
 
-15. Just like for the logistic regression model you can calculate the accuracy of the prediction by first converting the predicted probabilities back into class labels (1, 0) and then comparing these to `y_test` with `confusionMatrix()`. Do you have a good accuracy? N.B look at the 2x2 contingency table, what does it tell you?
+15. Just like for the logistic regression model you can calculate the accuracy of the prediction by comparing it to `y_test` with `confusionMatrix()`. Do you have a good accuracy? N.B look at the 2x2 contingency table, what does it tell you?
 
 ```{r}
-y_pred <- as.factor(ifelse(y_pred > 0.5, 1, 0))
+y_pred <- as.factor(y_pred)
 
-confusionMatrix(y_pred, y_test)
+caret::confusionMatrix(y_pred, y_test)
 ```
 
 16. Lastly, lets extract the variables which were retained in the model (e.g. not penalized out). We do this by calling the coefficient with `coef()` on our model. See pseudo-code below.
@@ -225,12 +213,132 @@ ggplot(coeffsDat, aes(x = VarName, y = AbsImp)) +
   theme_classic()
 ```
 
-17. Make a logistic regression using this dataset (you already have your train data, test data, y_train and y_test). Do you get similar results?
+17. Now repeat what you just did above, but this time instead of using `Preg.ended...37.wk` as outcome, try using a continuous variable, such as `GA.at.outcome`. N.B remember this means that you should evaluate the model using the RMSE and a scatter plot instead of the accuracy!
+
+## Part 2: Random Forest
+
+Now, lets make a Random Forest. We will continue using the `Obt_Perio_ML.Rdata` with `Preg.ended...37.wk` as outcome.
+
+18. Just like in the section on EN above, remove the outcome variables you will not be using and split the dataset into test and train set - this time keep the outcome variable `Preg.ended...37.wk` in the dataset. Remember to remove the `PID` column before training!
+
+```{r}
+load(file = "../data/Obt_Perio_ML.Rdata")
+
+optML <- optML %>%
+  mutate(Preg.ended...37.wk = factor(Preg.ended...37.wk, levels = c(0, 1), labels = c("No", "Yes")))
+
+```
+
+```{r}
+optML <- optML %>% 
+  dplyr::select(-c(Apgar1, Apgar5, GA.at.outcome, Birthweight, Any.SAE.))
+
+```
+
+```{r}
+set.seed(123)
+
+# Training set
+train <- optML %>% 
+  sample_frac(0.70) 
+
+
+test  <- anti_join(optML, train, by = 'PID') 
+
+
+train <- train %>% 
+  dplyr::select(-PID)
+
+
+test <- test %>% 
+  dplyr::select(-PID)
+
+
+
+```
+
+19. Set up a Random Forest model with cross-validation. See pseudo-code below. Remember to set a seed.
+
+```{r}
+set.seed(123)
+
+# Set up cross-validation: 5-fold CV
+RFcv <- trainControl(
+  method = "cv",
+  number = 5,
+  classProbs = TRUE,
+  summaryFunction = twoClassSummary,
+  savePredictions = "final"
+)
+
+# Train Random Forest
+set.seed(123)
+rf_model <- train(
+  Preg.ended...37.wk ~ .,  # formula interface
+  data = train,
+  method = "rf",           # random forest
+  trControl = RFcv,
+  metric = "ROC",          # optimize AUC
+  #preProcess = c("center", "scale"),  # optional
+  tuneLength = 5           # try 5 different mtry values
+)
+
+
+# Model summary
+print(rf_model)
+```
+
+20. Plot your model fit. How does your model improve when you add 10, 20, 30, etc. predictors?
+
+```{r}
+# Best parameters
+rf_model$bestTune
+
+# Plot performance
+plot(rf_model)
+
+
+```
+
+21. Use your test set to evaluate your model performance. How does the random forest compare to the elastic net regression?
+
+```{r}
+
+
+# Predict class probabilities
+y_pred <- predict(rf_model, newdata = test, type = "prob")
+
+y_pred <- as.factor(ifelse(y_pred$Yes > 0.5, "Yes", "No"))
+
+caret::confusionMatrix(y_pred, test$Preg.ended...37.wk)
+
+
+
+```
+
+22. Extract the predictive variables with the greatest importance from your fit.
+
+```{r}
+varImpOut <- varImp(rf_model)
+
+varImpOut$importance
+varImportance <- as.data.frame(as.matrix(varImpOut$importance)) %>% 
+  rownames_to_column(var = 'VarName') %>%
+  arrange(desc(Overall))
+
+varImportance
+```
+
+23. Make a logistic regression using the same dataset (you already have your train data, test data). How do the results of Elastic Net regression and Random Forest compare to the output of your glm.
 
 ```{r}
 
 # Model
-model1 <- glm(y_train ~ ., data = train[,-1], family = 'binomial')
+model1 <- glm(Preg.ended...37.wk ~ ., data = train, family = 'binomial')
+
+
+summary(model1)
+
 
 # Filter for significant p-values and convert to tibble
 model1out <- coef(summary(model1)) %>% 
@@ -238,10 +346,9 @@ model1out <- coef(summary(model1)) %>%
   rownames_to_column(var = 'VarName') %>% 
   filter(`Pr(>|z|)` <= 0.05 & VarName != "(Intercept)")
 
+
 # Compare output from Elastic Net with output from glm model
 intersect(as.character(coeffsDat$VarName), model1out$VarName) %>%
   sort()
 
 ```
-
-

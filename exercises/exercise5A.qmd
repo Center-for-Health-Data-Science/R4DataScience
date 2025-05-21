@@ -15,6 +15,8 @@ In this exercise you will fit and interpret simple models.
 ```{r warning=FALSE, message=FALSE}
 library(tidyverse)
 library(readxl)
+library(ggfortify)
+library(factoextra)
 ```
 
 ## Part 1: Linear regression
@@ -66,7 +68,7 @@ plot(model)
 
 9.  Now, use our test set to predict the response `medv` (`median value per house in 1000s`).
 
-10. Evaluate how well our model performs. There are different ways of doing this but lets use the classic measure of RMSE (Root Mean Square Error). The psedocode below shows how to calculate the RMSE. A small RMSE (close to zero), indicates a good model.
+10. Evaluate how well our model performs. There are different ways of doing this but lets use the classic measure of RMSE (Root Mean Square Error). The psedo-code below shows how to calculate the RMSE. A small RMSE (close to zero), indicates a good model.
 
 ```{r, eval=FALSE}
 #RMSE
@@ -83,15 +85,17 @@ Plot `y_test` against `y_pred`.
 
 ## Part 2: Logistic regression
 
-For this part we will use the joined diabetes, so lets load the joined dataset we created in exercise 1, e.g. 'diabetes_join.xlsx' or what you have named it.
+For this part we will use the joined diabetes, so lets load the joined dataset we created in exercise 1, e.g. `diabetes_join.xlsx` or what you have named it.
 
 As the outcome we are studying, `Diabetes`, is categorical variable we will perform logistic regression. We select serum calcium levels (`Serum_ca2`), `BMI` and smoking habits (`Smoker`) as predictive variables.
 
-12. Logistic regression does not allow for any missing values so first ensure you do not have NAs in your dataframe. Ensure that your outcome variable `Diabetes` is a factor.
+12. Read in the Diabetes dataset.
 
-13. Split your data into training and test data. Take care that the two classes of the outcome variable are represented in both training and test data, and at similar ratios.
+13. Logistic regression does not allow for any missing values so first ensure you do not have NAs in your dataframe. Ensure that your outcome variable `Diabetes` is a factor.
 
-14. Fit a logistic regression model with `Serum_ca2`, `BMI` and `Smoker` as predictors and `Diabetes` as outcome, using your training data.
+14. Split your data into training and test data. Take care that the two classes of the outcome variable are represented in both training and test data, and at similar ratios.
+
+15. Fit a logistic regression model with `Serum_ca2`, `BMI` and `Smoker` as predictors and `Diabetes` as outcome, using your training data.
 
 ::: {.callout-tip collapse="true"}
 ## Hint
@@ -99,9 +103,9 @@ As the outcome we are studying, `Diabetes`, is categorical variable we will perf
 glm(..., family = 'binomial')
 :::
 
-15. Check the model summary and try to determine whether you could potentially drop one of your variables? If so, remake your model and check the coefficients, and error terms again.
+16. Check the model summary and try to determine whether you could potentially drop one or more of your variables? If so, make this alternative model (model2) and compare it to the original model. Is there a significant loss/gain, i.e. better fit when including the serum calcium levels as predictor?
 
-16. Now, use your model to predict Diabetes class based on your test set. What does the output of the prediction mean?
+17. Now, use your model to predict Diabetes class based on your test set. What does the output of the prediction mean?
 
 ::: {.callout-tip collapse="true"}
 ## Hint
@@ -109,36 +113,22 @@ glm(..., family = 'binomial')
 `predict(... , type ='response')`
 :::
 
-17. Lets evaluate the performance of our model. As we are performing classification, measures such as mse/rmse will not work, instead we will calculate the Accuracy. In order to get the Accuracy you must first convert our predictions into Diabetes class (e.g. 0 or 1).
+18. Lets evaluate the performance of our model. As we are performing classification, measures such as mse/rmse will not work, instead we will calculate the accuracy. In order to get the accuracy you must first convert our predictions into Diabetes class labels (e.g. 0 or 1).
 
 ```{r, eval=FALSE}
-confusionMatrix(y_pred, y_test)
+caret::confusionMatrix(y_pred, y_test)
 ```
 
 ## Part 3: Clustering
 
-In this part we will run clustering on the joined diabetes dataset from exercise 1. Load it here if you don't have it already from Part 2.
+In this part we will run clustering on the joined diabetes dataset (`diabetes_join.xlsx`) from exercise 1. Load it here if you don't have it already from Part 2 above.
 
-14. Run the k-means clustering algorithm with 4 centers on the data. Consider which columns you can use and if you have to manipulate them before. If you get an error, check whether you have values that might not be admissible, such as NA.
+19. Before running K-means clustering. Remove any missing values across all variables in your dataset.
 
-15. Check whether the data you have run k-means on has the same number of rows as the dataframe with meta information, e.g. whether the person had diabetes. If they are not aligned, create a dataframe with Diabetes info that matches the dataframe you ran clustering on.
+20. Run the k-means clustering algorithm with 4 centers on the data. Consider which columns you can use and if you have to do anything to them before clustering?
 
-16. Visualize the results of your clustering.
+21. Visualize the results of your clustering.
 
-17. Investigate the best number of clusters.
+22. Investigate the best number of clusters.
 
-18. Re-do the clustering (plus visualization) with that number.
-
-------------------------------------------------------------------------
-
-## Extra exercises
-
-e1. Find the best single predictor in the Diabetes dataset. This is done by comparing the null model (no predictors) to all possible models with one predictor, i.e. `outcome ~ predictor`, `outcome ~ predictor2`, ect. The null model can be formulated like so: `outcome ~ 1` (only the intercept). Fit all possible one predictor models and compare their fit to the null model with a likelihood ratio test. Find the predictor with the lowest p-value in the likelihood ratio test. This can be done in a loop in order to avoid writing out all models.
-
-::: {.callout-tip collapse="true"}
-## Hint
-
-To use a formula with a variable you will need to combine the literal part and the variable with paste, e.g. `paste("Outcome ~", my_pred)`.
-:::
-
-e2. Write a function that handles visualization of k-means clustering results. Think about which information you need to pass and what it should return.
+23. Re-do the clustering (plus visualization) with that number.
