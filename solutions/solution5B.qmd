@@ -337,15 +337,13 @@ varImportance
 model1 <- glm(Preg.ended...37.wk ~ ., data = train, family = 'binomial')
 
 
-summary(model1)
-
-
 # Filter for significant p-values and convert to tibble
 model1out <- coef(summary(model1)) %>% 
   as.data.frame() %>%
   rownames_to_column(var = 'VarName') %>% 
   filter(`Pr(>|z|)` <= 0.05 & VarName != "(Intercept)")
 
+model1out
 
 # Compare output from Elastic Net with output from glm model
 intersect(as.character(coeffsDat$VarName), model1out$VarName) %>%

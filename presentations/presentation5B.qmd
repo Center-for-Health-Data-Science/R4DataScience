@@ -1,16 +1,37 @@
 ---
-title: "Exercise 5B - Solutions"
+title: "Presentation 5A: Intro to modelling in R"
 format: html
 project:
   type: website
   output-dir: ../docs
 ---
 
-In lasso regression, the hyperparameter lambda (λ), also known as the L1 penalty, balances the tradeoff between bias and variance in the resulting coefficients. As λ increases, the bias increases, and the variance decreases, leading to a simpler model with fewer parameters.
+## Part 1: Penalized Regression
 
-Finding the Optimal Lambda:
-The goal is to find the lambda that minimizes the cross-validation error. This corresponds to the point where the model is neither:
+$Elastic Net regression$ is part of the family of $penalized regressions$, which also includes $Ridge regression$ and $LASSO regression$. Penalized regressions are especially useful when dealing with many predictors, as they help eliminate less informative ones while retaining the important predictors, making them ideal for high-dimensional datasets. If you are interested in knowing more about penalized regressions, you can have a look at this excellent tutorial from [Datacamp](https://www.datacamp.com/tutorial/tutorial-ridge-lasso-elastic-net).
 
-Too complex (overfitting) — where the model fits the training data too closely and performs poorly on new, unseen data.
+In linear regression, we estimate the relationship between predictors $X$ and a outcome $Y$ using parameters $β$, chosen to minimize the residual sum of squares (RSS). Two key properties of these $β$ estimates are bias (the difference between the true parameter and the estimate) and variance (how much the estimates vary across different samples). While OLS (Ordinary Least Squares) gives unbiased estimates, it can suffer from high variance - especially when predictors are numerous or highly correlated — leading to poor predictions.
 
-Too simple (underfitting) — where the model is too heavily regularized and doesn't capture the underlying patterns in the data.
+To address this, we can introduce regularization, which slightly biases the estimates in exchange for reduced variance and improved predictive performance. This trade-off is essential: as model complexity grows, variance increases and bias decreases, so regularization helps find a better balance between the two.
+
+![](../figures/PenalizedRegression.png){fig-align="center"}
+
+$Ridge Regression$ = L2 penalty (adds the sum of the squares of the coefficients to the loss function). It discourages large coefficients by penalizing their squared magnitudes, shrinking them toward zero. This reduces overfitting while keeping all variables in the model.
+
+$Lasso Regression$ = L1 penalty (adds the sum of the absolute values of the coefficients to the loss function). This penalty encourages sparsity, causing some coefficients to become exactly zero for large λs, thereby performing variable selection.
+
+$Elastic Net$ combines L1 AND L2 penalties to balance variable selection and coefficient shrinkage. One of the key advantages of Elastic Net over other types of penalized regression is its ability to handle multicollinearity and situations where the number of predictors exceeds the number of observations.
+
+Lambda (λ) controls the strength of the penalty. As λ increases, variance decreases but bias increases, raising the key question: how much bias are we willing to accept to reduce variance?
+
+![](../figures/penalty_regularization.png){fig-align="center"}
+
+
+### Elastic Net regression
+
+For this exercise we will continue to use the wine dataset from the previous 
+
+
+## Part 2: ML classification
+
+Random Forest is an ensemble machine learning method that builds multiple decision trees and combines their predictions to improve accuracy and robustness. By averaging the results of many trees, it reduces overfitting and increases generalization, making it particularly effective for complex, nonlinear relationships. One of its key strengths is its ability to handle large datasets with many features, while also providing insights into feature importance.

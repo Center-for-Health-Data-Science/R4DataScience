@@ -8,7 +8,7 @@ project:
 
 ## Introduction
 
-In this exercise you will try to implement a Penalized Regression model in R.
+In this exercise you will try to implement a Penalized Regression model and a Random Forest in R.
 
 For modelling we will use the [Obstetrics and Periodontal Therapy Dataset](https://higgi13425.github.io/medicaldata/reference/opt.html), which was collected in a randomized clinical trial. The trail was concerned with the effects of treatment of maternal periodontal disease and if it may reduce preterm birth risk.
 
@@ -49,8 +49,6 @@ The remaining 28 variables we will consider as potential explanatory variables f
 4.  Make count tables for all your categorical/factor variables, are they balanced?
 
 ## Part 1: Elastic Net Regression
-
-Elastic Net regression is part of the family of penalized regressions, which also includes Ridge regression and LASSO regression. Penalized regressions are especially useful when dealing with many predictors, as they help eliminate less informative ones while retaining the important predictors, making them ideal for high-dimensional datasets. One of the key advantages of Elastic Net over other types of penalized regression is its ability to handle multicollinearity and situations where the number of predictors exceeds the number of observations.
 
 As described above we have five variables which could be considered outcomes as these where all measured at the end of pregnancy. We can only work with one outcome at a time and we will pick `Preg.ended...37.wk` for now. This variable is a factor variable which denotes if a women gave birth prematurely (1=yes, 0=no).
 
@@ -120,9 +118,7 @@ coeffsDat <- as.data.frame(as.matrix(coeffs))
 
 ## Part 2: Random Forest
 
-Now, we will make a Random Forest.
-
-We will continue using the `Obt_Perio_ML.Rdata` with `Preg.ended...37.wk` as outcome.
+Now, lets try a Random Forest classifier. We will continue using the `Obt_Perio_ML.Rdata` with `Preg.ended...37.wk` as outcome.
 
 18. Just like in the section on EN above:
 

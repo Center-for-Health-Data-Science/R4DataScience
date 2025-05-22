@@ -1,9 +1,9 @@
 ---
-  title: "Extra Exercise 5 - Models and Model Evaluation in R"
+title: "Extra Exercise 5"
 format: html
 project:
-  type: website
-output-dir: ../docs
+ type: website
+ output-dir: ../docs
 ---
   
 ## Extra exercises
@@ -16,7 +16,7 @@ e1. Find the best single predictor in the Diabetes dataset. This is done by comp
 To use a formula with a variable you will need to combine the literal part and the variable with paste, e.g. `paste("Outcome ~", my_pred)`.
 :::
   
-```{r}
+```{r, eval=FALSE}
 
 # Define the null model (intercept-only model)
 null_model <- glm(Diabetes ~ 1, data = train, family = binomial)

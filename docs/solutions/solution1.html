@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Exercise 1 - Solutions: Data Cleanup (Base R and Tidyverse) – R for Data Science</title>
+<title>Exercise 1 - Solutions: Data Cleanup and Summary Statistics – R for Data Science</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -196,19 +196,19 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../presentations/presentation4_main_script.html" class="sidebar-item-text sidebar-link">
+  <a href="../presentations/presentation4_main_script.qmd" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Presentation 4: Scripting in R</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../presentations/presentation4_functions.html" class="sidebar-item-text sidebar-link">
+  <a href="../presentations/presentation4_functions.qmd" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Presentation 4, Functions: Scripting in R</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../presentations/presentation5.html" class="sidebar-item-text sidebar-link">
+  <a href="../presentations/presentation5.qmd" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Presentation 5: Intro to Modelling in R</span></a>
   </div>
 </li>
@@ -267,13 +267,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../exercises/exercise4.html" class="sidebar-item-text sidebar-link">
+  <a href="../exercises/exercise4.qmd" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Exercise 4: Scripting in R</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../exercises/exercise5.html" class="sidebar-item-text sidebar-link">
+  <a href="../exercises/exercise5.qmd" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Exercise 5: Modelling in R</span></a>
   </div>
 </li>
@@ -320,19 +320,19 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../solutions/solution4.html" class="sidebar-item-text sidebar-link">
+  <a href="../solutions/solution4.qmd" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Exercise 4 - Solution</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../solutions/solution4_functions.html" class="sidebar-item-text sidebar-link">
+  <a href="../solutions/solution4_functions.qmd" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Exercise 4, Functions - Solution</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../solutions/solution5.html" class="sidebar-item-text sidebar-link">
+  <a href="../solutions/solution5.qmd" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Exercise 5 - Solution</span></a>
   </div>
 </li>
@@ -402,7 +402,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../solutions/solution1.html">Solutions</a></li><li class="breadcrumb-item"><a href="../solutions/solution1.html">Exercise 1 - Solution</a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title">Exercise 1 - Solutions: Data Cleanup (Base R and Tidyverse)</h1>
+<h1 class="title">Exercise 1 - Solutions: Data Cleanup and Summary Statistics</h1>
 </div>
 
 
@@ -466,7 +466,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 <ol start="4" type="1">
-<li>Check the ranges and distribution of each of the variables. Consider that the variables are of different classes. Do any values strike you as odd?</li>
+<li>Check the ranges and distribution of each of the variables. Remember, the variables might be different types. Do any values seem weird or unexpected?</li>
 </ol>
 <p>For the categorical variables we can use <code>table</code>:</p>
 <p>The <code>Sex</code> values are not consistent.</p>
@@ -474,8 +474,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(diabetes_clinical<span class="sc">$</span>Sex)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
-FEMALE Female   Male   male 
-     2    291    237      2 </code></pre>
+Female FEMALE   male   Male 
+   291      2      2    237 </code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(diabetes_clinical<span class="sc">$</span>Smoker)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -593,7 +593,7 @@ FEMALE Female   Male   male
 <li><p>Do you want to change any of the classes of the variables?</p></li>
 </ul>
 <ol start="5" type="1">
-<li>Clean the data according to your considerations.</li>
+<li>Make a clean version of the dataset according to your considerations.</li>
 </ol>
 <div class="callout callout-style-default callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
@@ -659,12 +659,12 @@ Hint
 <pre><code># A tibble: 6 × 3
      ID Married Work         
   &lt;dbl&gt; &lt;chr&gt;   &lt;chr&gt;        
-1 33879 Yes     Self-employed
-2 52800 Yes     Private      
-3 16817 Yes     Private      
-4 70676 Yes     Self-employed
-5  6319 No      Public       
-6 71379 No      Public       </code></pre>
+1 48368 Yes     Private      
+2 36706 No      Public       
+3 32729 Yes     Private      
+4 48272 Yes     Private      
+5  9404 Yes     Private      
+6 16934 Yes     Self-employed</code></pre>
 </div>
 </div>
 <p>6.3. How many missing values (NA’s) are there in each column.</p>
@@ -682,13 +682,13 @@ Hint
 <div class="cell-output cell-output-stdout">
 <pre><code>
   No  No   Yes Yes  
- 183    3  345    1 </code></pre>
+ 178    1  332    4 </code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(diabetes_meta<span class="sc">$</span>Work)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
       Private        Public       Retired Self-employed 
-          283           154             6            89 </code></pre>
+          273           150             6            86 </code></pre>
 </div>
 </div>
 <p>By investigating the unique values of the <code>Married</code> variable we see that some of the values have whitespace.</p>
@@ -700,7 +700,7 @@ Hint
 </div>
 <ol start="6" type="1">
 <li><ol start="5" type="1">
-<li>Clean the data according to your considerations.</li>
+<li>Make a clean version of the dataset according to your considerations.</li>
 </ol></li>
 </ol>
 <p>My considerations:</p>
@@ -712,7 +712,7 @@ Hint
 <div class="cell">
 <div class="sourceCode cell-code" id="cb46"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a><span class="fu">nrow</span>(diabetes_meta)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 532</code></pre>
+<pre><code>[1] 515</code></pre>
 </div>
 </div>
 <div class="cell">
@@ -731,38 +731,49 @@ Hint
 <div class="cell">
 <div class="sourceCode cell-code" id="cb51"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a><span class="fu">nrow</span>(diabetes_meta_clean)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 532</code></pre>
+<pre><code>[1] 515</code></pre>
 </div>
 </div>
 </section>
 <section id="join-the-datasets" class="level2">
 <h2 class="anchored" data-anchor-id="join-the-datasets">Join the datasets</h2>
 <ol start="7" type="1">
-<li>Consider what variable the datasets should be joined on.</li>
+<li><p>Consider which variable the datasets should be joined on.</p></li>
+<li><p>Consider how you want to join the datasets. Do you want to use <code>full_join</code>, <code>inner_join</code>, <code>left_join</code> and <code>rigth_join</code>?</p></li>
 </ol>
 <p>The joining variable must be the same type in both datasets.</p>
-<ol start="8" type="1">
-<li>Join the datasets by the variable you selected above.</li>
-</ol>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb53"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a>diabetes_join <span class="ot">&lt;-</span> diabetes_clinical_clean <span class="sc">%&gt;%</span> </span>
-<span id="cb53-2"><a href="#cb53-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(diabetes_meta_clean, <span class="at">by =</span> <span class="st">'ID'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
 <ol start="9" type="1">
-<li>How many rows does the joined dataset have? Explain why.</li>
+<li>Join the cleaned versions of the clinical and meta dataset by the variable and with the function you considered above.</li>
 </ol>
-<p>Because we used <code>left_join</code>, only the IDs that are in <code>diabetes_clinical_clean</code> are kept.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb54"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true" tabindex="-1"></a><span class="fu">nrow</span>(diabetes_join)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb53"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a><span class="co"># We use full_join to keep all observations before we know which variables we are interested in. </span></span>
+<span id="cb53-2"><a href="#cb53-2" aria-hidden="true" tabindex="-1"></a>diabetes_join <span class="ot">&lt;-</span> diabetes_clinical_clean <span class="sc">%&gt;%</span> </span>
+<span id="cb53-3"><a href="#cb53-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">full_join</span>(diabetes_meta_clean, <span class="at">by =</span> <span class="st">'ID'</span>)</span>
+<span id="cb53-4"><a href="#cb53-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb53-5"><a href="#cb53-5" aria-hidden="true" tabindex="-1"></a><span class="fu">nrow</span>(diabetes_join)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 490</code></pre>
+<pre><code>[1] 531</code></pre>
 </div>
 </div>
 <ol start="10" type="1">
+<li>How many rows does the joined dataset have? Explain how the join-function you used resulted in the given number of rows.</li>
+</ol>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb55"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb55-1"><a href="#cb55-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Because we used `full_join`, all the unique IDs across both data sets are kept.</span></span>
+<span id="cb55-2"><a href="#cb55-2" aria-hidden="true" tabindex="-1"></a><span class="fu">c</span>(diabetes_clinical_clean<span class="sc">$</span>ID, diabetes_meta_clean<span class="sc">$</span>ID) <span class="sc">%&gt;%</span> <span class="fu">unique</span>() <span class="sc">%&gt;%</span> <span class="fu">length</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 531</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb57"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb57-1"><a href="#cb57-1" aria-hidden="true" tabindex="-1"></a><span class="fu">nrow</span>(diabetes_join)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 531</code></pre>
+</div>
+</div>
+<ol start="11" type="1">
 <li>Export the joined dataset. Think about which directory you want to save the file in.</li>
 </ol>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb56"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb56-1"><a href="#cb56-1" aria-hidden="true" tabindex="-1"></a>writexl<span class="sc">::</span><span class="fu">write_xlsx</span>(diabetes_join, <span class="st">'../out/diabetes_join.xlsx'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb59"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb59-1"><a href="#cb59-1" aria-hidden="true" tabindex="-1"></a>writexl<span class="sc">::</span><span class="fu">write_xlsx</span>(diabetes_join, <span class="st">'../out/diabetes_join.xlsx'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 
 

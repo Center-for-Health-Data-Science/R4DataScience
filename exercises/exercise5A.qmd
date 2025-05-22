@@ -85,7 +85,7 @@ Plot `y_test` against `y_pred`.
 
 ## Part 2: Logistic regression
 
-For this part we will use the joined diabetes, so lets load the joined dataset we created in exercise 1, e.g. `diabetes_join.xlsx` or what you have named it.
+For this part we will use the joined diabetes, so lets load the joined dataset we created in exercise 1, e.g. `diabetes_join` or what you have named it. N.B if you did not manage to finish making this dataset or forgot to save it, you can find a copy here: `../out/diabetes_join.Rdata`.
 
 As the outcome we are studying, `Diabetes`, is categorical variable we will perform logistic regression. We select serum calcium levels (`Serum_ca2`), `BMI` and smoking habits (`Smoker`) as predictive variables.
 
@@ -123,12 +123,12 @@ caret::confusionMatrix(y_pred, y_test)
 
 In this part we will run clustering on the joined diabetes dataset (`diabetes_join.xlsx`) from exercise 1. Load it here if you don't have it already from Part 2 above.
 
-19. Before running K-means clustering. Remove any missing values across all variables in your dataset.
+19. Before running K-means clustering. Remove any missing values across all variables in your dataset. Consider which columns you can use and if you have to do anything to them before clustering?
 
-20. Run the k-means clustering algorithm with 4 centers on the data. Consider which columns you can use and if you have to do anything to them before clustering?
+20. Run the k-means clustering algorithm with 4 centers on the data.
 
 21. Visualize the results of your clustering.
 
-22. Investigate the best number of clusters.
+22. Investigate the best number of clusters. Try to use the `silhouette` metric. How many clusters are there?
 
-23. Re-do the clustering (plus visualization) with that number.
+23. Re-do the clustering (plus visualization) with that number. What do you think the clusters represent in this case?

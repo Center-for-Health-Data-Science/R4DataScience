@@ -1,41 +1,51 @@
 ---
-title: "Presentation 5: Intro to Modelling in R"
+title: "Presentation 5A: Intro to Regression in R"
 format: html
 project:
  type: website
  output-dir: ../docs
 ---
 
-In this section we'll look at how to define and fit a model in R.
+In this section we'll look at how to define and fit regression models in R.
 
 ## Load packages
 
 ```{r warning=FALSE, message=FALSE}
 library(tidyverse)
-library(caTools)
-library(ModelMetrics)
-library(ggfortify)
+library(caret)
+#library(caTools)
+#library(ModelMetrics)
+#library(ggfortify)
 library(readxl)
 ```
 
 ## Load data
 
-In order to focus on the technical aspects we'll use a very simple toy dataset. It contains the number of cigarettes smoked per day and how long the person lived. It is inspired by [this paper](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC2598467/) if you want to take a look.
+In order to focus on the technical aspects we'll use a simple toy dataset. It contains the number of cigarettes smoked per day and how long the person lived. It is inspired by [this paper](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC2598467/) if you want to take a look.
 
 ```{r}
 df_smoke <- read_csv('../data/smoking_cat.csv')
 df_smoke
 ```
 
+Looking at the variables in my dataset I see that I have; daily cigarettes smoked (number) and life (in years). Both of these are numeric variables. I also have a variable named exercise, it seems that this variable might in fact be an ordinal factor variable, e.g. exercise amount 0, 1 or 2. Exercise is encoded as a numeric variable, so the first thing we will do is to convert it to a factor.
+
+```{r}
+distinct(df_smoke, exercise)
+
+df_smoke <- df_smoke %>% 
+  mutate(exercise= as.factor(exercise))
+```
+
+## Linear Regression
+
 We will use this to perform a linear regression.
 
 ![](../figures/lin_reg.jpg){fig-align="center"}
 
-## Linear Regression
-
 ### Split Data into Training and Test Set
 
-First, we will split our data into a test and a training set. There are numerous ways to do this. We here show `sample_frac` from `dplyr`:
+Now, we will split our data into a test and a training set. There are numerous ways to do this. We here show `sample_frac` from `dplyr`:
 
 ```{r}
 # Set seed to ensure reproducibility
@@ -56,6 +66,12 @@ As you can see, the ID's in `train` are shuffled and it only has 75 rows since w
 #from df_smoke remove what is in train by checking the ID column
 test  <- df_smoke %>% 
   filter(!ID %in% train$ID) 
+
+# OR
+
+test  <- anti_join(df_smoke, train, by = 'ID') 
+
+
 
 nrow(test)
 head(test)
@@ -78,11 +94,11 @@ lm(y ~ x_1 + x_2 + ...)
 ?lm
 ```
 
-In our case, $y$ is the number of years lived and we have a singular predictor $x_1$, the number of cigarettes smoked per day. So that will be our model formulation:
+In our case, $y$ is the number of years lived and we have a two predictors $x_1$ (numeric), the number of cigarettes smoked per day, and $x_2$ (ordinal factor), exercise level (0, 1 or 2). So that will be our model formulation:
 
 ```{r}
 #remember to select the training data subset we defined above! 
-model <- lm(life ~ daily_cigarettes, data = train)
+model <- lm(life ~ daily_cigarettes + exercise, data = train)
 ```
 
 ### Modelling results
@@ -102,15 +118,17 @@ Lets have a look at the results. The summary gives us a lot of information about
 summary(model)
 ```
 
-It beings with **Call** which displays the formula used to fit the model.
-
 The **Residuals** section summarizes the distribution of the residuals, which is the difference between the actual observed $y$ values and the fitted $y$ values.
 
-The **Coefficients** table shows the estimated values for each coefficient including the intercept, along with their standard errors, t-values, and p-values. These help to determine the significance of each predictor. Smaller p-values indicate stronger evidence against the null hypothesis that the true coefficient is zero.
+The **Coefficients** table shows the estimated values for each coefficient including the intercept, along with their standard errors, t-values, and p-values. These help to determine the significance of each predictor.
 
-In the bottom section we have some information about how well model fits the training data. The **Residual Standard Error (RSE)** provides a measure of accuracy as it represents the average size of the residuals. The **R-squared** value indicates the proportion of variance explained by the model, with the Adjusted R-squared accounting for the number of predictors to prevent overfitting. Finally, the **F-statistic** and its p-value test whether the model as a whole explains a significant portion of the variance in the response variable (the outcome $y$).
+In the bottom section we have some information about how well model fits the training data.
 
-Overall, the `summary` helps us to assess the model fit and identify significant predictors and their effect size (size of the coefficient).
+The **Residual Standard Error (RSE)** provides a measure of accuracy as it represents the average size of the residuals.
+
+The **R-squared** value indicates the proportion of variance explained by the model, with the Adjusted R-squared accounting for the number of predictors to prevent overfitting.
+
+Finally, the **F-statistic** and its p-value test whether the model as a whole explains a significant portion of the variance in the response variable (the outcome $y$).
 
 We can extract the `model` object's components with `$`:
 
@@ -120,6 +138,13 @@ model$coefficients
 hist(model$residuals, breaks = 30, main = 'Histogram of residuals', 
      xlab = 'Residual')
 
+```
+
+Slightly fancier plot:
+
+```{r}
+par(mfrow=c(2,2))
+plot(model)
 ```
 
 ### Model interpretation
@@ -136,9 +161,9 @@ model$coefficients
 
 Therefore:
 
--   The intercept $b_0$ is the number of years we estimated a person in this dataset will live if they smoke 0 cigarettes. It is 78.7 years
+-   The intercept $b_0$ is the number of years we estimated a person in this dataset will live if they smoke 0 cigarettes and do not exercise. It is 77.6 years
 
--   The coefficient of cigarettes per day is -0.28. This means for every 1 unit increase in cigarettes (one additional cigarette per day) the life expectancy decreases by 0.28 years.
+-   The coefficient of cigarettes per day is -0.29. This means for every 1 unit increase in cigarettes (one additional cigarette per day) the life expectancy decreases by 0.29 years. Similarly for the exercise variable, if you exercise your life expectancy will go up 1.1-2.4 years (assuming you smoke 0 cigarettes).
 
 ### Model performance
 
@@ -159,91 +184,17 @@ ggplot(pred, aes(x=real, y=pred)) +
   geom_point()
 ```
 
-Not too bad! We usually calculate the mean square error (mse) between predictions and the known true values to numerically evaluate regression performance:
+Not too bad! We usually calculate the root mean square error (rmse) between predictions and the known true values to numerically evaluate regression performance:
 
 ```{r}
-mse(pred$real,pred$pred)
+RMSE(pred$real,pred$pred)
 ```
 
-Our predictions are on average 1.7 years wrong.
-
-## Regression with categorical features
-
-Now that we know how to make a simple linear model, how can we include categorical variables and what is the interpretation of their coefficients? To investigate this we include the other predictor variable we have: Exercise level.
-
-```{r}
-distinct(df_smoke, exercise)
-```
-
-Alright, we have three different levels of exercise. They are: low == 0, moderate == 1 and high == 2. Before we go on, let's have a look if our data is represented correctly:
-
-```{r}
-str(df_smoke)
-```
-
-We can see that the `exercise` column is interpreted as an integer. However, it is actually a category! In R categorical variables are known as `factors` and have their own datatype. Let's convert exercise to a factor:
-
-```{r}
-df_smoke$exercise <- as.factor(df_smoke$exercise)
-str(df_smoke)
-```
-
-As before, before fitting the model we'll split up the data in train and test. Since we're using the same seed we should get the same observations, i.e. rows into training and test as above.
-
-```{r}
-# Set seed to ensure reproducibility
-set.seed(123)  
-
-#add an ID column to keep track of observations
-df_smoke$ID <- 1:nrow(df_smoke)
-
-train <- df_smoke %>% sample_frac(.75)
-test  <- anti_join(df_smoke, train, by = 'ID') 
-```
-
-And now we extend our previous model formula with the new predictor:
-
-```{r}
-model2 <- lm(life ~ daily_cigarettes + exercise, data = train)
-```
-
-```{r}
-summary(model2)
-```
-
-When we check the summary we see that it has two additional coefficients, `exercise1` and `exercise2`. What are they?
-
-Because `exercise` is a categorical variable it is dummy coded. That means our model formula mathematically looks something like this:
-
-$$y=b_0+b_1*x_1 + b_2 *x_2 + b_3*x_3$$
-
-with:
-
-| Exercise level | $x_2$ | $x_3$ |
-|:--------------:|:-----:|------:|
-|       0        |   0   |     0 |
-|       1        |   1   |     0 |
-|       2        |   0   |     1 |
-
-And for our coefficients it means:
-
-```{r}
-model2$coefficients
-```
-
--   `Intercept` == $b_0$: The life expectancy at 0 cigarettes and exercise level 0
-
--   `daily_cigerettes` == $b_1$: The change in life expectancy for each additional cigarette.
-
--   `exercise1` == $b_2$: The change in life expectancy if the exercise level is 1 (assuming the number of cigarettes stays constant).
-
--   `exercise2` == $b_3$: The change in life expectancy if the exercise level is 2 (assuming the number of cigarettes stays constant).
-
-Why is there no coefficient for exercise level 0 (low amount of exercise)? This case is covered in the Intercept. It is referred to as the **reference level** of the categorical variable. You can change which level is regarded as the reference and the effect of having this level will always be modelled in the intercept.
+Our predictions are on average 0.88 years 'off'.
 
 ## Classification
 
-Classification is what we apply when the outcome has two or more classes.
+Classification is the method we use when the outcome we are interested in is not continuous, but instead consists of two or more classes.
 
 In order to have a categorical outcome, we'll add a column to our toy data that describes whether the person died before age 75 or not.
 
@@ -257,26 +208,29 @@ df_smoke %>%
 
 ### Training and Test set with class data
 
-Let's remake our training and test data. This time we have classes that we would like to be in the same ratios in training and test set. Therefore, we cannot just grab 75% of the data as we did before. We'll use `sample.split` from `caTools` to achieve balanced classes:
+Let's remake our training and test data. This time we have classes that we would like to be in the same ratios in training and test set. We must check this is the case!
 
 ```{r}
 # Set seed to ensure reproducibility
-set.seed(123)
+set.seed(123)  
 
-split <- sample.split(df_smoke$early_death, SplitRatio = 0.75)
+#add an ID column to keep track of observations
+df_smoke$ID <- 1:nrow(df_smoke)
 
-#split is a vector of true and false values we can now directly apply to our tibble
-split
+train <- df_smoke %>% sample_frac(.75)
 
-train <- df_smoke[split,]
-test <- df_smoke[!split,] #! negates the vector, so true becomes false and vice verse
+table(train$early_death)
 
-count(train,early_death)
-count(test, early_death)
+
+test  <- anti_join(df_smoke, train, by = 'ID') 
+
+table(test$early_death)
 
 ```
 
-Now we can perform logistic regression to see whether there is an influence of the number of cigarettes and amount of exercise on the odds of the person dying before 75.
+Luckily for us the division of the outcome variable classes between the train and test set is almost perfect. However, there may be cases where randomly splitting will not give you a balanced distribution, this is likely to happen if one class is much larger than the other(s). In these cases you should split your data in a non-random way, specifically ensuring a balanced train and test set.
+
+Now let's perform logistic regression to see whether there is an influence of the number of cigarettes and amount of exercise on the odds of the person dying before 75.
 
 Logistic regression belongs to the family of generalized linear models. They all look like this:
 
@@ -295,7 +249,7 @@ In a logistic regression model the link function is the logit. In a linear model
 
 In order to understand what that means we'll need a tiny bit of math.
 
-We see some issues right of the bat. Our $y$ is either 0 or 1 (the person is either dead or not). However we cannot model that so instead we will model the probability of the outcome being 1: $P(earlydeath == 1)$. Except probabilities are bounded between 0 and 1 which is mathematically difficult to impose (it means all $y$'s have to be between these two values and how are we gonna enforce that?) So instead, we will model the log-odds of early death:
+Our $y$ is either 0 or 1 (the person is either dead or not). However we cannot model that so instead we will model the probability of the outcome being 1: $P(earlydeath == 1)$. Except probabilities are bounded between 0 and 1 which is mathematically difficult to impose (it means all $y$'s have to be between these two values and how are we gonna enforce that?) So instead, we will model the log-odds of early death:
 
 $$ y = \log(\frac{P(earlydeath == 1)}{1-P(earlydeath == 1)})$$
 
@@ -320,9 +274,9 @@ summary(model_log)
 
 ### Model interpretation
 
-We see from looking at the summary that the coefficient of exercise level 1 and level 2 is not significant. This means that we are not confident that doing a high amount of exercise (level 3) has a significant impact on the probability of dying before 75 compare to doing moderate or low amounts of exercise. This does not mean that there can be no influence, merely that we do not have enough data to detect it if it is there.
+We see from looking at the summary that the coefficient of exercise level 1 and level 2 is not significant. This means that we are not confident that doing a high amount of exercise has a significant impact on the probability of dying before 75 compare to doing moderate or high amounts of exercise. This does not mean that there can be no influence, merely that we do not have enough data to detect it if it is there.
 
-Are you surprised? Exercise level was significant when we modelled the number of years lived, which is arguably a more fine-grained information than the binary split and perhaps therefore we picked up the influence.
+Are you surprised? Exercise level was significant when we modelled the number of years lived.
 
 With the number of daily cigarettes predictor we have a high degree of certainty that it influences the probability of dying before 75 (in this dataset!), but what does a coefficient of 0.84 mean?
 
@@ -379,7 +333,35 @@ We can use an anova with the Chi-square test to compare the log-likelihood of th
 anova(model_log, model_reduced, test = 'Chisq')
 ```
 
-The p-value of the Chi-square test tells us if there is evidence that the difference in log-likelihoods is significant. If it is not significant, we do not have evidence that one model is a better fit than the other and we would therefore choose the less complex model with fewer predictors since that gives us more statistical power and less overfitting.
+The p-value of the Chi-square test tells us if there is evidence that the difference in log-likelihoods is just significant. If it is not significant, we do not have evidence that one model is a better fit than the other and we would therefore choose the less complex model with fewer predictors since that gives us more statistical power and less overfitting.
+
+### Model Evaluation
+
+Lastly, lets evaluate our model using the test set, just like we did for the linear regression. First we will predict the outcome for the test set:
+
+```{r}
+y_pred <- predict(model_log, newdata = test, type = 'response')
+
+y_pred 
+```
+
+As you see the predictions we get out are not $yes$ or $no$, they are instead a probability (as discussed above), so, we will convert them to class labels.
+
+```{r}
+
+y_pred <- ifelse(as.numeric(y_pred) >= 0.5, 'yes', 'no') %>% 
+  as.factor()
+```
+
+Now we will compare the predicted class with the observed class for the test set. You can do this in different ways, but here we will use the accuracy.
+
+$$ Accuracy = \frac{(True Positives + True Negatives)}{(True Positives + True Negatives + False Positives + False Negatives)}$$
+
+You can calculate the accuracy yourself, or you can use a function like `confusionMatrix()` from the package `caret` which also provides you with individual metrics like sensitivity (true positive rate, recall) and specificity (true negative rate).
+
+```{r}
+caret::confusionMatrix(y_pred, test$early_death)
+```
 
 ## Clustering
 
@@ -391,6 +373,12 @@ For this we will use the wine data set as an example:
 
 ```{r warning=FALSE, message=FALSE}
 library(ContaminatedMixt)
+library(factoextra)
+```
+
+Lets load in the dataset
+
+```{r}
 data('wine') #load dataset
 df_wine <- wine #convert to tibble
 df_wine
@@ -410,24 +398,26 @@ For k-means it is very important that the data is numeric and scaled so we will 
 # Set seed to ensure reproducibility
 set.seed(123)  
 
-#run kmeans
-kmeans_res <- df_wine %>%
+# Pull numeric variables and scale these
+kmeans_df <- df_wine %>%
   select(where(is.numeric)) %>%
-  #scale all numeric cols
-  mutate(across(where(is.numeric), scale)) %>%
+  mutate(across(where(is.numeric), scale)) 
+
+```
+
+Kmeans clustering in R is easy, we simply run the `kmeans()` function:
+
+```{r}
+set.seed(123)  
+
+kmeans_res <- kmeans_df %>%
   kmeans(centers = 4, nstart = 25)
 
 kmeans_res
 
 ```
 
-We get a lot of results. `kmeans_res$cluster` is the cluster assigned to every wine bottle, i.e. row:
-
-```{r}
-kmeans_res$cluster
-```
-
-And `kmeans_res$centers` shows us at which values the centroids are:
+We can call `kmeans_res$centers` to inspect the values the centroids:
 
 ```{r}
 kmeans_res$centers
@@ -439,91 +429,15 @@ This is not super practical if we would like to visually inspect the clustering 
 
 ### Visualizing k-means results
 
-We would like to see where our wine bottles and their clusters lie in a low-dimensional space so we will calculate a PCA of the wine data and map the cluster centers to the PCA space.
-
-Since we want the PCA space and the clustering to have the same mapping we'll scale the data before running `prcomp()`. Basically we are making sure that the PCA is calculated on the same data as we passed into the clustering algorithm.
+We would like to see where our wine bottles and their clusters lie in a low-dimensional space. This can easily be done using the `fviz_cluster()`
 
 ```{r}
-pca_wine <- df_wine %>%
-  select(where(is.numeric)) %>%
-  #scale all numeric cols
-  mutate(across(where(is.numeric), scale)) %>%
-  prcomp()
-
+fviz_cluster(kmeans_res, data = kmeans_df,
+             palette = c("#2E9FDF", "#00AFBB", "#E7B800", "orchid3"), 
+             geom = "point",
+             ellipse.type = "norm", 
+             ggtheme = theme_bw())
 ```
-
-Let's have a look. Since there is no missing data in this set we can easily use the original dataframe to color by wine type:
-
-```{r}
-autoplot(pca_wine, data = df_wine, color = 'Type',
-         loadings = TRUE, loadings.colour = "grey30", 
-         loadings.label.colour = "black",
-         loadings.label = TRUE, loadings.label.size = 3.5,
-         scale = 0)
-```
-
-Now we would like to add the cluster centriods to the plot. Just as a wine bottle with 13 dimensions has a certain PC1/PC2 coordinate, the centriod also does:
-
-```{r}
-#this is the first wine bottle in the set
-df_wine[1,]
-```
-
-```{r}
-#this bottle is placed at -3.3/1.4 in the PCA plot
-pca_wine$x[1,]
-```
-
-We can find the PC1/PC2 coordinates of cluster 1, 2 and 3 by putting their position in the original 13-dim space into the PCA object:
-
-```{r}
-#project cluster centers from kmeans into the pca space
-centers_pca <- predict(pca_wine, newdata = kmeans_res$centers)
-centers_pca
-kmeans_res$centers
-```
-
-Let's make this into a dataframe and add labels:
-
-```{r}
-#project cluster centers from kmeans into the pca space
-centers_pca <- predict(pca_wine, newdata = kmeans_res$centers) %>% as.data.frame()
-# Label clusters
-centers_pca$cluster <- as.factor(1:nrow(centers_pca))  
-centers_pca
-```
-
-Alright! The last step is to add these 4 points, one for each cluster, to the autoplot. Did you know you can add ggplot geoms to autoplots?
-
-```{r}
-autoplot(pca_wine, data = df_wine, color = 'Type',
-         loadings = TRUE, loadings.colour = "grey30", 
-         loadings.label.colour = "black",
-         loadings.label = TRUE, loadings.label.size = 3.5,
-         scale = 0) +
-  # Cluster centers
-  geom_point(data = centers_pca, aes(x = PC1, y = PC2, color = cluster),
-             shape = 8, size = 6, stroke = 2)
-  
-```
-
-We are still coloring the PCA plot by the known wine type. Let's switch it to instead display which cluster each bottle has been assigned to by k-means:
-
-```{r}
-#add cluster info to the dataframe
-df_wine$Cluster <- factor(kmeans_res$cluster)
-
-autoplot(pca_wine, data = df_wine, color = 'Cluster',
-         loadings = TRUE, loadings.colour = "grey30", 
-         loadings.label.colour = "black",
-         loadings.label = TRUE, loadings.label.size = 3.5,
-         scale = 0) +
-  # Cluster centers
-  geom_point(data = centers_pca, aes(x = PC1, y = PC2, color = cluster),
-             shape = 8, size = 6, stroke = 2)
-```
-
-Well the centroids are in the middle of their respective clusters but this does not look ideal. Perhaps 4 is not the best number of clusters for this dataset.
 
 ### Optimal number of clusters
 
@@ -532,72 +446,33 @@ There are several ways to investigate the ideal number of clusters and `fviz_nbc
 The so-called elbow method observes how the sum of squared errors (sse) changes as we vary the number of clusters. This is also sometimes referred to as "within sum of square" (wss).
 
 ```{r}
-library(factoextra)
-
-df_wine %>%
-  select(where(is.numeric)) %>%
-  #scale all numeric cols
-  mutate(across(where(is.numeric), scale)) %>%
+kmeans_df %>%
   fviz_nbclust(kmeans, method = "wss")
-```
-
-The silhouette coefficient is a measure of cluster cohesion and separation. It quantifies how well a data point fits into its assigned cluster, by looking at how close it is to other points in its cluster and how far from points of other clusters. You need to have at least 2 clusters for the silhouette coefficient to be defined.
-
-Unlike the elbow of the sums of square errors, the silhouette score is supposed to peak:
-
-```{r}
-df_wine %>%
-  select(where(is.numeric)) %>%
-  #scale all numeric cols
-  mutate(across(where(is.numeric), scale)) %>%
-  fviz_nbclust(kmeans, method = "silhouette")
 ```
 
 The gap statistic compares the within-cluster variation (how compact the clusters are) for different values of K to the expected variation under a null reference distribution (i.e., random clustering).
 
 ```{r}
-df_wine %>%
-  select(where(is.numeric)) %>%
-  #scale all numeric cols
-  mutate(across(where(is.numeric), scale)) %>%
+kmeans_df %>%
   fviz_nbclust(kmeans, method = "gap_stat")
 ```
 
-All three of them tell us there should be three clusters and we also know there are three cultivars of wine in the dataset. Let's redo k-means with three centroids.
+Both of these tell us there should be three clusters and we also know there are three cultivars of wine in the dataset. Let's redo k-means with three centroids.
 
 ```{r}
 # Set seed to ensure reproducibility
 set.seed(123)  
 
 #run kmeans
-kmeans_res <- df_wine %>%
-  select(where(is.numeric)) %>%
-  #scale all numeric cols
-  mutate(across(where(is.numeric), scale)) %>%
+kmeans_res <- kmeans_df %>%
   kmeans(centers = 3, nstart = 25)
-
-#project cluster centers from kmeans into the pca space
-centers_pca <- predict(pca_wine, newdata = kmeans_res$centers) %>% as.data.frame()
-# Label clusters
-centers_pca$cluster <- as.factor(1:nrow(centers_pca))
-centers_pca
-
 ```
 
 ```{r}
 #add updated cluster info to the dataframe
-df_wine$Cluster <- factor(kmeans_res$cluster)
-
-autoplot(pca_wine, data = df_wine, color = 'Cluster',
-         loadings = TRUE, loadings.colour = "grey30", 
-         loadings.label.colour = "black",
-         loadings.label = TRUE, loadings.label.size = 3.5,
-         scale = 0) +
-  # Cluster centers
-  geom_point(data = centers_pca, aes(x = PC1, y = PC2, color = cluster),
-             shape = 8, size = 6, stroke = 2)
+fviz_cluster(kmeans_res, data = kmeans_df,
+             palette = c("#2E9FDF", "#00AFBB", "#E7B800", "orchid3"), 
+             geom = "point",
+             ellipse.type = "norm", 
+             ggtheme = theme_bw())
 ```
-
-Indeed this looks better!
-
-That concludes our foray into modelling for now and it's time for the exercise.

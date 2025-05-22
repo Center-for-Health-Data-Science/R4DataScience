@@ -66,7 +66,7 @@ par(mfrow=c(2,2))
 plot(model)
 ```
 
-Overall the plots look okay. There are some outlines, but all of them are within cooks distance, i.e. they are not extreme enough that they majorly effect the model. The model residuals are close to normally distributed.
+Overall the plots look okay. There are some outlines, but all of them are within cooks distance, i.e. they are not extreme. The model residuals are close to normally distributed.
 
 9.  Now, use our test set to predict the response `medv` (`median value per house in 1000s`).
 
@@ -100,21 +100,23 @@ ggplot(predPlot, aes(x = y_test, y=y_pred)) +
 
 For this part we will use the joined diabetes data since it has a categorical outcome (Diabetes yes or no). We will not use the oral Glucose measurements as predictors since this is literally how you define diabetes, so we're loading the joined dataset we created in exercise 1, e.g. 'diabetes_join.xlsx' or what you have named it.
 
-For this part we will use the joined diabetes, so lets load the joined dataset we created in exercise 1, e.g. 'diabetes_join.xlsx' or what you have named it.
+For this part we will use the joined diabetes, so lets load the joined dataset we created in exercise 1, e.g. `diabetes_join` or what you have named it. N.B if you did not manage to finish making this dataset or forgot to save it, you can find a copy here: `../out/diabetes_join.Rdata`.
 
 As the outcome we are studying, `Diabetes`, is categorical variable we will perform logistic regression. We select serum calcium levels (`Serum_ca2`), `BMI` and smoking habits (`Smoker`) as predictive variables.
 
 12. Read in the diabetes_join.xlsx dataset.
 
 ```{r}
-diabetes_df <- read_excel('../out/diabetes_join.xlsx')
-head(diabetes_df)
+
+load("../out/diabetes_join.Rdata")
+
+head(diabetes_join)
 ```
 
 13. Logistic regression does not allow for any missing values in the outcome variable. Ensure that the variable `Diabetes` does not have missing values AND that it is a factor variable.
 
 ```{r}
-diabetes_df <- diabetes_df %>% 
+diabetes_df <- diabetes_join %>% 
   filter(!is.na(Diabetes)) %>%
   mutate(Diabetes= as.factor(Diabetes))
 ```
@@ -190,126 +192,77 @@ In this part we will run clustering on the joined diabetes dataset from exercise
 
 ```{r}
 #in case
-diabetes_df <- read_excel('../out/diabetes_join.xlsx')
-head(diabetes_df)
+load('../out/diabetes_join.Rdata')
+
+head(diabetes_join)
 ```
 
 In this part we will run clustering on the joined diabetes dataset (`diabetes_join.xlsx`) from exercise 1. Load it here if you don't have it already from Part 2 above.
 
-19. Before running K-means clustering. Remove any missing values across all variables in your dataset.
+19. Before running K-means clustering. Remove any missing values across all variables in your dataset. Consider which columns you can use and if you have to do anything to them before clustering?
 
-```{r}
-
-diabetes_df <- drop_na(diabetes_df)
-
-```
-
-20. Run the k-means clustering algorithm with 4 centers on the data. Consider which columns you can use and if you have to do anything to them before clustering?
+20. Run the k-means clustering algorithm with 3 centers on the data.
 
 ```{r}
 # Set seed to ensure reproducibility
 set.seed(123)  
 
 #run kmeans
-kmeans_res <- diabetes_df %>%
-  dplyr::select(where(is.numeric)) %>%
-  #scale all numeric cols
+diabetes_df <- diabetes_join %>%
+  drop_na(.) %>%
   mutate(across(where(is.numeric), scale)) %>%
+  dplyr::select(where(is.numeric))
+
+
+kmeans_res <- diabetes_df %>% 
   kmeans(centers = 4, nstart = 25)
 
 kmeans_res
 ```
 
+```{r}
+kmeans_res$centers
+```
+
+
 21. Visualize the results of your clustering.
 
-We first need to calculate a PCA. This is basically the same we have done in exercise 3B.
-
 ```{r}
-pca_res <- diabetes_df %>%
-  dplyr::select(where(is.numeric)) %>%
-  #scale all numeric cols
-  mutate(across(where(is.numeric), scale)) %>%
-  prcomp()
+fviz_cluster(kmeans_res, data = diabetes_df,
+             palette = c("#2E9FDF", "#00AFBB", "#E7B800", "orchid3"), 
+             geom = "point",
+             ellipse.type = "norm", 
+             ggtheme = theme_bw())
 ```
 
-Now we project the k-means centroids in the PCA space
 
-```{r}
-#project cluster centers from kmeans into the pca space
-centers_pca <- predict(pca_res, newdata = kmeans_res$centers) %>% as.data.frame()
-# Label clusters
-centers_pca$cluster <- as.factor(1:nrow(centers_pca))  
-centers_pca
-```
-
-```{r}
-diabetes_df$Cluster <- factor(kmeans_res$cluster)
-```
-
-Finally we can plot:
-
-```{r}
-autoplot(pca_res, data = diabetes_df, color = 'Cluster',
-         loadings = TRUE, loadings.colour = "grey30", 
-         loadings.label.colour = "black",
-         loadings.label = TRUE, loadings.label.size = 3.5,
-         scale = 0) + 
-  theme_minimal() +
-  labs(title = "PCA of Diabetes Dataset") +
-  # Cluster centers
-  geom_point(data = centers_pca, aes(x = PC1, y = PC2, color = cluster),
-             shape = 8, size = 6, stroke = 2)  
-```
-
-22. Investigate the best number of clusters.
+22. Investigate the best number of clusters. Use the `silhouette` metric.
 
 ```{r}
 diabetes_df %>%
-  dplyr::select(where(is.numeric)) %>%
-  #scale all numeric cols
-  mutate(across(where(is.numeric), scale)) %>%
-  fviz_nbclust(kmeans, method = "gap_stat")
+  fviz_nbclust(kmeans, method = "silhouette")
 ```
 
-23. Re-do the clustering (plus visualization) with that number.
+23. Re-do the clustering (plus visualization) with that number. What do you think the clusters represent in this case?
 
 ```{r}
 # Set seed to ensure reproducibility
 set.seed(123)  
 
 #run kmeans
-kmeans_res <- diabetes_df %>%
-  dplyr::select(where(is.numeric)) %>%
-  #drop missing values
-  drop_na() %>%
-  #scale all numeric cols
-  mutate(across(where(is.numeric), scale)) %>%
+
+kmeans_res <- diabetes_df %>% 
   kmeans(centers = 2, nstart = 25)
 
 kmeans_res
 ```
 
-```{r}
-#project cluster centers from kmeans into the pca space
-centers_pca <- predict(pca_res, newdata = kmeans_res$centers) %>% as.data.frame()
-# Label clusters
-centers_pca$cluster <- as.factor(1:nrow(centers_pca))  
-centers_pca
-```
+
 
 ```{r}
-diabetes_df$Cluster <- factor(kmeans_res$cluster)
-```
-
-```{r}
-autoplot(pca_res, data = diabetes_df, color = 'Cluster',
-         loadings = TRUE, loadings.colour = "grey30", 
-         loadings.label.colour = "black",
-         loadings.label = TRUE, loadings.label.size = 3.5,
-         scale = 0) + 
-  theme_minimal() +
-  labs(title = "PCA of Diabetes Dataset") +
-  # Cluster centers
-  geom_point(data = centers_pca, aes(x = PC1, y = PC2, color = cluster),
-             shape = 8, size = 6, stroke = 2)  
+fviz_cluster(kmeans_res, data = diabetes_df,
+             palette = c("#00AFBB", "#E7B800"), 
+             geom = "point",
+             ellipse.type = "norm", 
+             ggtheme = theme_bw())
 ```
