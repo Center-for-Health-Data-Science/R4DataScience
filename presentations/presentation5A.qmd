@@ -400,7 +400,7 @@ set.seed(123)
 
 # Pull numeric variables and scale these
 kmeans_df <- df_wine %>%
-  select(where(is.numeric)) %>%
+  dplyr::select(where(is.numeric)) %>%
   mutate(across(where(is.numeric), scale)) 
 
 ```

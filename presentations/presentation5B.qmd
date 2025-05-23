@@ -26,11 +26,240 @@ Lambda (λ) controls the strength of the penalty. As λ increases, variance decr
 
 ![](../figures/penalty_regularization.png){fig-align="center"}
 
-
 ### Elastic Net regression
 
-For this exercise we will continue to use the wine dataset from the previous 
+Load th R packages needed for analysis:
 
+```{r, warning=FALSE, message=FALSE}
+library(tidyverse)
+library(caret)
+library(glmnet)
+library(MASS)
+library(randomForest)
+```
+
+For this exercise we will use a dataset from patients with Heart Disease. Information on the columns in the dataset can be found [here](https://www.kaggle.com/datasets/johnsmith88/heart-disease-dataset).
+
+```{r, warning=FALSE, message=FALSE}
+HD <- read_csv("../data/HeartDisease.csv")
+
+HD
+```
+
+Firstly, lets convert some of the variables which apper to be encoded as numeric datatypes to factors:
+
+```{r}
+
+facCols <- c("sex", 
+             "chestPainType", 
+             "fastingBP", 
+             "restElecCardio", 
+             "exerciseAngina", 
+             "slopePeakExST", 
+             "ThalStressRes", 
+             "heartDisease")
+
+
+HD <- HD %>% 
+  mutate_if(names(.) %in% facCols, as.factor) 
+
+```
+
+Let do some summary statistics to have a look at the types of variables we have. First the numeric columns.
+
+```{r}
+# Reshape data to long format for ggplot2
+long_data <- HD %>% 
+  dplyr::select(where(is.numeric)) %>%
+  pivot_longer(cols = everything(), 
+               names_to = "variable", 
+               values_to = "value")
+```
+
+```{r}
+# Plot histograms for each numeric variable in one grid
+ggplot(long_data, aes(x = value)) +
+  geom_histogram(binwidth = 0.5, fill = "#9395D3", color ='grey30') +
+  facet_wrap(~ variable, scales = "free") +
+  theme_minimal()
+```
+
+In opposition to hypothesis tests and classic linear regression, penalized regression has no assumption that predictors, nor model residuals must be normally distributed, so we do not have to test that, yeah! However, it does still assume that the relationship between predictors and the response is linear in the parameters and that observations are independent from one another.
+
+Importantly, penalized regression can be sensitive to large differences in the range of numeric/integer variables and it does not like missing values, so lets remove missing (if any) and scale our data.
+
+```{r}
+HD <- HD %>%
+  drop_na(.) %>%
+  mutate(across(where(is.numeric), scale))
+
+```
+
+Now lets have a look at our categorical/factor variables and their levels.
+
+```{r}
+
+HD %>%
+  dplyr::select(where(is.factor)) %>%
+  pivot_longer(everything(), names_to = "Variable", values_to = "Level") %>%
+  count(Variable, Level, name = "Count")
+
+
+```
+
+From our count table above we see that variables `ThalStressRes, chestPainType, restElecCardio, and slopePeakExST` are unbalanced. Especially `ThalStressRes and restElecCardio` are problematic with only 7 and 15 observations for one of the factor levels. To avoid issues when modelling, we will filter out these observations and re-level these two variables.
+
+```{r}
+HD <- HD %>% 
+  filter(ThalStressRes != 0 & restElecCardio !=2) %>%
+  mutate(ThalStressRes= as.factor(as.character(ThalStressRes)), 
+         restElecCardio = as.factor(as.character(restElecCardio)))
+```
+
+We will use `heartDisease` (0 = no, 1 = yes) as the model outcome. Now, we split our dataset into train and test set, you should have 70% of the data in the training set and 30% in the test set. To keep track of our train and test samples, we will make an ID variable. Importantly, afterwards we must again ensure that all levels of each factor variable are represented in both sets.
+
+```{r}
+
+#df_wine <- df_wine %>%
+#  mutate(ID = paste0("T", 1:nrow(df_wine)))
+
+HD <- HD %>% 
+  mutate(ID = paste0("W", 1:nrow(HD)))
+
+
+# Set seed
+set.seed(123)
+
+# Training set
+train <- HD %>% 
+  sample_frac(0.70) 
+
+# Check group levels
+train %>%
+  dplyr::select(where(is.factor)) %>%
+  pivot_longer(everything(), names_to = "Variable", values_to = "Level") %>%
+  count(Variable, Level, name = "Count")
+```
+
+```{r}
+# Test sett
+test  <- anti_join(HD, train, by = 'ID') 
+
+# Check group levels
+test %>%
+  dplyr::select(where(is.factor)) %>%
+  pivot_longer(everything(), names_to = "Variable", values_to = "Level") %>%
+  count(Variable, Level, name = "Count")
+
+
+
+```
+
+After dividing into train and test set we pull out the response variable `heartDisease` into its own vector for both datasets, we name these: `y_train` and `y_test`.
+
+```{r}
+
+y_train <- train %>%
+  pull(heartDisease)
+
+
+y_test <- test %>% 
+  pull(heartDisease)
+
+```
+
+Netx, we remove the response variable `heartDisease` from the train and test set, as well as `ID` as we should obviously not use this for training or testing.
+
+```{r}
+train <- train %>% 
+  dplyr::select(-c(ID, heartDisease))
+
+
+test <- test %>% 
+  dplyr::select(-c(ID, heartDisease))
+```
+
+Another benefit of a regularized regression, such as Elastic Net, is that this type of model can accommodate a categorical -or a numeric variable as outcome, and handle a mix of these types as predictors, making it super flexible.
+
+However, if you do use categorical variables as your predictors within the `glmnet()` function, you need ensure that your variables are `Dummy-coded (one-hot encoded)`. `Dummy-coding` means that categorical levels are converted into binary numeric indicators. You can do this 'manually', but there is a super easy way to do it with `model.matrix()` as shown below.
+
+Lets create the model matrix needed for input to `glmnet()` and `cv.glmnet()` functions:
+
+```{r}
+modTrain <- model.matrix(~ .- 1, data = train)
+head(modTrain)
+
+modTest <- model.matrix(~ .- 1, data = test)
+```
+
+Now we can create your Elastic Net Regression model with `glmnet()`.
+
+The parameter $α$ essentially tells `glmnet()` whether we are performing `Ridge Regression` ($α$ = 0), `LASSO regression` ($α$ = 1) or `Elastic Net regression` (0 \< $α$ \< 1 ). Furthermore, like for logistic regression we must specify if type our outcome is; `binominal`, `multinomial`, `gaussian`, etc.
+
+```{r}
+EN_model <- glmnet(modTrain, y_train, alpha = 0.5, family = "binomial")
+```
+
+As you may recall from the first part of this presentation that penalized regressions have a hyperparameter, λ, which determines the strength of shrinkage of the coefficients. We can use `k-fold cross-validation` to find the value of lambda that minimizes the cross-validated prediction error. For classification problems it's usually binominal deviance, which is related to log-loss (a measure of how well predicted probabilities match true class labels).
+
+Lets use `cv.glmnet()` to attain the best value of the hyperparameter lambda (λ). Remember to set a seed for reproducible results.
+
+```{r}
+set.seed(123)
+cv_model <- cv.glmnet(modTrain, y_train, alpha = 0.5, family = "binomial")
+```
+
+We can plot all the values of lambda tested during cross validation by calling `plot()` on the output of your `cv.glmnet()`, and we can extract the best lambda value from the `cv.glmnet()` model and save it as an object.
+
+```{r}
+plot(cv_model)
+
+bestLambda = cv_model$lambda.min
+```
+
+Now, lets see how well your model performed.
+
+Predict if a individual is likely to have heart disease using your model and your test set.
+
+```{r}
+y_pred <- predict(EN_model, s = bestLambda, newx = modTest, type = 'class')
+```
+
+Just like for the logistic regression model we can calculate the accuracy of the prediction by comparing it to `y_test` with `confusionMatrix()`. 
+
+```{r}
+y_pred <- as.factor(y_pred)
+
+caret::confusionMatrix(y_pred, y_test)
+```
+
+```{r}
+coeffs <- coef(EN_model, s = bestLambda)
+
+# Convert coefficients to a data frame for easier viewing
+coeffsDat <- as.data.frame(as.matrix(coeffs)) %>% 
+  rownames_to_column(var = 'VarName')
+ 
+```
+
+```{r}
+# Make dataframe ready for plotting, remove intercept and coeffcients that are zero
+coeffsDat <- coeffsDat %>% 
+  mutate(AbsImp = abs(s1)) %>%
+  arrange(AbsImp) %>%
+  mutate(VarName = factor(VarName, levels=VarName)) %>%
+  filter(AbsImp > 0 & VarName != "(Intercept)")
+
+
+# Plot
+ggplot(coeffsDat, aes(x = VarName, y = AbsImp)) +
+  geom_bar(stat = "identity", fill = "#9395D3") +
+  coord_flip() +
+  labs(title = "Feature Importance for Elastic Net", 
+       x = "Features", 
+       y = "Absolute Coefficients") +
+  theme_classic()
+```
 
 ## Part 2: ML classification
 
