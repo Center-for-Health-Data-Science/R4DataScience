@@ -6,6 +6,194 @@ project:
  output-dir: ../docs
 ---
 
+## Exploratory Data Analysis (EDA): Multivariate Analysis
+
+Now that we’ve seen how to explore one or two variables at a time, let’s scale it up. **Multivariate analysis** helps us understand how **multiple variables interact**, which is super important before doing any serious modeling.
+
+In multivariate EDA, we might use tools like:
+
+-   **PCA (Principal Component Analysis)** to reduce the complexity of datasets with many variables. (By simplifying them while keeping the most important information.)
+
+-   **Spatial analysis** if our data is tied to a geographical or spatial location (e.g., maps).
+
+-   **Time series analysis** if our variables evolve over time and we would like to understand modeling patterns and trends over time.
+
+### Principal Component Analysis (PCA)
+
+PCA helps us **summarize**, **reduce**, and **visualize** large datasets that have lots of numerical variables that might be correlated. Instead of working with dozens of variables, we can often get away with just a couple of new ones - called **principal components** - that still capture most of the variation in the data.
+
+*Principal component analysis is used to extract the important information from a multivariate data table and to express this information as a set of few new variables called principal components.*
+
+Here’s how you do it in R.
+
+We'll use `FactoMineR` + `factoextra` packages to compute and visualize PCA results.
+
+There are other functions \[packages\] to compute PCA in R:
+
+```{r}
+#res.pca <- prcomp(iris[, -5], scale. = TRUE)
+#res.pca <- princomp(iris[, -5], cor = TRUE)
+```
+
+```{r}
+rm(list = ls())
+library("FactoMineR")
+library("factoextra")
+library(dplyr)
+```
+
+We will use the Ovarian dataset we have previously cleaned up.
+
+```{r}
+load("../data/Ovarian_data_clean.RData")
+
+#df <- comb_data %>% select_if(is.numeric)
+
+# Optional: store metadata separately
+meta <- comb_data %>% select(1:(which(names(.) == "batch")))
+# Extract numeric features
+
+df <- comb_data %>% select((which(names(.) == "sample_type") +1):last_col())
+df <- df %>% select_if(is.numeric)
+
+```
+
+Let’s say we want to do PCA on all the numeric variables **after** the `sample_type`column:
+
+```{r}
+# Run the PCA:
+res.pca <- PCA(df,  graph = FALSE, scale.unit = TRUE)
+
+```
+
+### Eigenvalues and Variance
+
+First, we check how much variance each principal component explains:
+
+```{r}
+get_eig(res.pca)
+fviz_screeplot(res.pca, addlabels = TRUE, ylim = c(0, 50))
+
+eig.val <- get_eigenvalue(res.pca)
+eig.val
+
+```
+
+This tells us how many components we need to keep. If the first two components explain 80–90% of the variance, we’re in good shape.
+
+### Variables in PCA
+
+We can extract variable-level results with:
+
+```{r}
+var <- get_pca_var(res.pca)
+var
+```
+
+This gives us:
+
+-   `var$coord`: Coordinates (i.e., how variables align with PCs)
+
+-   `var$cos2`: Quality of representation
+
+-   `var$contrib`: Contribution to each principal component
+
+```{r}
+head(var$coord)[1:6,1:3]
+# Cos2: quality on the factore map
+head(var$cos2)[1:6,1:3]
+# Contributions to the principal components
+head(var$contrib)[1:6,1:3]
+
+```
+
+We can visualize this:
+
+```{r}
+# Color by cos2 values: quality on the factor map
+fviz_pca_var(res.pca, col.var = "cos2",
+             gradient.cols = c("#00AFBB", "#E7B800", "#FC4E07"), 
+             repel = TRUE # Avoid text overlapping
+             )
+fviz_cos2(res.pca, choice = "var", top=20) # cos2 = quality
+
+```
+
+And if you want a fancy contribution plot:
+
+Additionally, we’ll show how to reveal the most important variables that explain the variations in a data set.
+
+```{r}
+head(var$contrib, 4)
+library("corrplot")
+corrplot(var$contrib, is.corr=FALSE)  
+```
+
+### Individuals in PCA
+
+Just like with variables, we can extract PCA results for individuals (i.e., rows in your dataset):
+
+```{r}
+ind <- get_pca_ind(res.pca)
+ind
+# Coordinates of individuals
+head(ind$coord)
+# Quality of individuals
+head(ind$cos2)
+# Contributions of individuals
+head(ind$contrib)
+```
+
+Visualize them:
+
+```{r}
+fviz_pca_ind(res.pca, col.ind = "cos2", pointsize = "cos2", 
+             gradient.cols = c("#00AFBB", "#E7B800", "#FC4E07"),
+             repel = FALSE
+             )
+```
+
+*Note that, individuals that are similar are grouped together on the plot.*
+
+Or plot their quality and contribution:
+
+To create a bar plot of the quality of representation (cos2) of individuals on the factor map, you can use the function fviz_cos2() as previously described for variables:
+
+```{r}
+fviz_cos2(res.pca, choice = "ind", top=20) # cos2 = quality
+
+```
+
+To visualize the contribution of individuals to the first two principal components, type this:
+
+```{r}
+# Total contribution on PC1 and PC2
+
+fviz_contrib(res.pca, choice = "ind", axes = 1:5, top=20) # contribution
+```
+
+Want to color by groups? Just add a column to your metadata and pass it in:
+
+```{r}
+fviz_pca_ind(res.pca,
+             geom.ind = "point", # show points only (nbut not "text")
+             col.ind = comb_data$summarygrade, # color by groups
+             palette = c("#00AFBB", "#E7B800", "#FC4E07"),
+             addEllipses = TRUE, # Concentration ellipses
+             legend.title = "Groups"
+             )
+
+```
+
+```{r}
+
+fviz_pca_ind(res.pca, col.ind=comb_data$CXCL1) +
+  scale_color_viridis_b()
+
+```
+
+That’s a full walkthrough of PCA — how to compute it, extract results, and make beautiful plots in R using `FactoMineR`and `factoextra`. This kind of analysis is incredibly useful when you’re dealing with complex, high-dimensional data.
+
 In exercises 3A and B you will a deeper look at the diabetes data. To prepare for that, we will learn some extra ggplot tricks!
 
 ## Load packages
@@ -148,6 +336,7 @@ ggplot(df_sales, aes(x = .data[[plot_this]], y = sales_2022, color = Sex)) +
 We hear you say 'But that is cumbersome!'. Unfortunately we're neither the developers nor maintainers of `ggplot` so we all suffer together.
 
 Another solution is `aes_string`:
+
 ```{r}
 plot_this <- 'Name'
 
