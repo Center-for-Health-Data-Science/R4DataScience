@@ -75,7 +75,7 @@ plot(model)
 rmse <- sqrt(mean((y_test - y_pred)^2))
 ```
 
-11. Make a scatter plot to visualize your model fit.
+11. Make a scatter plot to visualize how the predicted values fit with the observed values.
 
 ::: {.callout-tip collapse="true"}
 ## Hint
@@ -85,7 +85,7 @@ Plot `y_test` against `y_pred`.
 
 ## Part 2: Logistic regression
 
-For this part we will use the joined diabetes, so lets load the joined dataset we created in exercise 1, e.g. `diabetes_join` or what you have named it. N.B if you did not manage to finish making this dataset or forgot to save it, you can find a copy here: `../out/diabetes_join.Rdata`.
+For this part we will use the joined diabetes data since it has a categorical outcome (Diabetes yes or no). We will not use the oral Glucose measurements as predictors since this is literally how you define diabetes, so we're loading the joined dataset we created in exercise 1, e.g. 'diabetes_join.xlsx' or what you have named it. N.B if you did not manage to finish making this dataset or forgot to save it, you can find a copy here: `../out/diabetes_join.Rdata`. Navigate to the file in the file window of Rstudio and click on it. Click "Yes" to confirm that the file can be loaded in your environment and check that it has happened.
 
 As the outcome we are studying, `Diabetes`, is categorical variable we will perform logistic regression. We select serum calcium levels (`Serum_ca2`), `BMI` and smoking habits (`Smoker`) as predictive variables.
 

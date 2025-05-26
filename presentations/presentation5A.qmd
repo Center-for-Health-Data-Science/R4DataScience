@@ -31,13 +31,14 @@ df_smoke
 Looking at the variables in my dataset I see that I have; daily cigarettes smoked (number) and life (in years). Both of these are numeric variables. I also have a variable named exercise, it seems that this variable might in fact be an ordinal factor variable, e.g. exercise amount 0, 1 or 2. Exercise is encoded as a numeric variable, so the first thing we will do is to convert it to a factor.
 
 ```{r}
-distinct(df_smoke, exercise)
+df_smoke %>% distinct(exercise)
 
 df_smoke <- df_smoke %>% 
-  mutate(exercise= as.factor(exercise))
+  mutate(exercise = as.factor(exercise))
 ```
 
 ## Linear Regression
+TODO: this model - these variables?
 
 We will use this to perform a linear regression.
 
@@ -51,10 +52,10 @@ Now, we will split our data into a test and a training set. There are numerous w
 # Set seed to ensure reproducibility
 set.seed(123)  
 
-#add an ID column to keep track of observations
+# add an ID column to keep track of observations
 df_smoke$ID <- 1:nrow(df_smoke)
 
-train <- df_smoke %>% sample_frac(.75)
+train <- df_smoke %>% sample_frac(0.75)
 nrow(train)
 head(train)
 
@@ -71,8 +72,6 @@ test  <- df_smoke %>%
 
 test  <- anti_join(df_smoke, train, by = 'ID') 
 
-
-
 nrow(test)
 head(test)
 ```
@@ -81,11 +80,11 @@ head(test)
 
 As stated above, a linear regression model generally has the form of:
 
-$$y=b_0+b_1*x_i$$
+$$y = b_0 + b_1 * x_i$$
 
 Where we refer to $b_0$ as the intercept and $b_1$ as the coefficient. There will typically be one coefficient for each predictor. The goal of modelling is to estimate the values of $b_0$ and all $b_i$.
 
-We need to tell R which of our variables is the outcome, $y$ and which predictors $x_i$ we want to include in the model. This is referred to in documentation as the model's **formula**. Have a look:
+We need to tell R which of our variables is the outcome, $y$, and which predictors, $x_i$, we want to include in the model. This is referred to in documentation as the model's **formula**. Have a look:
 
 ```{r eval=FALSE}
 #the formula is written like so:
@@ -122,23 +121,27 @@ The **Residuals** section summarizes the distribution of the residuals, which is
 
 The **Coefficients** table shows the estimated values for each coefficient including the intercept, along with their standard errors, t-values, and p-values. These help to determine the significance of each predictor.
 
-In the bottom section we have some information about how well model fits the training data.
+In the bottom section we have some information about how well the model fits the training data.
 
 The **Residual Standard Error (RSE)** provides a measure of accuracy as it represents the average size of the residuals.
 
 The **R-squared** value indicates the proportion of variance explained by the model, with the Adjusted R-squared accounting for the number of predictors to prevent overfitting.
 
-Finally, the **F-statistic** and its p-value test whether the model as a whole explains a significant portion of the variance in the response variable (the outcome $y$).
+Finally, the **F-statistic** and its p-value tests whether the model as a whole explains a significant portion of the variance in the response variable (the outcome, $y$).
 
 We can extract the `model` object's components with `$`:
 
 ```{r}
 model$coefficients
-
-hist(model$residuals, breaks = 30, main = 'Histogram of residuals', 
-     xlab = 'Residual')
-
 ```
+
+```{r}
+hist(model$residuals, 
+     breaks = 30, 
+     main = 'Histogram of residuals', 
+     xlab = 'Residual')
+```
+
 
 Slightly fancier plot:
 
@@ -149,9 +152,30 @@ plot(model)
 
 ### Model interpretation
 
+Plot to understand the model:
+```{r}
+# Predict life expectancy for each combination
+train$predicted_life <- predict(model, newdata = train)
+
+ggplot(train) + 
+  geom_point(aes(x = daily_cigarettes, 
+                 y = life, 
+                 color = exercise)) + 
+  geom_line(aes(x = daily_cigarettes, 
+                 y = predicted_life, 
+                 color = exercise)) + 
+  labs(title = "Predicted Life by Smoking & Exercise", 
+       x = "Daily cigarettes", 
+       y = "Life", 
+       color = "Exercise") + 
+  theme_bw()
+```
+
 What do these results mean? Our model formulation is:
 
-$$life=b_0+b_1*cigarettes$$
+TODO: Below where does excise come in? should it be $$life=b_0+b_1*cigarettes+b2_exercise$$ ?
+
+$$life = b_0 + b_1 * cigarettes$$
 
 And we estimated these values:
 
@@ -161,13 +185,14 @@ model$coefficients
 
 Therefore:
 
--   The intercept $b_0$ is the number of years we estimated a person in this dataset will live if they smoke 0 cigarettes and do not exercise. It is 77.6 years
+-   The intercept $b_0$ is the number of years we estimated a person in this dataset will live if they smoke 0 cigarettes and do not exercise. It is 77.6 years.
 
--   The coefficient of cigarettes per day is -0.29. This means for every 1 unit increase in cigarettes (one additional cigarette per day) the life expectancy decreases by 0.29 years. Similarly for the exercise variable, if you exercise your life expectancy will go up 1.1-2.4 years (assuming you smoke 0 cigarettes).
+-   The coefficient of cigarettes per day is -0.29. This means for every 1 unit increase in cigarettes (one additional cigarette per day) the life expectancy decreases by 0.29 years. Similarly for the exercise variable, if you exercise your life expectancy will go up 1.1-2.4 years compared to no exercise, independently of how many cigarettes you smoke.
+
 
 ### Model performance
 
-We now use our held out test data to evaluate the model performance. For that we will predict life expectancy for the 25 observations in `test` and compare with the actual values.
+We now use our held out test data to evaluate the model performance. For that we will predict life expectancy for the 25 observations in `test` and compare with the observed values.
 
 ```{r}
 #use the fitted model to make predictions for the test data
@@ -175,16 +200,18 @@ y_pred <- predict(model, test)
 y_pred
 ```
 
-Let's see how that fits with the known values.
+Let's see how the predicted values fit with the observed values.
 
 ```{r}
-pred <- tibble(pred = y_pred, real = test$life)
+pred <- tibble(pred = y_pred, 
+               real = test$life)
 
-ggplot(pred, aes(x=real, y=pred)) +
+ggplot(pred, 
+       aes(x=real, y=pred)) +
   geom_point()
 ```
 
-Not too bad! We usually calculate the root mean square error (rmse) between predictions and the known true values to numerically evaluate regression performance:
+Not too bad! We usually calculate the root mean square error (rmse) between predictions and the true observed values to numerically evaluate regression performance:
 
 ```{r}
 RMSE(pred$real,pred$pred)
@@ -194,7 +221,7 @@ Our predictions are on average 0.88 years 'off'.
 
 ## Classification
 
-Classification is the method we use when the outcome we are interested in is not continuous, but instead consists of two or more classes.
+Classification is the method we use when the outcome variable we are interested in is not continuous, but instead consists of two or more classes.
 
 In order to have a categorical outcome, we'll add a column to our toy data that describes whether the person died before age 75 or not.
 
@@ -217,7 +244,7 @@ set.seed(123)
 #add an ID column to keep track of observations
 df_smoke$ID <- 1:nrow(df_smoke)
 
-train <- df_smoke %>% sample_frac(.75)
+train <- df_smoke %>% sample_frac(0.75)
 
 table(train$early_death)
 
@@ -228,7 +255,7 @@ table(test$early_death)
 
 ```
 
-Luckily for us the division of the outcome variable classes between the train and test set is almost perfect. However, there may be cases where randomly splitting will not give you a balanced distribution, this is likely to happen if one class is much larger than the other(s). In these cases you should split your data in a non-random way, specifically ensuring a balanced train and test set.
+Luckily for us the division of the outcome variable classes between the train and test set is almost perfect. However, there may be cases where randomly splitting will not give you a balanced distribution. This is likely to happen if one class is much larger than the other(s). In these cases you should split your data in a non-random way, specifically ensuring a balanced train and test set.
 
 Now let's perform logistic regression to see whether there is an influence of the number of cigarettes and amount of exercise on the odds of the person dying before 75.
 
@@ -249,19 +276,20 @@ In a logistic regression model the link function is the logit. In a linear model
 
 In order to understand what that means we'll need a tiny bit of math.
 
+TODO: below, should it be: Our $y$ is either 0 (no, the person is not dead before 75) or 1 (yes, the person is dead before 75)
 Our $y$ is either 0 or 1 (the person is either dead or not). However we cannot model that so instead we will model the probability of the outcome being 1: $P(earlydeath == 1)$. Except probabilities are bounded between 0 and 1 which is mathematically difficult to impose (it means all $y$'s have to be between these two values and how are we gonna enforce that?) So instead, we will model the log-odds of early death:
 
 $$ y = \log(\frac{P(earlydeath == 1)}{1-P(earlydeath == 1)})$$
 
 It may not look like it but we promise you this $y$ is a well behaved number because it can be anywhere between - infinity and + infinity. So therefore our actual model is:
 
-$$ \log(\frac{P(earlydeath == 1)}{1-P(earlydeath == 1)} =  \beta * X$$
+$$ \log(\frac{P(earlydeath == 1)}{1-P(earlydeath == 1)} = \beta * X$$
 
-And if we want to know what the means for the probability of dying we just take the logit of $y$ :
+And if we want to know what this means for the probability of dying before 75 we just take the logit of $y$ :
 
 $$ P(earlydeath == 1) = \frac{1}{1+ e^{(-y)}} $$
 
-Which makes the link between what we're actually interested in (people's chances of dying) and what we're modelling the logit. End of math.
+Which makes the link between what we're actually interested in (people's chances of dying before 75) and what we're modelling the logit. End of math.
 
 ### Model formulation in R
 
@@ -273,8 +301,8 @@ summary(model_log)
 ```
 
 ### Model interpretation
-
-We see from looking at the summary that the coefficient of exercise level 1 and level 2 is not significant. This means that we are not confident that doing a high amount of exercise has a significant impact on the probability of dying before 75 compare to doing moderate or high amounts of exercise. This does not mean that there can be no influence, merely that we do not have enough data to detect it if it is there.
+TODO: two times "high amount of exercise". Where should the low amount of exercise go?
+We see from looking at the summary that the coefficient of exercise level 1 and level 2 is not significant. This means that we are not confident that doing a high amount of exercise has a significant impact on the probability of dying before 75 compared to doing moderate or high amounts of exercise. This does not mean that there can be no influence, merely that we do not have enough data to detect it if it is there.
 
 Are you surprised? Exercise level was significant when we modelled the number of years lived.
 
@@ -288,7 +316,7 @@ and (leaving out the exercise level since it's not significant):
 
 $$ y = \beta_0 + \beta_1 * cigs $$
 
-So how does $y$ change as $0.84 * cigs$ becomes larger? Let's agree that $y$ becomes larger. What does that mean for the probability of dying? Is $e^{(-y)}$ a large number if $y$ is large? Luckily we have a calculator handy
+So how does $y$ change as $0.84 * cigs$ becomes larger? Let's agree that $y$ becomes larger. What does that mean for the probability of dying before 75? Is $e^{(-y)}$ a large number if $y$ is large? Luckily we have a calculator handy:
 
 ```{r}
 #exp(b) is e^b in R
@@ -300,11 +328,11 @@ exp(-10)
 exp(-100)
 ```
 
-We see that $e^{(-y)}$ becomes increasingly smaller with larger $y$ which means that
+We see that $e^{(-y)}$ becomes increasingly smaller with larger $y$ which means that:
 
 $$ P(earlydeath == 1) = \frac{1}{1+ small} \sim \frac{1}{1} $$
 
-So the larger $y$ the smaller $e^{(-y)}$ and the closer we get to $P(earlydeath == 1)$ being 1. That was a lot of math for: If the coefficient is positive you increase the likelihood of getting the outcome, i.e. dying.
+So the larger $y$ the smaller $e^{(-y)}$ and the closer we get to $P(earlydeath == 1)$ being 1. That was a lot of math for: If the coefficient is positive you increase the likelihood of getting the outcome, i.e. dying before 75.
 
 ### Model comparison
 
@@ -312,7 +340,7 @@ So now we know how to fit linear models and interpret the results. But often the
 
 There are several ways to compare models. One is the likelihood ratio test which tests whether adding predictors significantly improves model fit by comparing the log-likelihoods of the two models. Another much used comparison is to look at the AIC (Akaike Information Criterion) or BIC (Bayesian Information Criterion). Lower AIC/BIC values generally indicate a better trade-off between model fit and complexity.
 
-For example we have made this model above:
+For example we made this logistic regression model above:
 
 ```{r}
 summary(model_log)
@@ -333,11 +361,13 @@ We can use an anova with the Chi-square test to compare the log-likelihood of th
 anova(model_log, model_reduced, test = 'Chisq')
 ```
 
-The p-value of the Chi-square test tells us if there is evidence that the difference in log-likelihoods is just significant. If it is not significant, we do not have evidence that one model is a better fit than the other and we would therefore choose the less complex model with fewer predictors since that gives us more statistical power and less overfitting.
+The p-value of the Chi-square test tells us if there is evidence that the difference in log-likelihoods is significant. If it is not significant, we do not have evidence that one model is a better fit than the other and we would therefore choose the less complex model with fewer predictors since that gives us more statistical power and less overfitting.
 
 ### Model Evaluation
 
-Lastly, lets evaluate our model using the test set, just like we did for the linear regression. First we will predict the outcome for the test set:
+TODO: should we go forward with the model_reduced since that performs better?
+
+Lastly, lets evaluate our model using the test set, just like we did for the linear regression. First, we will predict the outcome for the test set:
 
 ```{r}
 y_pred <- predict(model_log, newdata = test, type = 'response')
@@ -345,10 +375,9 @@ y_pred <- predict(model_log, newdata = test, type = 'response')
 y_pred 
 ```
 
-As you see the predictions we get out are not $yes$ or $no$, they are instead a probability (as discussed above), so, we will convert them to class labels.
+As you see, the predictions we get out are not $yes$ or $no$, they are instead a probability (as discussed above), so, we will convert them to class labels.
 
 ```{r}
-
 y_pred <- ifelse(as.numeric(y_pred) >= 0.5, 'yes', 'no') %>% 
   as.factor()
 ```
@@ -380,7 +409,7 @@ Lets load in the dataset
 
 ```{r}
 data('wine') #load dataset
-df_wine <- wine #convert to tibble
+df_wine <- wine %>% as_tibble() #convert to tibble
 df_wine
 ```
 
@@ -432,7 +461,8 @@ This is not super practical if we would like to visually inspect the clustering 
 We would like to see where our wine bottles and their clusters lie in a low-dimensional space. This can easily be done using the `fviz_cluster()`
 
 ```{r}
-fviz_cluster(kmeans_res, data = kmeans_df,
+fviz_cluster(object = kmeans_res, 
+             data = kmeans_df,
              palette = c("#2E9FDF", "#00AFBB", "#E7B800", "orchid3"), 
              geom = "point",
              ellipse.type = "norm", 
@@ -457,7 +487,7 @@ kmeans_df %>%
   fviz_nbclust(kmeans, method = "gap_stat")
 ```
 
-Both of these tell us there should be three clusters and we also know there are three cultivars of wine in the dataset. Let's redo k-means with three centroids.
+Both of these tell us that there should be three clusters and we also know that there are three cultivars of wine in the dataset. Let's redo k-means with three centroids.
 
 ```{r}
 # Set seed to ensure reproducibility
