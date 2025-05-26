@@ -6,7 +6,7 @@ project:
  output-dir: ../docs
 ---
 
-In this exercise you will practice your scripting in R. 
+In this exercise you will practice creating and applying user-defined functions.
 
 ## Getting started
 
@@ -24,172 +24,243 @@ diabetes_glucose
 
 ## User defined Functions
 
-In this part we will write some functions that create plots. 
+1. Create a function named `calculate_risk_score()`. 
 
-Since we want to be able to pass the name of the column to plot as a variable we will need to use the syntax for aliased column names. We showed how to do that in the end of presentation 3 if you need a refresher.  
+It should accept the following parameters:
 
+* BloodPressure
+* BMI
+* Smoking
+* PhysicalActivity
 
-1. Create a variable `plot_column` and assign "Age" to it. Now make a boxplot of that column. Switch `plot_column` to a different column in `diabetes_glucose`. Does it work?
+And it should calculate a risk score with the following rules:
 
-```{r}
-#the column we want to plot
-plot_column <- 'Age'
+* if BloodPressure is > 90, add 0.5
+* if Smoking is 'Smoker', add 1
+* if BMI is > 30, add 1. If BMI > 40, add 2.
+* if PhysicalActivity is > 110, substract 1
 
-#make the plot
-ggplot(diabetes_glucose, aes(y = !!sym(plot_column))) +
-  geom_boxplot()
+The function should return the final risk score. Test it with some different inputs to verify that it works according to the rules detailed above. 
 
-```
-
-2. Wrap your code for the boxplot into a function. The function should take two arguments: the dataframe to use and the name of the column to plot. Test your function. Add some customization to the plot like a theme or colors. 
-
-::: {.callout-tip collapse="true"}
-## Hint
-
-Functions are good at returning objects so make your plot into an object and return that.
-
-:::
 
 ```{r}
-make_boxplot <- function(df, plot_column){
+calculate_risk_score <- function(BloodPressure, BMI, Smoking,PhysicalActivity){
   
-  p <- ggplot(df, aes(y = !!sym(plot_column))) +
-    geom_boxplot(fill = "#03579A") +
-    labs(title = paste("Boxplot of", plot_column)) + 
-    theme_bw()
+  risk_score <- 0
   
-  return(p)
+  if (BloodPressure > 90){
+    risk_score <- risk_score + 0.5
+    }
+
+  if (Smoking == 'Smoker'){
+    risk_score <- risk_score + 1
+    }
+  
+  #BMI > 30 includes BMIs that are larger than 40, so we need to be careful of
+  #the order in which we check, or include that the BMI should be <= 40 in order 
+  #to add 1.   
+  
+ if (BMI > 40){
+    risk_score <- risk_score + 2
+    } 
+  else if( BMI > 30) {
+    risk_score <- risk_score + 1
+    } 
+  
+  if (PhysicalActivity > 110){
+    risk_score <- risk_score - 1
+    }
+    
+  return(risk_score)
   
 }
 
-make_boxplot(diabetes_glucose, 'Age')
 
 ```
 
-3. Add a check to your function whether the supplied column is numeric. Note here that you need to test the data type of the column you want to plot, not the data type of it's name. Confirm that your check works.
+
+```{r}
+#demo
+calculate_risk_score(120, 45, 'no', 115)
+calculate_risk_score(120, 45, 'Smoker', 115)
+calculate_risk_score(90, 35, 'Smoker', 60)
+
+```
+
+
+2. Add a check to your function whether the supplied parameters are numeric, except for Smoking which should be a factor or a character (you can check that too if you want to). Test that your check works correctly.
 
 
 ```{r error=TRUE}
-make_boxplot <- function(df, plot_column){
+calculate_risk_score <- function(BloodPressure, BMI, Smoking, PhysicalActivity){
   
-  if (!is.numeric(df[[plot_column]])){
-    stop('The column to plot must be numcerial.')
+  if (!is.numeric(BloodPressure) | !is.numeric(BMI) | !is.numeric(PhysicalActivity)) {
+    stop("BloodPressure, BMI, and PhysicalActivity must be numeric values.")
   }
   
-  p <- ggplot(df, aes(y = !!sym(plot_column))) +
-    geom_boxplot(fill = "#03579A") +
-    labs(title = paste("Boxplot of", plot_column)) + 
-    theme_bw()
+  if(! (is.character(Smoking) | is.factor(Smoking)) ){
+    stop("Smoking should be a factor or character.")
+  }
   
-  return(p)
+  risk_score <- 0
+  
+  if (BloodPressure > 90){
+    risk_score <- risk_score + 0.5
+    }
+
+  if (Smoking == 'Smoker'){
+    risk_score <- risk_score + 1
+    }
+  
+  #BMI > 30 includes BMIs that are larger than 40, so we need to be careful of
+  #the order in which we check, or include that the BMI should be <= 40 in order 
+  #to add 1.   
+  
+ if (BMI > 40){
+    risk_score <- risk_score + 2
+    } 
+  else if( BMI > 30) {
+    risk_score <- risk_score + 1
+    } 
+  
+  if (PhysicalActivity > 110){
+    risk_score <- risk_score - 1
+    }
+    
+  return(risk_score)
   
 }
 
-make_boxplot(diabetes_glucose, 'Sex')
-
 ```
-
-
-4. Write code to apply your boxplot function to each numerical column in the dataframe. There are different ways to achieve this.
 
 ```{r}
-# Our Idea: Find names of all numeric columns and plug them into a for loop
+calculate_risk_score('Hi', 35, 'Smoker', 60)
+```
 
-num_cols <- diabetes_glucose %>%
-  select(where(is.numeric)) %>%
-  colnames()
+```{r}
+calculate_risk_score(90, 35, 1, 60)
+```
 
-#check if correct columns found
-num_cols
+```{r}
+calculate_risk_score(90, 35, 'Smoker', 60)
+```
 
-#iterate over numeric columns and display plots
-for(col in num_cols){
-  my_plot <- make_boxplot(diabetes_glucose, col)
-  print(my_plot)
-  #alternative: if you want to extport the plots to files use something like:
-  #ggsave(paste0('../figures/boxplot_diabetes_',col,'.png'), width = 7, height = 5)
+3.  Write code to apply your `calculate_risk_score` to each row in `diabetes_glucose`. Using the appropriate column, i.e. `diabetes_glucose$BloodPressure` should be the `BloodPressure` given to the function and so on. Add the calculated risk score to diabetes_glucose as a column `Risk_score`.
+
+```{r}
+
+for (i in 1:nrow(diabetes_glucose)) {
+  
+  risk_score <- calculate_risk_score(BloodPressure = diabetes_glucose$BloodPressure[i], 
+                                     BMI = diabetes_glucose$BMI[i], 
+                                     Smoking = diabetes_glucose$Smoker[i], 
+                                     PhysicalActivity = diabetes_glucose$PhysicalActivity[i])
+  
+  diabetes_glucose[i, 'Risk_score'] <- risk_score
+  
 }
 
 ```
 
+```{r}
+diabetes_glucose
+```
 
-5. Create an R script file to contain your functions. Copy your functions there and remove them from your global environment with `rm(list="name_of_your_function")`. Now source the function R script in your quarto document and test that the functions work. 
+
+4. Now, run `calculate_risk_score` on each row in `diabetes_glucose` by using `mapply` instead. Confirm that your result is the same. 
+
+```{r}
+risk_scores <- mapply(FUN = calculate_risk_score, 
+                      BloodPressure = diabetes_glucose$BloodPressure, 
+                      BMI = diabetes_glucose$BMI,
+                      Smoking = diabetes_glucose$Smoker,
+                      PhysicalActivity = diabetes_glucose$PhysicalActivity)
+```
+
+A quick check confirms that the `risk_scores` vector contains the same as the column we previously added.
+
+```{r}
+all(risk_scores == diabetes_glucose$Risk_score)
+```
+
+5.  Create an R script file to contain your functions. Copy your functions there and remove them from your global environment with `rm(list="name_of_your_function")`. Now source the function R script in your quarto document and test that the functions work.
 
 ```{r}
 #remove function from global environment so we can test if it loads properly from the script
-rm(list = "make_boxplot")
+rm(list = "calculate_risk_score")
 ```
+
+Source the script we copied our `calculate_risk_score` function into:
 
 ```{r}
 source('solution4B.R')
 ```
 
+The function works still:
+
 ```{r}
-make_boxplot(diabetes_glucose, 'Age')
+calculate_risk_score(90, 35, 'Smoker', 60)
 ```
 
-
--------------------------------
+------------------------------------------------------------------------
 
 ## Extra exercises
 
-First, unnest diabetes_glucose so you get back the Measurement and Glucose columns. 
+These exercises will ask you to first perform some tidyverse operations. Once you succeeded, you should abstract your code into a function. 
+
+We start by unnesting diabetes_glucose so you get back the Measurement and Glucose columns:
 
 ```{r}
 diabetes_glucose_unnest <- diabetes_glucose %>%
   unnest(OGTT)
 ```
 
+e1. Calculate the mean of `Glucose (mmol/L)` for each measuring time point across all patients. You should obtain 3 values, one for 0, one for 60 and one for 120. 
 
-e1. Calculate the mean `Glucose (mmol/L)` for each measuring time point (i.e. one value for 0, 60 and 120). Now stratify this mean by a second variable, Sex. You should have 6 mean values since there are 6 groups (0_female, 0_male, 60_female, ect). Now, create a variable `category` to which you pass the name of the column to stratify by (e.g. `category <- 'Sex'`) and use `category` in your code instead of the literal variable name. 
+```{r}
+diabetes_glucose_unnest %>%
+  group_by(Measurement) %>%
+  summarise(mean_gluc = mean( `Glucose (mmol/L)`))
+```
+
+e2. Now we would like to stratify this mean further by a second variable, Sex. We would like to obtain 6 means: 0_female, 0_male, 60_female, 60_male, 120_female, 120_male.
+
+```{r}
+diabetes_glucose_unnest %>%
+  group_by(Measurement, Sex) %>%
+  summarize(glucose_mean = mean(`Glucose (mmol/L)`))
+```
+
+e3. Now we would like to abstract the name of the second column. Imagine we would like means per marriage status or per workplace instead of per sex. Create a variable `column <- 'Sex'` and redo what you did above but using `column` instead of the literal name of the column (Sex). This works in the same way as when plotting with a variable instead of the literal column name. Have a look at presentation 4A if you don't remember how to do it.
 
 
 ```{r}
-category <- 'Sex'
+column <- 'Sex'
 
 glucose_group_mean <- diabetes_glucose_unnest %>%
-  group_by(Measurement, !!sym(category)) %>%
-  summarize(glucose_mean = mean(`Glucose (mmol/L)`), .groups = "drop")
+  group_by(Measurement, !!sym(column)) %>%
+  summarize(glucose_mean = mean(`Glucose (mmol/L)`))
 
 glucose_group_mean
 ```
 
-e2. We would like to make a plot that shows the means you calculated above. Again, use your `category` variable instead of the literal column name. 
-
-
-```{r}
-glucose_group_mean %>%
-    ggplot(aes(x = Measurement,
-               y = glucose_mean, 
-               color = !!sym(category),
-               group = !!sym(category))) +
-    geom_point() +
-    geom_line()
-```
-
-e3. Wrap the code from e1 and e2 into a function `show_mean_by_catergory` so that you can call: 
-`show_mean_by_catergory(diabetes_glucose_unnest, 'Sex')` and it will make you the plot. Test with different columns. 
+e4. Now, make your code into a function `calc_mean_meta()` that can calculate means based on different meta data columns. It should be called like so `calc_mean_meta('Sex')` and give you the same result as before. Try it on other metadata columns in diabetes_glucose_unnest too!
 
 ```{r}
-show_mean_by_catergory <- function(df,category){
+calc_mean_meta <- function(column){
+  glucose_group_mean <- diabetes_glucose_unnest %>%
+    group_by(Measurement, !!sym(column)) %>%
+    summarize(glucose_mean = mean(`Glucose (mmol/L)`))
   
-  glucose_group_mean <- df %>%
-    group_by(Measurement, !!sym(category)) %>%
-    summarize(glucose_mean = mean(`Glucose (mmol/L)`), .groups = "drop")
-  
-  p <-glucose_group_mean %>%
-    ggplot(aes(x = Measurement,
-               y = glucose_mean, 
-               color = !!sym(category),
-               group = !!sym(category))) +
-    geom_point() +
-    geom_line()
-  
-  return(p)
+  return(glucose_group_mean)
 }
 ```
 
 ```{r}
-show_mean_by_catergory(diabetes_glucose_unnest, 'Smoker')
+calc_mean_meta('Sex')
 ```
 
+
+```{r}
+calc_mean_meta('Work')
+```

@@ -93,7 +93,7 @@ weight_kg <- 85
 height_m <- 1.75
 ```
 
-Fpr some BMI should only be calculated for individuals over the age of 18.
+If we want to calculate BMI only for individuals over the age of 18:
 
 ```{r}
 if (age >= 18){
@@ -170,7 +170,7 @@ for (id in rownames(df)) {
 }
 ```
 
-Add BMI to the data frame.
+Adding BMI to the data frame.
 
 ```{r}
 for (id in rownames(df)){
@@ -202,7 +202,8 @@ df
 
 ## Plotting in functions
 
-Define function that creates boxplot
+Define function that creates boxplots
+
 ```{r}
 my_boxplot <- function(dataframe, variable = ''){
   
@@ -218,17 +219,23 @@ my_boxplot <- function(dataframe, variable = ''){
 ```
 
 Look at column names of df
+
 ```{r}
 colnames(df)
 colnames(df)[1]
 ```
 
-Run function on age. 
+Run function on age.
+
+```{r}
+my_boxplot(dataframe = df, 'age')
+```
+
+Or equivalently
+
 ```{r}
 my_boxplot(dataframe = df, colnames(df)[1])
 ```
-
-
 
 ## Error handling in user-defined functions
 
@@ -315,7 +322,7 @@ calculate_bmi_2(weight_kg = 67,
 
 ## Apply functions
 
-If you want to run a function multiple times — especially across elements in a vector, matrix, or list — R provides a powerful set of tools called the **apply** family of functions. These are often used instead of writing explicit for-loops and we will go through three of them here. 
+If you want to run a function multiple times --- especially across elements in a vector, matrix, or list --- R provides a powerful set of tools called the **apply** family of functions. These are often used instead of writing explicit for-loops and we will go through three of them here.
 
 ### `apply()`
 
@@ -328,7 +335,8 @@ apply(df, 2, mean)  # mean of each column
 
 ### `lapply()`
 
-Applies a function to each element of a list (or vector) and returns a **l**ist. 
+Applies a function to each element of a list (or vector) and returns a **l**ist.
+
 ```{r}
 lapply(FUN = sum, 
        list(c(1, 2, 3, 4, 6),
@@ -338,11 +346,10 @@ lapply(FUN = sum,
 
 ### `mapply()`
 
-Applies a function to **m**ultiple inputs in parallel — like a for loop across **m**ultiple vectors. You can also use `mapply` as an alternative to calling the function in a for-loop (`calculate_bmi_2(weight_kg[i], height_m[i]`) for each row).
+Applies a function to **m**ultiple inputs in parallel --- like a for loop across **m**ultiple vectors. You can also use `mapply` as an alternative to calling the function in a for-loop (`calculate_bmi_2(weight_kg[i], height_m[i]`) for each row).
+
 ```{r}
 mapply(FUN = calculate_bmi_2, 
        weight_kg = df$weight_kg, 
        height_m = df$height_m)
 ```
-
-

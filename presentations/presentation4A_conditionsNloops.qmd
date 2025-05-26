@@ -12,12 +12,11 @@ In this section we will learn more about flow control and how to make more compl
 library(tidyverse)
 ```
 
+## If-else statments
 
-## If-else statments 
+If-else statements are essential if you want your program to do different things depending on a condition. Here we see how to code them in R.
 
-If-else statements are essential if you want your program to do different things depending on a condition. Here we see how to code them in R. 
-
-First define some variables.  
+First define some variables.
 
 ```{r}
 num1 <- 8
@@ -46,10 +45,9 @@ if (num1 > num2){
 print(statement)
 ```
 
-We can add an `else if` to test multiple conditions. `else` is what applies when all previous checks where `FALSE`. 
+We can add an `else if` to test multiple conditions. `else` is what applies when all previous checks where `FALSE`.
 
-Now we have three possible outcomes: 
-
+Now we have three possible outcomes:
 
 ```{r}
 #try with different values for num2
@@ -66,9 +64,10 @@ if (num1 > num2){
 print(statement)
 ```
 
-### And and or operations 
+### And and or operations
 
 Check values of num1 and num2
+
 ```{r}
 num1
 num2
@@ -78,6 +77,7 @@ num2
 ```
 
 You can give multiple conditions and check if both of them are true with the `&` (and-operation).
+
 ```{r}
 if (num1 < 10 & num2 < 10) {
   print('Both numbers are lower than 10')
@@ -86,7 +86,8 @@ if (num1 < 10 & num2 < 10) {
 }
 ```
 
-You can also check if either one or the other is true with the `|` (or-operation).  
+You can also check if either one or the other is true with the `|` (or-operation).
+
 ```{r}
 if (num1 < 10 | num2 < 10) {
   print('One or both of the numbers are lower than 10.')
@@ -95,7 +96,10 @@ if (num1 < 10 | num2 < 10) {
 }
 ```
 
-If you add more conditions, paraphrases can be useful. 
+When you use complex conditions it can be necessary to use parenthesis to show what should be evaluated first.
+
+In the example below, we first evaluate whether num1 or num2 is larger than 10, and we will receive a `TRUE` or `FALSE` answer. We then combine that with the condition that num3 shoud be exactly 10.
+
 ```{r}
 # num1 <- 8
 # num2 <- 5
@@ -115,7 +119,7 @@ if ((num1 < 10 | num2 < 10) & num3 == 10) {
 
 ### Defining a for loop
 
-Many functions in R are already vectorized, i.e. 
+Many functions in R are already vectorized, i.e.
 
 ```{r}
 df <- tibble(num1 = 1:10)
@@ -125,9 +129,9 @@ df$num2 <- df$num1 * 10
 df
 ```
 
-The above code applies `* 10` to each element of column `num1` without us having to invoke a loop. 
+The above code applies `* 10` to each element of column `num1` without us having to invoke a loop.
 
-But sometimes we want to iterate over the elements manually because the situation requires it. For that case we can use a `for` loop. 
+But sometimes we want to iterate over the elements manually because the situation requires it. For that case we can use a `for` loop.
 
 We first define a list containing both numeric and character elements.
 
@@ -151,7 +155,7 @@ for (THIS_VARIABLE in list1) {
 }
 ```
 
-After you loop through a vector or a list, the value of the loop variable is always the last element of your vector. The variable is hence a global variable. 
+After you loop through a vector or a list, the value of the loop variable is always the last element of your vector. The variable is hence a global variable.
 
 ```{r}
 THIS_VARIABLE
@@ -162,6 +166,7 @@ THIS_VARIABLE
 There are two loop control statements we can use to: `next` and `break`
 
 `next` jumps to the next iteration. Here, we print every element in list1 and when the element is 'hello' we jump to the next iteration.
+
 ```{r}
 for (element in list1) {
   if(element == 'hello'){
@@ -172,7 +177,8 @@ for (element in list1) {
 }
 ```
 
- `break` ends the loop before finishing. Here, we print every element in list1 and when the element is 'hello' we break (end) the loop.
+`break` ends the loop before finishing. Here, we print every element in list1 and when the element is 'hello' we break (end) the loop.
+
 ```{r}
 for (element in list1) {
   if(element == 'hello'){
@@ -182,7 +188,6 @@ for (element in list1) {
   print(element)
 }
 ```
-
 
 ### Which data constructs are iterable in R?
 
@@ -220,7 +225,6 @@ for (col in my_df) {
 
 ```
 
-
 For row-wise iteration you can for example use the row index:
 
 ```{r}
@@ -233,7 +237,9 @@ for (i in 1:nrow(my_df)) {
 ```
 
 ### Plotting in loops
+
 Create data
+
 ```{r}
 plot_data_1 <- tibble(Name = c('Marie', 'Marie', 'Emma', 'Sofie', 'Sarah', 'Sofie', 'Hannah', 'Lise', 'Emma'),
                       Class = c('1.A', '1.A', '1.A', '1.A', '1.B', '1.B', '1.B', '1.C', '1.C'),
@@ -242,7 +248,9 @@ plot_data_1 <- tibble(Name = c('Marie', 'Marie', 'Emma', 'Sofie', 'Sarah', 'Sofi
 
 head(plot_data_1, n = 2)
 ```
+
 Barplot of each variable.
+
 ```{r}
 ggplot(plot_data_1, 
        aes(x = Name)) + 
@@ -257,7 +265,8 @@ ggplot(plot_data_1,
 
 Let's do it in a for loop!
 
-First, let's check that the variables we are interested in are iterated correctly. 
+First, let's check that the variables we are interested in are iterated correctly.
+
 ```{r}
 for (col in colnames(plot_data_1)){
   print(col)
@@ -265,6 +274,7 @@ for (col in colnames(plot_data_1)){
 ```
 
 Great! Now, let's add the plot function to our for loop.
+
 ```{r}
 for (col in colnames(plot_data_1)){
   p <- ggplot(plot_data_1, 
@@ -279,8 +289,8 @@ That was not what we wanted...
 
 Wrap the `!!sym()` function around the string formatted column name when passing it in aesthetic.
 
-* `sym()` turns a string into a symbol (column reference)
-* `!!` unquotes the symbol to use it in `aes()`
+-   `sym()` turns a string into a symbol (column reference)
+-   `!!` unquotes the symbol to use it in `aes()`
 
 ```{r}
 for (col in colnames(plot_data_1)){
@@ -294,7 +304,6 @@ for (col in colnames(plot_data_1)){
 
 `!!sym(col)` should also be used for other tidyverse operations (`filter`, `select`, ...) where you pass the column names in string format.
 
-
 ### If-else in loops
 
 We can now use what we have learned to loop through our `list1` and multiply all numeric values with 10:
@@ -303,7 +312,6 @@ We can now use what we have learned to loop through our `list1` and multiply all
 #to remember contents:
 list1
 ```
-
 
 ```{r}
 for (element in list1) {
@@ -316,18 +324,20 @@ for (element in list1) {
 }
 ```
 
-**Note:** that this does not work with a vector, i.e. `vec <- c(1,2,'hello')` because vectors can only contain one data type so all elements of `vec` are characters. 
+**Note:** that this does not work with a vector, i.e. `vec <- c(1,2,'hello')` because vectors can only contain one data type so all elements of `vec` are characters.
 
 #### Save results
 
-Let's say we want to save the non-numeric values. We can do this in a list. 
+Let's say we want to save the non-numeric values. We can do this in a list.
 
 Initiate list for saving non-numeric values.
+
 ```{r}
 non_numeric_values <- list()
 ```
 
 Append the non-numeric values to the list.
+
 ```{r}
 for (element in list1) {
   if (is.numeric(element)){
@@ -339,23 +349,26 @@ for (element in list1) {
 ```
 
 View list.
+
 ```{r}
 non_numeric_values
 ```
 
-## While-loop 
+## While-loop
 
 While-loops are not commonly used in R since they are ineffective in this language. We will demonstrate how they work since they are common in other programming languages.
 
-Say we want to create a list where each element is the letter "A" followed by a number, starting from 0 and going up to 99 We can do this using a while-loop that keeps appending "A_<count>" to a list until the count reaches 100:
+Say we want to create a list where each element is the letter "A" followed by a number, starting from 0 and going up to 99 We can do this using a while-loop that keeps appending "A\_<count>" to a list until the count reaches 100:
 
-First, let's initially the counter `count` that will count the number of times we go through the while-loop. 
+First, let's initially the counter `count` that will count the number of times we go through the while-loop.
+
 ```{r}
 count <- 0
 list2 <- list()
 ```
 
 Now, we can make our while-loop. In each iteration we add 1 to the counter.
+
 ```{r}
 while (count < 100) {
   list2 <- append(list2, paste('A_', count, sep = ''))
@@ -364,11 +377,13 @@ while (count < 100) {
 ```
 
 Check count
+
 ```{r}
 count
 ```
 
-Check length of list as well as the first and the last element. 
+Check length of list as well as the first and the last element.
+
 ```{r}
 length(list2) 
 
@@ -377,11 +392,8 @@ list2[[length(list2)]]
 ```
 
 They way you would do it in R:
+
 ```{r}
 list3 <- paste('A_', 1:100, sep = '') %>% as.list()
 # list3
 ```
-
-
-
-
