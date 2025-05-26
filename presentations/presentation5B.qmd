@@ -8,7 +8,7 @@ project:
 
 ## Part 1: Penalized Regression
 
-$Elastic Net regression$ is part of the family of $penalized regressions$, which also includes $Ridge regression$ and $LASSO regression$. Penalized regressions are especially useful when dealing with many predictors, as they help eliminate less informative ones while retaining the important predictors, making them ideal for high-dimensional datasets. If you are interested in knowing more about penalized regressions, you can have a look at this excellent tutorial from [Datacamp](https://www.datacamp.com/tutorial/tutorial-ridge-lasso-elastic-net).
+$Elastic$ $Net$ $regression$ is part of the family of $penalized$ $regressions$, which also includes $Ridge$ $regression$ and $LASSO$ $regression$. Penalized regressions are useful when dealing with many predictors, as they help eliminate less informative ones while retaining the important predictors, making them ideal for high-dimensional datasets. If you are interested in knowing more about penalized regressions, you can have a look at this excellent tutorial from [Datacamp](https://www.datacamp.com/tutorial/tutorial-ridge-lasso-elastic-net).
 
 In linear regression, we estimate the relationship between predictors $X$ and a outcome $Y$ using parameters $β$, chosen to minimize the residual sum of squares (RSS). Two key properties of these $β$ estimates are bias (the difference between the true parameter and the estimate) and variance (how much the estimates vary across different samples). While OLS (Ordinary Least Squares) gives unbiased estimates, it can suffer from high variance - especially when predictors are numerous or highly correlated — leading to poor predictions.
 
@@ -16,19 +16,19 @@ To address this, we can introduce regularization, which slightly biases the esti
 
 ![](../figures/PenalizedRegression.png){fig-align="center"}
 
-$Ridge Regression$ = L2 penalty (adds the sum of the squares of the coefficients to the loss function). It discourages large coefficients by penalizing their squared magnitudes, shrinking them toward zero. This reduces overfitting while keeping all variables in the model.
+$Ridge$ $Regression$ = L2 penalty (adds the sum of the squares of the coefficients to the loss function). It discourages large coefficients by penalizing their squared magnitudes, shrinking them toward zero. This reduces overfitting while keeping all variables in the model.
 
-$Lasso Regression$ = L1 penalty (adds the sum of the absolute values of the coefficients to the loss function). This penalty encourages sparsity, causing some coefficients to become exactly zero for large λs, thereby performing variable selection.
+$Lasso$ $Regression$ = L1 penalty (adds the sum of the absolute values of the coefficients to the loss function). This penalty encourages sparsity, causing some coefficients to become exactly zero for large λs, thereby performing variable selection.
 
-$Elastic Net$ combines L1 AND L2 penalties to balance variable selection and coefficient shrinkage. One of the key advantages of Elastic Net over other types of penalized regression is its ability to handle multicollinearity and situations where the number of predictors exceeds the number of observations.
+$Elastic$ $Net$ combines L1 AND L2 penalties to balance variable selection and coefficient shrinkage. One of the key advantages of Elastic Net over other types of penalized regression is its ability to handle multicollinearity and situations where the number of predictors exceeds the number of observations.
 
-Lambda (λ) controls the strength of the penalty. As λ increases, variance decreases but bias increases, raising the key question: how much bias are we willing to accept to reduce variance?
+$Lambda$ $(λ)$ controls the strength of the penalty. As $λ$ increases, variance decreases but bias increases, raising the key question: how much bias are we willing to accept to reduce variance?
 
 ![](../figures/penalty_regularization.png){fig-align="center"}
 
 ### Elastic Net regression
 
-Load th R packages needed for analysis:
+Load the R packages needed for analysis:
 
 ```{r, warning=FALSE, message=FALSE}
 library(tidyverse)
@@ -38,15 +38,15 @@ library(MASS)
 library(randomForest)
 ```
 
-For this exercise we will use a dataset from patients with Heart Disease. Information on the columns in the dataset can be found [here](https://www.kaggle.com/datasets/johnsmith88/heart-disease-dataset).
+For this exercise we will use a dataset from patients with Heart Disease. Information on the columns in the dataset can be found [here](https://www.kaggle.com/datasets/redwankarimsony/heart-disease-data).
 
 ```{r, warning=FALSE, message=FALSE}
 HD <- read_csv("../data/HeartDisease.csv")
 
-HD
+head(HD)
 ```
 
-Firstly, lets convert some of the variables which apper to be encoded as numeric datatypes to factors:
+Firstly, lets convert some of the variables which are encoded as numeric datatypes but should be factors:
 
 ```{r}
 
@@ -56,7 +56,7 @@ facCols <- c("sex",
              "restElecCardio", 
              "exerciseAngina", 
              "slopePeakExST", 
-             "ThalStressRes", 
+             "DefectType", 
              "heartDisease")
 
 
@@ -65,7 +65,7 @@ HD <- HD %>%
 
 ```
 
-Let do some summary statistics to have a look at the types of variables we have. First the numeric columns.
+Let's do some summary statistics to have a look at the variables we have in our dataset. Firstly, the numeric columns. We can get a quick overview of variable distributions and ranges with some histograms.
 
 ```{r}
 # Reshape data to long format for ggplot2
@@ -84,22 +84,27 @@ ggplot(long_data, aes(x = value)) +
   theme_minimal()
 ```
 
-In opposition to hypothesis tests and classic linear regression, penalized regression has no assumption that predictors, nor model residuals must be normally distributed, so we do not have to test that, yeah! However, it does still assume that the relationship between predictors and the response is linear in the parameters and that observations are independent from one another.
+In opposition to hypothesis tests and classic linear regression, penalized regression has no assumption that predictors, nor model residuals, must be normally distributed so we do not have to test that, yeah! However, it does still assume that the relationship between predictors and the response is linear and that observations are independent from one another.
 
-Importantly, penalized regression can be sensitive to large differences in the range of numeric/integer variables and it does not like missing values, so lets remove missing (if any) and scale our data.
+Importantly, penalized regression can be sensitive to large differences in the range of numeric/integer variables and it does not like missing values, so lets remove missing (if any) and scale our numeric variables.
 
 ```{r}
-HD <- HD %>%
-  drop_na(.) %>%
+HD_EN <- HD %>%
+  drop_na(.) 
+
+```
+
+```{r}
+HD_EN <-HD %>%
   mutate(across(where(is.numeric), scale))
 
 ```
 
-Now lets have a look at our categorical/factor variables and their levels.
+Now, lets have a look at our categorical/factor variables. The important thing to check is the balance of the number of observations for each level of a variable.
 
 ```{r}
 
-HD %>%
+HD_EN %>%
   dplyr::select(where(is.factor)) %>%
   pivot_longer(everything(), names_to = "Variable", values_to = "Level") %>%
   count(Variable, Level, name = "Count")
@@ -107,31 +112,31 @@ HD %>%
 
 ```
 
-From our count table above we see that variables `ThalStressRes, chestPainType, restElecCardio, and slopePeakExST` are unbalanced. Especially `ThalStressRes and restElecCardio` are problematic with only 7 and 15 observations for one of the factor levels. To avoid issues when modelling, we will filter out these observations and re-level these two variables.
+From our count table above we see that variables `DefectType, chestPainType, restElecCardio, and slopePeakExST` are unbalanced. Especially `DefectType and restElecCardio` are problematic with only 7 and 15 observations for one of the factor levels. To avoid issues when modelling, we will filter out these observations and re-level these two variables.
 
 ```{r}
-HD <- HD %>% 
-  filter(ThalStressRes != 0 & restElecCardio !=2) %>%
-  mutate(ThalStressRes= as.factor(as.character(ThalStressRes)), 
+HD_EN <- HD_EN %>% 
+  filter(DefectType != 0 & restElecCardio !=2) %>%
+  mutate(DefectType= as.factor(as.character(DefectType)), 
          restElecCardio = as.factor(as.character(restElecCardio)))
 ```
 
-We will use `heartDisease` (0 = no, 1 = yes) as the model outcome. Now, we split our dataset into train and test set, you should have 70% of the data in the training set and 30% in the test set. To keep track of our train and test samples, we will make an ID variable. Importantly, afterwards we must again ensure that all levels of each factor variable are represented in both sets.
+We will use `heartDisease` (0 = no, 1 = yes) as the outcome.
+
+We split our dataset into train and test set, we will keep 70% of the data in the training set and take out 30% for the test set. To keep track of our train and test samples, we will make an ID variable. Importantly, afterwards we must again ensure that all levels of each factor variable are represented in both sets.
 
 ```{r}
+# Add ID column
 
-#df_wine <- df_wine %>%
-#  mutate(ID = paste0("T", 1:nrow(df_wine)))
-
-HD <- HD %>% 
-  mutate(ID = paste0("W", 1:nrow(HD)))
+HD_EN <- HD_EN %>% 
+  mutate(ID = paste0("W", 1:nrow(HD_EN)))
 
 
 # Set seed
 set.seed(123)
 
 # Training set
-train <- HD %>% 
+train <- HD_EN %>% 
   sample_frac(0.70) 
 
 # Check group levels
@@ -143,7 +148,7 @@ train %>%
 
 ```{r}
 # Test sett
-test  <- anti_join(HD, train, by = 'ID') 
+test  <- anti_join(HD_EN, train, by = 'ID') 
 
 # Check group levels
 test %>%
@@ -168,7 +173,7 @@ y_test <- test %>%
 
 ```
 
-Netx, we remove the response variable `heartDisease` from the train and test set, as well as `ID` as we should obviously not use this for training or testing.
+Next, we remove the response variable `heartDisease` from the train and test set, as well as `ID` as we should obviously not use this for training or testing.
 
 ```{r}
 train <- train %>% 
@@ -181,7 +186,7 @@ test <- test %>%
 
 Another benefit of a regularized regression, such as Elastic Net, is that this type of model can accommodate a categorical -or a numeric variable as outcome, and handle a mix of these types as predictors, making it super flexible.
 
-However, if you do use categorical variables as your predictors within the `glmnet()` function, you need ensure that your variables are `Dummy-coded (one-hot encoded)`. `Dummy-coding` means that categorical levels are converted into binary numeric indicators. You can do this 'manually', but there is a super easy way to do it with `model.matrix()` as shown below.
+However, if you do use categorical variables as your predictors within the `glmnet()` function, you need to ensure that your variables are `Dummy-coded (one-hot encoded)`. `Dummy-coding` means that categorical levels are converted into binary numeric indicators. You can do this 'manually', but there is a super easy way to do it with `model.matrix()` as shown below.
 
 Lets create the model matrix needed for input to `glmnet()` and `cv.glmnet()` functions:
 
@@ -192,17 +197,17 @@ head(modTrain)
 modTest <- model.matrix(~ .- 1, data = test)
 ```
 
-Now we can create your Elastic Net Regression model with `glmnet()`.
+Let's create your Elastic Net Regression model with `glmnet()`.
 
-The parameter $α$ essentially tells `glmnet()` whether we are performing `Ridge Regression` ($α$ = 0), `LASSO regression` ($α$ = 1) or `Elastic Net regression` (0 \< $α$ \< 1 ). Furthermore, like for logistic regression we must specify if type our outcome is; `binominal`, `multinomial`, `gaussian`, etc.
+The parameter $α$ essentially tells `glmnet()` whether we are performing `Ridge Regression` ($α$ = 0), `LASSO regression` ($α$ = 1) or `Elastic Net regression` (0 \< $α$ \< 1 ). Furthermore, like for logistic regression we must specify if our outcome is; `binominal`, `multinomial`, `gaussian`, etc.
 
 ```{r}
 EN_model <- glmnet(modTrain, y_train, alpha = 0.5, family = "binomial")
 ```
 
-As you may recall from the first part of this presentation that penalized regressions have a hyperparameter, λ, which determines the strength of shrinkage of the coefficients. We can use `k-fold cross-validation` to find the value of lambda that minimizes the cross-validated prediction error. For classification problems it's usually binominal deviance, which is related to log-loss (a measure of how well predicted probabilities match true class labels).
+As you may recall from the first part of this presentation penalized regressions have a hyperparameter, $λ$, which determines the strength of shrinkage of the coefficients. We can use `k-fold cross-validation` to find the value of lambda that minimizes the cross-validated prediction error. For classification problems such as the one we have here the prediction error is usually binominal deviance, which is related to log-loss (a measure of how well predicted probabilities match true class labels).
 
-Lets use `cv.glmnet()` to attain the best value of the hyperparameter lambda (λ). Remember to set a seed for reproducible results.
+Lets use `cv.glmnet()` to attain the best value of the hyperparameter lambda ($λ$). We should remember to set a seed for reproducible results.
 
 ```{r}
 set.seed(123)
@@ -215,17 +220,24 @@ We can plot all the values of lambda tested during cross validation by calling `
 plot(cv_model)
 
 bestLambda = cv_model$lambda.min
+
 ```
 
-Now, lets see how well your model performed.
+The plot shows how the model's prediction error changes with different values of lambda $λ$. It helps identify the largest λ we can choose before the penalty starts to hurt performance - too much shrinkage can remove important predictors, increasing prediction error.
 
-Predict if a individual is likely to have heart disease using your model and your test set.
+```{r}
+bestLambda
+
+log(bestLambda)
+```
+
+Now, lets see how well your model performs. Lets predict if a individual is likely to have heart disease using your model and your test set.
 
 ```{r}
 y_pred <- predict(EN_model, s = bestLambda, newx = modTest, type = 'class')
 ```
 
-Just like for the logistic regression model we can calculate the accuracy of the prediction by comparing it to `y_test` with `confusionMatrix()`. 
+Just like for the logistic regression model we can calculate the accuracy of the prediction by comparing it to `y_test` with `confusionMatrix()`.
 
 ```{r}
 y_pred <- as.factor(y_pred)
@@ -233,26 +245,34 @@ y_pred <- as.factor(y_pred)
 caret::confusionMatrix(y_pred, y_test)
 ```
 
+Our model performs relatively well with a Balanced Accuracy of 0.84.
+
+Just like with linear or logistic regression we can pull out the coefficients (weights) from our model to asses which variable(s) are the most explanatory for heart disease. We use the function `coef()` for this.
+
 ```{r}
 coeffs <- coef(EN_model, s = bestLambda)
 
-# Convert coefficients to a data frame for easier viewing
-coeffsDat <- as.data.frame(as.matrix(coeffs)) %>% 
-  rownames_to_column(var = 'VarName')
- 
+coeffs
 ```
 
+First of all we see that none of our explanatory variables have been penalized so much that they have been removed, although some like `age` contribute very little to the model.
+
+Lets order the coefficients by size and plot them to get an easy overview. First we do a little data wrangling to set up the dataset.
+
 ```{r}
-# Make dataframe ready for plotting, remove intercept and coeffcients that are zero
-coeffsDat <- coeffsDat %>% 
-  mutate(AbsImp = abs(s1)) %>%
-  arrange(AbsImp) %>%
-  mutate(VarName = factor(VarName, levels=VarName)) %>%
-  filter(AbsImp > 0 & VarName != "(Intercept)")
 
+coeffsDat <- as.data.frame(as.matrix(coeffs)) %>% 
+  rownames_to_column(var = 'VarName') %>%
+  arrange(desc(s1)) %>%  
+  filter(VarName != "(Intercept)") %>%
+  mutate(VarName = factor(VarName, levels=VarName))
+```
 
+Now we can make a bar plot to visualize our results.
+
+```{r}
 # Plot
-ggplot(coeffsDat, aes(x = VarName, y = AbsImp)) +
+ggplot(coeffsDat, aes(x = VarName, y = s1)) +
   geom_bar(stat = "identity", fill = "#9395D3") +
   coord_flip() +
   labs(title = "Feature Importance for Elastic Net", 
@@ -261,6 +281,150 @@ ggplot(coeffsDat, aes(x = VarName, y = AbsImp)) +
   theme_classic()
 ```
 
-## Part 2: ML classification
+From the coefficients above it seem like `Chest Pain` of any type (0 vs 1,2 or 3) is a strong predictor of the outcome, e.g. Heart Disease. In opposition, having a `Defect Type 3` significantly lowers the predicted probability of belonging to the event class (1 = Heart Disease). Specifically, it decreases the log-odds of the outcome. A large negative value like this suggests that `Defect Type 3` is strongly associated with a lower likelihood of an event.
 
-Random Forest is an ensemble machine learning method that builds multiple decision trees and combines their predictions to improve accuracy and robustness. By averaging the results of many trees, it reduces overfitting and increases generalization, making it particularly effective for complex, nonlinear relationships. One of its key strengths is its ability to handle large datasets with many features, while also providing insights into feature importance.
+## Part 2: Random Forest
+
+In this section, we will train a$Random$ $Forest$ $(RF)$ model using the same dataset and outcome as above. $Random$ $Forest$ is a simple ensemble machine learning method that builds multiple decision trees and combines their predictions to improve accuracy and robustness. By averaging the results of many trees, it reduces overfitting and increases generalization, making it particularly effective for complex, $non-linear$ relationships. One of its key strengths is its ability to handle large datasets with many features, while also providing insights into feature importance.
+
+![](../figures/RandomForest.png){fig-align="center"}
+
+Why do we want to try a $(RF)$? Unlike linear, logistic, or elastic net regression, RF does not assume a linear relationship between predictors and the outcome — it can naturally capture non-linear patterns and complex interactions between variables.
+
+Another advantage is that RF considers one predictor at a time when splitting, making it robust to differences in variable scales and allowing it to handle categorical variables directly, without requiring dummy coding.
+
+The downside is to a RF model is that it typically require a reasonably large sample size to perform well and can be less interpretable compared to regression-based approaches.
+
+### RF Model
+
+Luckily, we already have a good understanding of our dataset so we won't spend time on exploratory data analysis. We have the data loaded already:
+
+```{r}
+head(HD)
+```
+
+For RF there is no need to scale numeric predictors or dummy code categorical predictors However, we do need to covert the outcome variable `heartDisease` from binary (0 or 1) to a category name (this is required by the function we will use for random forest later).
+
+```{r}
+
+# Mutate outcome to category and add ID column for splitting
+HD_RF <- HD %>% 
+  mutate(heartDisease = as.factor(as.character(ifelse(heartDisease == 1, "yesHD", "noHD")))) %>%
+  mutate(ID = paste0("W", 1:nrow(HD)))
+
+head(HD_RF$heartDisease)
+```
+
+Then, we can split our dataset into training and test. You may notice that in opposition to the elastic net regression above, we keep the outcome variable in the dataset. Weather you keep it in or must pull it out depends on the R-package (functions) you are using.
+
+```{r}
+# Set seed
+set.seed(123)
+
+# Training set
+train <- HD_RF %>% 
+  sample_frac(0.70) 
+
+# Test set
+test  <- anti_join(HD_RF, train, by = 'ID') 
+
+
+
+# Remove the ID, which we do not want to use for training.
+train <- train %>% 
+  dplyr::select(-ID)
+
+test <- test %>% 
+  dplyr::select(-ID)
+```
+
+Now lets set up a Random Forest model with cross-validation - this way we do not overfit our model. The R-package `caret` has a very versatile function `trainControl()` which can be used with a range of The resampling methods, including bootstrapping, out-of-bag error, and leave-one-out cross-validation,
+
+```{r}
+set.seed(123)
+
+# Set up cross-validation: 5-fold CV
+RFcv <- trainControl(
+  method = "cv",
+  number = 5,
+  classProbs = TRUE,
+  summaryFunction = twoClassSummary,
+  savePredictions = "final"
+)
+```
+
+We have set up for parameters for cross validation in the `RFcv` object above, we then feed that to the `train()` function from `caret`. We also specify the `training data`, the `name of the outcome variable` and, importantly, that we want to perform random forest as the `train()` function can be used for different models.
+
+```{r}
+# Train Random Forest
+set.seed(123)
+rf_model <- train(
+  heartDisease ~ .,
+  data = train,
+  method = "rf",
+  trControl = RFcv,
+  metric = "ROC",
+  tuneLength = 5          
+)
+
+
+# Model summary
+print(rf_model)
+```
+
+Next, we can plot your model fit, to see how many explanatory variables significantly contribute to our model.
+
+```{r}
+# Best parameters
+rf_model$bestTune
+
+# Plot performance
+plot(rf_model)
+
+
+```
+
+Now, we use our test set to evaluate your model performance.
+
+```{r}
+
+
+# Predict class probabilities
+y_pred <- predict(rf_model, newdata = test, type = "prob")
+y_pred
+```
+
+```{r}
+y_pred <- as.factor(ifelse(y_pred$yesHD > 0.5, "yesHD", "noHD"))
+
+caret::confusionMatrix(y_pred, test$heartDisease)
+```
+
+Lastly, we can extract the predictive variables with the greatest importance from your fit.
+
+```{r}
+varImpOut <- varImp(rf_model)
+
+varImpOut$importance
+varImportance <- as.data.frame(as.matrix(varImpOut$importance)) %>% 
+  rownames_to_column(var = 'VarName') %>%
+  arrange(desc(Overall))
+
+varImportance
+```
+
+Variable importance is based on how much each variable improves the model's accuracy across splits. DefectType2 might could be involved in important interaction or split the data in a very informative way early in trees.
+
+In terms of comparing the outcome of the Random Forest model with the Elastic Net Regression don't expect identical top features — they reflect different model assumptions.
+
+Use both models as complementary tools:
+
+```         
+EN: for interpretable, linear relationships
+
+RF: for capturing complex patterns and variable interactions
+```
+
+If a feature ranks high in both, that’s a strong signal it's important.
+
+If a feature ranks high in one but not the other — explore further: interaction? non-linearity? collinearity?
