@@ -52,7 +52,6 @@ Now we have three possible outcomes:
 
 
 ```{r}
-
 #try with different values for num2
 num2 <- 10
 
@@ -65,6 +64,51 @@ if (num1 > num2){
 } 
 
 print(statement)
+```
+
+### And and or operations 
+
+Check values of num1 and num2
+```{r}
+num1
+num2
+
+# num1 <- 14
+# num2 <- 12
+```
+
+You can give multiple conditions and check if both of them are true with the `&` (and-operation).
+```{r}
+if (num1 < 10 & num2 < 10) {
+  print('Both numbers are lower than 10')
+} else {
+  print('Both numbers are not lower than 10')
+}
+```
+
+You can also check if either one or the other is true with the `|` (or-operation).  
+```{r}
+if (num1 < 10 | num2 < 10) {
+  print('One or both of the numbers are lower than 10.')
+} else {
+  print('None of the numbers are not lower than 10')
+}
+```
+
+If you add more conditions, paraphrases can be useful. 
+```{r}
+# num1 <- 8
+# num2 <- 5
+
+num3 <- 10
+```
+
+```{r}
+if ((num1 < 10 | num2 < 10) & num3 == 10) {
+  print('Yes')
+} else {
+  print('No')
+}
 ```
 
 ## For-loops
@@ -115,14 +159,10 @@ THIS_VARIABLE
 
 ### Loop control
 
-There are two loop control statements we can use to 
+There are two loop control statements we can use to: `next` and `break`
 
-* jump to the next iteration: `next`
-* end the loop before finishing: `break`
-
+`next` jumps to the next iteration. Here, we print every element in list1 and when the element is 'hello' we jump to the next iteration.
 ```{r}
-#example for next
-
 for (element in list1) {
   if(element == 'hello'){
     next
@@ -132,8 +172,8 @@ for (element in list1) {
 }
 ```
 
+ `break` ends the loop before finishing. Here, we print every element in list1 and when the element is 'hello' we break (end) the loop.
 ```{r}
-#example for break
 for (element in list1) {
   if(element == 'hello'){
     break
@@ -191,6 +231,68 @@ for (i in 1:nrow(my_df)) {
 }
 
 ```
+
+### Plotting in loops
+Create data
+```{r}
+plot_data_1 <- tibble(Name = c('Marie', 'Marie', 'Emma', 'Sofie', 'Sarah', 'Sofie', 'Hannah', 'Lise', 'Emma'),
+                      Class = c('1.A', '1.A', '1.A', '1.A', '1.B', '1.B', '1.B', '1.C', '1.C'),
+                      Food = c('Lasagna', 'Pizza', 'Pizza', 'Bruger', 'Lasagna', 'Lasagna', 'Lasagna', 'Burger', 'Lasagna'),
+                      Age = c(6, 6, 6, 6, 6, 5, 7, 6, 6))
+
+head(plot_data_1, n = 2)
+```
+Barplot of each variable.
+```{r}
+ggplot(plot_data_1, 
+       aes(x = Name)) + 
+  geom_bar()
+
+ggplot(plot_data_1, 
+       aes(x = Class)) + 
+  geom_bar()
+
+# and so on ...
+```
+
+Let's do it in a for loop!
+
+First, let's check that the variables we are interested in are iterated correctly. 
+```{r}
+for (col in colnames(plot_data_1)){
+  print(col)
+}
+```
+
+Great! Now, let's add the plot function to our for loop.
+```{r}
+for (col in colnames(plot_data_1)){
+  p <- ggplot(plot_data_1, 
+       aes(x = col)) + 
+  geom_bar()
+  
+  print(p)
+}
+```
+
+That was not what we wanted...
+
+Wrap the `!!sym()` function around the string formatted column name when passing it in aesthetic.
+
+* `sym()` turns a string into a symbol (column reference)
+* `!!` unquotes the symbol to use it in `aes()`
+
+```{r}
+for (col in colnames(plot_data_1)){
+  p <- ggplot(plot_data_1, 
+       aes(x = !!sym(col))) + 
+  geom_bar()
+  
+  print(p)
+}
+```
+
+`!!sym(col)` should also be used for other tidyverse operations (`filter`, `select`, ...) where you pass the column names in string format.
 
 
 ### If-else in loops

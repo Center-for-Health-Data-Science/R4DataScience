@@ -36,7 +36,7 @@ Since we want to be able to pass the name of the column to plot as a variable we
 plot_column <- 'Age'
 
 #make the plot
-ggplot(diabetes_glucose, aes(y = .data[[plot_column]])) +
+ggplot(diabetes_glucose, aes(y = !!sym(plot_column))) +
   geom_boxplot()
 
 ```
@@ -50,11 +50,10 @@ Functions are good at returning objects so make your plot into an object and ret
 
 :::
 
-
 ```{r}
 make_boxplot <- function(df, plot_column){
   
-  p <- ggplot(df, aes(y = .data[[plot_column]])) +
+  p <- ggplot(df, aes(y = !!sym(plot_column))) +
     geom_boxplot(fill = "#03579A") +
     labs(title = paste("Boxplot of", plot_column)) + 
     theme_bw()
@@ -67,7 +66,7 @@ make_boxplot(diabetes_glucose, 'Age')
 
 ```
 
-9. Add a check to your function whether the supplied column is numeric. Note here that you need to test the data type of the column you want to plot, not the data type of it's name. Confirm that your check works.
+3. Add a check to your function whether the supplied column is numeric. Note here that you need to test the data type of the column you want to plot, not the data type of it's name. Confirm that your check works.
 
 
 ```{r error=TRUE}
@@ -77,7 +76,7 @@ make_boxplot <- function(df, plot_column){
     stop('The column to plot must be numcerial.')
   }
   
-  p <- ggplot(df, aes(y = .data[[plot_column]])) +
+  p <- ggplot(df, aes(y = !!sym(plot_column))) +
     geom_boxplot(fill = "#03579A") +
     labs(title = paste("Boxplot of", plot_column)) + 
     theme_bw()
@@ -91,7 +90,7 @@ make_boxplot(diabetes_glucose, 'Sex')
 ```
 
 
-10. Write code to apply your boxplot function to each numerical column in the dataframe. There are different ways to achieve this.
+4. Write code to apply your boxplot function to each numerical column in the dataframe. There are different ways to achieve this.
 
 ```{r}
 # Our Idea: Find names of all numeric columns and plug them into a for loop
@@ -114,7 +113,7 @@ for(col in num_cols){
 ```
 
 
-11. Create an R script file to contain your functions. Copy your functions there and remove them from your global environment with `rm(list="name_of_your_function")`. Now source the function R script in your quarto document and test that the functions work. 
+5. Create an R script file to contain your functions. Copy your functions there and remove them from your global environment with `rm(list="name_of_your_function")`. Now source the function R script in your quarto document and test that the functions work. 
 
 ```{r}
 #remove function from global environment so we can test if it loads properly from the script
@@ -149,7 +148,7 @@ e1. Calculate the mean `Glucose (mmol/L)` for each measuring time point (i.e. on
 category <- 'Sex'
 
 glucose_group_mean <- diabetes_glucose_unnest %>%
-  group_by(Measurement, .data[[category]]) %>%
+  group_by(Measurement, !!sym(category)) %>%
   summarize(glucose_mean = mean(`Glucose (mmol/L)`), .groups = "drop")
 
 glucose_group_mean
@@ -162,8 +161,8 @@ e2. We would like to make a plot that shows the means you calculated above. Agai
 glucose_group_mean %>%
     ggplot(aes(x = Measurement,
                y = glucose_mean, 
-               color = .data[[category]],
-               group = .data[[category]])) +
+               color = !!sym(category),
+               group = !!sym(category))) +
     geom_point() +
     geom_line()
 ```
@@ -175,14 +174,14 @@ e3. Wrap the code from e1 and e2 into a function `show_mean_by_catergory` so tha
 show_mean_by_catergory <- function(df,category){
   
   glucose_group_mean <- df %>%
-    group_by(Measurement, .data[[category]]) %>%
+    group_by(Measurement, !!sym(category)) %>%
     summarize(glucose_mean = mean(`Glucose (mmol/L)`), .groups = "drop")
   
   p <-glucose_group_mean %>%
     ggplot(aes(x = Measurement,
                y = glucose_mean, 
-               color = .data[[category]],
-               group = .data[[category]])) +
+               color = !!sym(category),
+               group = !!sym(category))) +
     geom_point() +
     geom_line()
   

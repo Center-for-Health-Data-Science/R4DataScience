@@ -106,9 +106,9 @@ if (age >= 18){
 Or we can choose to execute our function once for every element of an iterable, e.g. every row in a dataframe:
 
 ```{r}
-df <- data.frame(row.names = 1:5, 
-                 age = c(45, 16, 31, 56, 19), 
-                 weight_kg = c(85, 65, 100, 45, 76), 
+df <- data.frame(row.names = 1:5,
+                 age = c(45, 16, 31, 56, 19),
+                 weight_kg = c(85, 65, 100, 45, 76),
                  height_m = c(1.75, 1.45, 1.95, 1.51, 1.89))
 
 df
@@ -118,13 +118,13 @@ Print ID, weight, and height of all individuals.
 
 ```{r}
 for (id in rownames(df)){
-  
+
   weight <- df[id, 'weight_kg']
-  
+
   height <- df[id, 'height_m']
-  
+
   print(c(id, weight, height))
-  
+
 }
 ```
 
@@ -199,6 +199,36 @@ Have a look at the data frame.
 ```{r}
 df
 ```
+
+## Plotting in functions
+
+Define function that creates boxplot
+```{r}
+my_boxplot <- function(dataframe, variable = ''){
+  
+  p <- ggplot(data = dataframe, 
+         aes(y = !!sym(variable))) + # Use variable as column reference
+  geom_boxplot(color = 'blue') + 
+  theme_bw() + 
+  labs(title = paste('Boxplot of', variable)) # Use variable as string
+  
+  return(p)
+  
+}
+```
+
+Look at column names of df
+```{r}
+colnames(df)
+colnames(df)[1]
+```
+
+Run function on age. 
+```{r}
+my_boxplot(dataframe = df, colnames(df)[1])
+```
+
+
 
 ## Error handling in user-defined functions
 

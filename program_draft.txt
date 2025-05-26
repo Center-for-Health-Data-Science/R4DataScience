@@ -1,0 +1,23 @@
+DAY 1
+(30 minutes)    Introduction
+(30 minutes)    Exercise 0: Getting started
+(45 minutes)    Presentation 1: Data Cleanup & Summary Statistics
+(45-60 minutes) Exercise 1: Data Cleanup and Summary Statistics
+(45 minutes)    Presentation 2: Data Transformation and Integration
+(60 minutes)    Exercise 2: Data Transformation and Integration
+
+DAY 2
+(XX minutes)    Presentation 3 - Exploratory Data Analysis (EDA)
+(XX minutes)    Exercise 3, 3A, 3B ???
+(45 minutes)    Presentation 4A: Scripting in R - Conditions and For-loops
+(60 minutes)    Exercise 4A: Scripting in R - Conditions and For-loops
+(30 minutes)    Presentation 4B: Scripting in R - Functions
+(60 minutes)    Exercise 4B: Scripting in R - Functions
+
+DAY 3 
+(XX minutes)    Presentation 5A: Models and Model Evaluation in R
+(XX minutes)    Exercise 5A: Models and Model Evaluation in R
+(XX minutes)    Presentation 5B: Models and Model Evaluation in R
+(XX minutes)    Exercise 5B: Models and Model Evaluation in R
+
+

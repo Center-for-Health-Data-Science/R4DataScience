@@ -106,6 +106,7 @@ for (i in 1:10) {
   } else {
     print('Normal blood pressure')
   } 
+  
 }
 ```
 
@@ -143,5 +144,103 @@ for (i in 1:10) {
 }
 
 ```
+
+7. Do the same as above but instead of printing the risk status, append it to a list. Start by initiating an empty list. 
+
+```{r}
+# Initiate list
+risk_status <- list()
+```
+
+```{r}
+for (i in 1:nrow(diabetes_glucose)) {
+  Smoker <- diabetes_glucose$Smoker[i]
+  BMI <- diabetes_glucose$BMI[i]
+  
+  #skip rows where either of the values is NA
+  if (is.na(Smoker) | is.na(BMI)){
+    next
+  }
+    
+  if (Smoker == 'Smoker' & BMI > 35){
+    risk_status <- append(risk_status, 'High risk')
+  } else if (Smoker == 'Smoker' | BMI > 35) {
+    risk_status <- append(risk_status, 'Moderate risk')
+  } else {
+    risk_status <- append(risk_status, 'Low risk')
+  }
+}
+
+```
+
+```{r}
+risk_status %>% head()
+```
+
+8. Check the length of the list. Is it as expected?
+
+Since we looped through all the rows in the `diabetes_glucose` dataframe, the list should be as long as there are row in the dataframe. 
+```{r}
+length(risk_status)
+```
+
+```{r}
+nrow(diabetes_glucose)
+```
+
+
+9. Add the list as a column in the `diabetes_glucose` data frame. 
+
+```{r}
+diabetes_glucose$risk_status <- risk_status
+```
+
+```{r}
+diabetes_glucose %>% select(BMI, Smoker, risk_status) %>% unnest(risk_status)
+```
+
+10. Make a list of all the column names in `diabetes_glucose` that contain categorical variables. Make a for loop that goes through the list and prints a barplot for each of the categorical variables. 
+
+```{r}
+categorical <- list('Sex', 'Smoker', 'Diabetes', 'Married', 'Work')
+```
+
+```{r}
+for (var in categorical){
+  
+  p <- ggplot(diabetes_glucose, 
+         aes(x = !!sym(var))) + 
+    geom_bar() +
+    labs(title = paste('Barplot of', var))
+  
+  print(p)
+  
+}
+```
+
+10. Make a list of all the column names in `diabetes_glucose` that contain numeric variables. Make a for loop that goes through the list and prints a boxplot for each of the categorical variables. 
+
+```{r}
+head(diabetes_glucose)
+```
+
+```{r}
+numeric <- list('Age', 'BloodPressure', 'BMI', 'PhysicalActivity', 'Serum_ca2')
+```
+
+```{r}
+for (var in numeric){
+  
+  p <- ggplot(diabetes_glucose, 
+         aes(y = !!sym(var))) + 
+    geom_boxplot() + 
+    labs(title = paste('Boxplot of', var))
+  
+  print(p)
+  
+}
+```
+
+
 
 
