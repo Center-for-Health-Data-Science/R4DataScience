@@ -189,14 +189,14 @@ nrow(diabetes_glucose)
 ```
 
 
-9. Add the list as a column in the `diabetes_glucose` data frame. 
+9. Add the list as a new column in the `diabetes_glucose` data frame. Note: Before assigning it, use the `unlist()` function to convert the list to a flat vector. This ensures that each value aligns correctly with the rows of the data frame.
 
 ```{r}
-diabetes_glucose$risk_status <- risk_status
+diabetes_glucose$risk_status <- unlist(risk_status)
 ```
 
 ```{r}
-diabetes_glucose %>% select(BMI, Smoker, risk_status) %>% unnest(risk_status)
+diabetes_glucose %>% select(BMI, Smoker, risk_status)
 ```
 
 10. Make a list of all the column names in `diabetes_glucose` that contain categorical variables. Make a for loop that goes through the list and prints a barplot for each of the categorical variables. 
