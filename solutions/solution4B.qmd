@@ -10,7 +10,7 @@ In this exercise you will practice creating and applying user-defined functions.
 
 ## Getting started
 
-Load libraries and data
+Load libraries and the joined diabetes data set.
 
 ```{r message=FALSE, warning=FALSE}
 library(tidyverse)
@@ -33,18 +33,18 @@ It should accept the following parameters:
 * Smoking
 * PhysicalActivity
 
-And it should calculate a risk score with the following rules:
+Initiate the risk score with a value of 0 and calculate the final risk score with the following rules:
 
 * if BloodPressure is > 90, add 0.5
-* if Smoking is 'Smoker', add 1
-* if BMI is > 30, add 1. If BMI > 40, add 2.
+* if Smoking is 'Smoker', add 1 
+* if BMI is > 30, add 1. If BMI > 40, add 2
 * if PhysicalActivity is > 110, substract 1
 
 The function should return the final risk score. Test it with some different inputs to verify that it works according to the rules detailed above. 
 
 
 ```{r}
-calculate_risk_score <- function(BloodPressure, BMI, Smoking,PhysicalActivity){
+calculate_risk_score <- function(BloodPressure, BMI, Smoking, PhysicalActivity){
   
   risk_score <- 0
   
@@ -145,7 +145,7 @@ calculate_risk_score(90, 35, 1, 60)
 calculate_risk_score(90, 35, 'Smoker', 60)
 ```
 
-3.  Write code to apply your `calculate_risk_score` to each row in `diabetes_glucose`. Using the appropriate column, i.e. `diabetes_glucose$BloodPressure` should be the `BloodPressure` given to the function and so on. Add the calculated risk score to diabetes_glucose as a column `Risk_score`.
+3.  In a for-loop, apply your `calculate_risk_score` to each row in `diabetes_glucose`. Remember to use the appropriate column, i.e. `diabetes_glucose$BloodPressure` should be the argument for `BloodPressure` in the function. Add the calculated risk score to diabetes_glucose as a column `Risk_score`.
 
 ```{r}
 
@@ -220,10 +220,10 @@ e1. Calculate the mean of `Glucose (mmol/L)` for each measuring time point acros
 ```{r}
 diabetes_glucose_unnest %>%
   group_by(Measurement) %>%
-  summarise(mean_gluc = mean( `Glucose (mmol/L)`))
+  summarise(mean_gluc = mean(`Glucose (mmol/L)`))
 ```
 
-e2. Now we would like to stratify this mean further by a second variable, Sex. We would like to obtain 6 means: 0_female, 0_male, 60_female, 60_male, 120_female, 120_male.
+e2. Now we would like to stratify this mean further by a second variable, `Sex`. We would like to obtain 6 means: 0_female, 0_male, 60_female, 60_male, 120_female, 120_male.
 
 ```{r}
 diabetes_glucose_unnest %>%
@@ -231,8 +231,7 @@ diabetes_glucose_unnest %>%
   summarize(glucose_mean = mean(`Glucose (mmol/L)`))
 ```
 
-e3. Now we would like to abstract the name of the second column. Imagine we would like means per marriage status or per workplace instead of per sex. Create a variable `column <- 'Sex'` and redo what you did above but using `column` instead of the literal name of the column (Sex). This works in the same way as when plotting with a variable instead of the literal column name. Have a look at presentation 4A if you don't remember how to do it.
-
+e3. Now we would like to abstract the name of the second column. Imagine we would like glucose measurement means per marriage status or per workplace instead of per sex. Create a variable `column <- 'Sex'` and redo what you did above but using `column` instead of the literal name of the column (`Sex`). This works in the same way as when plotting with a variable instead of the literal column name. Have a look at presentation 4A if you don't remember how to do it.
 
 ```{r}
 column <- 'Sex'
@@ -244,7 +243,7 @@ glucose_group_mean <- diabetes_glucose_unnest %>%
 glucose_group_mean
 ```
 
-e4. Now, make your code into a function `calc_mean_meta()` that can calculate means based on different meta data columns. It should be called like so `calc_mean_meta('Sex')` and give you the same result as before. Try it on other metadata columns in diabetes_glucose_unnest too!
+e4. Now, make your code into a function `calc_mean_meta()` that can calculate glucose measurement means based on different meta data columns. It should be called like so `calc_mean_meta('Sex')` and give you the same result as before. Try it on other metadata columns in `diabetes_glucose_unnest` too!
 
 ```{r}
 calc_mean_meta <- function(column){
@@ -259,7 +258,6 @@ calc_mean_meta <- function(column){
 ```{r}
 calc_mean_meta('Sex')
 ```
-
 
 ```{r}
 calc_mean_meta('Work')
