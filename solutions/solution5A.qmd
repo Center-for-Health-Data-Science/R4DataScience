@@ -1,5 +1,5 @@
 ---
-title: "Exercise 5 - Solutions"
+title: "Exercise 5A - Solutions: Intro to Regression in R"
 format: html
 project:
   type: website

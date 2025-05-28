@@ -6,7 +6,7 @@ project:
   output-dir: ../docs
 ---
 
-1.  Load th R packages needed for analysis:
+1.  Load the R packages needed for analysis:
 
 ```{r, warning=FALSE, message=FALSE}
 library(tidyverse)
@@ -42,11 +42,30 @@ ggplot(long_data, aes(x = value)) +
   theme_minimal()
 ```
 
-4.  Make count tables of your categorical/factor variables, are they balanced?
+4. Some of the numeric variables are actually categorical. We have identified them in the `facCols` vector. Here, we change their type from numeric to character (since the other categorical variables are of this type). This code is sightly different from changing the type to factor, why we have written the code for you. Try to understand what is going on. 
+```{r}
+facCols <- c("Race", 
+             "ETXU_CAT5", 
+             "BL.Anti.inf", 
+             "BL.Antibio", 
+             "V3.Anti.inf", 
+             "V3.Antibio", 
+             "V3.Bac.vag", 
+             "V5.Anti.inf",
+             "V5.Antibio",
+             "V5.Bac.vag",
+             "X..Vis.Att")
 
+
+optML <- optML %>%
+  mutate(across(all_of(facCols), as.character))
+
+head(optML)
+```
+
+5.  Make count tables of your categorical/factor variables, are they balanced?
 ```{r}
 # Count observations per level/group for each categorical variable
-
 
 factor_counts <- optML[,-1] %>%
   dplyr::select(where(is.character)) %>%
@@ -59,17 +78,19 @@ factor_counts
 
 ## Part 1: Elastic Net Regression
 
-5.  As you will use the response `Preg.ended...37.wk`, you should remove the other five outcome measures from your dataset.
-
-6.  Elastic net regression can be sensitive to large differences in the range of numeric/integer variables, as such these variables should be scaled. Scale all numeric/integer variables in your dataset.
-
+6.  As you will use the response `Preg.ended...37.wk`, you should remove the other five possible outcome variables measures from your dataset.
 ```{r}
 optML <- optML %>% 
-  dplyr::select(-c(Apgar1, Apgar5, GA.at.outcome, Birthweight, Any.SAE.)) %>%
+  dplyr::select(!c(Apgar1, Apgar5, GA.at.outcome, Birthweight, Any.SAE.))
+```
+
+7.  Elastic net regression can be sensitive to large differences in the range of numeric/integer variables, as such these variables should be scaled. Scale all numeric/integer variables in your dataset.
+```{r}
+optML <- optML %>% 
   mutate(across(where(is.numeric), scale))
 ```
 
-7.  Split your dataset into train and test set, you should have 70% of the data in the training set and 30% in the test set. How you chose to split is up to you, BUT afterwards you should ensure that for the categorical/factor variables all levels are represented in both sets.
+8.  Split your dataset into train and test set, you should have 70% of the data in the training set and 30% in the test set. How you chose to split is up to you, BUT afterwards you should ensure that for the categorical/factor variables all levels are represented in both sets.
 
 ```{r}
 
@@ -107,7 +128,7 @@ test  <- anti_join(optML, train, by = 'PID')
 
 ```
 
-8.  After dividing into train and test set pull out the response variable `Preg.ended...37.wk` into its own vector for both datasets, name these: `y_train` and `y_test`.
+9.  After dividing into train and test set pull out the outcome variable, `Preg.ended...37.wk`, into its own vector for both datasets. Name these `y_train` and `y_test`.
 
 ```{r}
 
@@ -120,7 +141,7 @@ y_test <- test %>%
 
 ```
 
-9.  Remove the response variable `Preg.ended...37.wk` from the train and test set, as well as `PID` (if you have not already done so), as we should obviously not use this for training or testing.
+10.  Remove the outcome variable, `Preg.ended...37.wk`, from the train and test set, as well as `PID` (if you have not already done so), as we should obviously not use this for training or testing.
 
 ```{r}
 train <- train %>% 
@@ -131,49 +152,45 @@ test <- test %>%
   dplyr::select(-c(PID, Preg.ended...37.wk))
 ```
 
-You will employ the package `glmnet` to perform Elastic Net Regression. The main function from this package is `glmnet()` which we will use to fit the model. Additionally, you will also perform cross validation with `cv.glmnet()` to obtain the best value of the model hyper-parameter, lambda (λ).
+You will employ the package `glmnet` to perform Elastic Net Regression. The main function from this package is `glmnet()` which we will use to fit the model. Additionally, you will also perform cross validation with `cv.glmnet()` to obtain the best value of the model hyper-parameter, lambda ($λ$).
 
-As we are working with a mix of categorical and numerical predictors, it is advisable to dummy-code the variables, you can easily do this by creating a model matrix for both test and train set.
+As we are working with a mix of categorical and numerical predictors, it is advisable to dummy-code the variables. You can easily do this by creating a model matrix for both the test and train set.
 
-10. Create the model matrix needed for input to `glmnet()` and `cv.glmnet()`:
-
+11. Create the model matrix needed for input to `glmnet()` and `cv.glmnet()`.
 ```{r}
-modTrain <- model.matrix(~ .- 1, data = train)
-modTest <- model.matrix(~ .- 1, data = test)
+modTrain <- model.matrix(~ ., data = train)
+modTest <- model.matrix(~ ., data = test)
 ```
 
-Note that the `- 1` in the `model.matrix()` formula which means, drop the intercept from the matrix.
-
-11. Create your Elastic Net Regression model with `glmnet()`.
-
+12. Create your Elastic Net Regression model with `glmnet()`.
 ```{r}
 EN_model <- glmnet(modTrain, y_train, alpha = 0.5, family = "binomial")
 ```
 
-12. Use `cv.glmnet()` to attain the best value of the hyperparameter lambda (λ). Remember to set a seed for reproducible results.
+13. Use `cv.glmnet()` to attain the best value of the hyperparameter lambda ($λ$). Remember to set a seed for reproducible results.
 
 ```{r}
 set.seed(123)
 cv_model <- cv.glmnet(modTrain, y_train, alpha = 0.5, family = "binomial")
 ```
 
-13. Plot all the values of lambda tested during cross validation by calling `plot()` on the output of your `cv.glmnet()`. Extract the best lambda value from the `cv.glmnet()` model and save it as an object.
+14. Plot all the values of lambda tested during cross validation by calling `plot()` on the output of your `cv.glmnet()`. Extract the best lambda value from the `cv.glmnet()` model and save it as an object.
 
 ```{r}
 plot(cv_model)
 
-bestLambda = cv_model$lambda.min
+bestLambda <- cv_model$lambda.min
 ```
 
-Now, lets see how well your model performed.
+Now, let's see how well your model performed.
 
-14. Predict if a individual is likely to give birth before the 37th week using your model and your test set. See pseudo-code below
+15. Predict if an individual is likely to give birth before the 37th week using your model and your test set. See pseudo-code below
 
 ```{r}
 y_pred <- predict(EN_model, s = bestLambda, newx = modTest, type = 'class')
 ```
 
-15. Just like for the logistic regression model you can calculate the accuracy of the prediction by comparing it to `y_test` with `confusionMatrix()`. Do you have a good accuracy? N.B look at the 2x2 contingency table, what does it tell you?
+16. Just like for the logistic regression model you can calculate the accuracy of the prediction by comparing it to `y_test` with `confusionMatrix()`. Do you have a good accuracy? N.B look at the 2x2 contingency table, what does it tell you?
 
 ```{r}
 y_pred <- as.factor(y_pred)
@@ -181,7 +198,7 @@ y_pred <- as.factor(y_pred)
 caret::confusionMatrix(y_pred, y_test)
 ```
 
-16. Lastly, lets extract the variables which were retained in the model (e.g. not penalized out). We do this by calling the coefficient with `coef()` on our model. See pseudo-code below.
+17. Lastly, let's extract the variables which were retained in the model (e.g. not penalized out). We do this by calling the coefficient with `coef()` on our model. See pseudo-code below.
 
 ```{r}
 coeffs <- coef(EN_model, s = bestLambda)
@@ -192,7 +209,7 @@ coeffsDat <- as.data.frame(as.matrix(coeffs)) %>%
  
 ```
 
-16. Make a plot that shows the absolute importance of the variables retained in your model. This could be barplot with variable names on the x-axis and the height of the bars denoting absolute size of coefficient).
+18. Make a plot that shows the absolute importance of the variables retained in your model. This could be a barplot with variable names on the y-axis and the length of the bars denoting absolute size of coefficient.
 
 ```{r}
 # Make dataframe ready for plotting, remove intercept and coeffcients that are zero
@@ -213,20 +230,19 @@ ggplot(coeffsDat, aes(x = VarName, y = AbsImp)) +
   theme_classic()
 ```
 
-17. Now repeat what you just did above, but this time instead of using `Preg.ended...37.wk` as outcome, try using a continuous variable, such as `GA.at.outcome`. N.B remember this means that you should evaluate the model using the RMSE and a scatter plot instead of the accuracy!
+19. Now repeat what you just did above, but this time instead of using `Preg.ended...37.wk` as outcome, try using a continuous variable, such as `GA.at.outcome`. N.B remember this means that you should evaluate the model using the RMSE and a scatter plot instead of the accuracy!
 
 ## Part 2: Random Forest
 
 Now, lets make a Random Forest. We will continue using the `Obt_Perio_ML.Rdata` with `Preg.ended...37.wk` as outcome.
 
-18. Just like in the section on EN above, remove the outcome variables you will not be using and split the dataset into test and train set - this time keep the outcome variable `Preg.ended...37.wk` in the dataset. Remember to remove the `PID` column before training!
+20. Just like in the section on Elastic Net above, remove the outcome variables you will not be using and split the dataset into test and train set - this time keep the outcome variable `Preg.ended...37.wk` in the dataset. Remember to remove the `PID` column before training!
 
 ```{r}
 load(file = "../data/Obt_Perio_ML.Rdata")
 
 optML <- optML %>%
   mutate(Preg.ended...37.wk = factor(Preg.ended...37.wk, levels = c(0, 1), labels = c("No", "Yes")))
-
 ```
 
 ```{r}
@@ -252,12 +268,9 @@ train <- train %>%
 
 test <- test %>% 
   dplyr::select(-PID)
-
-
-
 ```
 
-19. Set up a Random Forest model with cross-validation. See pseudo-code below. Remember to set a seed.
+21. Set up a Random Forest model with cross-validation. See pseudo-code below. Remember to set a seed.
 
 ```{r}
 set.seed(123)
@@ -288,7 +301,7 @@ rf_model <- train(
 print(rf_model)
 ```
 
-20. Plot your model fit. How does your model improve when you add 10, 20, 30, etc. predictors?
+22. Plot your model fit. How does your model improve when you add 10, 20, 30, etc. predictors?
 
 ```{r}
 # Best parameters
@@ -296,27 +309,20 @@ rf_model$bestTune
 
 # Plot performance
 plot(rf_model)
-
-
 ```
 
-21. Use your test set to evaluate your model performance. How does the random forest compare to the elastic net regression?
+23. Use your test set to evaluate your model performance. How does the random forest compare to the elastic net regression?
 
 ```{r}
-
-
 # Predict class probabilities
 y_pred <- predict(rf_model, newdata = test, type = "prob")
 
 y_pred <- as.factor(ifelse(y_pred$Yes > 0.5, "Yes", "No"))
 
 caret::confusionMatrix(y_pred, test$Preg.ended...37.wk)
-
-
-
 ```
 
-22. Extract the predictive variables with the greatest importance from your fit.
+24. Extract the predictive variables with the greatest importance from your fit.
 
 ```{r}
 varImpOut <- varImp(rf_model)
@@ -329,10 +335,9 @@ varImportance <- as.data.frame(as.matrix(varImpOut$importance)) %>%
 varImportance
 ```
 
-23. Make a logistic regression using the same dataset (you already have your train data, test data). How do the results of Elastic Net regression and Random Forest compare to the output of your glm.
+25. Make a logistic regression using the same dataset (you already have your train data, test data). How do the results of Elastic Net regression and Random Forest compare to the output of your glm.
 
 ```{r}
-
 # Model
 model1 <- glm(Preg.ended...37.wk ~ ., data = train, family = 'binomial')
 
@@ -348,5 +353,4 @@ model1out
 # Compare output from Elastic Net with output from glm model
 intersect(as.character(coeffsDat$VarName), model1out$VarName) %>%
   sort()
-
 ```
