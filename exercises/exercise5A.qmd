@@ -1,5 +1,5 @@
 ---
-title: "Exercise 5A - Models and Model Evaluation in R"
+title: "Exercise 5A: Intro to Regression in R"
 format: html
 project:
  type: website

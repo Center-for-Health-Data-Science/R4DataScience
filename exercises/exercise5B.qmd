@@ -14,9 +14,9 @@ For modelling we will use the [Obstetrics and Periodontal Therapy Dataset](https
 
 This dataset has a total of 823 observations and 171 variables. As is often the case with clinical data, the data has many missing values, and for most categorical variables there is an unbalanced in number of observations for each level.
 
-In order for you to not spend too much time on data cleaning and wrangling we have selected 33 variables (plus a patient ID column, `PID`) for which we have just enough observations per group level. As LASSO cannot handle NAs we have imputed missing values, and we have removed a few outlier samples.
+In order for you to not spend too much time on data cleaning and wrangling we have selected 33 variables (plus a patient ID column, `PID`) for which we have just enough observations per group level. As Lasso cannot handle NAs, we have imputed missing values and removed a few outlier samples.
 
-1.  Load th R packages needed for analysis:
+1.  Load the R packages needed for analysis:
 
 ```{r, warning=FALSE, message=FALSE}
 library(tidyverse)
@@ -25,86 +25,112 @@ library(glmnet)
 library(MASS)
 ```
 
-Note that you may have some clashes of function names between these packages. Because of this, you will need to specify the package you are calling some of the functions from, you do this with the package name followed by two colons followed by the name of the function, e.g. `dplyr::select()`
+Note that you may have some clashes of function names between these packages. Because of this, you will need to specify the package you are calling some of the functions from. You do this with the package name followed by two colons followed by the name of the function, e.g. `dplyr::select()`
 
 ## Summary Statistics
 
 2.  Load in the dataset `Obt_Perio_ML.Rdata` and inspect it.
 
-You can look at what the individual variables [here](https://higgi13425.github.io/medicaldata/reference/opt.html). The curated dataset contains five variables which may be regarded as outcomes, these are:
+::: {.callout-tip collapse="true"}
+## Loading an Rdata file
 
-```         
-GA.at.outcome - Gestational age at end of pregnancy (days)
-Birthweight - Weight of baby at birth (grams)
-Apgar1 - Apgar score, a summary of a newborn infant's 'appearance at birth, range: 0-10 
-Apgar5 - Apgar score at 5 minutes, numeric, range: 0-10
-Preg.ended...37.wk - Pregnancy ended before week 37, categorical (0 = no, 1 = yes)
-Any.SAE. - Whether participant experienced any serious adverse events (Yes, No)
-```
+Navigate to the `data/Obt_Perio_ML.Rdata` file in the file panel of your Rstudio and click the file. Confirm that you want to load the data into your environment by clicking "Yes".
+
+For reproducibility, copy the `load` function call printed in the console and paste it to the code chunk.
+:::
+
+You can look at what the individual variables contain [here](https://higgi13425.github.io/medicaldata/reference/opt.html). The curated dataset contains five variables which may be regarded as outcomes, these are:
+
+-   `GA.at.outcome`: Gestational age at end of pregnancy (days)
+-   `Birthweight`: Weight of baby at birth (grams)
+-   `Apgar1`: Apgar score, a summary of a newborn infant's appearance at birth, range: 0-10
+-   `Apgar5`: Apgar score at 5 minutes after birth, range: 0-10
+-   `Preg.ended...37.wk`: Pregnancy ended before week 37, categorical (0 = no, 1 = yes)
+-   `Any.SAE.`: Whether participant experienced any serious adverse events (Yes, No)
 
 The remaining 28 variables we will consider as potential explanatory variables for these outcomes.
 
 3.  Do some basic summary statistics. How many categorical variables and how many numeric variables do you have? Try to make distributional plots for a couple of your numeric variables (or all if you would like) to get a feel for some of the data distributions you have.
 
-4.  Make count tables for all your categorical/factor variables, are they balanced?
+4. Some of the numeric variables are actually categorical. We have identified them in the `facCols` vector. Here, we change their type from numeric to character (since the other categorical variables are of this type). This code is sightly different from changing the type to factor, why we have written the code for you. Try to understand what is going on. 
+```{r}
+facCols <- c("Race", 
+             "ETXU_CAT5", 
+             "BL.Anti.inf", 
+             "BL.Antibio", 
+             "V3.Anti.inf", 
+             "V3.Antibio", 
+             "V3.Bac.vag", 
+             "V5.Anti.inf",
+             "V5.Antibio",
+             "V5.Bac.vag",
+             "X..Vis.Att")
+
+
+optML <- optML %>%
+  mutate(across(all_of(facCols), as.character))
+
+head(optML)
+```
+
+5.  Make count tables for all your categorical/factor variables. Are they balanced?
 
 ## Part 1: Elastic Net Regression
 
 As described above we have five variables which could be considered outcomes as these where all measured at the end of pregnancy. We can only work with one outcome at a time and we will pick `Preg.ended...37.wk` for now. This variable is a factor variable which denotes if a women gave birth prematurely (1=yes, 0=no).
 
-5.  As you will use the response `Preg.ended...37.wk`, you should remove the other five outcome measures from your dataset.
+6.  As you will use the outcome `Preg.ended...37.wk`, you should remove the other five possible outcome variables from your dataset.
 
-6.  Elastic net regression can be sensitive to large differences in the range of numeric/integer variables, as such these variables should be scaled. Scale all numeric/integer variables in your dataset.
+7.  Elastic net regression can be sensitive to large differences in the range of numeric/integer variables, as such these variables should be scaled. Scale all numeric/integer variables in your dataset.
 
 ::: {.callout-tip collapse="true"}
 ## Hint
 
-mutate(across(...))
+mutate(across(where(...)))
+
 :::
 
-7.  Split your dataset into train and test set, you should have 75% of the data in the training set and 30% in the test set. How you chose to split is up to you, BUT afterwards you should ensure that for the categorical/factor variables all levels are represented in both sets.
+8.  Split your dataset into train and test set, you should have 70% of the data in the training set and 30% in the test set. How you chose to split is up to you, BUT afterwards you should ensure that for the categorical/factor variables all levels are represented in both sets.
 
-8.  After dividing into train and test set pull out the response variable `Preg.ended...37.wk` into its own vector for both datasets, name these: `y_train` and `y_test`.
+9.  After dividing into train and test set, pull out the outcome variable, `Preg.ended...37.wk`, into its own vector for both datasets, name these: `y_train` and `y_test`.
 
-9.  Remove the response variable `Preg.ended...37.wk` from the train and test set, as well as `PID` (if you have not already done so), as we should obviously not use this for training or testing.
+10.  Remove the outcome variable, `Preg.ended...37.wk`, from the train and test set, as well as `PID` (if you have not already done so), as we should obviously not use this for training or testing.
 
-You will employ the package `glmnet` to perform Elastic Net Regression. The main function from this package is `glmnet()` which we will use to fit the model. Additionally, you will also perform cross validation with `cv.glmnet()` to obtain the best value of the model hyper-parameter, lambda (λ).
+You will employ the package `glmnet` to perform Elastic Net Regression. The main function from this package is `glmnet()` which we will use to fit the model. Additionally, you will also perform cross validation with `cv.glmnet()` to obtain the best value of the model hyper-parameter, lambda ($λ$).
 
-As we are working with a mix of categorical and numerical predictors, it is advisable to dummy-code the variables, you can easily do this by creating a model matrix for both test and train set.
+As we are working with a mix of categorical and numerical predictors, it is advisable to dummy-code the variables. You can easily do this by creating a model matrix for both the test and train set.
 
-10. Create the model matrix needed for input to `glmnet()` and `cv.glmnet()`. See pseudo-code below:
+11. Create the model matrix needed for input to `glmnet()` and `cv.glmnet()`. See pseudo-code below:
 
 ```{r eval=FALSE}
-modTrain <- model.matrix(~ .- 1, data = train)
-modTest <- model.matrix(~ .- 1, data = test)
+modTrain <- model.matrix(~ ., data = train)
+modTest <- model.matrix(~ ., data = test)
 ```
 
-Note that the `- 1` in the `model.matrix()` formula which means, drop the intercept from the matrix.
-
-11. Create your Elastic Net Regression model with `glmnet()`.
+12. Create your Elastic Net Regression model with `glmnet()`.
 
 ::: {.callout-tip collapse="true"}
 ## Hint
 
 As you are performing Elastic Net Regression, you set the mixing parameter alpha = 0.5. This gives you a 50/50 balance of the L1 (LASSO) and L2 (Ridge) penalties.
+
 :::
 
-12. Use `cv.glmnet()` to attain the best value of the hyperparameter lambda (λ). Remember to set a seed for reproducible results.
+13. Use `cv.glmnet()` to attain the best value of the hyperparameter lambda ($λ$). Remember to set a seed for reproducible results.
 
-13. Plot all the values of lambda tested during cross validation by calling `plot()` on the output of your `cv.glmnet()`. Extract the best lambda value from the `cv.glmnet()` model and save it as an object.
+14. Plot all the values of lambda tested during cross validation by calling `plot()` on the output of your `cv.glmnet()`. Extract the best lambda value from the `cv.glmnet()` model and save it as an object.
 
-Now, lets see how well your model performed.
+Now, let's see how well your model performed.
 
-14. Predict if a individual is likely to give birth before the 37th week using your model and your test set. See pseudo-code below.
+15. Predict if an individual is likely to give birth before the 37th week using your model and your test set. See pseudo-code below.
 
 ```{r, eval = FALSE}
 y_pred <- predict(model, test, type = 'class')
-
 ```
 
-15. Just like for the logistic regression model you can calculate the accuracy of the prediction by comparing it to `y_test` with `confusionMatrix()`. Do you have a good accuracy? N.B look at the 2x2 contingency table, what does it tell you?
+16. Just like for the logistic regression model you can calculate the accuracy of the prediction by comparing it to `y_test` with `confusionMatrix()`. Do you have a good accuracy? N.B look at the 2x2 contingency table, what does it tell you?
 
-16. Lastly, lets extract the variables which were retained in the model (e.g. not penalized out). We do this by calling the coefficient with `coef()` on our model. See pseudo-code below.
+17. Lastly, let's extract the variables which were retained in the model (e.g. not penalized out). We do this by calling the coefficient with `coef()` on our model. See pseudo-code below.
 
 ```{r eval=FALSE}
 coeffs <- coef(mode, s = bestLambda)
@@ -114,23 +140,26 @@ coeffsDat <- as.data.frame(as.matrix(coeffs))
  
 ```
 
-16. Make a plot that shows the absolute importance of the variables retained in your model. This could be barplot with variable names on the x-axis and the height of the bars denoting absolute size of coefficient).
+18. Make a plot that shows the absolute importance of the variables retained in your model. This could be a barplot with variable names on the y-axis and the length of the bars denoting absolute size of coefficient.
+
+19. Now repeat what you just did above, but this time instead of using `Preg.ended...37.wk` as outcome, try using a continuous variable, such as `GA.at.outcome`. N.B remember this means that you should evaluate the model using the RMSE and a scatter plot instead of the accuracy!
+
 
 ## Part 2: Random Forest
 
-Now, lets try a Random Forest classifier. We will continue using the `Obt_Perio_ML.Rdata` with `Preg.ended...37.wk` as outcome.
+Now, let's try a Random Forest classifier. We will continue using the `Obt_Perio_ML.Rdata` dataset with `Preg.ended...37.wk` as outcome.
 
-18. Just like in the section on EN above:
+20. Just like in the section on Elastic Net above:
 
     -   Load the dataset (if you have not already)
 
-    -   Remove the outcome variables you will not be using.
+    -   Remove the possiable outcome variables you will not be using.
 
     -   Split the dataset into test and train set - this time keep the outcome variable `Preg.ended...37.wk` in the dataset.
 
     -   Remember to remove the `PID` column before training!
 
-19. Set up a Random Forest model with cross-validation. See pseudo-code below. Remember to set a seed.
+21. Set up a Random Forest model with cross-validation. See pseudo-code below. Remember to set a seed.
 
 First the cross-validation parameters:
 
@@ -166,7 +195,7 @@ rf_model <- train(
 print(rf_model)
 ```
 
-20. Plot your model fit. How does your model improve when you add 10, 20, 30, etc. predictors?
+22. Plot your model fit. How does your model improve when you add 10, 20, 30, etc. predictors?
 
 ```{r, eval=FALSE}
 # Best parameters
@@ -174,13 +203,11 @@ rf_model$bestTune
 
 # Plot performance
 plot(rf_model)
-
-
 ```
 
-21. Use your test set to evaluate your model performance. How does the random forest compare to the elastic net regression?
+23. Use your test set to evaluate your model performance. How does the Random Forest compare to the Elastic Net regression?
 
-22. Extract the predictive variables with the greatest importance from your fit.
+24. Extract the predictive variables with the greatest importance from your fit.
 
 ```{r, eval=FALSE}
 varImpOut <- varImp(rf_model)
@@ -188,4 +215,4 @@ varImpOut <- varImp(rf_model)
 varImpOut$importance
 ```
 
-23. Make a logistic regression using the same dataset (you already have your train data, test data, y_train and y_test). How do the results of Elastic Net regression and Random Forest compare to the output of your glm.
+25. Make a logistic regression using the same dataset (you already have your train data, test data, y_train and y_test). How do the results of Elastic Net regression and Random Forest compare to the output of your `glm`.

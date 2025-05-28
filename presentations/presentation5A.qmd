@@ -38,9 +38,8 @@ df_smoke <- df_smoke %>%
 ```
 
 ## Linear Regression
-TODO: this model - these variables?
 
-We will use this to perform a linear regression.
+We will perform a linear regression using daily cigarettes smoked and exercise level as predictors, $X$, and lived years as the outcome, $y$.
 
 ![](../figures/lin_reg.jpg){fig-align="center"}
 
@@ -58,7 +57,6 @@ df_smoke$ID <- 1:nrow(df_smoke)
 train <- df_smoke %>% sample_frac(0.75)
 nrow(train)
 head(train)
-
 ```
 
 As you can see, the ID's in `train` are shuffled and it only has 75 rows since we asked for 75% of the data. Now all we have to do is identify the other 25%, i.e. the observations not in train.
@@ -80,9 +78,9 @@ head(test)
 
 As stated above, a linear regression model generally has the form of:
 
-$$y = b_0 + b_1 * x_i$$
+$$y = β_0 + β_1 * x_i$$
 
-Where we refer to $b_0$ as the intercept and $b_1$ as the coefficient. There will typically be one coefficient for each predictor. The goal of modelling is to estimate the values of $b_0$ and all $b_i$.
+Where we refer to $β_0$ as the intercept and $β_1$ as the coefficient. There will typically be one coefficient for each predictor. The goal of modelling is to estimate the values of $β_0$ and all $β_i$.
 
 We need to tell R which of our variables is the outcome, $y$, and which predictors, $x_i$, we want to include in the model. This is referred to in documentation as the model's **formula**. Have a look:
 
@@ -110,7 +108,7 @@ class(model)
 names(model)
 ```
 
-Lets have a look at the results. The summary gives us a lot of information about the model we trained:
+Let's have a look at the results. The summary gives us a lot of information about the model we trained:
 
 ```{r}
 # View model summary
@@ -142,7 +140,6 @@ hist(model$residuals,
      xlab = 'Residual')
 ```
 
-
 Slightly fancier plot:
 
 ```{r}
@@ -153,6 +150,7 @@ plot(model)
 ### Model interpretation
 
 Plot to understand the model:
+
 ```{r}
 # Predict life expectancy for each combination
 train$predicted_life <- predict(model, newdata = train)
@@ -173,9 +171,7 @@ ggplot(train) +
 
 What do these results mean? Our model formulation is:
 
-TODO: Below where does excise come in? should it be $$life=b_0+b_1*cigarettes+b2_exercise$$ ?
-
-$$life = b_0 + b_1 * cigarettes$$
+$$life = β_0 + β_1 * cigarettes + β_2 * exercise$$
 
 And we estimated these values:
 
@@ -185,10 +181,9 @@ model$coefficients
 
 Therefore:
 
--   The intercept $b_0$ is the number of years we estimated a person in this dataset will live if they smoke 0 cigarettes and do not exercise. It is 77.6 years.
+-   The intercept $β_0$ is the number of years we estimated a person in this dataset will live if they smoke 0 cigarettes and do not exercise. It is 77.6 years.
 
 -   The coefficient of cigarettes per day is -0.29. This means for every 1 unit increase in cigarettes (one additional cigarette per day) the life expectancy decreases by 0.29 years. Similarly for the exercise variable, if you exercise your life expectancy will go up 1.1-2.4 years compared to no exercise, independently of how many cigarettes you smoke.
-
 
 ### Model performance
 
@@ -227,7 +222,7 @@ In order to have a categorical outcome, we'll add a column to our toy data that 
 
 ```{r}
 df_smoke <- df_smoke %>%
-  mutate(early_death = factor(ifelse(life < 75, 'yes', 'no')))
+  mutate(early_death = factor(ifelse(life < 75, 1, 0))) # Encoding: True/yes = 1, False/no = 0
 
 df_smoke %>%
   count(early_death)
@@ -276,8 +271,7 @@ In a logistic regression model the link function is the logit. In a linear model
 
 In order to understand what that means we'll need a tiny bit of math.
 
-TODO: below, should it be: Our $y$ is either 0 (no, the person is not dead before 75) or 1 (yes, the person is dead before 75)
-Our $y$ is either 0 or 1 (the person is either dead or not). However we cannot model that so instead we will model the probability of the outcome being 1: $P(earlydeath == 1)$. Except probabilities are bounded between 0 and 1 which is mathematically difficult to impose (it means all $y$'s have to be between these two values and how are we gonna enforce that?) So instead, we will model the log-odds of early death:
+Our $y$ is either 0 (no, the person is not dead before 75) or 1 (yes, the person is dead before 75). However we cannot model that so instead we will model the probability of the outcome being 1: $P(earlydeath == 1)$. Except probabilities are bounded between 0 and 1 which is mathematically difficult to impose (it means all $y$'s have to be between these two values and how are we gonna enforce that?) So instead, we will model the log-odds of early death:
 
 $$ y = \log(\frac{P(earlydeath == 1)}{1-P(earlydeath == 1)})$$
 
@@ -301,10 +295,10 @@ summary(model_log)
 ```
 
 ### Model interpretation
-TODO: two times "high amount of exercise". Where should the low amount of exercise go?
-We see from looking at the summary that the coefficient of exercise level 1 and level 2 is not significant. This means that we are not confident that doing a high amount of exercise has a significant impact on the probability of dying before 75 compared to doing moderate or high amounts of exercise. This does not mean that there can be no influence, merely that we do not have enough data to detect it if it is there.
 
-Are you surprised? Exercise level was significant when we modelled the number of years lived.
+We see from looking at the summary that the coefficient of exercise level 1 and level 2 is not significant. This means that we are not confident that doing any level of exercise has a significant impact on the probability of dying before 75 compared to doing no exercise. This does not mean that there can be no influence, merely that we do not have enough data to detect it if it is there.
+
+Are you surprised? Exercise level was significant when we modelled the number of years lived with linear regressions.
 
 With the number of daily cigarettes predictor we have a high degree of certainty that it influences the probability of dying before 75 (in this dataset!), but what does a coefficient of 0.84 mean?
 
@@ -355,19 +349,19 @@ model_reduced <- glm(early_death ~ daily_cigarettes, data = train, family = "bin
 summary(model_reduced)
 ```
 
-We can use an anova with the Chi-square test to compare the log-likelihood of the two models:
+We can use an anova with the Chi-square test to compare the log-likelihood of the two models. It is most common to compare the less complex model to the more complex model:
 
 ```{r}
-anova(model_log, model_reduced, test = 'Chisq')
+anova(model_reduced, model_log, test = 'Chisq')
 ```
 
-The p-value of the Chi-square test tells us if there is evidence that the difference in log-likelihoods is significant. If it is not significant, we do not have evidence that one model is a better fit than the other and we would therefore choose the less complex model with fewer predictors since that gives us more statistical power and less overfitting.
+The p-value of the Chi-square test tells us if there is evidence that the difference in log-likelihoods is significant. If it is not significant, we do not have evidence that the more complex model is a better fit than the less complex model and we would therefore choose the less complex model with fewer predictors since that gives us more statistical power and less overfitting.
+
+In this case the p-value is significant which means that the more complex model, that includes exercises, is a better fit. Discuss in small groups if you think this makes sense with the exercises levels not being significant predictors when we looked at `summary(model_log)`.
 
 ### Model Evaluation
 
-TODO: should we go forward with the model_reduced since that performs better?
-
-Lastly, lets evaluate our model using the test set, just like we did for the linear regression. First, we will predict the outcome for the test set:
+Lastly, let's evaluate our model using the test set, just like we did for the linear regression. First, we will predict the outcome for the test set:
 
 ```{r}
 y_pred <- predict(model_log, newdata = test, type = 'response')
@@ -405,7 +399,7 @@ library(ContaminatedMixt)
 library(factoextra)
 ```
 
-Lets load in the dataset
+Let's load in the dataset
 
 ```{r}
 data('wine') #load dataset

@@ -7,17 +7,20 @@ DAY 1
 (60 minutes)    Exercise 2: Data Transformation and Integration
 
 DAY 2
+Before Lunch:
 (XX minutes)    Presentation 3 - Exploratory Data Analysis (EDA)
 (XX minutes)    Exercise 3, 3A, 3B ???
+
+Afternoon:
 (45 minutes)    Presentation 4A: Scripting in R - Conditions and For-loops
 (60 minutes)    Exercise 4A: Scripting in R - Conditions and For-loops
-(45 minutes)    Presentation 4B: Scripting in R - Functions
-(45 minutes)    Exercise 4B: Scripting in R - Functions
+(60 minutes)    Presentation 4B: Scripting in R - Functions
+(60 minutes)    Exercise 4B: Scripting in R - Functions
 
 DAY 3 
-(60 minutes)    Presentation 5A: Models and Model Evaluation in R
-(60 minutes)    Exercise 5A: Models and Model Evaluation in R
-(XX minutes)    Presentation 5B: Models and Model Evaluation in R
-(XX minutes)    Exercise 5B: Models and Model Evaluation in R
+(60 minutes)    Presentation 5A: Intro to Regression in R
+(60 minutes)    Exercise 5A: Intro to Regression in R
+(60-75 minutes) Presentation 5B: Models and Model Evaluation in R
+(120 minutes)    Exercise 5B: Models and Model Evaluation in R
 
 
