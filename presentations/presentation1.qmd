@@ -6,345 +6,121 @@ project:
  output-dir: ../docs
 ---
 
-In this section we will focus on data cleanup and generating summary statistics. We will mostly use functions from the tidyverse packages. However, in some cases, it can be quicker and simpler to use base R which is a package that is automatically loaded when starting an R session.
+In this section, we'll focus on cleaning data and generating summary statistics. We'll primarily use functions from the `tidyverse` package, but in some cases base R offers quick and effective alternatives.
 
 ## Load Packages
 
 ```{r warning=FALSE, message=FALSE}
 library(tidyverse)
 library(ggforce)
+library(skimr)
 ```
 
-## Load Dataset
+## Load data
 
-Here, we load a dataset containing sales data for employees (measured in thousands of DKK) from 2020 to 2023. We use the `readxl::read_excel()` function, which automatically imports the data as a tibble — the default data format used in the tidyverse for easier and more consistent data handling.
+We’ll work with two datasets:
+
+-   df_ov: clinical information for ovarian cancer patients.
+
+-   df_exp: gene expression data for cytochrome genes.
+
+We use the `readxl::read_excel()` function, which automatically imports the data as a tibble — the default data format used in the tidyverse for easier and more consistent data handling.
+
+```{r warning=FALSE, message=FALSE}
+
+load("../data/Ovarian_data.RData")
+row.names(df_ov) <- NULL
+
+#df_ov <- read_csv("../data/Ovarian_meta.csv")
+class(df_ov)
+df_ov[1:3,1:4]
+
+#df_exp <- read.csv("../data/Ovarian_exp.csv", row.names=1)
+#df_exp <- df_ex
+df_exp[1:3,1:7]
+class(df_exp)
+
+```
+
+## Understanding the Data
+
+Before jumping into statistics or modeling, we need to understand both the problem we’re solving and the structure of the data.
+
+-   What does each column (variable) represent?
+
+-   Are the values **numerical**, **categorical**, **text**, or something else?
+
+-   Are there **missing values**, or other data quality issues?
+
+-   Are there **domain-specific rules** (e.g., medical standards)?
+
+This will help us get an overview of the data, help you avoid mistakes and choose the right analysis methods.
+
+## Accessing Data Characteristics
+
+Let’s start by taking a look at the structure and distribution of the data to get a feel for the data distribution and identify any potential problems.
+
+Get summary stats:
+
+-   Central tendency (mean, median)
+
+-   Spread (standard deviation, range)
+
+-   Skewness/Kurtosis
+
+Missing value percentages
+
+### Basics
+
+We can get a little reminder of base R and tidyverse functions and explore some basic data characteristics.
+
+Take a look at categorical and numerical variables, access elements in list.
 
 ```{r}
-df <- readxl::read_excel('../data/df_sales_1.xlsx') 
-```
-
-```{r}
-class(df)
-```
-
-## Accessing and Manipulating Data
-
-### Accessing Data
-
-Access the `Age` column:
-
-```{r results="hide"}
-# Base R 
-df['Age']
+df_ov$summarystage[1:5]
+df_ov$days_to_death[1:5]
 
 # Tidyverse 
-df %>% select(Age)
+sel_col <- df_ov %>%
+  select(vital_status)
 ```
 
-### Manipulating Data
+#### **Check for Missing Values**
 
-Add a column.
-
-```{r results="hide"}
-df <- df %>% 
-  mutate(mood = "happy")
-```
-
-Add a column containing the difference in sales in 2022 and 2022.
+Check which columns contain NA values and how many:
 
 ```{r}
-df <- df %>% 
-  mutate(sales_diff = sales_2022 - sales_2020)
+colSums(is.na(df_ov))[1:6]
+barplot(colSums(is.na(df_ov)), las=2, cex.names=0.5, col = "gold")
 ```
 
-Remove the `sales_diff` column.
+Remove rows with missing data (careful—this can reduce sample size too much):
 
 ```{r}
-# Base R 
-# df$sales_diff <- NULL
-
-# Tidyverse 
-df <- df %>%
-  select(-sales_diff)
+df_ov %>% drop_na() %>% head()
 ```
 
-Adding a column with content based on a condition with `ifelse`.
-
-```{r results="hide"}
-df <- df %>% 
-  mutate(raise = ifelse(sales_2023 > sales_2022, "yes", "no"))
-```
-
-Extension of `ifelse`: `case_when`
-
-```{r results="hide"}
-df <- df %>% 
-  mutate(group = case_when(Age < 30 & Sex == "Female" ~ "young_female",
-                           Age < 30 & Sex == "Male" ~ "young_male",
-                           Age >= 30 & Sex == "Female" ~ "mature_female",
-                           Age >= 30 & Sex == "Male" ~ "mature_male", 
-                           .default = NA))
-```
-
-### Subestting Data
-
-Select columns with sales numbers.
-
-```{r results="hide"}
-df %>% 
-  select(starts_with('sales_'))
-```
-
-Filter rows for people older than 25.
-
-```{r results="hide"}
-# Base R 
-df[df$Age > 25 ,]
-
-# Tidyverse 
-df %>% 
-  filter(Age > 25)
-```
-
-Filter rows for people that are 30 years old or younger and have sales in 2022 over 200.
-
-```{r}
-df %>% 
-  filter(Age <= 30, sales_2022 > 200)
-```
-
-## Joining Dataframes
-
-The `df_location` data frame contains information about the cities of the sales people.
-
-```{r}
-set.seed(101)
-
-df_location <- data.frame(
-  ID = c(1, 2, 3, 4, 5, 11, 12, 13, 14, 15),
-  City = c("New York", "LA", "New York", "Chicago", "Miami", "Miami", "LA", "Chicago", "LA", "New York")
-)
-
-head(df_location)
-```
-
-Join `df` and `df_location` with `full_join`, `inner_join`, `left_join` and `rigth_join`.
-
-`full_join` keeps all observations in both data sets.
-
-```{r}
-df %>% 
-  full_join(df_location, by = 'ID')
-```
-
-`ìnner_join` keeps observations that occurs in both datasets.
-```{r}
-df %>% 
-  inner_join(df_location, by = 'ID')
-```
-
-`left_join` keeps all observations in `df`.
-
-```{r}
-df %>% 
-  left_join(df_location, by = 'ID')
-```
-
-`left_join` keeps all observations in `df_loction`.
-
-```{r}
-df %>% 
-  right_join(df_location, by = 'ID')
-```
-
-We are going to use the left joined dataframe.
-
-```{r}
-df_join <- df %>% 
-  left_join(df_location, by = 'ID')
-```
-
-## Investigating Data
-
-Check which columns have NAs.
-
-```{r}
-# Base R
-colSums(is.na(df_join))
-
-# Tidyverse
-df_join %>% summarise(across(everything(), ~ sum(is.na(.))))
-```
-
-Remove rows with any NAs.
-
-```{r}
-df_join %>% drop_na()
-```
-
-Sort data based on sales in 2022 in descending order.
-
-```{r}
-df_join %>% arrange(desc(sales_2022))
-```
-
-Check variable type:
-
-```{r}
-str(df_join)
-```
-
-You also see variable types displayed under the column name in tibbles:
-
-```{r}
-head(df_join)
-```
+#### **Check groups of categorical variables**
 
 Counting the number of occurrences for each level of a categorical variable.
 
-```{r results="hide"}
-# Base R
-table(df_join$City)
-
-# Tidyverse
-df_join %>% dplyr::count(City)
-```
-
-Checking the range of a variable.
-
 ```{r}
-# Base R
-range(df_join$Age, na.rm = TRUE)
-
-# Tidyverse 
-df_join %>%
-  summarise(min_value = min(Age, na.rm = TRUE), 
-            max_value = max(Age, na.rm = TRUE))
-```
-
-### Plotting distributions
-
-For continuous variables we may want to see how they are distributed:
-
-```{r}
-#base R
-
-#no native violin plots, but you could use the vioplot package
-
-hist(df_join$Age)
-```
-
-```{r}
-#tidyverse: 
-
-ggplot(df_join, aes(x=1,y=Age)) +
-  geom_violin()
-  #if you want to add dots for the actual data points
-  #geom_sina()
-
-ggplot(df_join, aes(x=Age)) +
-  geom_histogram(bins = 5)
+#Let’s count how many dead or alive individuals we have.
+#This is useful for checking balance across groups or categories.
+barplot(table(df_ov$vital_status), las=2, cex.names=0.5, col = "gold")
 
 ```
 
-Before the next section - let's do a quick break!
-
-------------------------------------------------------------------------
-
-## String manipulation
-
-We will do string manipulation the tidyverse way: using the `stringr` package where all the functions starts with `str_`. 
-
-The `paste` function concatenates two strings to one. This one is from baseR though. 
-
-```{r}
-paste('Alice', 'Hansen', sep = ' ')
-```
-
-Let's give all the employees the last name *Hansen*.
-
-```{r}
-df_join <- df_join %>% 
-  mutate(Name = paste(Name, 'Hansen', sep = ' '))
-
-head(df_join)
-```
-
-We can use the `str_split_i` function to split a string on a given character and access the i'th element. 
-
-```{r}
-str_split_i('Alice Hansen', pattern = ' ', i = 1)
-```
-
-```{r}
-str_split_i('Alice_Hansen_Jensen', pattern = '_', i = 2)
-```
-
-Let's remove the last name we just gave the employees.
-
-```{r}
-df_join <- df_join %>% 
-  mutate(Name = str_split_i(Name, pattern = ' ', i = 1))
-
-head(df_join)
-```
-
-Detect substring in main string using `str_detect`.
-
-```{r}
-str_detect('Alice', 'A')
-```
-
-```{r}
-str_detect('Alice', 'B')
-```
-
-Add column that check if "A" or "a" in `Name` and place it after the `Name` column.
-
-```{r}
-df_join %>% 
-  mutate(A_in_name = str_detect(Name, 'A|a'),
-         .after = Name) %>% 
-  head()
-```
-
-Replace substring in string
-
-```{r}
-str_replace_all('Hansen', 'n', 'N')
-```
-
-Add column that check if "A" or "a" in `Name` and place it after the `Name` column.
-
-```{r}
-df_join %>% 
-  mutate(NamE = str_replace_all(Name, 'e', 'E'),
-         .after = Name) %>% 
-  head()
-```
-
-### Whitespace
-
-Whitespace includes spaces, newlines, and other blank characters in text. It can cause errors or inconsistencies in data, so removing unnecessary whitespace is an important step in cleaning data.
-
-Let's have a look at a version of the sales data frame with whitespaces. In the tibble format it cannot be spotted.
-
-```{r message=FALSE}
-df_sales_messy <- read_delim('../data/df_sales_messy.csv')
-head(df_sales_messy)
-```
-
-Accessing the unique sexes of the `Sex` column before cleaning.
-
-```{r}
-df_sales_messy$Sex %>% 
-  unique()
-```
+Whitespace includes spaces, newlines, and other blank characters in text. It can cause errors or inconsistencies in data, so removing unnecessary whitespace is an important step in cleaning data. Sometimes, hidden characters or spaces *cause* misgrouped levels.
 
 Use the `str_trim` function to remove whitespace.
 
+Trim whitespace and standardize:
+
 ```{r}
-df_sales_messy$Sex %>% 
+table(df_ov$vital_status) 
+
+df_ov$vital_status %>% 
   str_trim() %>% 
   unique()
 ```
@@ -352,18 +128,173 @@ df_sales_messy$Sex %>%
 Like other function, the `str_trim` function can also be used inside the `mutate` function to alter the data frame.
 
 ```{r}
-df_sales_clean <- df_sales_messy %>% 
-  mutate(Sex = str_trim(Sex))
+df_ov <- df_ov %>% 
+  mutate(vital_status = str_trim(vital_status))
+
 ```
 
-Accessing the unique sexes of the `Sex` column after cleaning.
+Accessing the unique sexes of the `vital_status` column.
 
 ```{r}
-df_sales_clean$Sex %>% 
+df_ov$vital_status %>% 
   unique()
 ```
 
-### Regex: Regular expression 
+#### Check numerical variables
+
+To understand the spread of a variable like `Age at initial diagnosis`, we can check the minimum and maximum values. This helps spot outliers or strange values (like someone who’s 200 years old!).
+
+```{r}
+range(df_ov$age_at_initial_pathologic_diagnosis, na.rm = TRUE)
+hist(df_ov$age_at_initial_pathologic_diagnosis, col = "gold")
+```
+
+Let’s say we want to sort data by  `Age at initial diagnosi`:
+
+```{r}
+df_ov <- df_ov %>% 
+  arrange(desc(age_at_initial_pathologic_diagnosis))
+```
+
+### Summary
+
+There is a LOT of data and it can be a bit overwhelming. But lucky there are some helper functions.
+
+```{r}
+str(df_ov)# Overview of structure
+skim(df_ov) # Summary stats (needs skimr package)
+```
+
+We can already identify a lot of issues.
+
+## Data wrangling and cleaning
+
+**Lets do some cleanup**
+
+1.  Drop Variables with Too Many Missing Values
+
+2.  Fix Variable Types
+
+3.  Drop Non-Informative Variables
+
+4.  Recode and Reorder Factors
+
+### Step 1: Drop Variables with Too Many Missing Values
+
+1.  If a variable has more than \~1/3% missing data, it probably won’t be useful. Let’s remove those:
+
+```{r}
+threshold <- 1/5 # Roughly equivalent to a 20% threshold
+head(df_ov %>% select(where(~mean(is.na(.)) > threshold)))
+df_ov <- df_ov %>% select(where(~mean(is.na(.)) < threshold))
+```
+
+This keeps only the variables that are mostly complete.
+
+### Step 2: Fix Variable Types
+
+Some variables are stored as **character** or even **numeric**, when they should actually be **factors** (i.e., categorical variables). Convert character/numeric columns to factors:
+
+```{r}
+
+df_ov <- df_ov %>% 
+  mutate_at(c('sample_type', 'primarysite', 'summarygrade',
+              'summarystage', 'substage', 'recurrence_status',
+              'vital_status', 'tumorstage', 'grade', 'batch'), as.factor)
+
+```
+
+### Step 3: Drop Non-Informative Variables
+
+Let’s check a few categorical variables and remove any that are redundant or irrelevant. If they don’t provide useful or well-curated information, we can drop them:
+
+```{r}
+table(df_ov$histological_type)
+table(df_ov$primarysite)
+```
+
+```{r, warning=FALSE}
+target <- c("histological_type", "uncurated_author_metadata", "primarysite")
+df_ov <- select(df_ov, -target)
+```
+
+### Step 4: Recode and Reorder Factors
+
+Sometimes we want to **set the order of factor levels manually**, especially if there's a natural or meaningful order (e.g., "low" → "high"): This helps when plotting or interpreting regression coefficients.
+
+```{r}
+
+table(df_ov$summarystage)
+table(df_ov$summarygrade)
+
+df_ov <- df_ov %>% mutate(summarygrade = fct_recode(summarygrade, "high" = "HIGH"))
+df_ov <- df_ov %>% mutate(summarygrade = fct_recode(summarygrade, "low" = "LOW"))
+
+
+df_ov <- df_ov %>% mutate(summarystage = factor(summarystage, levels = c("early","late")))
+df_ov <- df_ov %>% mutate(summarygrade = factor(summarygrade, levels = c("low","high")))
+
+
+```
+
+## Create New Variables
+
+Sometimes we would like to create a new data columns by extracting specific information or combining other columns.
+
+### Step 5: Creating New Variables
+
+Add a column combining other columns:
+
+```{r}
+df_ov <- df_ov %>% 
+  mutate(percent_not_cancer_cells = percent_stromal_cells + percent_normal_cells)
+hist(df_ov$percent_not_cancer_cells, col = "gold")
+```
+
+For character vectors you can use function `paste` and `paste0` . The `paste` function concatenates two strings to one. This one is from baseR though.
+
+```{r}
+paste('TCGA', 'Data', sep = ' ')
+```
+
+```{r}
+df_ov <- df_ov %>% 
+  mutate(stage = paste(tumorstage, substage, sep = '-'))
+
+head(df_ov$stage)
+```
+
+Create logical variable with `ifelse`. Adding a column with content based on a condition with `ifelse`.
+
+```{r results="show"}
+df_ov <- df_ov %>% 
+  mutate(ratio = ifelse(percent_not_cancer_cells > percent_tumor_cells, "larger", "smaller"))
+table(df_ov$ratio)
+
+```
+
+Extension of `ifelse`: `case_when`
+
+```{r results="show"}
+
+df_ov <- df_ov %>% 
+  mutate(group = case_when(age_at_initial_pathologic_diagnosis < 60 & summarystage == "early" ~ "Young - Early stage",
+                           age_at_initial_pathologic_diagnosis < 60 & summarystage == "late" ~ "Young - Late stage",
+                           age_at_initial_pathologic_diagnosis >= 60 & summarystage == "early" ~ "Mature - Early stage",
+                           age_at_initial_pathologic_diagnosis >= 60 & summarystage == "late" ~ "Mature - Late stage",
+                           .default = NA))
+
+table(df_ov$group)
+```
+
+## String manipulation
+
+Sometimes the information you need is hidden inside longer text strings or encoded in specific patterns — especially in genomics or clinical datasets. In this example we notice that sample type information is unknow for a lot of patients. Since we are TCGA experts, we know that this information is actually encoded in the full sample name `TCGA-20-0987-01A-02R-0434-01`. But How do we get it.
+
+To extract and work with this kind of information, we use **Regular expression (Regex)** and **string manipulation** tools.
+
+### Regex: Regular expression
+
 Regular expressions (regex) are a special language used to search for patterns in text in a very flexible and slightly confusing way.
 
 Instead of looking for an exact word like "cat", regex lets you search for things like:
@@ -378,70 +309,176 @@ Instead of looking for an exact word like "cat", regex lets you search for thing
 
 It might look a little weird at first (lots of slashes, dots, and symbols), but once you learn a few basics, it’s incredibly powerful. And the good thing is that ChatCPT is very good at it!
 
-#### Use cases for regex
+![](/figures/regex1.png){fig-align="center"}
 
-`grep` returns value or index of value that match pattern in list.
+We will do string manipulation the tidyverse way: using the `stringr` package where all the functions starts with `str_`.
+
+### Examples
 
 ```{r}
-df_join$raise
+df_ov$alt_sample_name[1]
+```
+
+Let’s say we want to extract part of the sample name. We can use the `str_split_i` function to split a string on a given character and access the i'th element.
+
+```{r}
+str_split_i('TCGA-20-0987-01A-02R-0434-01', pattern = '-', i = 2)
+```
+
+This grabs the 4th segment in the name string, which might contain the sample type. We can apply this to a whole column using `mutate()` and create a new variable with the extracted values.
+
+```{r}
+df_ov <- df_ov %>% 
+  mutate(Sample_code = str_split_i(alt_sample_name, pattern = '-', i = 4))
+
+table(df_ov$Sample_code)
+```
+
+We know that 01 encode primary tumor while 11 encodes healthy tissue. We can use  `str_detect()`  to see if sub-string contains the 01 or 11.
+
+```{r}
+str_detect(df_ov$Sample_code, '01')[1:6]
 ```
 
 ```{r}
-grep(pattern = 'yes', x = df_tidyverse_join$raise) # Returns indexes of values that match
-
-grep(pattern = 'yes', x = df_tidyverse_join$raise, value = TRUE) # Returns values that match
-
-grep(pattern = 'y', x = df_tidyverse_join$raise, value = TRUE) # can handle sub strings 
-
-grep(pattern = 'maybe', x = df_tidyverse_join$raise) 
+str_detect(df_ov$Sample_code, '11')[1:6]
 ```
 
-`grepl` returns logical vector indicating which elements match the pattern in list.
+Add column that records TRUE if sample is a primary tumor and place it after the `Sample_type` column.
 
 ```{r}
-grepl(pattern = 'yes', df_tidyverse_join$raise)
-
-grepl(pattern = 'y', df_tidyverse_join$raise)
-
-grepl(pattern = 'maybe', df_tidyverse_join$raise) 
+df_ov <- df_ov %>% 
+  mutate(Sample_code_mnual = str_detect(df_ov$Sample_code, '01.{0,1}'), .after = sample_type)
 ```
 
-`gsub`
+We can also replace text patterns:
 
 ```{r}
-gsub(pattern = "yes", replacement = "YES", x = df_tidyverse_join$raise)
+str_replace_all('TCGA', 'A', 'aaaaaaaaaa')
 ```
 
-## Slices
-
-Look at list
+Add column that check if "A" or "a" in `Name` and place it after the `Name` column.
 
 ```{r}
-df_tidyverse_join$Name
+df_ov <- df_ov %>% 
+  mutate(Sample_code = str_replace_all(Sample_code, '01.', 'Tumor'),
+         .after = sample_type)
+df_ov[1:4,1:4]
 ```
 
-Access first element in list
+![](/figures/regex2.png){fig-align="center"}
+
+Nicely done!
+
+**At this point, we have:**
+
+1.  Drop Variables with Too Many Missing Values
+
+2.  Fix Variable Types
+
+3.  Drop Non-Informative Variables
+
+4.  Recode and Reorder Factors
+
+5.  Create New Variables from existing ones
+
+6.  Create New Variables using regex string manipulations
+
+Lets take a look how our data looks now.
 
 ```{r}
-df_tidyverse_join$Name[1]
+skim(df_ov)
 ```
 
-Access first to fithed element in list
+## 
 
-```{r}
-df_tidyverse_join$Name[1:5]
+## Joining Dataframes
+
+Often we have additional information stored in another table, and we want to merge that into our main dataset. We would like to join our `df_ov and df_exp` data table by IDs.
+
+Here’s a quick recap of join types from `dplyr`:
+
+-   `full_join()`: all rows from both
+
+-   `inner_join()`: only matched rows
+
+-   `left_join()`: all from left, matched from right
+
+-   `right_join()`: all from right, matched from left
+
+#### Full Join
+
+A **full join** keeps *everything* — all rows from both `df_ov` and `df_exp`. If there's no match, missing values (`NA`) are filled in.
+
+```{r, eval=FALSE, echo=TRUE}
+df_ov %>% 
+  full_join(df_exp, by = 'ID')
 ```
 
-Access second to fithed element in list
+#### Inner Join
 
-```{r}
-df_tidyverse_join$Name[2:5]
+An **inner join** keeps only the rows that appear in **both** data frames. So if an ID exists in one but not the other, it’s dropped.
+
+```{r,eval=FALSE, echo=TRUE}
+df_ov %>% 
+  inner_join(df_exp, by = 'ID')
 ```
 
-## Export Dataset
+#### Left Join
 
-Export tidyverse dataset
+A **left join** keeps **all rows from** `df_ov`, and matches info from `df_exp` wherever possible. Unmatched rows from `df_ov` get `NA` for the new columns.
+
+```{r, eval=FALSE, echo=TRUE}
+df_ov %>% 
+  left_join(df_exp, by = "ID")
+```
+
+#### Right Join
+
+A **right join** is the opposite: it keeps **all rows from** `df_ov` and adds matching data from `df_exp` wherever it can.
+
+```{r, eval=FALSE, echo=TRUE}
+df_ov %>% 
+  right_join(df_exp, by = "ID")
+```
+
+### Lets join
+
+In this case, we want to keep all the records from `df_ov` and *add expression info where available*. So we’ll use a **left join**.
+
+Before merging datasets, make sure the IDs/names match. For example, replace `-` with `.` so the column names align.
 
 ```{r}
-writexl::write_xlsx(df_tidyverse_join, '../out/sales_data_2.xlsx')
+df_ov[1:3,1:3]
+df_exp[1:3,6:12]
+
+# Fix ID format before merging
+df_ov$unique_patient_ID <- str_replace_all(df_ov$unique_patient_ID, "-", ".")
+
+```
+
+```{r}
+# Merge clinical and expression data
+df_comb <- dplyr::left_join(
+  as_tibble(df_ov), as_tibble(df_exp), by = c("unique_patient_ID" = "sample"))
+```
+
+### Recap
+
+**By now, we have:**
+
+-   Loaded and explored clinical and expression datasets
+
+-   Cleaned whitespace, fixed types, dropped unnecessary variables
+
+-   Created new columns through logic and string operations
+
+-   Merged the clinical and expression data for downstream analysis
+
+-   Your data is now prepped and ready for modeling, visualization, or more advanced statistical analysis.
+
+**Your dataset `df_comb` is now ready for further analysis such as PCA, regression, or machine learning.**
+
+```{r}
+save(df_comb, file="../data/Ovarian_comb_clean.RData")
 ```
