@@ -1,5 +1,5 @@
 ---
-title: "Exercise 1 - Solutions: Data Cleanup and Summary Statistics"
+title: "Solution 1: Data Cleanup"
 format: html
 project:
  type: website
@@ -24,26 +24,15 @@ head(diabetes_clinical)
 
 ## Explore the data
 
-Use can you either base R or/and tidyverse to solve the exercises. 
+Use can you either base R or/and tidyverse to solve the exercises.
 
-3.  How many missing values (NA's) are there in each column. 
+3.  How many missing values (NA's) are there in each column.
 
 ```{r}
 colSums(is.na(diabetes_clinical))
 ```
 
-4.  Check the ranges and distribution of each of the variables. Remember, the variables might be different types. Do any values seem weird or unexpected?
-
-
-For the categorical variables we can use `table`:
-
-The `Sex` values are not consistent. 
-
-```{r}
-table(diabetes_clinical$Sex)
-table(diabetes_clinical$Smoker)
-table(diabetes_clinical$Diabetes)
-```
+4.  Check the ranges and distribution of each of the numeric variables in the dataset. Do any values seem weird or unexpected? Extract summary statistics on these, e.g. means and standard deviation.
 
 For the numerical variables we'll plot and check the range:
 
@@ -52,46 +41,80 @@ range(diabetes_clinical$Age, na.rm = TRUE)
 
 diabetes_clinical %>% 
   ggplot(aes(y = Age, x = 1)) + 
-  geom_violin()
+  geom_boxplot(fill="steelblue") + 
+  theme_minimal()
 ```
 
-Odd: Some `BloodPressure` values are 0. 
+Odd: Some `BloodPressure` values are 0.
 
 ```{r}
 range(diabetes_clinical$BloodPressure, na.rm = TRUE)
 
 diabetes_clinical %>% 
-  ggplot(aes(y = BloodPressure, x = 1)) + 
-  geom_violin() 
+  ggplot(aes(x = BloodPressure)) + 
+  geom_histogram(color='black', fill='grey') + 
+  theme_minimal()
   
 ```
 
-Odd: Some `BMI` values are 0. 
+Odd: Some `BMI` values are 0.
 
 ```{r}
 range(diabetes_clinical$BMI, na.rm = TRUE)
 
 diabetes_clinical %>% 
   ggplot(aes(y = BMI, x = 1)) + 
-  geom_violin()
+  geom_violin(fill="#ADC698") +
+  geom_point() +
+  theme_minimal()
 ```
 
 ```{r}
 range(diabetes_clinical$PhysicalActivity, na.rm = TRUE)
 
 diabetes_clinical %>% 
-  ggplot(aes(y = PhysicalActivity, x = 1)) + 
-  geom_violin()
+  ggplot(aes(y = PhysicalActivity)) + 
+  geom_boxplot(color='black', fill='grey') + 
+  theme_minimal()
+  
 ```
 
 ```{r}
 range(diabetes_clinical$Serum_ca2, na.rm = TRUE)
 
 diabetes_clinical %>% 
-  ggplot(aes(y = Serum_ca2, x = 1)) + 
-  geom_violin()
+  ggplot(aes(x = Serum_ca2)) + 
+  geom_histogram(color='black', fill='#ADC698') + 
+  theme_minimal()
 ```
 
+Some summary statistics:
+
+```{r}
+diabetes_clinical %>%
+  summarise(across(where(is.numeric), list(mean = mean, sd = sd), na.rm = TRUE))
+
+
+# or alternatively
+
+diabetes_clinical %>%
+  dplyr::select(where(is.numeric)) %>% 
+  summary(.)
+
+
+```
+
+5.  Some variables in the dataset are categorical or factor variables. Figure out what levels these have and how many observations there are for each level.
+
+For the categorical variables we can use `table()` (or if you prefer, `count()`):
+
+The `Sex` values are not consistent.
+
+```{r}
+table(diabetes_clinical$Sex)
+table(diabetes_clinical$Smoker)
+table(diabetes_clinical$Diabetes)
+```
 
 ## Clean up the data
 
@@ -107,11 +130,12 @@ Consider the following:
 
 -   Do you want to change any of the classes of the variables?
 
-5.  Make a clean version of the dataset according to your considerations.
+6.  Make a clean version of the dataset according to your considerations.
 
 ::: {.callout-tip collapse="true"}
 ## Hint
-Have a look at `ID`, `BloodPressure`, `BMI`, `Sex`, and `Diabetes`. 
+
+Have a look at `ID`, `BloodPressure`, `BMI`, `Sex`, and `Diabetes`.
 :::
 
 My considerations:
@@ -122,14 +146,16 @@ My considerations:
 
 -   There are zeros in `BMI` and `BloodPressure`. These are considered false zeros as is does not make sense that these variables have a value of 0.
 
--   `Diabetes` and `ID` are changed to factor. 
+-   `Diabetes` and `ID` are changed to factor.
 
 Check number of rows before cleaning.
+
 ```{r}
 nrow(diabetes_clinical)
 ```
 
 Cleaning data according to considerations.
+
 ```{r}
 diabetes_clinical_clean <- diabetes_clinical %>% 
   mutate(Sex = str_to_title(Sex),
@@ -139,54 +165,57 @@ diabetes_clinical_clean <- diabetes_clinical %>%
 ```
 
 Check the unique sexes now.
+
 ```{r}
 diabetes_clinical_clean$Sex %>% unique()
 ```
 
-Check number of rows after cleaning. 
+Check number of rows after cleaning.
+
 ```{r}
 nrow(diabetes_clinical_clean)
 ```
 
 ## Meta Data
 
-There is some metadata to accompany the dataset you have just cleaned in `diabetes_meta_toy_messy.csv`. This is a csv file, not an excel sheet, so you need to use the `read_delim` function to load it. Load in the dataset and inspect it. 
-
-6.2. Load the meta data set.
+7.  There is some metadata to accompany the dataset you have just cleaned in `diabetes_meta_toy_messy.csv`. This is a csv file, not an excel sheet, so you need to use the `read_delim` function to load it. Load in the dataset and inspect it.
 
 ```{r message=FALSE}
 diabetes_meta <- read_delim('../data/diabetes_meta_toy_messy.csv')
 head(diabetes_meta)
 ```
 
-6.3. How many missing values (NA's) are there in each column. 
+7.1. How many missing values (NA's) are there in each column.
 
 ```{r}
 colSums(is.na(diabetes_meta))
 ```
 
-6.4. Check the distribution of each of the variables. Consider that the variables are of different classes. Do any of the distributions seam odd to you?
+7.2. Check the distribution of each of the variables. Consider that the variables are of different classes. Do any of the distributions seam odd to you?
 
 For the categorical variables:
+
 ```{r}
 table(diabetes_meta$Married)
 table(diabetes_meta$Work)
 ```
 
-By investigating the unique values of the `Married` variable we see that some of the values have whitespace. 
+By investigating the unique values of the `Married` variable we see that some of the values have whitespace.
+
 ```{r}
 unique(diabetes_meta$Married)
 ```
 
-6. 5. Make a clean version of the dataset according to your considerations.
+7.3. Make a clean version of the dataset according to your considerations.
 
 My considerations:
 
--   The `Married` variable has whitespace in the some of the values. The values "Yes" and "Yes " will be interpreted as different values. We can confidently remove all the whitespaces in this variable. 
+-   The `Married` variable has whitespace in the some of the values. The values "Yes" and "Yes " will be interpreted as different values. We can confidently remove all the whitespaces in this variable.
 
--   `ID` is changed to factor to match the `diabetes_clean` dataset. 
+-   `ID` is changed to factor to match the `diabetes_clean` dataset.
 
 Check number of rows before cleaning.
+
 ```{r}
 nrow(diabetes_meta)
 ```
@@ -198,42 +227,68 @@ diabetes_meta_clean <- diabetes_meta %>%
 ```
 
 Check the unique marital status now.
+
 ```{r}
 unique(diabetes_meta_clean$Married)
 ```
 
 Check number of rows after cleaning.
+
 ```{r}
 nrow(diabetes_meta_clean)
 ```
 
 ## Join the datasets
 
-7. Consider which variable the datasets should be joined on.
+8.  Consider which variable the datasets should be joined on.
 
-8. Consider how you want to join the datasets. Do you want to use `full_join`, `inner_join`, `left_join` and `rigth_join`?
+9.  Consider how you want to join the datasets. Do you want to use `full_join`, `inner_join`, `left_join` and `rigth_join`?
 
 The joining variable must be the same type in both datasets.
 
-9. Join the cleaned versions of the clinical and meta dataset by the variable and with the function you considered above.
+10. Join the cleaned versions of the clinical and meta dataset by the variable and with the function you considered above.
+
 ```{r}
 # We use full_join to keep all observations before we know which variables we are interested in. 
 diabetes_join <- diabetes_clinical_clean %>% 
-  full_join(diabetes_meta_clean, by = 'ID')
+  inner_join(diabetes_meta_clean, by = 'ID')
 
 nrow(diabetes_join)
 ```
 
-10. How many rows does the joined dataset have? Explain how the join-function you used resulted in the given number of rows. 
+11. How many rows does the joined dataset have? Explain how the join-function you used resulted in the given number of rows.
 
 ```{r}
 # Because we used `full_join`, all the unique IDs across both data sets are kept.
-c(diabetes_clinical_clean$ID, diabetes_meta_clean$ID) %>% unique() %>% length()
+c(diabetes_clinical_clean$ID, diabetes_meta_clean$ID) %>% 
+  unique() %>% 
+  length()
+
 nrow(diabetes_join)
 ```
 
-11. Export the joined dataset. Think about which directory you want to save the file in. 
+## Manipulate some strings
+
+When we look at the column `Work`, we can see that we have three levels `Public`, `Private` and `Self-employed`. Some special characters, including: `- / \[\] (), etc.` can sometimes prove problematic in variable names, as they are also used for operations in R. For example, are dashes (`-`) used to indicate a contrast in some functions.
+
+12. To avoid potential issues in downstream analysis, change the `Work` variable so that `Self-employed` becomes `SelfEmployed`. N.B use a regular expression for this operation!
+
+```{r}
+diabetes_join <-  diabetes_join %>% 
+  mutate(Work = str_replace_all(Work, '-e', 'E'))
+```
+
+Additionally, we are not so happy with the fact that the ID is simply denoted by a number. The reason for this is that if we write out our dataset and read it in again (which we will do later), R will think it is a numeric or integer variable.
+
+13. Add the string `ID_` in front of the number and convert it to a character variable.
+
+```{r}
+diabetes_join <-  diabetes_join %>% 
+  mutate(ID = paste0("ID_", as.character(ID)))
+```
+
+14. Export the joined dataset. Think about which directory you want to save the file in.
+
 ```{r}
 writexl::write_xlsx(diabetes_join, '../out/diabetes_join.xlsx')
 ```
-

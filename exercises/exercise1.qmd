@@ -1,5 +1,5 @@
 ---
-title: "Exercise 1 - Solutions: Data Cleanup and Summary Statistics"
+title: "Exercise 1 - Data Cleanup"
 format: html
 project:
  type: website
@@ -14,11 +14,13 @@ project:
 
 ## Explore the data
 
-Use can you either base R or/and tidyverse to solve the exercises. 
+Use can you either base R or/and tidyverse to solve the exercises.
 
-3.  How many missing values (NA's) are there in each column. 
+3.  How many missing values (NA's) are there in each column.
 
-4.  Check the ranges and distribution of each of the variables in the dataset. Remember, the variables might be different types. Do any values seem weird or unexpected?
+4.  Check the ranges and distribution of each of the numeric variables in the dataset. Do any values seem weird or unexpected? Extract summary statistics on these, e.g. means and standard deviation.
+
+5.  Some variables in the dataset are categorical or factor variables. Figure out what levels these have and how many observations there are for each level.
 
 ## Clean up the data
 
@@ -34,35 +36,45 @@ Consider the following:
 
 -   Do you want to change any of the classes of the variables?
 
-5.  Make a clean version of the dataset according to your considerations.
+6.  Make a clean version of the dataset according to your considerations.
 
 ::: {.callout-tip collapse="true"}
 ## Hint
-Have a look at `ID`, `BloodPressure`, `BMI`, `Sex`, and `Diabetes`. 
+
+Have a look at `ID`, `BloodPressure`, `BMI`, `Sex`, and `Diabetes`.
 :::
 
 ## Meta Data
 
-There is some metadata to accompany the dataset you have just cleaned in `diabetes_meta_toy_messy.csv`. This is a csv file, not an excel sheet, so you need to use the `read_delim` function to load it. Load in the dataset and inspect it. 
+7. There is some metadata to accompany the dataset you have just cleaned in `diabetes_meta_toy_messy.csv`. This is a csv file, not an excel sheet, so you need to use the `read_delim` function to load it. Load in the dataset and inspect it.
 
-6.2. Load the meta data set.
+7.1. How many missing values (NA's) are there in each column.
 
-6.3. How many missing values (NA's) are there in each column. 
+7.2. Check the distribution of each of the variables. Consider that the variables are of different classes. Do any of the distributions seam odd to you?
 
-6.4. Check the distribution of each of the variables. Consider that the variables are of different classes. Do any of the distributions seam odd to you?
-
-6. 5. Make a clean version of the dataset according to your considerations.
+7.3. Make a clean version of the dataset according to your considerations.
 
 ## Join the datasets
 
-7. Consider which variable the datasets should be joined on.
+8.  Consider which variable the datasets should be joined on.
 
-8. Consider how you want to join the datasets. Do you want to use `full_join`, `inner_join`, `left_join` and `rigth_join`?
+9.  Consider how you want to join the datasets. Do you want to use `full_join`, `inner_join`, `left_join` and `rigth_join`?
 
 The joining variable must be the same type in both datasets.
 
-10. How many rows does the joined dataset have? Explain how the join-function you used resulted in the given number of rows. 
+10. Join the cleaned versions of the clinical and meta dataset by the variable and with the function you considered above.
 
-11. Export the joined dataset. Think about which directory you want to save the file in. 
+11. How many rows does the joined dataset have? Explain how the join-function you used resulted in the given number of rows.
 
 
+## Manipulate some strings
+
+When we look at the column `Work`, we can see that we have three levels `Public`, `Private` and `Self-employed`. Some special characters, including: `- / \[\] (), etc.` can sometimes prove problematic in variable names, as they are also used for operations in R. For example, are dashes (`-`) used to indicate a contrast in some functions.
+
+12. To avoid potential issues in downstream analysis, change the `Work` variable so that `Self-employed` becomes `SelfEmployed`. N.B use a regular expression for this operation!
+
+Additionally, we are not so happy with the fact that the ID is simply denoted by a number. The reason for this is that if we write out our dataset and read it in again (which we will do later), R will think it is a numeric or integer variable.
+
+13. Add the string `ID_` in front of the number and convert it to a character variable.
+
+14. Export the joined dataset. Think about which directory you want to save the file in.

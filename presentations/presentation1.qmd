@@ -1,12 +1,12 @@
 ---
-title: "Presentation 1: Data Cleanup & Summary Statistics"
+title: "Presentation 1: Data Cleanup"
 format: html
 project:
  type: website
  output-dir: ../docs
 ---
 
-In this section, we'll focus on cleaning data and generating summary statistics. We'll primarily use functions from the `tidyverse` package, but in some cases base R offers quick and effective alternatives.
+In this section, we'll focus on cleaning a dataset. We'll primarily use functions from the `tidyverse` package, but in some cases base R offers quick and effective alternatives.
 
 ## Load Packages
 
@@ -29,7 +29,6 @@ We use the `readxl::read_excel()` function, which automatically imports the data
 ```{r warning=FALSE, message=FALSE}
 
 load("../data/Ovarian_data.RData")
-row.names(df_ov) <- NULL
 
 #df_ov <- read_csv("../data/Ovarian_meta.csv")
 class(df_ov)
@@ -44,7 +43,7 @@ class(df_exp)
 
 ## Understanding the Data
 
-Before jumping into statistics or modeling, we need to understand both the problem we’re solving and the structure of the data.
+Before jumping into statistics or modeling, we need to think about what scientific question we are trying to solve and get an understanding of the dataset we are working with.
 
 -   What does each column (variable) represent?
 
@@ -58,7 +57,7 @@ This will help us get an overview of the data, help you avoid mistakes and choos
 
 ## Accessing Data Characteristics
 
-Let’s start by taking a look at the structure and distribution of the data to get a feel for the data distribution and identify any potential problems.
+Let’s start by taking a look at the our dataset to get a feel for the data distribution and identify any potential data-related issues.
 
 Get summary stats:
 
@@ -82,36 +81,38 @@ df_ov$days_to_death[1:5]
 
 # Tidyverse 
 sel_col <- df_ov %>%
-  select(vital_status)
+  dplyr::select(vital_status)
 ```
 
-#### **Check for Missing Values**
+#### Check for Missing Values
 
 Check which columns contain NA values and how many:
 
 ```{r}
 colSums(is.na(df_ov))[1:6]
-barplot(colSums(is.na(df_ov)), las=2, cex.names=0.5, col = "gold")
+barplot(colSums(is.na(df_ov)), las=2, cex.names=0.5, col = "#826AED")
 ```
 
 Remove rows with missing data (careful—this can reduce sample size too much):
 
 ```{r}
-df_ov %>% drop_na() %>% head()
+df_ov %>% 
+  drop_na() %>% 
+  head()
 ```
 
-#### **Check groups of categorical variables**
+#### Check groups of categorical variables
 
 Counting the number of occurrences for each level of a categorical variable.
 
 ```{r}
 #Let’s count how many dead or alive individuals we have.
 #This is useful for checking balance across groups or categories.
-barplot(table(df_ov$vital_status), las=2, cex.names=0.5, col = "gold")
+barplot(table(df_ov$vital_status), las=2, cex.names=0.5, col = "#826AED")
 
 ```
 
-Whitespace includes spaces, newlines, and other blank characters in text. It can cause errors or inconsistencies in data, so removing unnecessary whitespace is an important step in cleaning data. Sometimes, hidden characters or spaces *cause* misgrouped levels.
+Whitespace includes spaces, newlines, and other blank characters in text. It can cause errors or inconsistencies in data, so removing unnecessary whitespace is an important step in cleaning data. Sometimes, hidden characters or spaces cause misgrouped levels.
 
 Use the `str_trim` function to remove whitespace.
 
@@ -142,26 +143,32 @@ df_ov$vital_status %>%
 
 #### Check numerical variables
 
-To understand the spread of a variable like `Age at initial diagnosis`, we can check the minimum and maximum values. This helps spot outliers or strange values (like someone who’s 200 years old!).
+To understand the spread of a variables like `Age at initial diagnosis`, we can check the minimum and maximum values. This helps us to spot outliers or strange values (like someone who’s 200 years old!).
 
 ```{r}
 range(df_ov$age_at_initial_pathologic_diagnosis, na.rm = TRUE)
-hist(df_ov$age_at_initial_pathologic_diagnosis, col = "gold")
+hist(df_ov$age_at_initial_pathologic_diagnosis, col = "#826AED")
 ```
 
-Let’s say we want to sort data by  `Age at initial diagnosi`:
+Let’s say we want to sort data by  `Age at initial diagnosis`:
 
 ```{r}
 df_ov <- df_ov %>% 
-  arrange(desc(age_at_initial_pathologic_diagnosis))
+  arrange(desc(age_at_initial_pathologic_diagnosis)) 
+
+head(df_ov)[11:15]
+
 ```
 
 ### Summary
 
-There is a LOT of data and it can be a bit overwhelming. But lucky there are some helper functions.
+There is a LOT of data and it can be a bit overwhelming. But lucky we have some helper functions.
 
 ```{r}
 str(df_ov)# Overview of structure
+
+summary(df_ov) # Summary stats from baseR
+
 skim(df_ov) # Summary stats (needs skimr package)
 ```
 
@@ -184,9 +191,11 @@ We can already identify a lot of issues.
 1.  If a variable has more than \~1/3% missing data, it probably won’t be useful. Let’s remove those:
 
 ```{r}
-threshold <- 1/5 # Roughly equivalent to a 20% threshold
-head(df_ov %>% select(where(~mean(is.na(.)) > threshold)))
-df_ov <- df_ov %>% select(where(~mean(is.na(.)) < threshold))
+threshold <- 0.2 # 20% threshold
+head(df_ov %>% dplyr::select(where(~mean(is.na(.)) > threshold)))
+
+df_ov <- df_ov %>% 
+  dplyr::select(where(~mean(is.na(.)) < threshold))
 ```
 
 This keeps only the variables that are mostly complete.
@@ -209,49 +218,64 @@ df_ov <- df_ov %>%
 Let’s check a few categorical variables and remove any that are redundant or irrelevant. If they don’t provide useful or well-curated information, we can drop them:
 
 ```{r}
+
+# base
 table(df_ov$histological_type)
-table(df_ov$primarysite)
+
+# tidy
+df_ov %>% 
+  count(primarysite)
+
 ```
 
 ```{r, warning=FALSE}
 target <- c("histological_type", "uncurated_author_metadata", "primarysite")
-df_ov <- select(df_ov, -target)
+
+df_ov <- df_ov %>% 
+  dplyr::select(-target)
 ```
 
-### Step 4: Recode and Reorder Factors
+### Step 4: Re-code and Reorder Factors
 
-Sometimes we want to **set the order of factor levels manually**, especially if there's a natural or meaningful order (e.g., "low" → "high"): This helps when plotting or interpreting regression coefficients.
+Sometimes we want to **set the order of factor levels manually**, especially if there's a natural or meaningful order (e.g., "low" → "high"): This helps when plotting or interpreting regression coefficients.
 
 ```{r}
 
 table(df_ov$summarystage)
 table(df_ov$summarygrade)
 
-df_ov <- df_ov %>% mutate(summarygrade = fct_recode(summarygrade, "high" = "HIGH"))
-df_ov <- df_ov %>% mutate(summarygrade = fct_recode(summarygrade, "low" = "LOW"))
+df_ov <- df_ov %>% 
+  mutate(summarygrade = fct_recode(summarygrade, "high" = "HIGH"))
+
+df_ov <- df_ov %>% 
+  mutate(summarygrade = fct_recode(summarygrade, "low" = "LOW"))
 
 
-df_ov <- df_ov %>% mutate(summarystage = factor(summarystage, levels = c("early","late")))
-df_ov <- df_ov %>% mutate(summarygrade = factor(summarygrade, levels = c("low","high")))
+df_ov <- df_ov %>% 
+  mutate(summarystage = factor(summarystage, levels = c("early","late")))
+
+df_ov <- df_ov %>% 
+  mutate(summarygrade = factor(summarygrade, levels = c("low","high")))
 
 
 ```
 
 ## Create New Variables
 
-Sometimes we would like to create a new data columns by extracting specific information or combining other columns.
+Now, we would like to create a new data column by extracting specific information or combining other columns.
 
 ### Step 5: Creating New Variables
 
-Add a column combining other columns:
+Add a column combining other columns into one:
 
 ```{r}
 df_ov <- df_ov %>% 
   mutate(percent_not_cancer_cells = percent_stromal_cells + percent_normal_cells)
+
 hist(df_ov$percent_not_cancer_cells, col = "gold")
 ```
 
-For character vectors you can use function `paste` and `paste0` . The `paste` function concatenates two strings to one. This one is from baseR though.
+For character vectors you can use functions `paste` and `paste0` . The `paste` function concatenates two strings into one. This one is from baseR.
 
 ```{r}
 paste('TCGA', 'Data', sep = ' ')
@@ -264,11 +288,12 @@ df_ov <- df_ov %>%
 head(df_ov$stage)
 ```
 
-Create logical variable with `ifelse`. Adding a column with content based on a condition with `ifelse`.
+Create logical variables with `ifelse`. Adding a column with content based on a condition with `ifelse`.
 
 ```{r results="show"}
 df_ov <- df_ov %>% 
   mutate(ratio = ifelse(percent_not_cancer_cells > percent_tumor_cells, "larger", "smaller"))
+
 table(df_ov$ratio)
 
 ```
@@ -289,27 +314,27 @@ table(df_ov$group)
 
 ## String manipulation
 
-Sometimes the information you need is hidden inside longer text strings or encoded in specific patterns — especially in genomics or clinical datasets. In this example we notice that sample type information is unknow for a lot of patients. Since we are TCGA experts, we know that this information is actually encoded in the full sample name `TCGA-20-0987-01A-02R-0434-01`. But How do we get it.
+Sometimes the information you need is hidden inside longer text strings or encoded in specific patterns — especially in genomics or clinical datasets. In this example we notice that sample type information is unknown for a lot of patients. Since we are TCGA experts, we know that this information is actually encoded in the full sample name `TCGA-20-0987-01A-02R-0434-01`. But How do we get it out.
 
-To extract and work with this kind of information, we use **Regular expression (Regex)** and **string manipulation** tools.
+To extract and work with this kind of information, we can use what is called a **Regular Expression (Regex)** and **string manipulation** tools.
 
 ### Regex: Regular expression
 
-Regular expressions (regex) are a special language used to search for patterns in text in a very flexible and slightly confusing way.
+Regular expressions (regex) are used to search for patterns in text strings. Regular expressions are super flexible and very powerful, BUT they can be slightly confusing at times...
 
-Instead of looking for an exact word like "cat", regex lets you search for things like:
+Instead of looking for an exact word like **cat**, a **regex** lets you search for things like:
 
 -   "Any word that starts with ‘c’ and ends with ‘t’"
 
 -   "Any sequence of digits"
 
--   "A phone number"
-
 -   "A word that may or may not have a certain letter"
 
-It might look a little weird at first (lots of slashes, dots, and symbols), but once you learn a few basics, it’s incredibly powerful. And the good thing is that ChatCPT is very good at it!
+-   "A word containing a specific delimiter, e.g. a dash, as comma, etc."
 
-![](/figures/regex1.png){fig-align="center"}
+It might look a little weird (lots of slashes, dots, and symbols), but once you learn a few basics, it’s incredibly useful! And the good thing is that ChatCPT is very good at making regular expressions for you!
+
+![](../figures/regex1.png){fig-align="center"}
 
 We will do string manipulation the tidyverse way: using the `stringr` package where all the functions starts with `str_`.
 
@@ -334,7 +359,7 @@ df_ov <- df_ov %>%
 table(df_ov$Sample_code)
 ```
 
-We know that 01 encode primary tumor while 11 encodes healthy tissue. We can use  `str_detect()`  to see if sub-string contains the 01 or 11.
+We know that **01** encodes **primary tumor** while **11** encodes healthy tissue. We can use  `str_detect()`  to see if a sub-string contains the **01** or **11**.
 
 ```{r}
 str_detect(df_ov$Sample_code, '01')[1:6]
@@ -344,7 +369,7 @@ str_detect(df_ov$Sample_code, '01')[1:6]
 str_detect(df_ov$Sample_code, '11')[1:6]
 ```
 
-Add column that records TRUE if sample is a primary tumor and place it after the `Sample_type` column.
+Add a column that records TRUE if sample is a primary tumor and places it after the `Sample_type` column.
 
 ```{r}
 df_ov <- df_ov %>% 
@@ -357,7 +382,7 @@ We can also replace text patterns:
 str_replace_all('TCGA', 'A', 'aaaaaaaaaa')
 ```
 
-Add column that check if "A" or "a" in `Name` and place it after the `Name` column.
+Add a column that checks if "A" or "a" is in `Name` and place it after the `Name` column.
 
 ```{r}
 df_ov <- df_ov %>% 
@@ -366,25 +391,25 @@ df_ov <- df_ov %>%
 df_ov[1:4,1:4]
 ```
 
-![](/figures/regex2.png){fig-align="center"}
+![](../figures/regex2.png){fig-align="center"}
 
 Nicely done!
 
 **At this point, we have:**
 
-1.  Drop Variables with Too Many Missing Values
+1.  Dropped Variables with Too Many Missing Values
 
-2.  Fix Variable Types
+2.  Fixed Variable Types
 
-3.  Drop Non-Informative Variables
+3.  Dropped Non-Informative Variables
 
-4.  Recode and Reorder Factors
+4.  Recoded and Reordered Factors
 
-5.  Create New Variables from existing ones
+5.  Created New Variables from existing ones
 
-6.  Create New Variables using regex string manipulations
+6.  Created New Variables using regex string manipulations
 
-Lets take a look how our data looks now.
+Lets take a look at how our data looks now.
 
 ```{r}
 skim(df_ov)
@@ -394,9 +419,9 @@ skim(df_ov)
 
 ## Joining Dataframes
 
-Often we have additional information stored in another table, and we want to merge that into our main dataset. We would like to join our `df_ov and df_exp` data table by IDs.
+Often we have information stored in more than one table, and we want to merge these data together into a single dataset. For example, here we would like to join our `df_ov and df_exp` data table by IDs.
 
-Here’s a quick recap of join types from `dplyr`:
+A quick recap of join types from `dplyr`:
 
 -   `full_join()`: all rows from both
 
@@ -459,8 +484,8 @@ df_ov$unique_patient_ID <- str_replace_all(df_ov$unique_patient_ID, "-", ".")
 
 ```{r}
 # Merge clinical and expression data
-df_comb <- dplyr::left_join(
-  as_tibble(df_ov), as_tibble(df_exp), by = c("unique_patient_ID" = "sample"))
+df_comb <- df_ov %>% 
+  dplyr::left_join(., df_exp, by = "unique_patient_ID")
 ```
 
 ### Recap
@@ -477,7 +502,7 @@ df_comb <- dplyr::left_join(
 
 -   Your data is now prepped and ready for modeling, visualization, or more advanced statistical analysis.
 
-**Your dataset `df_comb` is now ready for further analysis such as PCA, regression, or machine learning.**
+**Your dataset `df_comb` is now ready for summary statistics and exploratory data analysis (EDA).**
 
 ```{r}
 save(df_comb, file="../data/Ovarian_comb_clean.RData")
