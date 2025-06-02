@@ -14,60 +14,61 @@ In this section, we'll focus on cleaning a dataset. We'll primarily use function
 library(tidyverse)
 library(ggforce)
 library(skimr)
+# unload MASS since it has select function we don't want to use. 
 ```
 
 ## Load data
 
 We’ll work with two datasets:
 
--   df_ov: clinical information for ovarian cancer patients.
+-   `df_ov`: clinical information for ovarian cancer patients.
 
--   df_exp: gene expression data for cytochrome genes.
+-   `df_exp`: gene expression data for cytochrome genes.
 
 We use the `readxl::read_excel()` function, which automatically imports the data as a tibble — the default data format used in the tidyverse for easier and more consistent data handling.
 
 ```{r warning=FALSE, message=FALSE}
-
 load("../data/Ovarian_data.RData")
 
 #df_ov <- read_csv("../data/Ovarian_meta.csv")
 class(df_ov)
-df_ov[1:3,1:4]
+dim(df_ov)
+df_ov %>% head() 
 
 #df_exp <- read.csv("../data/Ovarian_exp.csv", row.names=1)
 #df_exp <- df_ex
-df_exp[1:3,1:7]
 class(df_exp)
-
+dim(df_exp)
+df_exp %>% head()
 ```
 
 ## Understanding the Data
 
-Before jumping into statistics or modeling, we need to think about what scientific question we are trying to solve and get an understanding of the dataset we are working with.
+Before jumping into statistics or modeling, we need to think about what scientific question we are trying to answer and get an understanding of the dataset we are working with.
 
 -   What does each column (variable) represent?
 
--   Are the values **numerical**, **categorical**, **text**, or something else?
+-   Are the values **numeric**, **categorical**, **character**, or something else?
 
--   Are there **missing values**, or other data quality issues?
+-   Are there any **missing values**, or other data quality issues?
 
--   Are there **domain-specific rules** (e.g., medical standards)?
+-   Are there **domain-specific rules** (e.g., medical standards)?
 
-This will help us get an overview of the data, help you avoid mistakes and choose the right analysis methods.
+This will help us get an overview of the data, help you avoid mistakes, and choose the right analysis methods.
 
 ## Accessing Data Characteristics
 
-Let’s start by taking a look at the our dataset to get a feel for the data distribution and identify any potential data-related issues.
+Let’s start by taking a look at our dataset to get a feel for the data distribution and identify any potential data-related issues.
 
 Get summary stats:
 
--   Central tendency (mean, median)
+-   Central tendency (mean, median)
 
--   Spread (standard deviation, range)
+-   Spread (standard deviation, range)
 
 -   Skewness/Kurtosis
 
-Missing value percentages
+-   Missing value percentages
 
 ### Basics
 
@@ -76,24 +77,37 @@ We can get a little reminder of base R and tidyverse functions and explore some 
 Take a look at categorical and numerical variables, access elements in list.
 
 ```{r}
-df_ov$summarystage[1:5]
-df_ov$days_to_death[1:5]
+df_ov$vital_status %>% 
+  head()
 
 # Tidyverse 
-sel_col <- df_ov %>%
-  dplyr::select(vital_status)
+df_ov %>%
+  select(vital_status) %>% 
+  head()
 ```
+
+Get a vector the tidyverse way:
+```{r}
+df_ov %>%
+  select(vital_status) %>% 
+  pull() %>% 
+  head()
+```
+
 
 #### Check for Missing Values
 
 Check which columns contain NA values and how many:
 
 ```{r}
-colSums(is.na(df_ov))[1:6]
-barplot(colSums(is.na(df_ov)), las=2, cex.names=0.5, col = "#826AED")
+df_ov %>% 
+  is.na() %>% 
+  colSums() #%>% 
+
+  # barplot(las=2, cex.names=0.6, col = "#826AED") # baseR barplot since we are plotting a vector
 ```
 
-Remove rows with missing data (careful—this can reduce sample size too much):
+Remove rows with missing data (careful - this can reduce sample size too much):
 
 ```{r}
 df_ov %>% 
@@ -105,36 +119,39 @@ df_ov %>%
 
 Counting the number of occurrences for each level of a categorical variable.
 
-```{r}
-#Let’s count how many dead or alive individuals we have.
-#This is useful for checking balance across groups or categories.
-barplot(table(df_ov$vital_status), las=2, cex.names=0.5, col = "#826AED")
+Here we count how many dead or alive individuals we have. This is useful for checking balance across groups or categories.
 
+```{r}
+df_ov %>% 
+  select(vital_status) %>% 
+  table() #%>% 
+  # barplot()
 ```
 
-Whitespace includes spaces, newlines, and other blank characters in text. It can cause errors or inconsistencies in data, so removing unnecessary whitespace is an important step in cleaning data. Sometimes, hidden characters or spaces cause misgrouped levels.
-
-Use the `str_trim` function to remove whitespace.
-
-Trim whitespace and standardize:
-
+Let's have a closer look at the unique values of this variable. Run the code in the console for a more detailed look. 
 ```{r}
-table(df_ov$vital_status) 
-
 df_ov$vital_status %>% 
-  str_trim() %>% 
   unique()
 ```
 
-Like other function, the `str_trim` function can also be used inside the `mutate` function to alter the data frame.
+Whitespace includes spaces, newlines, and other blank characters in text. It can cause errors or inconsistencies in data, so removing unnecessary whitespace is an important step in cleaning data. Sometimes, hidden characters or spaces cause misgrouped levels.
+
+Use the `str_trim()` function to remove whitespace.
+```{r}
+str_trim(" Hello World!   ")
+```
+
+
+Trim whitespace and standardize:
+
+Like other function, the `str_trim()` function can also be used inside the `mutate()` function to alter the data frame.
 
 ```{r}
 df_ov <- df_ov %>% 
   mutate(vital_status = str_trim(vital_status))
-
 ```
 
-Accessing the unique sexes of the `vital_status` column.
+Accessing the unique values of the `vital_status` column.
 
 ```{r}
 df_ov$vital_status %>% 
@@ -143,21 +160,27 @@ df_ov$vital_status %>%
 
 #### Check numerical variables
 
-To understand the spread of a variables like `Age at initial diagnosis`, we can check the minimum and maximum values. This helps us to spot outliers or strange values (like someone who’s 200 years old!).
+To understand the spread of a variables like `age_at_initial_pathologic_diagnosis`, we can check the minimum and maximum values. This helps us to spot outliers or strange values (like someone who’s 200 years old!).
 
 ```{r}
-range(df_ov$age_at_initial_pathologic_diagnosis, na.rm = TRUE)
-hist(df_ov$age_at_initial_pathologic_diagnosis, col = "#826AED")
+df_ov %>% 
+  select(age_at_initial_pathologic_diagnosis) %>% 
+  pull() %>% 
+  hist()
+
+# df_ov$age_at_initial_pathologic_diagnosis %>% 
+#   hist()
 ```
 
-Let’s say we want to sort data by  `Age at initial diagnosis`:
+Let’s say we want to sort the data according to `age_at_initial_pathologic_diagnosis`:
 
 ```{r}
 df_ov <- df_ov %>% 
   arrange(desc(age_at_initial_pathologic_diagnosis)) 
 
-head(df_ov)[11:15]
-
+df_ov %>%  
+  select(age_at_initial_pathologic_diagnosis) %>% 
+  head() 
 ```
 
 ### Summary
@@ -165,7 +188,7 @@ head(df_ov)[11:15]
 There is a LOT of data and it can be a bit overwhelming. But lucky we have some helper functions.
 
 ```{r}
-str(df_ov)# Overview of structure
+str(df_ov) # Overview of structure
 
 summary(df_ov) # Summary stats from baseR
 
@@ -176,11 +199,11 @@ We can already identify a lot of issues.
 
 ## Data wrangling and cleaning
 
-**Lets do some cleanup**
+**Let's do some cleanup**
 
 1.  Drop Variables with Too Many Missing Values
 
-2.  Fix Variable Types
+2.  Change Variable Types
 
 3.  Drop Non-Informative Variables
 
@@ -188,29 +211,45 @@ We can already identify a lot of issues.
 
 ### Step 1: Drop Variables with Too Many Missing Values
 
-1.  If a variable has more than \~1/3% missing data, it probably won’t be useful. Let’s remove those:
+1.  If a variable has more than \~10/30% missing data, it probably won’t be useful. Let’s remove those:
+
+`~ mean(is.na(.)) < threshold` explained:
+`~` = “Define a function”
+`.` is a placeholder for the input (in this case, a column of the data frame)
+`mean(is.na(.))` calculates the proportion of missing values
+`< threshold` returns TRUE or FALSE — which where() uses to decide if a column should be kept
 
 ```{r}
 threshold <- 0.2 # 20% threshold
-head(df_ov %>% dplyr::select(where(~mean(is.na(.)) > threshold)))
+
+df_ov %>% 
+  select(where(~mean(is.na(.)) < threshold)) %>% 
+  head()
+
+# df_ov$substage %>% is.na() %>% mean()
 
 df_ov <- df_ov %>% 
-  dplyr::select(where(~mean(is.na(.)) < threshold))
+  select(where(~mean(is.na(.)) < threshold))
 ```
 
 This keeps only the variables that are mostly complete.
 
 ### Step 2: Fix Variable Types
 
-Some variables are stored as **character** or even **numeric**, when they should actually be **factors** (i.e., categorical variables). Convert character/numeric columns to factors:
+Some variables are stored as **character** or **numeric** when they should actually be **factors** (i.e., categorical variables). Convert character/numeric columns to factors:
 
 ```{r}
+# One by one...
+df_ov$sample_type <- as.factor(df_ov$sample_type)
+df_ov$primarysite <- as.factor(df_ov$primarysite)
 
-df_ov <- df_ov %>% 
-  mutate_at(c('sample_type', 'primarysite', 'summarygrade',
-              'summarystage', 'substage', 'recurrence_status',
-              'vital_status', 'tumorstage', 'grade', 'batch'), as.factor)
+# In one go:
+cols_to_factor <- c('sample_type', 'primarysite', 'summarygrade',
+                    'summarystage', 'substage', 'recurrence_status',
+                    'vital_status', 'tumorstage', 'grade', 'batch')
 
+df_ov <- df_ov %>%
+  mutate(across(all_of(cols_to_factor), as.factor))
 ```
 
 ### Step 3: Drop Non-Informative Variables
@@ -218,21 +257,16 @@ df_ov <- df_ov %>%
 Let’s check a few categorical variables and remove any that are redundant or irrelevant. If they don’t provide useful or well-curated information, we can drop them:
 
 ```{r}
+df_ov$histological_type %>% table()
 
-# base
-table(df_ov$histological_type)
-
-# tidy
-df_ov %>% 
-  count(primarysite)
-
+df_ov$primarysite %>% table()
 ```
 
 ```{r, warning=FALSE}
-target <- c("histological_type", "uncurated_author_metadata", "primarysite")
+target <- c("histological_type", "primarysite")
 
 df_ov <- df_ov %>% 
-  dplyr::select(-target)
+  select(!target)
 ```
 
 ### Step 4: Re-code and Reorder Factors
@@ -240,24 +274,14 @@ df_ov <- df_ov %>%
 Sometimes we want to **set the order of factor levels manually**, especially if there's a natural or meaningful order (e.g., "low" → "high"): This helps when plotting or interpreting regression coefficients.
 
 ```{r}
-
-table(df_ov$summarystage)
-table(df_ov$summarygrade)
-
-df_ov <- df_ov %>% 
-  mutate(summarygrade = fct_recode(summarygrade, "high" = "HIGH"))
+# Summary garde
+df_ov$summarygrade %>% table()
 
 df_ov <- df_ov %>% 
-  mutate(summarygrade = fct_recode(summarygrade, "low" = "LOW"))
+  mutate(summarygrade = fct_recode(summarygrade, "high" = "HIGH"),
+         summarygrade = fct_recode(summarygrade, "low" = "LOW")) 
 
-
-df_ov <- df_ov %>% 
-  mutate(summarystage = factor(summarystage, levels = c("early","late")))
-
-df_ov <- df_ov %>% 
-  mutate(summarygrade = factor(summarygrade, levels = c("low","high")))
-
-
+df_ov$summarygrade %>% table()
 ```
 
 ## Create New Variables
@@ -272,7 +296,7 @@ Add a column combining other columns into one:
 df_ov <- df_ov %>% 
   mutate(percent_not_cancer_cells = percent_stromal_cells + percent_normal_cells)
 
-hist(df_ov$percent_not_cancer_cells, col = "gold")
+df_ov$percent_not_cancer_cells %>% hist(col = 'lightblue')
 ```
 
 For character vectors you can use functions `paste` and `paste0` . The `paste` function concatenates two strings into one. This one is from baseR.
@@ -295,13 +319,11 @@ df_ov <- df_ov %>%
   mutate(ratio = ifelse(percent_not_cancer_cells > percent_tumor_cells, "larger", "smaller"))
 
 table(df_ov$ratio)
-
 ```
 
 Extension of `ifelse`: `case_when`
 
 ```{r results="show"}
-
 df_ov <- df_ov %>% 
   mutate(group = case_when(age_at_initial_pathologic_diagnosis < 60 & summarystage == "early" ~ "Young - Early stage",
                            age_at_initial_pathologic_diagnosis < 60 & summarystage == "late" ~ "Young - Late stage",
@@ -314,7 +336,7 @@ table(df_ov$group)
 
 ## String manipulation
 
-Sometimes the information you need is hidden inside longer text strings or encoded in specific patterns — especially in genomics or clinical datasets. In this example we notice that sample type information is unknown for a lot of patients. Since we are TCGA experts, we know that this information is actually encoded in the full sample name `TCGA-20-0987-01A-02R-0434-01`. But How do we get it out.
+Sometimes the information you need is hidden inside longer text strings or encoded in specific patterns — especially in genomics or clinical datasets. In this example we notice that sample type information is unknown for a lot of patients. Since we are TCGA experts, we know that this information is actually encoded in the full sample name `TCGA-20-0987-01A-02R-0434-01`. But How do we get it out.
 
 To extract and work with this kind of information, we can use what is called a **Regular Expression (Regex)** and **string manipulation** tools.
 
@@ -341,7 +363,7 @@ We will do string manipulation the tidyverse way: using the `stringr` package wh
 ### Examples
 
 ```{r}
-df_ov$alt_sample_name[1]
+df_ov$alt_sample_name %>% head(n = 1)
 ```
 
 Let’s say we want to extract part of the sample name. We can use the `str_split_i` function to split a string on a given character and access the i'th element.
@@ -350,8 +372,7 @@ Let’s say we want to extract part of the sample name. We can use the `str_spli
 str_split_i('TCGA-20-0987-01A-02R-0434-01', pattern = '-', i = 2)
 ```
 
-This grabs the 4th segment in the name string, which might contain the sample type. We can apply this to a whole column using `mutate()` and create a new variable with the extracted values.
-
+This grabs the 4th segment in the name string, which might contain the sample type. We can apply this to a whole column using `mutate()` and create a new variable with the extracted values.
 ```{r}
 df_ov <- df_ov %>% 
   mutate(Sample_code = str_split_i(alt_sample_name, pattern = '-', i = 4))
@@ -359,21 +380,24 @@ df_ov <- df_ov %>%
 table(df_ov$Sample_code)
 ```
 
-We know that **01** encodes **primary tumor** while **11** encodes healthy tissue. We can use  `str_detect()`  to see if a sub-string contains the **01** or **11**.
+We know that **01** encodes **primary tumor** while **11** encodes healthy tissue. We can use `str_detect()` to see if a sub-string contains the **01** or **11**.
 
 ```{r}
-str_detect(df_ov$Sample_code, '01')[1:6]
+str_detect(df_ov$Sample_code, '01') %>% head()
 ```
 
 ```{r}
-str_detect(df_ov$Sample_code, '11')[1:6]
+str_detect(df_ov$Sample_code, '11') %>% head()
 ```
 
 Add a column that records TRUE if sample is a primary tumor and places it after the `Sample_type` column.
-
+01.{0,1} means 01 + . + 0 or 1 of any character (A, B, C, X)
 ```{r}
 df_ov <- df_ov %>% 
-  mutate(Sample_code_mnual = str_detect(df_ov$Sample_code, '01.{0,1}'), .after = sample_type)
+  mutate(Sample_code_manual = str_detect(df_ov$Sample_code, '01.{0,1}'), 
+         .after = sample_type)
+
+tail(df_ov)
 ```
 
 We can also replace text patterns:
@@ -382,16 +406,13 @@ We can also replace text patterns:
 str_replace_all('TCGA', 'A', 'aaaaaaaaaa')
 ```
 
-Add a column that checks if "A" or "a" is in `Name` and place it after the `Name` column.
-
 ```{r}
 df_ov <- df_ov %>% 
-  mutate(Sample_code = str_replace_all(Sample_code, '01.', 'Tumor'),
+  mutate(Sample_recode = str_replace_all(Sample_code, '01.', 'Tumor'),
          .after = sample_type)
-df_ov[1:4,1:4]
-```
 
-![](../figures/regex2.png){fig-align="center"}
+df_ov %>% select(alt_sample_name, Sample_code, Sample_code_manual, Sample_recode) %>% tail()
+```
 
 Nicely done!
 
@@ -415,13 +436,20 @@ Lets take a look at how our data looks now.
 skim(df_ov)
 ```
 
-## 
 
 ## Joining Dataframes
 
-Often we have information stored in more than one table, and we want to merge these data together into a single dataset. For example, here we would like to join our `df_ov and df_exp` data table by IDs.
+Often we have information stored in more than one table, and we want to merge these data together into a single dataset. For example, here we would like to join our `df_ov` and `df_exp` data table by IDs.
 
-A quick recap of join types from `dplyr`:
+Let's make a subset of each of the datasets to have a better overview of what is going on. 
+```{r}
+df_exp_subset <- df_exp %>% arrange(unique_patient_ID) %>% slice(1:5) %>% select(1:5)
+df_ov_subset <- df_ov %>% arrange(unique_patient_ID) %>% slice(3:7) %>% select(1:5)
+
+df_exp_subset$unique_patient_ID %in% df_ov_subset$unique_patient_ID %>% table()
+```
+
+A quick recap of join types from `dplyr`:
 
 -   `full_join()`: all rows from both
 
@@ -433,59 +461,45 @@ A quick recap of join types from `dplyr`:
 
 #### Full Join
 
-A **full join** keeps *everything* — all rows from both `df_ov` and `df_exp`. If there's no match, missing values (`NA`) are filled in.
+A **full join** keeps *everything* — all rows from both `df_ov_subset` and `df_exp_subset`. If there's no match, missing values (`NA`) are filled in.
 
-```{r, eval=FALSE, echo=TRUE}
-df_ov %>% 
-  full_join(df_exp, by = 'ID')
+```{r}
+df_ov_subset %>% 
+  full_join(df_exp_subset, by = "unique_patient_ID")
 ```
 
 #### Inner Join
 
-An **inner join** keeps only the rows that appear in **both** data frames. So if an ID exists in one but not the other, it’s dropped.
+An **inner join** keeps only the rows that appear in **both** data frames. So if an ID exists in one but not the other, it’s dropped.
 
 ```{r,eval=FALSE, echo=TRUE}
-df_ov %>% 
-  inner_join(df_exp, by = 'ID')
+df_ov_subset %>% 
+  inner_join(df_exp_subset, by = "unique_patient_ID")
 ```
 
 #### Left Join
 
-A **left join** keeps **all rows from** `df_ov`, and matches info from `df_exp` wherever possible. Unmatched rows from `df_ov` get `NA` for the new columns.
+A **left join** keeps **all rows from** `df_ov_subset`, and matches info from `df_exp_subset` wherever possible. Unmatched rows from `df_ov_subset` get `NA` for the new columns.
 
-```{r, eval=FALSE, echo=TRUE}
-df_ov %>% 
-  left_join(df_exp, by = "ID")
+```{r}
+df_ov_subset %>% 
+  left_join(df_exp_subset, by = "unique_patient_ID")
 ```
 
 #### Right Join
 
-A **right join** is the opposite: it keeps **all rows from** `df_ov` and adds matching data from `df_exp` wherever it can.
+A **right join** is the opposite: it keeps **all rows from** `df_ov_subset` and adds matching data from `df_exp_subset` wherever it can.
 
 ```{r, eval=FALSE, echo=TRUE}
-df_ov %>% 
-  right_join(df_exp, by = "ID")
+df_ov_subset %>% 
+  right_join(df_exp_subset, by = "unique_patient_ID")
 ```
 
-### Lets join
-
-In this case, we want to keep all the records from `df_ov` and *add expression info where available*. So we’ll use a **left join**.
-
-Before merging datasets, make sure the IDs/names match. For example, replace `-` with `.` so the column names align.
+### Let's join
 
 ```{r}
-df_ov[1:3,1:3]
-df_exp[1:3,6:12]
-
-# Fix ID format before merging
-df_ov$unique_patient_ID <- str_replace_all(df_ov$unique_patient_ID, "-", ".")
-
-```
-
-```{r}
-# Merge clinical and expression data
 df_comb <- df_ov %>% 
-  dplyr::left_join(., df_exp, by = "unique_patient_ID")
+  left_join(df_exp, by = "unique_patient_ID")
 ```
 
 ### Recap
