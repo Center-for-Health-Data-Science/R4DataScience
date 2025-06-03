@@ -87,13 +87,13 @@ df_ov %>%
 ```
 
 Get a vector the tidyverse way:
+
 ```{r}
 df_ov %>%
   select(vital_status) %>% 
   pull() %>% 
   head()
 ```
-
 
 #### Check for Missing Values
 
@@ -128,7 +128,8 @@ df_ov %>%
   # barplot()
 ```
 
-Let's have a closer look at the unique values of this variable. Run the code in the console for a more detailed look. 
+Let's have a closer look at the unique values of this variable. Run the code in the console for a more detailed look.
+
 ```{r}
 df_ov$vital_status %>% 
   unique()
@@ -137,10 +138,10 @@ df_ov$vital_status %>%
 Whitespace includes spaces, newlines, and other blank characters in text. It can cause errors or inconsistencies in data, so removing unnecessary whitespace is an important step in cleaning data. Sometimes, hidden characters or spaces cause misgrouped levels.
 
 Use the `str_trim()` function to remove whitespace.
+
 ```{r}
 str_trim(" Hello World!   ")
 ```
-
 
 Trim whitespace and standardize:
 
@@ -164,11 +165,11 @@ To understand the spread of a variables like `age_at_initial_pathologic_diagnosi
 
 ```{r}
 df_ov %>% 
-  select(age_at_initial_pathologic_diagnosis) %>% 
+  select(age_at_initial_path_diagn) %>% 
   pull() %>% 
   hist()
 
-# df_ov$age_at_initial_pathologic_diagnosis %>% 
+# df_ov$age_at_initial_path_diagn %>% 
 #   hist()
 ```
 
@@ -176,10 +177,10 @@ Let’s say we want to sort the data according to `age_at_initial_pathologic_dia
 
 ```{r}
 df_ov <- df_ov %>% 
-  arrange(desc(age_at_initial_pathologic_diagnosis)) 
+  arrange(desc(age_at_initial_path_diagn)) 
 
 df_ov %>%  
-  select(age_at_initial_pathologic_diagnosis) %>% 
+  select(age_at_initial_path_diagn) %>% 
   head() 
 ```
 
@@ -213,11 +214,7 @@ We can already identify a lot of issues.
 
 1.  If a variable has more than \~10/30% missing data, it probably won’t be useful. Let’s remove those:
 
-`~ mean(is.na(.)) < threshold` explained:
-`~` = “Define a function”
-`.` is a placeholder for the input (in this case, a column of the data frame)
-`mean(is.na(.))` calculates the proportion of missing values
-`< threshold` returns TRUE or FALSE — which where() uses to decide if a column should be kept
+`~ mean(is.na(.)) < threshold` explained: `~` = “Define a function” `.` is a placeholder for the input (in this case, a column of the data frame) `mean(is.na(.))` calculates the proportion of missing values `< threshold` returns TRUE or FALSE — which where() uses to decide if a column should be kept
 
 ```{r}
 threshold <- 0.2 # 20% threshold
@@ -245,7 +242,7 @@ df_ov$primarysite <- as.factor(df_ov$primarysite)
 
 # In one go:
 cols_to_factor <- c('sample_type', 'primarysite', 'summarygrade',
-                    'summarystage', 'substage', 'recurrence_status',
+                    'summarystage', 'recurrence_status',
                     'vital_status', 'tumorstage', 'grade', 'batch')
 
 df_ov <- df_ov %>%
@@ -274,7 +271,7 @@ df_ov <- df_ov %>%
 Sometimes we want to **set the order of factor levels manually**, especially if there's a natural or meaningful order (e.g., "low" → "high"): This helps when plotting or interpreting regression coefficients.
 
 ```{r}
-# Summary garde
+# Summary grade
 df_ov$summarygrade %>% table()
 
 df_ov <- df_ov %>% 
@@ -282,6 +279,16 @@ df_ov <- df_ov %>%
          summarygrade = fct_recode(summarygrade, "low" = "LOW")) 
 
 df_ov$summarygrade %>% table()
+```
+
+```{r}
+# Vital status
+df_ov$vital_status %>% table()
+
+df_ov <- df_ov %>% 
+  mutate(vital_status = case_when(vital_status == "NA" ~ NA_character_, TRUE ~ vital_status) )
+
+df_ov$vital_status %>% table()
 ```
 
 ## Create New Variables
@@ -307,7 +314,7 @@ paste('TCGA', 'Data', sep = ' ')
 
 ```{r}
 df_ov <- df_ov %>% 
-  mutate(stage = paste(tumorstage, substage, sep = '-'))
+  mutate(stage = paste(tumorstage, summarygrade, sep = '-'))
 
 head(df_ov$stage)
 ```
@@ -325,10 +332,10 @@ Extension of `ifelse`: `case_when`
 
 ```{r results="show"}
 df_ov <- df_ov %>% 
-  mutate(group = case_when(age_at_initial_pathologic_diagnosis < 60 & summarystage == "early" ~ "Young - Early stage",
-                           age_at_initial_pathologic_diagnosis < 60 & summarystage == "late" ~ "Young - Late stage",
-                           age_at_initial_pathologic_diagnosis >= 60 & summarystage == "early" ~ "Mature - Early stage",
-                           age_at_initial_pathologic_diagnosis >= 60 & summarystage == "late" ~ "Mature - Late stage",
+  mutate(group = case_when(age_at_initial_path_diagn < 60 & summarystage == "early" ~ "Early stage - Young",
+                           age_at_initial_path_diagn < 60 & summarystage == "late" ~ "Late stage - Young",
+                           age_at_initial_path_diagn >= 60 & summarystage == "early" ~ "Early stage - Mature",
+                           age_at_initial_path_diagn >= 60 & summarystage == "late" ~ "Late stage - Mature",
                            .default = NA))
 
 table(df_ov$group)
@@ -373,6 +380,7 @@ str_split_i('TCGA-20-0987-01A-02R-0434-01', pattern = '-', i = 2)
 ```
 
 This grabs the 4th segment in the name string, which might contain the sample type. We can apply this to a whole column using `mutate()` and create a new variable with the extracted values.
+
 ```{r}
 df_ov <- df_ov %>% 
   mutate(Sample_code = str_split_i(alt_sample_name, pattern = '-', i = 4))
@@ -390,8 +398,8 @@ str_detect(df_ov$Sample_code, '01') %>% head()
 str_detect(df_ov$Sample_code, '11') %>% head()
 ```
 
-Add a column that records TRUE if sample is a primary tumor and places it after the `Sample_type` column.
-01.{0,1} means 01 + . + 0 or 1 of any character (A, B, C, X)
+Add a column that records TRUE if sample is a primary tumor and places it after the `Sample_type` column. 01.{0,1} means 01 + . + 0 or 1 of any character (A, B, C, X)
+
 ```{r}
 df_ov <- df_ov %>% 
   mutate(Sample_code_manual = str_detect(df_ov$Sample_code, '01.{0,1}'), 
@@ -409,9 +417,14 @@ str_replace_all('TCGA', 'A', 'aaaaaaaaaa')
 ```{r}
 df_ov <- df_ov %>% 
   mutate(Sample_recode = str_replace_all(Sample_code, '01.', 'Tumor'),
+         Sample_recode = str_replace_all(Sample_recode, '11A', 'Healthy'),
          .after = sample_type)
 
 df_ov %>% select(alt_sample_name, Sample_code, Sample_code_manual, Sample_recode) %>% tail()
+
+df_ov <- df_ov %>% 
+  select(-Sample_code_manual, -Sample_code, -alt_sample_name, -sample_type)
+
 ```
 
 Nicely done!
@@ -436,12 +449,12 @@ Lets take a look at how our data looks now.
 skim(df_ov)
 ```
 
-
 ## Joining Dataframes
 
 Often we have information stored in more than one table, and we want to merge these data together into a single dataset. For example, here we would like to join our `df_ov` and `df_exp` data table by IDs.
 
-Let's make a subset of each of the datasets to have a better overview of what is going on. 
+Let's make a subset of each of the datasets to have a better overview of what is going on.
+
 ```{r}
 df_exp_subset <- df_exp %>% arrange(unique_patient_ID) %>% slice(1:5) %>% select(1:5)
 df_ov_subset <- df_ov %>% arrange(unique_patient_ID) %>% slice(3:7) %>% select(1:5)
