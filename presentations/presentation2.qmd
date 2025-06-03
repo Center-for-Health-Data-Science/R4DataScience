@@ -54,7 +54,7 @@ load("../data/Ovarian_comb_clean.RData")
 
 # Quick peek at the structure and contents
 class(df_comb)
-df_comb[1:3,1:4]
+df_comb %>% select(1:4)
 ```
 
 When you start exploring your data and need a bit of guidance, remember the most commonly used tools in your **Exploratory Data Analysis (EDA)** toolkit:
@@ -79,7 +79,7 @@ Bivariate Analysis
 
 -   **Line graphs** – Track trends over time
 
-<br> <br> <br>
+<br> <br>
 
 ## Data Overview and ggplot2 Recap
 
@@ -126,7 +126,7 @@ If you are tired of cluttering your environment with dozens of intermediate data
 
 ```{r warning=FALSE}
 df_comb %>%
-  dplyr::filter(Sample_code  == "Tumor")  %>%
+  dplyr::filter(Sample_recode  == "Tumor")  %>%
   # we omit the dataframe to plot because that is being piped into ggplot
   # remember that different ggplot layers are still combined with '+'
   ggplot(aes(x = CXCL11, y = CXCL10, color = summarygrade)) + scale_color_viridis_d() +
@@ -179,7 +179,7 @@ awesome_plot <- ggplot(df_comb, aes(x = grade, y = age_at_initial_path_diagn, fi
 
 If R is every being pesky about showing you plots (e.g. if you want to display them in a loop) wrapping `print()` around the plot name usually helps:
 
-``` {rwarning="FALSE"}
+``` {r warning="FALSE"}
 print(awesome_plot)
 ```
 
@@ -299,7 +299,7 @@ To inspect a patient’s gene expression data, use `filter()` and `pull()`:
 
 ```{r}
 df_long_nested %>% 
-  filter(unique_patient_ID == 'TCGA.24.2030') %>% 
+  filter(unique_patient_ID == 'TCGA-24-2030') %>% 
   pull("gene_expresion")
 ```
 
@@ -310,7 +310,7 @@ For operations on the information contained in nested columns they first need to
 ```{r}
 
 df_long_nested %>% 
-  filter(unique_patient_ID == "TCGA.24.2030") %>% 
+  filter(unique_patient_ID == "TCGA-24-2030") %>% 
   unnest(gene_expresion) %>%
   summarise(mean_sales = mean(value, na.rm = T))
 
@@ -343,8 +343,6 @@ When working with **factor variables**, we often want to know:
 Let’s visualize two important factor variables: `tumorstage` and `group`.
 
 ```{r, warning=FALSE}
-#| out-width: 50%
-#| layout-ncol: 2
 
 ggplot(df_comb, aes(x = reorder(tumorstage, vital_status), fill = vital_status)) +
   geom_bar() +
@@ -364,8 +362,9 @@ To explore **relationships between multiple categorical variables** at once, w
 #| out-width: 100%
 
 # Pairwise overview of factor variables
-ggpairs(na.omit(df_comb %>% 
-          select_if(is.factor)), columns = 3:6,  ggplot2::aes(colour = batch)) + 
+df_comb_pairs <- na.omit(df_comb %>% select_if(is.factor))
+
+ggpairs(df_comb_pairs, columns = 1:5,  ggplot2::aes(colour = batch)) + 
   theme_bw()  + 
   scale_fill_viridis_d()
 
@@ -387,7 +386,7 @@ ggpairs(na.omit(df_comb %>%
 
 These insights will help us structure our downstream analysis in a statistically sound and interpretable way.
 
-<br> <br> <br>
+<br> <br>
 
 ## Summary Statistics
 
@@ -629,7 +628,7 @@ df_comb %>%
 
 This is it for now but there will be user-defined functions later!
 
-<br> <br> <br>
+<br> <br>
 
 ## Handling Outliers
 
@@ -712,7 +711,7 @@ ggplot(df_comb, aes(x = percent_tumor_cells, y = percent_not_cancer_cells, color
 
 >  **Be cautious when removing data**: Outlier removal should always be guided by domain knowledge and clear justification. Removing too much — or for the wrong reasons — can distort your analysis.
 
-<br> <br> <br>
+<br> <br>
 
 ## Handling Missing Data
 
@@ -726,12 +725,15 @@ Missing data can fall into three categories:
 
 -   **Missing Not At Random (MNAR)**: The missingness depends on unobserved values themselves.
 
-Understanding which category your data falls into helps guide how to deal with it. Let’s inspect missing values in the `tumorstage` variable:
+Understanding which category your data falls into helps guide how to deal with it. Let’s inspect rows with the most missing values:
 
 ```{r}
-df_comb %>% 
-  filter(is.na(tumorstage)) %>% 
-  select_if(negate(is.numeric))
+
+df_comb %>%
+  mutate(na_count = rowSums(is.na(.))) %>%
+  arrange(desc(na_count)) %>%
+  slice_head(n = 10)
+
 ```
 
 Here we notice that **most of the missing values come from healthy tissue samples**.
@@ -757,12 +759,12 @@ Consider the impact of missing data. Even after imputing, missing data can cause
 Since we have very few **healthy tissue samples** and our analysis focuses on tumors, we can safely remove them:
 
 ```{r}
-df_comb <- df_comb %>% filter(Sample_code == "Tumor")
+df_comb <- df_comb %>% filter(Sample_recode == "Tumor")
 ```
 
 We’ll keep the remaining `NA`s as-is for now, depending on context.
 
-<br> <br> <br>
+<br> <br> 
 
 ## In Summary
 
@@ -787,7 +789,7 @@ We have conducted an initial **exploratory data analysis (EDA)** and overall, 
 -   We observed that the categories within stage and grade are **not fully balanced**, therefore we decided to use the **summary stage** and **summary grade** variables
 
 ```{r}
-save(df_comb, file="/Users/pbj825/Desktop/R4DataScience/data/Ovarian_comb_prep.RData")
+save(df_comb, file="../data/Ovarian_comb_prep.RData")
 ```
 
 
