@@ -14,7 +14,6 @@ In this exercise you will do a lot of plotting with ggplot. For a reminder on ho
 
 2. Load data from the `.rds` file you created in Exercise 2. Have a guess at what the function is called. 
 
-## SECTION IN PROGRESS - CHECK NORMAL DISTRIBUTION
 
 ```{r}
 

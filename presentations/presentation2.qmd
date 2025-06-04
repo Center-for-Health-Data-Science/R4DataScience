@@ -1,206 +1,198 @@
 ---
-title: "Presentation 2: Data Transformation and Integration"
+title: "Presentation 2: Summary Statistics"
 format: html
 project:
  type: website
  output-dir: ../docs
 ---
 
+Now that we've cleaned our data, it’s time to dig a bit deeper into the actual contents of our dataset. Exploratory Data Analysis (EDA) is an essential step in any data analysis or modeling workflow.
 
-# Exploratory Data Analysis (EDA)
+EDA is about getting an overview of your data before fitting it to any models. It helps us:
 
-Now that we've cleaned and harmonized our data, it’s time to dig a bit deeper into the actual contents of our dataset. EDA is an essential step in any data analysis or modeling workflow.
+-   Understand **distributions**
 
-EDA is about understanding your data before applying complex models. It helps us:
+-   Spot **outliers**
 
--   Reveal **patterns, trends, and structure**
+-   Reveal **patterns** 
 
--   Spot **outliers, errors, and missing values**
+-   Explore **relationships** between variables
 
--   Understand **variable types and distributions**
+There are three broad ways to investigate variables:
 
--   Explore **relationships** between variables
+1.  **Univariate** – Examining one variable at a time.
 
--   Guide **data cleaning, transformation**, and **feature selection**
+2.  **Bivariate** – Exploring relationships between two variables.
 
-There are three broad types:
-
-1.  **Univariate** – Examining one variable at a time.
-
-2.  **Bivariate** – Exploring relationships between two variables.
-
-3.  **Multivariate** – Looking at relationships among multiple variables.
+3.  **Multivariate** – Looking at relationships among multiple variables.
 
 ## Load Packages and Data
 
 Let’s begin by loading the packages we’ll need for data wrangling and plotting:
 
 ```{r warning=FALSE, message=FALSE}
-
 library(tidyverse) 
-library(ggforce) 
-library(readxl) 
-#library(reshape2) 
-library(GGally)
-
+# library(ggforce) 
 ```
 
-Now, we load our dataset which has been pre-processed and saved as an .RData file. This object includes combined ovarian cancer data:
+Now, we load our dataset which was pre-processed and saved as an `.RData` file in the end of presentation 1:
 
-```{r}
-#| message: false
-
+```{r message=FALSE}
 load("../data/Ovarian_comb_clean.RData")
 
 # Quick peek at the structure and contents
 class(df_comb)
-df_comb %>% select(1:4)
+str(df_comb)
 ```
 
-When you start exploring your data and need a bit of guidance, remember the most commonly used tools in your **Exploratory Data Analysis (EDA)** toolkit:
+Depending on how you want to investigate the variables, there are different tools in your EDA toolkit:
 
 Univariate Analysis
 
--   **Histograms** – Check distributions of numeric variables
+-   **Histograms** – Check distributions of numeric variables
 
--   **Boxplots** – Detect outliers and skewness
+-   **Boxplots** – Detect outliers and skewness
 
--   **Bar charts** – Explore frequency of categorical variables
+-   **Bar charts** – Explore frequency of categorical variables
 
--   **Summary stats** – Mean, median, SD, min, max, IQR
+-   **Summary stats** – Mean, median, standard deviation (SD), min, max, interquartile range (IQR)
 
 Bivariate Analysis
 
--   **Scatter plots** – Explore relationships between two numeric variables
+-   **Scatter plots** – Explore relationships between two numeric variables
 
--   **Correlation coefficients** – Assess linear strength (e.g., Pearson’s *r*)
+-   **Correlation coefficients** – Assess linear strength (e.g., Pearson’s *r*)
 
--   **Contingency tables** – Analyze relationships between categorical variables
+-   **Contingency tables** – Analyze relationships between categorical variables
 
--   **Line graphs** – Track trends over time
+-   **Line graphs** – Track trends over time
 
-<br> <br>
+## Data Overview and `ggplot2` Recap
 
-## Data Overview and ggplot2 Recap
+Let’s revisit some of the variables in the dataset and refresh our `ggplot2` skills.
 
-But before jumping into deeper analysis, let’s revisit some of the variables and refresh our `ggplot2` skills.
-
-If you need a detailed refresher, refer to the [From Excel to R: Presentation 3](https://center-for-health-data-science.github.io/FromExceltoR/Presentations/presentation3.html).
-
-Lets try out couple `ggplot2.`
+If you need a detailed refresher, refer to the [From Excel to R: Presentation 3](https://center-for-health-data-science.github.io/FromExceltoR/Presentations/presentation3.html).
 
 ```{r warning=FALSE}
-#| out-width: 50%
-#| layout-ncol: 2
-
 # Distribution of tumor cell percentage
-ggplot(df_comb, aes(x = percent_tumor_cells)) +
-  geom_histogram(bins = 30, fill = "#482878FF", color = "black") +
-  theme_bw() + scale_fill_viridis_d()
+ggplot(df_comb, 
+       aes(x = percent_tumor_cells)) +
+  geom_histogram(bins = 30) +
+  theme_bw()
 
 # Tumor percentage by summary grade
-ggplot(df_comb, aes(x = grade, y = percent_tumor_cells, fill = grade)) +
+ggplot(df_comb, 
+       aes(x = grade, 
+           y = percent_tumor_cells, 
+           fill = grade)) +
   geom_boxplot() +
-  theme_bw() + scale_fill_viridis_d()
+  theme_bw() + 
+  scale_fill_viridis_d(na.value = "grey50")
 
 # Count with barplot
-ggplot(df_comb, aes(x = grade, fill = grade)) +
+ggplot(df_comb, 
+       aes(x = grade, 
+           fill = grade)) +
   geom_bar() +
-  theme_bw() + scale_fill_viridis_d()
-
-# Check Normality
-ggplot(df_comb, aes(sample = CXCL1)) + 
-  stat_qq(col = "#482878FF") + 
-  stat_qq_line() +
-  theme_bw() 
-
-
-
+  theme_bw() + 
+  scale_fill_viridis_d(na.value = "grey50")
 ```
 
-These quick plots give us an initial understanding of some of variables - their distributions, variation across groups, and relationships between key biological features.
+These simple plots give us an initial overview of the distribution of some of the variables - on their own and stratified by groups.
 
-### You Can Pipe Into ggplot
+### Pipe into `ggplot`
 
-If you are tired of cluttering your environment with dozens of intermediate data frames? There is a solution. You can pipe (%\>%) your filtered data directly into ggplot without saving it first:
+Tired of cluttering your environment with dozens of intermediate data frames? There’s a solution: you can pipe (`%>%`) your filtered data directly into `ggplot()` without saving it first. When you do this, you don’t need to specify the `data = ...` argument inside `ggplot()` — the data is being *piped* into the function automatically.
 
 ```{r warning=FALSE}
 df_comb %>%
-  dplyr::filter(Sample_recode  == "Tumor")  %>%
-  # we omit the dataframe to plot because that is being piped into ggplot
-  # remember that different ggplot layers are still combined with '+'
-  ggplot(aes(x = CXCL11, y = CXCL10, color = summarygrade)) + scale_color_viridis_d() +
-  geom_point() + theme_bw()
+  filter(sample_recode  == "Tumor") %>%
+  ggplot(aes(x = CXCL11, 
+             y = CXCL10, 
+             color = summarygrade)) + 
+  geom_point() +
+  scale_fill_viridis_d(na.value = "grey50") +
+  theme_bw()
 ```
 
 ### Plotting several dataframes
 
-Sometimes, we want to add extra layers of information to a plot — for example, combining raw data distributions with summary statistics. This is a useful and flexible skill when working with ggplot2.
+Sometimes we want to add extra layers of information to a plot — for example, combining raw data distributions with summary statistics. This is a useful and flexible skill when working with ggplot2.
 
-In this case, we’ll create a violin plot to show the distribution of age_at_initial_path_diagn values for summarygrade categories At the same time, we want to overlay the mean value for each summarygrade category as a red point.
+In this case, we’ll create a violin plot to show the distribution of the `age_at_initial_path_diagn` values stratified by the `summarygrade` categories. At the same time, we want to overlay the mean `age_at_initial_path_diagn` value for each `summarygrade` category as a red point.
 
-We start by summarizing our data to get the mean expression for each summarygrade category:
+We start by summarizing our data to get the mean `age_at_initial_path_diagn` for each `summarygrade` category:
 
 ```{r}
-
 gene_mean <- df_comb %>%
   group_by(grade) %>%
-  summarise(mean = mean(age_at_initial_path_diagn, na.rm = TRUE))
+  summarise(mean = mean(age_at_initial_path_diagn)) %>% 
+  filter(!is.na(grade))
+
 gene_mean
 ```
 
-Now we plot the distributions with `geom_violin()` and add the mean values using a second data frame in `geom_point()`:
+Now we plot the distributions with `geom_violin()` and add the mean values using a second data frame in `geom_point()`:
 
 ```{r warning=FALSE}
-
-# Tumor percentage by summary grade
-ggplot(df_comb, aes(x = grade, y = age_at_initial_path_diagn, fill = grade)) +
+df_comb %>% 
+  filter(!(is.na(age_at_initial_path_diagn) | is.na(grade))) %>% 
+  ggplot(aes(x = grade, 
+             y = age_at_initial_path_diagn, 
+             fill = grade)) +
   geom_violin() +
-  geom_point(data = gene_mean, aes(x = grade, y=mean), color = 'red', size = 5) +
-  theme_bw() + scale_fill_viridis_d()
-
+  geom_point(data = gene_mean, aes(x = grade, y = mean), color = 'red', size = 3) +
+  scale_fill_viridis_d() +
+  labs(title = 'Age at Initial Pathologic Diagnosis by grade', 
+       caption = 'Only one individual in grade 4.') +
+  theme_bw() 
 ```
 
-`geom_point(data = gene_mean)` tells `ggplot` to use a **different data frame** for this layer — a powerful way to combine data sources in a single plot.
+`geom_point(data = gene_mean)` tells `ggplot` to use a **different data frame** for this layer — a powerful way to combine data sources in a single plot.
 
-This makes it easy to visualize both **variation** and **central tendency** at the same time.
+This makes it easy to visualize both **variation** and **central tendency** at the same time.
 
 ### Plots are objects
 
-Just like data frames and models, `ggplot` plots are R objects. You can assign them to variables and display them later:
+Just like data frames, `ggplot` plots are R objects. You can assign them to variables and display them later:
 
 ```{r}
-awesome_plot <- ggplot(df_comb, aes(x = grade, y = age_at_initial_path_diagn, fill = grade)) +
+awesome_plot <- df_comb %>% 
+  filter(!(is.na(age_at_initial_path_diagn) | is.na(grade))) %>% 
+  ggplot(aes(x = grade,
+             y = age_at_initial_path_diagn,
+             fill = grade)) +
   geom_violin() +
   geom_point(data = gene_mean, aes(x = grade, y=mean), color = 'yellow', size = 5) +
-  theme_bw() + scale_fill_viridis_d()
-
+  scale_fill_viridis_d() + 
+  labs(title = 'Age at Initial Pathologic Diagnosis by grade', 
+       caption = 'Only one individual in grade 4.') +
+  theme_bw() 
 ```
 
-If R is every being pesky about showing you plots (e.g. if you want to display them in a loop) wrapping `print()` around the plot name usually helps:
+If R is being every pesky about showing you plots (e.g. if you want to display them in a loop) wrapping `print()` around the name of the plot object usually helps:
 
-``` {r warning="FALSE"}
+```{r warning="FALSE"}
 print(awesome_plot)
 ```
 
 This is especially useful for creating multiple plots programmatically.
 
-<br> <br> <br>
 
-## Formats: Pivot long and wider
+## Formats: long and wide
 
-The creed of `ggplot` is that every information that should be put into the plot must be in a column. There is one column that describes the x-axis, one for the y-axis, and one for each additional aesthetic like color, size, shape, ect.
+The creed of `ggplot` is that every information you want to plot must be in a column. There is one column that describes the x-axis, one for the y-axis, and one for each additional aesthetic like color, size, shape, ect.
 
-There is a prolem with this format. Let’s say we want to create a single plot and compare several **CXCL gene expression levels** across different categories.
+Your data might not be in the correct format for all the plots you want to make. Let’s say we want to create a single plot and compare several **CXCL gene expression levels** across different categories.
 
-In the current **wide format** (like most spreadsheets), each gene is stored in its own column:
+In the current **wide format** (like most spreadsheets), each gene is stored in its own column:
 
 | ID  | CXCL1 | CXCL2 | CXCL3 | ... |
 |-----|-------|-------|-------|-----|
 
-This layout is fine for browsing spreadsheets, but it doesn’t play well with `ggplot` or modeling. You’d have to write a separate plot for each column — not efficient.
+This layout is fine for browsing spreadsheets, but to create the plot described above you’d have to write a separate plot for each gene/column — not efficient.
 
-To plot and analyze more effectively, we need to reshape the data into **long format**, where each row represents a single observation:
+To plot and analyze more effectively, we need to reshape the data into **long format**, where each row represents a single observation:
 
 | ID  | gene  | value |
 |-----|-------|-------|
@@ -209,49 +201,53 @@ To plot and analyze more effectively, we need to reshape the data into **long f
 | 2   | CXCL1 | 3.1   |
 | ... | ...   | ...   |
 
-We can do this using `pivot_longer()`:
+We can do this using `pivot_longer()`:
 
-The data can be reformatted to long format such that there is one line per variable per person. For this we use the `pivot_longer` function.
+The data can be reformatted to long format such that there is one line per gene per person. For this we use the `pivot_longer` function.
 
 ```{r}
-df_long <- df_comb %>% 
-  pivot_longer(cols = c(CXCL1,CXCL2,CXCL3, CXCL5, CXCL6, CXCL9, CXCL10, CXCL11),
+df_comb_long <- df_comb %>% 
+  pivot_longer(cols = starts_with('CXCL'),
                names_to = "gene",
                values_to = "value")
 
-head(df_long)[1:3,1:5]
+df_comb_long %>% select(unique_patient_ID, age_at_initial_path_diagn, gene, value) %>% head() 
+
+# one line per gene per person
+nrow(df_comb)
+nrow(df_comb_long)
+df_comb_long$gene %>% unique() %>% length() * nrow(df_comb)
 ```
 
 ### The Long Format is ggplot’s Best Friend
 
-With the reshaped `df_long`, we can now create one **combined plot** that shows distributions for **all genes**  **in a single `ggplot` call**:
+With the reshaped `df_comb_long`, we can now create one **combined plot** that shows distributions for **all genes** in **a single** `ggplot` call:
 
 ```{r}
-ggplot(df_long, aes(x = gene, y = value, fill = gene)) +
+ggplot(df_comb_long, 
+       aes(x = gene, y = value, fill = gene)) +
   geom_boxplot() +
-  theme_minimal() + scale_fill_viridis_d()
+  scale_fill_viridis_d() + 
+  theme_minimal() 
 ```
 
 Want histograms for all genes?
-
 ```{r}
-ggplot(df_long, aes(x = value)) +
-  geom_histogram(bins = 30, fill = "#482878FF", color = "black") +
-  theme_minimal() +
-  facet_wrap(vars(gene), nrow = 3)
+ggplot(df_comb_long, 
+       aes(x = value)) +
+  geom_histogram(bins = 30) +
+  facet_wrap(vars(gene), nrow = 3) + 
+  theme_minimal()
 ```
 
-More context: add color by `summarygrade` and compare distributions side-by-side:
+More context: add color by `summarygrade` and compare distributions side-by-side:
 
 ```{r}
-ggplot(na.omit(df_long), aes(x = gene, y = value, fill = summarygrade)) +
-  geom_boxplot() + scale_fill_viridis_d()+
+ggplot(na.omit(df_comb_long), 
+       aes(x = gene, y = value, fill = summarygrade)) +
+  geom_boxplot() + 
+  scale_fill_viridis_d() + 
   theme_minimal() 
-
-ggplot(na.omit(df_long), aes(x = summarygrade, y = value, fill = summarygrade)) +
-  geom_violin() + scale_fill_viridis_d() +
-  theme_minimal()  + facet_wrap(vars(gene), nrow = 3)
-
 ```
 
 This plot gives us a histogram for each gene, all in one go.
@@ -265,74 +261,17 @@ This plot gives us a histogram for each gene, all in one go.
 The `pivot_wider` function is used to transform data to wide format.
 
 ```{r eval=FALSE}
-df_wide <- df_long %>% 
+df_comb_wide <- df_comb_long %>% 
   pivot_wider(names_from = gene, 
               values_from = value)
-# Same content 
-head(df_wide)
+
+head(df_comb_wide)
+head(df_comb)
 ```
-
-### Nesting
-
-When working with long-format data, we often encounter **repetitive information**. For example, in `df_long`, each patient has one row **per gene**, meaning the patient’s clinical data is repeated many times.
-
-To make the data more compact and structured, we can use **nesting**. Nesting allows us to store repeated rows inside a single column as a small tibble (a "mini-dataframe") per group — reducing redundancy and improving readability.
-
-Let’s restructure our data by **grouping by patient** and nesting the gene expression data into a column named `gene_expression`:
-
-```{r}
-df_long_nested <- df_long %>%  
-  group_by(gene) %>% 
-  nest(gene_expresion = c(gene, value)) %>% 
-  ungroup()
-
-head(df_long_nested)
-```
-
-You’ll see that `gene_expression` is now a **list-column** — each cell contains an entire mini-tibble with that patient’s gene expression data.
-
-Now we have one row per patient, and their gene data is neatly bundled inside that row.
-
-*A Note: Nesting creates list-columns, which **cannot be exported** to formats like `.csv` or Excel. Instead, you should save the object as an `.rds` file, which is designed for storing full R objects:*
-
-To inspect a patient’s gene expression data, use `filter()` and `pull()`:
-
-```{r}
-df_long_nested %>% 
-  filter(unique_patient_ID == 'TCGA-24-2030') %>% 
-  pull("gene_expresion")
-```
-
-This returns the tibble of gene expression values for that individual patient.
-
-For operations on the information contained in nested columns they first need to be `unnested`:
-
-```{r}
-
-df_long_nested %>% 
-  filter(unique_patient_ID == "TCGA-24-2030") %>% 
-  unnest(gene_expresion) %>%
-  summarise(mean_sales = mean(value, na.rm = T))
-
-```
-
-Nesting is useful for organizing repeated measurements and makes grouped operations like modeling or plotting much easier. It is a useful trick for the future, but we will not be using nested long format tibbles today.
-
-### Summary
-
--   **Wide format** is good for humans, not for `ggplot`.
-
--   **Long format** is ideal for visualization and modeling.
-
--   Use `pivot_longer()` and `pivot_wider()` to reshape easily.
-
--   With long format, one plot can handle **many variables** — fast and scalable.
-
-<br> <br> <br>
 
 ## Exploring Factors (Categorical Variables)
 
-When working with **factor variables**, we often want to know:
+When working with **factor variables**, we often want to know:
 
 -   What levels (categories) exist
 
@@ -340,53 +279,62 @@ When working with **factor variables**, we often want to know:
 
 -   How **missingness** overlaps across factors
 
-Let’s visualize two important factor variables: `tumorstage` and `group`.
-
-```{r, warning=FALSE}
-
-ggplot(df_comb, aes(x = reorder(tumorstage, vital_status), fill = vital_status)) +
-  geom_bar() +
-  labs(title = "Bar Plot of Texture Class", x = "Grade") +
-  theme_minimal() + scale_fill_viridis_d()
-
+Let's have a look at the `vital_status` variable. It looks fairly balanced. 
+```{r}
+table(df_comb$vital_status, useNA = "ifany")
 ```
 
-These **bar plots** help us assess group sizes and see whether outcomes like `vital_status` are evenly distributed across categories.
+Now, let's see how the `vital_status` levels are distributed across the `tumorstage` levels.
+```{r}
+table(df_comb$vital_status, df_comb$tumorstage, useNA = "ifany")
+```
+
+Maybe better to visualize 
+```{r, warning=FALSE}
+df_comb %>% 
+  filter(!(is.na(tumorstage) | is.na(vital_status))) %>% 
+  ggplot(aes(x = tumorstage, 
+             fill = vital_status)) +
+    geom_bar() +
+    scale_fill_viridis_d() + 
+    theme_minimal()
+```
+
+These **bar plots** help us assess group sizes and see whether outcomes like `vital_status` are evenly distributed across categories.
 
 ### Pairwise Relationships Between Categorical Variables
 
-To explore **relationships between multiple categorical variables** at once, we can use the `GGally` package’s `ggpairs()`function — which is like an enhanced contingency table viewer.
-
-```{r warning=FALSE}
-#| fig-height: 7
-#| out-width: 100%
-
-# Pairwise overview of factor variables
-df_comb_pairs <- na.omit(df_comb %>% select_if(is.factor))
-
-ggpairs(df_comb_pairs, columns = 1:5,  ggplot2::aes(colour = batch)) + 
-  theme_bw()  + 
-  scale_fill_viridis_d()
-
+We will now have a look at the distribution of levels of the categorical variables across `vital_status`. 
+```{r}
+# Keep only factor variables including vital_status
+df_comb %>% 
+  select(where(is.factor), vital_status) %>% 
+  drop_na() %>% 
+  pivot_longer(cols = -vital_status, names_to = "variable", values_to = "value") %>% 
+  # Plot faceted bar plots colored by vital_status
+  ggplot(aes(x = value, fill = vital_status)) +
+  geom_bar() +
+  facet_wrap(vars(variable), scales = "free_x") +
+  scale_fill_viridis_d() +
+  theme_minimal() 
 ```
+
 
 #### After reviewing our categorical variables, we observed the following:
 
--   **`Tumorstage` and `grade` are imbalanced** — with certain stages and grades (e.g., 1 or 4) having low sample counts. This limits our ability to make reliable comparisons across all detailed levels.
+-   **`Tumorstage` and `grade` are imbalanced** — with certain stages and grades (e.g., 1 or 4) having low sample counts. This limits our ability to make reliable comparisons across all detailed levels.
 
     -   To address this, we may use broader categories:
 
-        -   *Early vs. Late Stage* (e.g., Stage 1–2 vs. 3-4)
+        -   *Early vs. Late Stage* (e.g., Stage 1–2 vs. 3-4)
 
-        -   *Low vs. High Grade* (e.g., Grade 1–2 vs. 3–4)
+        -   *Low vs. High Grade* (e.g., Grade 1–2 vs. 3–4)
 
--   **`Batch` is evenly represented**, which reduces concerns about batch effects in our analysis.
+-   **`Batch` is evenly represented**, which reduces concerns about batch effects in our analysis.
 
--   **`Vital_status` is nicely balanced** between outcome groups, making it well-suited for comparisons and modeling.
+-   **`Vital_status` is nicely balanced** making it well-suited for comparisons and modeling.
 
 These insights will help us structure our downstream analysis in a statistically sound and interpretable way.
-
-<br> <br>
 
 ## Summary Statistics
 
@@ -404,31 +352,32 @@ Let’s say we want to compute the mean of several columns. A basic (but tedious
 
 ```{r}
 df_comb %>%
-  summarise(mean(CXCL1),
-            mean(CXCL2),
-            mean(CXCL3),
-            mean(CXCL5),
-            mean(age_at_initial_path_diagn))
+  summarise(mean_CXCL1 = mean(CXCL1),
+            mean_CXCL2 = mean(CXCL2),
+            mean_CXCL3 = mean(CXCL3),
+            mean_CXCL5 = mean(CXCL5),
+            mean_age_at_diagn = mean(age_at_initial_path_diagn))
 ```
 
 > *Note: We got some `NA`s because **age_at_initial_path_diagn** contain `NA` values and we didn't specify `na.rm=TRUE`. We will continue to see these in the below examples. Don't worry about them for now, we will show you how to deal with them later!*
 
-This works, but then we need to name every column we want to apply `summarise` to. It’s verbose and error-prone — especially if you have dozens of variables.
+This works, but we need to name every column we want to apply `summarise` to. It’s verbose and error-prone — especially if you have dozens of variables.
 
-Enter `across()`: lets us select the columns **across** which we want to apply summarise in a dynamic fashion:
+Enter `across()`: lets us select the columns which we want to apply `summarise` **across** in a dynamic fashion:
 
 ```{r warning=FALSE, message=FALSE}
 df_comb %>%
-  summarise(across(everything(), mean)) %>% select(15:25)
+  summarise(across(.cols = everything(), # Columns to run fuction on 
+                   .fns = mean)) %>% # Function 
+  select(15:25)
 ```
 
-We put the columns we want to select inside the brackets of `across()`. `everything()`, as you have probably guessed means all columns.
-
-Another cool example:
+Another useful example:
 
 ```{r eval=FALSE}
 df_comb %>% 
-  summarise(across(everything(), ~ sum(is.na(.))))
+  summarise(across(.cols = everything(), 
+                   .fns = ~ sum(is.na(.))))
 ```
 
 ### Using `where()` to Select Numeric Columns
@@ -437,7 +386,9 @@ We will probably not want to calculate means on non-numeric columns, so let's se
 
 ```{r}
 df_comb %>%
-  summarise(across(where(is.numeric), mean)) %>% select(5:15)
+  summarise(across(.cols = where(fn = is.numeric), # fn is a function that returns TRUE or FALSE
+                   .fns = mean)) %>% 
+  select(5:15)
 ```
 
 ### Other Column Selection Helpers
@@ -458,44 +409,41 @@ df_comb %>%
   summarise(across(starts_with('CXC'), mean))
 ```
 
-If the column names follow some pattern like 'CXCL_X' we can also employ `num_range` to specify them:
-
-```{r}
-# Columns like CXCL1, CXCL2, CXCL3
-df_comb %>%
-  summarise(across(num_range('CXCL', 1:3), mean))
-```
-
 Lastly, we can always straight up supply the names of the columns we want to select in a vector:
-
 ```{r}
 # Specific columns listed manually
 df_comb %>%
   summarise(across(c(CXCL3, CXCL5), mean))
 ```
 
-These helpers make your code cleaner, more scalable, and easier to maintain — especially when working with wide datasets.
+These helpers make your code cleaner, more scalable, and easier to maintain.
 
 ### `summarise()` becomes more powerful!
 
-So far, we've only applied a single function. But why stop at the mean? What if you want **multiple statistics** like mean, SD, min, and max — all in one go?
+So far, we've only applied a single function. But why stop at the mean? What if you want **multiple statistics** like mean, SD, min, and max — all in one go?
 
-With `across()`, you can pass a **list of functions**:
+With `across()`, you can pass a **list of functions**:
 
 ```{r}
 df_comb %>%
-  summarise(across(starts_with("CXC"), list(mean, sd, min, max)))
+  summarise(across(.cols = starts_with("CXC"), 
+                   .fns = list(mean, sd, min, max)))
 ```
 
-This gives you one wide row per column, with new columns like `CXCL1_1`, `CXCL1_2`, etc. A bit cryptic, right?
+This gives you one wide row per column, with new columns like `CXCL1_1`, `CXCL1_2`, etc. A bit cryptic, right?
 
 Let’s clean it up by naming the functions and columns:
 
 ```{r}
-df_comb %>%
-  summarise(across(starts_with("CXC"), 
-                   list(mean = mean, sd = sd, min = min, max = max),
+gene_summary <- df_comb %>%
+  summarise(across(.cols = starts_with("CXC"), 
+                   .fns = list(mean = mean, 
+                               sd = sd, 
+                               min = min, 
+                               max = max),
                    .names = "{.col}-{.fn}"))
+
+gene_summary
 ```
 
 Much better! Now the column names are readable and include both the variable and the statistic.
@@ -505,17 +453,12 @@ Still not your preferred format?
 You can probably pivot your way out of that!
 
 ```{r}
-df_comb %>%
-  #run summarise on all sales columns
-  summarise(across(where(is.numeric), 
-                   list(mean = mean, sd = sd, min = min, max = max),
-                   .names = "{.col}-{.fn}")) %>%
-  #add reformating
+gene_summary %>%
   pivot_longer(cols = everything(), 
                names_to = c("gene", "statistic"), 
                names_sep = "-") %>%
-  pivot_wider(names_from = statistic, values_from = value)
-
+  pivot_wider(names_from = statistic, 
+              values_from = value)
 ```
 
 Now you get a long format table with one row per variable and all your stats in columns — clean, tidy, and ready for interpretation.
@@ -524,12 +467,12 @@ Now you get a long format table with one row per variable and all your stats in 
 
 ### The anonymous function: `~` and `.`
 
-But wait! We still have those pesky `NA`s in our summary stats. Let's just add the `na.rm=TRUE` argument. To not have too many things going on at once we'll only do `mean()` for now:
+We promised to get back to handling the `NA`s when doing summary stats. Let's just add the `na.rm=TRUE` argument. To not have too many things going on at once we'll only do `mean()` for now:
 
 ```{r error=TRUE}
 df_comb %>%
-  summarise(across(where(is.numeric), 
-                   list(mean = mean(na.rm = TRUE)),
+  summarise(across(.cols = where(is.numeric), 
+                   .fns = list(mean = mean(na.rm = TRUE)),
                    .names = "{.col}-{.fn}"))
 ```
 
@@ -537,203 +480,147 @@ Brrrtt! We may not.
 
 Why doesn’t this work?
 
-![](../figures/meme_disappointment.png){fig-align="center"}
+When you pass functions directly into `across()` using the **shorthand syntax** (`mean`, `sd`, etc.), you're only allowed to use the **bare function with default arguments**. You will also notice that we didn't use brackets after their names, which is part of using the function shorthanded. Once you try to add something like `na.rm = TRUE`, the shorthandness breaks.
 
-When you pass functions directly into `across()` using the **shorthand syntax** (like `mean`, `sd`, etc.), you're only allowed to use **bare function names with no arguments**. You will also notice that we didn't use brackets after their names, which is part of using the function short hand. Once you try to add something like `na.rm = TRUE`, the shorthand breaks.
-
-To pass arguments to a function inside (i.e. calling `mean` inside `summarise`), we need to use what’s called an **anonymous function**.\
-Don't worry — it’s not as scary as it sounds.
+To pass arguments to a function that is called inside another function (i.e. calling `mean` inside `summarise`), we need to use what’s called an **anonymous function**. Don't worry — it’s not as scary as it sounds.
 
 It is written as a `~` and looks like this:
 
 ```{r}
 df_comb %>%
-  summarise(across(where(is.numeric), 
-                   list(mean = ~ mean(., na.rm = TRUE)),
+  summarise(across(.cols = where(is.numeric), 
+                   .fns = list(mean = ~ mean(., na.rm = TRUE)),
                    .names = "{.col}-{.fn}"))
 ```
 
 Let’s break it down:
 
--   `~` to define the function. `~ mean(., na.rm = TRUE)` tells R:\
+-   `~` to define the function. `~ mean(., na.rm = TRUE)` tells R:\
     *“for each column, compute the mean, ignoring NAs”*
 
--   `.` as a placeholder for the current column being operated on or 'the data previously referred to'. We need to use the `.` because `mean` when called as a proper function needs to have an argument (a vector of numbers) to work on.
+-   `.` is a placeholder for the current column being operated or 'the data previously referred to'. We need to use the `.` because `mean` when called as a proper function needs to have an argument (a vector of numbers) to work on.
 
 Compare it to this:
 
 ```{r}
-mean(df_comb$age_at_initial_path_diagn,na.rm=TRUE)
+mean(df_comb$age_at_initial_path_diagn, na.rm = TRUE)
 ```
 
-In both cases, the column must be explicitly passed in - and `.` serves that role inside anonymous functions.
+In both cases, the column must be explicitly passed in and `.` serves that role inside anonymous functions.
 
-### Multiple Summary Statistics with `na.rm = TRUE`
+### Multiple Summary Statistics with `na.rm = TRUE`
 
-Now let’s compute **several** stats per gene column, all with `na.rm = TRUE`:
+Now let’s compute **several** stats per gene column, all with `na.rm = TRUE`:
 
 ```{r}
 df_comb %>%
-  #across and starts_with selects columns
-  summarise(across(where(is.numeric), 
-                   #list the functions to execute
-                   list(mean = ~ mean(., na.rm=T),
-                        sd = ~ sd(., na.rm=T), 
-                        min = ~ min(., na.rm=T), 
-                        max = ~ max(., na.rm=T)),
-                   #specify names of output columns
+  summarise(across(.cols = where(is.numeric), 
+                   .fns = list(mean = ~ mean(., na.rm = TRUE),
+                               sd = ~ sd(., na.rm = TRUE), 
+                               min = ~ min(., na.rm = TRUE), 
+                               max = ~ max(., na.rm = TRUE)),
                    .names = "{.col}-{.fn}")) %>%
-  
-  #add reformating
+  # add reformating
   pivot_longer(cols = everything(), 
                names_to = c("gene", "statistic"), 
                names_sep = "-") %>%
-  pivot_wider(names_from = statistic, values_from = value)
+  pivot_wider(names_from = statistic, 
+              values_from = value)
 ```
 
-This produces a tidy table with one row per gene and columns for `mean`, `sd`, `min`, and `max`.
+This produces a tidy table with one row per gene and columns for `mean`, `sd`, `min`, and `max`.
 
-### Other usage examples
-
-So far, we’ve used helper functions inside `summarise()` — but it’s just as powerful inside `mutate()`.
-
-Let’s say we want to **convert all `days_to_*` columns from days to years** by dividing them by 365:
-
-```{r}
-df_comb %>%
-  mutate(across(starts_with("days_to_"), ~ . / 365)) %>%
-  head(n=3) %>% select(5:15)
-```
-
-![](../figures/meme_move.png){width="400"}
-
-Here’s what’s happening:
-
--   `starts_with("days_to_")` selects the relevant columns
-
--   `~ . / 365` tells R to divide each value in those columns by 365
-
--   `.` refers to “this column”
-
--   `~` defines the function to apply
-
-It’s concise and powerful.
-
-Another cool example: Replacing `NA`s with `0`s only in the columns starting with 'days_to\_':
-
-```{r}
-df_comb %>%
-  mutate(across(starts_with("days_to_"), ~ replace_na(.,0))) %>% select(5:15)
-```
-
-This is it for now but there will be user-defined functions later!
-
-<br> <br>
+The helper functions can be used in other tidyverse operation such as `mutate` and `select`. 
 
 ## Handling Outliers
 
-Now that we’ve explored summary statistics, it's time to consider **outliers** — those data points that differ markedly from the rest. Outliers can be caused by measurement or entry errors, natural variability or rare events or anomalies.
+Now that we’ve explored summary statistics, it's time to consider **outliers** — data points that differ markedly from the rest. Outliers can be caused by measurement or entry errors, natural variability or rare events or anomalies.
 
 Outliers can skew your summary statistics, distort visualizations and can affect model performance, especially in regression.
 
-We can identify outliers using methods like interquartile range (IQR), Z-scores or domain-specific rules.
-
-Let’s use our tidyverse skills to **calculate some basic stats** and **visualize potential outliers**.
+Let’s use our tidyverse skills to **calculate some basic stats** and **visualize potential outliers**.
 
 ```{r warning=FALSE}
-
 stats <- df_comb %>%
-  #across and starts_with selects columns
-  summarise(across(where(is.integer), 
-                   #list the functions to execute
-                   list(mean = ~ mean(., na.rm=T),
-                        sd = ~ sd(., na.rm=T), 
-                        min = ~ min(., na.rm=T), 
-                        max = ~ max(., na.rm=T)),
-                   #specify names of output columns
+  summarise(across(.cols = where(is.integer),
+                   .fns = list(mean = ~ mean(., na.rm = TRUE),  
+                               sd = ~ sd(., na.rm = TRUE), 
+                               min = ~ min(., na.rm = TRUE), 
+                               max = ~ max(., na.rm = TRUE)),
                    .names = "{.col}-{.fn}")) %>%
-  
-  #add reformating
+  # add reformating
   pivot_longer(cols = everything(), 
                names_to = c("variable", "statistic"), 
                names_sep = "-") %>%
-  pivot_wider(names_from = statistic, values_from = value) %>% mutate(threshold = mean + 3 * sd)
+  pivot_wider(names_from = statistic, 
+              values_from = value) %>% 
+  mutate(threshold_upper = mean + 3 * sd,
+         threshold_lower = mean - 3 * sd) %>%
+  pivot_longer(cols = c(threshold_lower, threshold_upper), names_to = "threshold_type", values_to = "threshold")
 
-
-df_longer <-df_comb %>% 
+df_comb_longer <- df_comb %>% 
   pivot_longer(cols = where(is.integer),
                names_to = "variable",
                values_to = "value")
 
-ggplot(df_longer, aes(x = value)) +
-  geom_histogram(bins = 30, fill = "#482878FF", color = "black") +
-  theme_minimal() +
-  geom_vline(data = stats, aes(xintercept = threshold),
-             color = "red", linetype = "dashed", size = 1) +
-  facet_wrap(vars(variable), nrow = 4, scales = "free")
-
-
-
+ggplot(df_comb_longer, 
+       aes(x = value)) +
+  geom_histogram(bins = 30) +
+  geom_vline(data = stats, 
+             aes(xintercept = threshold),
+             color = "red", linetype = "dashed") +
+  facet_wrap(vars(variable), ncol = 2, scales = "free") + 
+  theme_minimal()
 ```
 
-Sometimes, visualizing values in relation to **other variables** can make potential outliers easier to spot. Below, you’ll notice that a patient with 0% cancer cells and 0% tumor cells likely represents an outlier:
+Sometimes, visualizing values in relation to **other variables** can make potential outliers easier to spot. Below, you’ll notice that a patient with 0% cancer cells and 0% tumor cells likely represents an outlier:
 
 ```{r warning=FALSE}
 # Bivariate scatter plot colored by stromal cell percentage
-ggplot(df_comb, aes(x = percent_tumor_cells, y = percent_not_cancer_cells, color = percent_stromal_cells)) +
-  geom_point() + theme_bw() + scale_color_viridis_c(  direction = -1)
+ggplot(df_comb, 
+       aes(x = percent_tumor_cells, y = percent_not_cancer_cells, color = percent_stromal_cells)) +
+  geom_point() + 
+  scale_color_viridis_c() +
+  theme_bw()
 ```
 
-Once identified, we can choose to:
-
--   **Remove them**
-
--   **Winsorize** (cap extreme values)
-
--   **Impute or model** their potential impact
-
-There are many different tools and strategies available to detect and handle outliers. However, in this case, we’ll keep it simple: we will **remove patients where both `percent_tumor_cells` and `percent_not_cancer_cells` are less than 5%**.
+There are many different tools and strategies available to detect and handle outliers. However, in this case, we’ll keep it simple: we will remove patients where both `percent_tumor_cells` and `percent_not_cancer_cells` are less than 5%.
 
 ```{r warning=FALSE}
-
 df_comb <- df_comb %>%
-  mutate(is_outlier = percent_tumor_cells < 5 &  percent_tumor_cells < 5)
+  mutate(is_outlier = percent_tumor_cells < 5 & percent_tumor_cells < 5)
 
-ggplot(df_comb, aes(x = percent_tumor_cells, y = percent_not_cancer_cells, color = percent_stromal_cells)) +
+ggplot(df_comb, 
+       aes(x = percent_tumor_cells, y = percent_not_cancer_cells, color = percent_stromal_cells)) +
   geom_point()  +  
-  geom_point(data = df_comb %>% filter(is_outlier),
+  geom_point(data = df_comb %>% filter(is_outlier == TRUE),
              aes(x = percent_tumor_cells, y = percent_not_cancer_cells),
              shape = 21, fill = NA, color = "red", size = 8, stroke = 1) + 
-  theme_bw()+ scale_color_viridis_c(  direction = -1)
-
-
+  scale_color_viridis_c(direction = -1) + 
+  theme_bw()
 ```
 
->  **Be cautious when removing data**: Outlier removal should always be guided by domain knowledge and clear justification. Removing too much — or for the wrong reasons — can distort your analysis.
+> **Be cautious when removing data**: Outlier removal should always be guided by domain knowledge and clear justification. Removing too much — or for the wrong reasons — can distort your analysis.
 
-<br> <br>
 
 ## Handling Missing Data
 
-Missing data is common in most real-world datasets and can significantly affect the quality of our analysis. During exploratory data analysis (EDA), it's essential to **identify**, **understand**, and **properly handle** missing values to avoid biased or misleading conclusions.
+Missing data is common in most real-world datasets and can significantly affect the quality of our analysis. During EDA, it's essential to **identify**, **understand**, and **properly handle** missing values to avoid biased or misleading conclusions.
 
 Missing data can fall into three categories:
 
--   **Missing Completely At Random (MCAR)**: The missingness is independent of both observed and unobserved data.
+-   **Missing Completely At Random (MCAR)**: The missingness is independent of both the observed and unobserved data.
 
--   **Missing At Random (MAR)**: The missingness is related to observed data.
+-   **Missing At Random (MAR)**: The missingness is related to the observed data.
 
--   **Missing Not At Random (MNAR)**: The missingness depends on unobserved values themselves.
+-   **Missing Not At Random (MNAR)**: The missingness depends on the observed values themselves.
 
 Understanding which category your data falls into helps guide how to deal with it. Let’s inspect rows with the most missing values:
-
 ```{r}
-
 df_comb %>%
   mutate(na_count = rowSums(is.na(.))) %>%
   arrange(desc(na_count)) %>%
   slice_head(n = 10)
-
 ```
 
 Here we notice that **most of the missing values come from healthy tissue samples**.
@@ -764,7 +651,7 @@ df_comb <- df_comb %>% filter(Sample_recode == "Tumor")
 
 We’ll keep the remaining `NA`s as-is for now, depending on context.
 
-<br> <br> 
+<br> <br>
 
 ## In Summary
 
@@ -791,6 +678,3 @@ We have conducted an initial **exploratory data analysis (EDA)** and overall, 
 ```{r}
 save(df_comb, file="../data/Ovarian_comb_prep.RData")
 ```
-
-
-

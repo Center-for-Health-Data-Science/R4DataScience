@@ -1,5 +1,5 @@
 ---
-title: "Exercise 2: Data Transformation and Integration"
+title: "Exercise 2: Summary Statistics"
 format: html
 project:
  type: website

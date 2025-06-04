@@ -1,5 +1,5 @@
 ---
-title: "Exercise 2 - Solutions: Data Transformation and Integration"
+title: "Solution 2: Summary Statistics"
 format: html
 project:
  type: website
@@ -25,14 +25,10 @@ diabetes_join <- readxl::read_excel('../out/diabetes_join.xlsx')
 df_glucose <- readxl::read_excel('../data/df_glucose.xlsx')
 ```
 
-## Wrangling
+
+## Change format
 
 3. Have a look at the glucose dataset. It has three columns with measurements from a Oral Glucose Tolerance Test where blood glucose is measured at fasting (Glucose_0), 1 hour/60 mins after glucose intake (Glucose_6), and 2 hours/120 mins after (Glucose_120). The last columns is an ID column. Change the data type of the ID column to `factor` in both `diabetes_join` and `df_glucose`.
-
-
-```{r}
-head(df_glucose)
-```
 
 ```{r}
 df_glucose$ID <- as.factor(df_glucose$ID)
@@ -40,8 +36,7 @@ diabetes_join$ID <- as.factor(diabetes_join$ID)
 ```
 
 
-4. Restructure the glucose dataset into a long format. Name the column that describes which measurement the row refers to, i.e. Glucose_0, Glucose_60 or Glucose_120, `Measurement`. How many rows are there per ID? Does that make sense?
-
+4. Restructure the glucose dataset into a long format. Think about which columns should be included in the pivot.
 ```{r}
 df_glucose_long <- df_glucose %>% 
   pivot_longer(cols = starts_with("Glucose"),
@@ -52,59 +47,49 @@ df_glucose_long <- df_glucose %>%
 head(df_glucose_long)
 ```
 
-There are three rows for each ID, corresponding to the three glucose measurements
+5. How many rows are there per ID? Does that make sense?
 
 ```{r}
+# There are three rows for each ID, corresponding to the three glucose measurements
+
 df_glucose_long %>%
   count(ID) %>%
   head()
 ```
 
 
-5. In your long format dataframe you should have one column that described which measurement the row refers to, i.e. Glucose_0, Glucose_60 or Glucose_120. Transform this column so that you only have the numerical part, i.e. **only** 0, 60 or 120. Then change the data type of that column to `factor`. Check the order of the factor levels and if necessary change them to the proper order.
+6. In your long formatted dataframe you should have one column that described which measurement the row refers to, i.e. Glucose_0, Glucose_60 or Glucose_120. Transform this column so you only have the numerical part, i.e. **only** 0, 60 or 120. Then change the data type of that column to `factor`. Check the order of the factor levels and if necessary change them to the proper order.
 
 ::: {.callout-tip collapse="true"}
 ## Hint
-The `stringr` packages is a part of tidyverse and has many functions for manipulating strings. Find a function that can **split** the string so you can extract the numbers on the other side of the underscore. 
-
 Have a look at the help for factors `?factors` to see how to influence the levels.
 :::
 
 ```{r}
 df_glucose_long <- df_glucose_long %>% 
   mutate(Measurement = str_split_i(Measurement, '_', 2) %>% as.factor())
-
-head(df_glucose_long)
 ```
 
 Check factor levels:
-
 ```{r}
 levels(df_glucose_long$Measurement)
 ```
-Adjust levels to proper order:
 
+Adjust levels to proper order:
 ```{r}
 df_glucose_long$Measurement <- factor(df_glucose_long$Measurement, levels = c('0', '60','120'))
 ```
 
-
-6. Merge the long formatted glucose dataset you made in **4** with the joined diabetes dataset you loaded in **2**.
+7. Join the long formatted glucose dataset you made in **4** with the joined diabetes dataset you loaded in **2**. Do the wrangling needed to make it happen!
 
 ```{r}
 diabetes_glucose <- diabetes_join %>% 
-  left_join(df_glucose_long, by = 'ID')
+  mutate(ID = str_split_i(ID, pattern = '_', i = 2)) %>% 
+  left_join(df_glucose_long, by = 'ID') 
 
 head(diabetes_glucose)
 ```
 
-7. Pull the glucose measurements from your favorite ID. 
-
-```{r}
-diabetes_glucose %>% 
-  filter(ID == 9046) %>% 
-  pull(Measurement,`Glucose (mmol/L)`)
-```
 
 8. Calculate the mean glucose measure for each measurement time point.
 
@@ -114,70 +99,57 @@ diabetes_glucose %>%
   summarise(mean = mean(`Glucose (mmol/L)`))
 ```
 
-9. Calculate mean and standard deviation for all numeric columns.
+9. Calculate mean and standard deviation for all numeric columns and reformat the data frame into a manageable format like we did in the presentation. 
 
 ::: {.callout-tip collapse="true"}
 ## Hint
-You will need to use `summarise()` and `across()`, selecting numeric columns.
+You will need to use `summarise()` and `across()` to select numeric columns.
+
+For a nice reformatting like in the presentation with need both `pivot_longer` and `pivot_wider`.
+
 :::
 
 ```{r}
 diabetes_glucose %>%
-  summarise(across(where(is.numeric), list(mean=mean, sd=sd), 
-                   na.rm = TRUE))
+  summarise(across(.cols = where(is.numeric), 
+                   .fns = list(mean = ~ mean(., na.rm = TRUE),
+                               sd = ~ sd(., na.rm = TRUE)),
+                   .names = "{.col}-{.fn}")) %>% 
+  pivot_longer(cols = everything(), 
+               names_to = c("variable", "statistic"), 
+               names_sep = "-") %>%
+  pivot_wider(names_from = statistic, 
+              values_from = value)
 ```
 
-10. Nest the glucose measurements and values such that there is only one row per ID and call the nested column OGTT (Oral Glucose Tolerance Test). Display the resulting tibble to confirm that you have succeeded.
 
-::: {.callout-tip collapse="true"}
-## Hint
-
-Remember the flow:
-
-```{r eval = FALSE}
-group_by() %>% 
-  nest() %>% 
-  ungroup()
-```
-
-:::
-
+10. Finally, change the Diabetes column to factor.
 ```{r}
-diabetes_glucose <- diabetes_glucose %>% 
-  group_by(ID) %>% 
-  nest(OGTT = c(Measurement, `Glucose (mmol/L)`)) %>% 
-  ungroup()
-  
-#relocate the new nested column to after BMI so we can actually see it
-head(relocate(diabetes_glucose, OGTT, .after = BMI))
+diabetes_glucose$Diabetes <- as.factor(diabetes_glucose$Diabetes)
 ```
 
-11. Export the final dataset. Since the dataset is nested, you cannot export it as an excel file. Export the dataset as an `.rds` file. Have a guess at what the function is called.
-
+11. Export the final dataset in what ever format you prefer. 
 ```{r}
-write_rds(diabetes_glucose, '../out/diabetes_glucose.rds')
+writexl::write_xlsx(diabetes_glucose, '../out/diabetes_glucose.xlsx')
 ```
 
-## Simple plotting
+## Plotting
 
-Before we move on, let's refresh the plotting package in tidyverse: `ggplot2`. 
+Let's make some `ggplot`s!
 
-12. For p1, plot the density of the glucose measurements at time 0. For p2, make the same plot as p1 but add stratification on the diabetes status. Give the plot a meaningful title. Consider the densities - do they make sense?
+12. For p1, plot the density of the glucose measurements at time 0. For p2, make the same plot as p1 but add stratification on the diabetes status. Give the plot a meaningful title. Consider the densities - do the plots make sense?
 ```{r}
 p1 <- diabetes_glucose %>% 
-  unnest(OGTT) %>% 
   filter(Measurement == 0) %>% 
   ggplot(aes(x = `Glucose (mmol/L)`)) + 
   geom_density()
 
 p2 <- diabetes_glucose %>% 
-  unnest(OGTT) %>% 
   filter(Measurement == 0) %>% 
   ggplot(aes(x = `Glucose (mmol/L)`,
              linetype = Diabetes)) + 
   geom_density()
 
-# Get plots side by side.
 library(patchwork)
 p1 + p2 + plot_annotation(title = "Glucose measurements at time 0")
 ```
@@ -185,13 +157,11 @@ p1 + p2 + plot_annotation(title = "Glucose measurements at time 0")
 13. Do the same for the glucose measurements at time 60.
 ```{r}
 p1 <- diabetes_glucose %>% 
-  unnest(OGTT) %>% 
   filter(Measurement == 60) %>% 
   ggplot(aes(x = `Glucose (mmol/L)`)) + 
   geom_density()
 
 p2 <- diabetes_glucose %>% 
-  unnest(OGTT) %>% 
   filter(Measurement == 60) %>% 
   ggplot(aes(x = `Glucose (mmol/L)`)) + 
   geom_density(aes(linetype = Diabetes))
@@ -202,7 +172,6 @@ p1 + p2 + plot_annotation(title = "Glucose measurements at time 60")
 ```
 
 14. Now, create one plot for the glucose measurement where the densities are stratified on measurement time (0, 60, 120) and diabetes status (0, 1). You should see 6 density curves in your plot. 
-
 ::: {.callout-tip collapse="true"}
 ## Hint
 There two ways of stratifying a density plot in ggplot2: `color` and `linetype`.
@@ -210,7 +179,6 @@ There two ways of stratifying a density plot in ggplot2: `color` and `linetype`.
 
 ```{r}
 p1 <- diabetes_glucose %>% 
-  unnest(OGTT) %>% 
   ggplot(aes(x = `Glucose (mmol/L)`, 
              color = Measurement,
              linetype = Diabetes)) + 
@@ -219,6 +187,74 @@ p1 <- diabetes_glucose %>%
 
 p1
 ```
+
+## Extra Exercises
+
+e1. Calculate the mean glucose levels for each time point. 
+
+::: {.callout-tip collapse="true"}
+## Hint
+You will need to use `group_by()` and `summerise()`.
+
+:::
+
+```{r}
+diabetes_glucose %>%
+  group_by(Measurement) %>% 
+  summarise(`Glucose (mmol/L)` = mean(`Glucose (mmol/L)`))
+```
+
+
+e2. Make the same calculation as above, but additionally group the results by `Diabetes`. Save the data frame in a variable.
+
+::: {.callout-tip collapse="true"}
+## Hint
+Group by several variables: `group_by(var1, var2)`.
+
+:::
+
+```{r}
+glucose_mean <- diabetes_glucose %>%
+  group_by(Measurement, Diabetes) %>%
+  summarize(`Glucose (mmol/L)` = mean(`Glucose (mmol/L)`)) %>%
+  ungroup()
+
+glucose_mean
+```
+
+
+e3. Create a plot that visualizes glucose measurements across time points, with one line for each patient ID. Then color the lines by their diabetes status. In summary, each patient's glucose measurements should be connected with a line, grouped by their ID, and color-coded by `Diabetes`. Give the plot a meaningful title. 
+
+```{r}
+diabetes_glucose %>%
+  ggplot(aes(x = Measurement,
+             y = `Glucose (mmol/L)`)) +
+  geom_point(aes(color = Diabetes)) + 
+  geom_line(aes(group = ID, color = Diabetes)) + 
+  labs(title = 'Glucose Measurements Across Time Points by Diabetes Status')
+```
+
+
+e4. Recreate the plot you made above and include the mean value for each glucose measurement for the two diabetes statuses (0 and 1) you calculated in **e2**. This plot should look like this:
+
+![](../out/figure3_13.png){fig-align="center"}
+
+
+```{r}
+diabetes_glucose %>%
+  ggplot(aes(x = Measurement,
+             y = `Glucose (mmol/L)`)) +
+  geom_point(aes(color = Diabetes)) + 
+  geom_line(aes(group = ID, color = Diabetes)) + 
+  geom_point(data = glucose_mean, aes(x = Measurement, y = `Glucose (mmol/L)`)) +
+  geom_line(data = glucose_mean, aes(x = Measurement, y = `Glucose (mmol/L)`, 
+                                     group = Diabetes, linetype = Diabetes)) +
+  labs(title = "Glucose Measurements with Mean by Diabetes Status")
+
+ggsave('../out/figure3_13.png')
+```
+
+
 
 
 

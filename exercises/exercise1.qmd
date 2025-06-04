@@ -1,5 +1,5 @@
 ---
-title: "Exercise 1: Data Cleanup"
+title: "Exercise 1: Data Cleaning"
 format: html
 project:
  type: website
@@ -75,6 +75,6 @@ When we look at the column `Work`, we can see that we have three levels `Public`
 
 Additionally, we are not so happy with the fact that the `ID` is simply denoted by a number. The reason for this is that if we write out our dataset and read it in again (which we will do later), R will think it is a numeric or integer variable.
 
-13. Add the string `ID_` in front of the number and convert it to a character variable.
+13. Add the string `ID_` in front of the number and convert it to a factor variable.
 
 14. Export the joined dataset. Think about which directory you want to save the file in.

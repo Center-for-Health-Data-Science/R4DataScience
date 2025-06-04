@@ -1,5 +1,5 @@
 ---
-title: "Solution 1: Data Cleanup"
+title: "Solution 1: Data Cleaning"
 format: html
 project:
  type: website
@@ -89,19 +89,6 @@ diabetes_clinical %>%
   ggplot(aes(x = Serum_ca2)) + 
   geom_histogram(color='black', fill='#ADC698') + 
   theme_minimal()
-```
-
-Some summary statistics:
-
-```{r}
-diabetes_clinical %>%
-  summarise(across(where(is.numeric), list(mean = mean, sd = sd), na.rm = TRUE))
-
-# or alternatively
-
-diabetes_clinical %>%
-  select(where(is.numeric)) %>% 
-  summary(.)
 ```
 
 5.  Some variables in the dataset are categorical or factor variables. Figure out what levels these have and how many observations there are for each level.
@@ -247,9 +234,9 @@ The joining variable must be the same type in both datasets.
 10. Join the cleaned versions of the clinical and metadataset by the variable and with the function you considered above.
 
 ```{r}
-# We use full_join to keep all observations before we know which variables we are interested in. 
+# We use inner_join to have as few NAs as possiable
 diabetes_join <- diabetes_clinical_clean %>% 
-  full_join(diabetes_meta_clean, by = 'ID')
+  inner_join(diabetes_meta_clean, by = 'ID')
 
 nrow(diabetes_join)
 ```
@@ -280,14 +267,15 @@ table(diabetes_join$Work)
 
 Additionally, we are not so happy with the fact that the `ID` is simply denoted by a number. The reason for this is that if we write out our dataset and read it in again (which we will do later), R will think it is a numeric or integer variable.
 
-13. Add the string `ID_` in front of the number and convert it to a character variable.
+13. Add the string `ID_` in front of the number and convert it to a factor variable.
 
 ```{r}
 diabetes_join <-  diabetes_join %>% 
-  mutate(ID = paste0("ID_", as.character(ID)))
+  mutate(ID = paste0("ID_", as.factor(ID)))
 
 head(diabetes_join$ID)
 ```
+
 
 14. Export the joined dataset. Think about which directory you want to save the file in.
 
