@@ -1,5 +1,5 @@
 ---
-title: "Presentation 2: Summary Statitics, Data Wrangling and Plotting"
+title: "Presentation 2: Summary Statistics and Data Wrangling"
 format: html
 project:
  type: website

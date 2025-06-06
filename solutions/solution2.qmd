@@ -1,5 +1,5 @@
 ---
-title: "Solution 2: Summary Statitics, Data Wrangling and Plotting"
+title: "Solution 2: Summary Statistics and Data Wrangling"
 format: html
 project:
  type: website
@@ -24,7 +24,6 @@ library(tidyverse)
 diabetes_join <- readxl::read_excel('../data/exercise1_diabetes_join.xlsx')
 df_glucose <- readxl::read_excel('../data/df_glucose.xlsx')
 ```
-
 
 ## Change format
 
@@ -226,6 +225,7 @@ plot(hclust_num, main="Clustering based on scaled integer values", cex=0.7)
 ```{r}
 writexl::write_xlsx(diabetes_glucose, '../data/exercise2_diabetes_glucose.xlsx')
 ```
+
 
 ## More Plotting
 
