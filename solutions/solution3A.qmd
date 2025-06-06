@@ -173,77 +173,12 @@ diabetes_glucose %>%
   labs(title = 'Glucose Measurements for Time Point 0, 60, and 120')
 ```
 
-10. Calculate the mean glucose levels for each time point. 
-
-::: {.callout-tip collapse="true"}
-## Hint
-You will need to use `unnest()`, `group_by()`, and `summerise()`.
-
-:::
-
-```{r}
-diabetes_glucose %>%
-  unnest(OGTT) %>% 
-  group_by(Measurement) %>% 
-  summarise(`Glucose (mmol/L)` = mean(`Glucose (mmol/L)`))
-```
-
-
-11. Make the same calculation as above, but additionally group the results by `Diabetes`. Save the data frame in a variable. Compare your results to the boxplots you made above. 
-
-::: {.callout-tip collapse="true"}
-## Hint
-Group by several variables: `group_by(var1, var2)`.
-
-:::
-
-```{r}
-glucose_mean <- diabetes_glucose %>%
-  unnest(OGTT) %>% 
-  group_by(Measurement, Diabetes) %>%
-  summarize(`Glucose (mmol/L)` = mean(`Glucose (mmol/L)`)) %>%
-  ungroup()
-
-glucose_mean
-```
-
-
-12. Create a plot that visualizes glucose measurements across time points, with one line for each patient ID. Then color the lines by their diabetes status. In summary, each patient's glucose measurements should be connected with a line, grouped by their ID, and color-coded by `Diabetes`. Give the plot a meaningful title. 
-
-If your time points are strangely ordered have a look at the `levels` of your `Measurement` variable (the one that specifies which time point the measurement was taken at) and if necessary fix their order.
-
-```{r}
-diabetes_glucose %>%
-  unnest(OGTT) %>% 
-  ggplot(aes(x = Measurement,
-             y = `Glucose (mmol/L)`)) +
-  geom_point(aes(color = Diabetes)) + 
-  geom_line(aes(group = ID, color = Diabetes)) + 
-  labs(title = 'Glucose Measurements Across Time Points by Diabetes Status')
-```
 
 
 
-13. Recreate the plot you made in **12** and include the mean value for each glucose measurement for the two diabetes statuses (0 and 1) you calculated in Exercise 11. This plot should look like this:
-
-![](../out/figure3_13.png){fig-align="center"}
 
 
-```{r}
 
-diabetes_glucose %>%
-  unnest(OGTT) %>% 
-  ggplot(aes(x = Measurement,
-             y = `Glucose (mmol/L)`)) +
-  geom_point(aes(color = Diabetes)) + 
-  geom_line(aes(group = ID, color = Diabetes)) + 
-  geom_point(data = glucose_mean, aes(x = Measurement, y = `Glucose (mmol/L)`)) +
-  geom_line(data = glucose_mean, aes(x = Measurement, y = `Glucose (mmol/L)`, 
-                                     group = Diabetes, linetype = Diabetes)) +
-  labs(title = "Glucose Measurements with Mean by Diabetes Status")
-
-ggsave('../out/figure3_13.png')
-```
 
 
 
