@@ -578,17 +578,70 @@ There are many different tools and strategies available to detect and handle out
 
 ```{r warning=FALSE}
 df_comb <- df_comb %>%
-  filter(percent_tumor_cells > 5 & percent_tumor_cells > 5)
-  
+  mutate(isOutlier = (percent_tumor_cells < 5 & percent_not_cancer_cells < 5))
 
-ggplot(df_comb, 
-       aes(x = percent_tumor_cells, y = percent_not_cancer_cells, color = percent_stromal_cells)) +
-  geom_point() + 
-  scale_color_viridis_c() +
-  theme_bw()
+df_comb %>%
+  filter(isOutlier == TRUE)
+
+df_comb <- df_comb %>% 
+  filter(isOutlier == FALSE | is.na(isOutlier))
 ```
 
 > **Be cautious when removing data**: Outlier removal should always be guided by domain knowledge and clear justification. Removing too much — or for the wrong reasons — can distort your analysis.
+
+
+## Sample outliers across variables
+
+Instead of visualizing variables one by one, we can also look at samples across a set of variables and identify outliers that way. If we have a lot of integer and numeric values in our dataset, one thing that might make sense is to make a dendogram (tree) using hierarchical clustering and look at if any sample 'stand out'.
+
+Lets try this for the integer variables in our dataset. 
+
+We first select all integer columns, drop missing values (they are non-informative for clustering anyways). Then, we make a plot to get an idea of data distributions:
+```{r}
+df_int <- df_comb %>%
+  select(where(is.integer)) %>%
+  drop_na()
+
+df_int[1:5, ]
+
+df_int %>% 
+  pivot_longer(cols = where(is.integer),
+               names_to = "variable",
+               values_to = "value") %>%
+  ggplot(., aes(x = value)) +
+  geom_histogram(color= 'white') +
+  facet_wrap(vars(variable), ncol = 2, scales = "free") + 
+  theme_minimal()
+
+```
+
+Next, we scale our data (more on this in Presentation 5.) and calculate the distances between all pairs of scaled variables and perform hierarchical clustering.
+```{r}
+# Euclidean pairwise distances
+df_int_dist <-  df_int %>% 
+  mutate(across(everything(), scale)) %>%
+  dist(., method = 'euclidean')
+
+# Hierarchical clustering with Ward's distance metric
+hclust_int <- hclust(df_int_dist, method = 'ward.D2')
+
+# Plot the result of clustering
+plot(hclust_int, main="Clustering based on scaled integer values", cex=0.7)
+
+```
+
+
+From our plot we see that a couple of samples seem to have very short branch lengths (which may indicate and outlier). One such sample is 208 (row id). Lets have a look at it:
+
+```{r}
+df_int <- df_comb %>%
+  select(where(is.integer)) %>%
+  drop_na() 
+
+df_int[208, ]
+```
+We can now compare the values of this sample to the distributions above to try an figure out what makes it an outlier and IF it should be removed. 
+
 
 ## Handling Missing Data
 
@@ -611,7 +664,7 @@ df_comb %>%
   slice_head(n = 10)
 ```
 
-Here we notice that most of the missing values come from samples where the patient had a **norecurrence** tumor and does not have a **group** label - this points to either MAR or MNAR. Unless however we have evidence that, missingness is directly related to the observed values themselves, we prefer to assume MAR.
+Here we notice that most of the missing values come from samples where the patients were  (**healthy (sample_recode)** - this points to either MAR or MNAR. Unless however we have evidence that, missingness is directly related to the observed values themselves, we prefer to assume MAR.
 
 There are two main approaches when deciding what to do:
 
@@ -623,15 +676,17 @@ Consider the impact of missing data. Even after imputing, missing data can cause
 
 > **Caution**: Even after imputation, results may be biased. Always interpret findings with an understanding of how missing data was handled.
 
-Since we have very low number of samples with a high number of missing values in our analysis we can safely these:
+Since we have very few samples with a high number of missing values AND we are not interested in working with these likely either misclassified or mislabled samples in our analysis, we can safely them:
 
 ```{r}
-df_comb <- df_comb %>% filter(!is.na(group))
+df_comb <- df_comb %>% filter(sample_recode == "Tumor")
 ```
 
 We’ll keep the remaining `NA`s as-is for now, depending on context.
 
 <br> <br>
+
+
 
 ## In Summary
 
