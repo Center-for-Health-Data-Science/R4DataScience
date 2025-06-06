@@ -33,9 +33,9 @@ load("../data/Ovarian_comb_prep_temp.RData")
 
 ## From Pairs to Triads
 
-We are now ready to explore more **complex relationships** between variables — going beyond summary statistics and 2 variable plots. Our focus here is to investigate whether the **collagen (COL) gene family** plays a role in **ovarian cancer**, and whether **cell type proportions** (such as tumor, stromal, or normal cell percentages) influence collagen expression patterns.
+We are now ready to explore more **complex relationships** between variables — going beyond summary statistics and 2 variable plots. Our focus here is to investigate whether the **collagen (COL) gene family** plays a role in **ovarian cancer**, and whether **cell type proportions** (such as tumor, stromal, or normal cell percentages) influence collagen expression patterns.
 
-We also aim to assess whether **patient characteristics** like **stage** show any correlation with collagen gene expression.
+We also aim to assess whether **patient characteristics** like **stage** show any correlation with collagen gene expression.
 
 To gain deeper insight, we’ll now:
 
@@ -45,7 +45,7 @@ To gain deeper insight, we’ll now:
 
 This approach allows us to assess whether certain genes increase or decrease with tumor burden or are associated with specific patient groups.
 
-Let's try to look just at couple of our plots. Only collagen genes that start with 1 "COL1..", `tumorstage` and `age_at_initial_path_diagn.`
+Let's try to look at a couple of plots. Only collagen genes that start with 1 "COL1..", `tumorstage` and `age_at_initial_path_diagn.`
 
 ```{r warning=FALSE}
 #| fig-height: 7
@@ -73,19 +73,23 @@ ggplot(df_long, aes(x = age_at_initial_path_diagn, y = value, color = tumorstage
 
 ```
 
-This scatter plot shows gene expression on the y-axis, tumor cell percentage or age at initial diagnosis on the x-axis, and uses color to encode tumor stage.
-
-**Well, this doesn't seem helpful.**
+This scatter plot shows gene expression on the y-axis, tumor cell percentage or age at initial diagnosis on the x-axis, and uses colors to encode tumor stage. **However, unfortunately this plot does not seem helpful.**
 
 When visualizing dozens of variables, pairwise scatter plots become overwhelming. Maybe correlation matrices provide a concise summary of linear relationships across all numeric features.
 
 A quick way to see linear relationships across many numeric variables.
 
 ```{r}
+# Custom color pallet
 col_pal <- c("#440154FF", "#482878FF", "#3E4A89FF", "#31688EFF", "#26828EFF",
              "#1F9E89FF", "#35B779FF", "#6DCD59FF", "#B4DE2CFF", "#FDE725FF")
+
 # All Integer Variables
-corr_matrix <- df_comb %>% select(where(is.integer)) %>% cor(use = "complete.obs")
+corr_matrix <- df_comb %>% 
+  select(where(is.integer)) %>% 
+  cor(use = "complete.obs")
+
+# Correlation plot
 corrplot(corr_matrix, method = "circle", type = "lower", tl.cex = 0.8,   tl.col = "black",
          col = col_pal)
 ```
@@ -94,31 +98,22 @@ corrplot(corr_matrix, method = "circle", type = "lower", tl.cex = 0.8,   tl.col 
 #| out-width: 100%
 
 # All Integer Variables
-corr_matrix <- df_comb %>% select(starts_with("COL")) %>% cor(use = "complete.obs")
+corr_matrix <- df_comb %>% 
+  select(starts_with("COL")) %>% 
+  cor(use = "complete.obs")
+
 corrplot(corr_matrix, method = "circle", type = "lower", tl.cex = 0.8,   tl.col = "black", order = c("hclust"), col = col_pal)
 ```
 
-Oh my Oh my
+Again, this plot however beautiful is still very difficult to interpret. Can we do better?
 
-Still not any clearer?
+We are clearly challenged by data complexity. As the number of variables increases—especially if you have **dozens of gene expression values**, **categorical groups**, and **clinical variables**—simple visualizations become difficult to interpret and visually overwhelming.
 
-## The Challenge of Complexity
-
-As the number of variables increases—especially if you have **dozens of gene expression values**, **categorical groups**, and **clinical variables**—simple visualizations become:
-
--   Crowded
-
--   Hard to interpret
-
--   Visually overwhelming
-
-Visualization is essential for understanding relationships — but it has limits. As dimensionality grows, traditional plots get harder to interpret. It is time to transition to PCA or clustering to uncover deeper structure.
-
-<br> <br>
+It is time to transition to PCA or clustering to uncover deeper structures.
 
 # Normality and Data Transformation
 
-Real-world data is often messy: skewed, non-linear, or heteroscedastic (i.e., variance changes with the mean). Data transformation prepares our dataset for accurate analysis and modeling. Depending on our data’s characteristics and goals, we may need to **scale** or **transform** variables to:
+Real-world data is often messy: skewed, non-linear, or heteroscedastic (i.e., variance changes with the mean). Data transformation prepares our dataset for accurate analysis and modeling. Depending on our data’s characteristics and goals, we may need to **scale** or **transform** variables to:
 
 -   Address non-linearity
 
@@ -142,7 +137,7 @@ Common Data Transformation Techniques
 
 Before applying any transformation, it's essential to visually assess if our variables are approximately **normally distributed**. Many statistical models (e.g., linear regression, t-tests, PCA) assume normality.
 
-We can do this using **QQ plots** and **histograms**. Lets try to look at our clinical data.
+We can do this using **QQ plots** and **histograms**. Lets try to look at our clinical data.
 
 ### Example: QQ Plot for Gene Expression
 
@@ -248,8 +243,7 @@ ggplot(df_long, aes(x = value)) +
 Z-score standardization is essential when:
 
 -   Variables have different units or ranges
-
-You're applying PCA, clustering, or distance-based models'
+-   If you plan to apply PCA, clustering, or distance-based models
 
 ```{r}
 #| out-width: 100%
@@ -282,26 +276,17 @@ p2 <- ggplot(df_long, aes(x = Sample, y = Value, fill = Sample)) +
 ggarrange(p1, p2, nrow = 1)
 ```
 
-<br> <br>
-
 # Principal Component Analysis (PCA)
 
-PCA helps us **summarize**, **reduce**, and **visualize** large datasets that have lots of numerical variables that might be correlated. Instead of working with dozens of variables, we can often get away with just a couple of new ones - called **principal components** - that still capture most of the variation in the data.
+Principal Component Analysis (PCA) is a linear dimensionality reduction technique that helps **summarize**, **simplify**, and **visualize** large datasets with many potentially correlated numerical variables. Rather than analyzing hundreds of variables individually, PCA transforms the data into a smaller set of new variables — called principal components — that retain most of the original variability in the dataset.
 
-This helps us to identify most important features for building models and guide us on how to prepare them for better performance. Choosing best modeling techniques and adjusting them for better results.
+This, helps us to identify the most important features for building models and guide us on how to prepare them for better performance.
 
-Here’s how you do it in R.
-
-We’ll use the `FactoMineR` and `factoextra` packages to compute and visualize PCA results. (Note: Other PCA methods exist, e.g. `prcomp()` or `princomp()`, that also work with these  `factoextra` )
-
-```{r}
-#res.pca <- prcomp(iris[, -5], scale. = TRUE)
-#res.pca <- princomp(iris[, -5], cor = TRUE)
-```
+There are many frameworks for performing PCA in R. Here, we’ll use the `FactoMineR` and `factoextra` packages to compute and visualize PCA results.
 
 ### Using PCA to Assess Variance Structure
 
-PCA is **sensitive to scale and variance**, so it's important to check and possibly transform variables beforehand. We’ve tranformed our cleaned ovarian dataset accordingly.
+PCA is **sensitive to scale and variance**, so it's important to check and possibly transform variables beforehand. We’ve tranformed our cleaned ovarian dataset accordingly.
 
 Let’s run PCA on the integer variables:
 
@@ -421,9 +406,7 @@ ggarrange(p1, p2, ncol = 2, nrow = 1)
 
 That’s a complete walkthrough of PCA: computing it, exploring results, and visualizing them effectively. PCA is a critical tool for working with high-dimensional data.
 
-<br> <br>
-
-# Variance Stabilization 
+# Variance Stabilization
 
 Now that we've explored data tranformations and PCAs, it's time to address another important aspect: **variance stabilization**. Many statistical and machine learning methods assume **homoscedasticity**, meaning that the variance is constant across all levels of the data.
 
@@ -433,7 +416,7 @@ In biological and count-based data (like gene expression), we often encounter *
 
 -   Linear models (like regression) assume constant residual variance.
 
--   ANOVA can suffer inflated Type I error due to unequal variances.
+-   ANOVA can suffer inflated Type I error due to unequal variances.
 
 -   PCA and clustering can be dominated by high-variance features, obscuring biological signals.
 
@@ -676,13 +659,11 @@ ggarrange(p1, p2, nrow = 1, ncol = 2)
 
 These plots help confirm there is no apparent batch effect, and tumor stage may align with some PCA structure.
 
-<br> <br>
-
 # Results: Investigating Collagen Genes and Tumor Characteristics
 
-We set out to explore whether the COL (collagen) gene family plays an important role in ovarian cancer, and whether cell type proportions — like tumor or stromal content — influence collagen gene expression.
+We set out to explore whether the COL (collagen) gene family plays an important role in ovarian cancer, and whether cell type proportions — like tumor or stromal content — influence collagen gene expression.
 
-To explore this, we used Principal Component Analysis (PCA) to identify the most variable and informative COL genes.
+To explore this, we have used Principal Component Analysis (PCA) to identify the most variable and informative COL genes.
 
 ```{r warning=FALSE}
 # Get variable loadings (contributions to PCs)
@@ -698,7 +679,7 @@ top_genes <- unique(c(top_pc1$gene, top_pc2$gene))
 top_genes
 ```
 
-These top genes are the ones most strongly contributing to variation along the principal components — suggesting biological relevance.
+These top genes are the ones most strongly contributing to variation along the principal components — suggesting biological relevance.
 
 ### Gene Expression by Cancer Stage
 
@@ -721,9 +702,9 @@ ggplot(df_long, aes(x = gene, y = value, fill = stage)) +
 
 From these boxplots:
 
--   Genes highly loading on PC1 seem to increase with tumor stage, suggesting a role in tumor progression.
+-   Genes highly loading on PC1 seem to increase with tumor stage, suggesting a role in tumor progression.
 
--   Genes from PC2 show a more stable or mixed pattern — possibly reflecting different biological regulation.
+-   Genes from PC2 show a more stable or mixed pattern — possibly reflecting different biological regulation.
 
 ### Gene Expression vs. Tumor Composition
 
@@ -754,22 +735,18 @@ ggplot(df_long, aes(x = percent_tumor_cells^2, y = value, color = percent_stroma
 
 ```
 
-We observe a negative correlation between PC1 gene expression and tumor cell percentage, suggesting that:
+We observe a negative correlation between PC1 gene expression and tumor cell percentage, suggesting that:
 
 > Collagen expression may be higher in samples with lower tumor purity, possibly reflecting increased stromal or non-tumor activity.
 
-This highlights the importance of adjusting for cell composition when analyzing expression data — otherwise, we risk attributing biological meaning to technical or compositional bias.
+This highlights the importance of adjusting for cell composition when analyzing expression data — otherwise, we risk attributing biological meaning to technical or compositional bias.
 
 ### Summary of Key Results
 
--   PCA helped us **prioritize COL genes** most associated with biological variation.
+-   PCA helped us **prioritize COL genes** most associated with biological variation.
 
 -   PC1 genes showed **higher expression in late-stage tumors**, suggesting a role in progression.
 
 -   These genes also **correlate negatively with tumor cell content**, implying stromal influence.
 
 **Further statistical analysis and modeling would be necessary to confirm these theories properly.**
-
-<br> <br>
-
-
