@@ -280,5 +280,5 @@ head(diabetes_join$ID)
 14. Export the joined dataset. Think about which directory you want to save the file in.
 
 ```{r}
-writexl::write_xlsx(diabetes_join, '../out/diabetes_join.xlsx')
+writexl::write_xlsx(diabetes_join, '../data/exercise1_diabetes_join.xlsx')
 ```

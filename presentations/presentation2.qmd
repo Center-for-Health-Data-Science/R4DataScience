@@ -1,5 +1,5 @@
 ---
-title: "Presentation 2: Summary Statistics"
+title: "Presentation 2: Summary Statitics, Data Wrangling and Plotting"
 format: html
 project:
  type: website
@@ -240,7 +240,13 @@ ggplot(df_comb_long,
   theme_minimal()
 ```
 
-More context: add color by `summarygrade` and compare distributions side-by-side:
+This plot gives us a histogram for each gene, all in one go.
+
+-   No need to write separate plots manually.
+
+-   Much easier to compare variables side-by-side.
+
+More context: add color-stratification by `summarygrade` and compare distributions side-by-side:
 
 ```{r}
 ggplot(na.omit(df_comb_long), 
@@ -251,12 +257,6 @@ ggplot(na.omit(df_comb_long),
   theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
   
 ```
-
-This plot gives us a histogram for each gene, all in one go.
-
--   No need to write separate plots manually.
-
--   Much easier to compare variables side-by-side.
 
 ### Pivot back into wide format
 
@@ -275,7 +275,7 @@ head(df_comb)
 
 When working with **factor variables**, we often want to know:
 
--   What levels (categories) exist
+-   Which levels (categories) exist
 
 -   Whether groups are **balanced**
 
@@ -338,7 +338,7 @@ Instead of looking at individual variable, we’ll introduce some tidyverse help
 
 ### Tidyverse helpers: `across()` and `where()`
 
-In this section we will say a bit more about the so called tidyverse helpers such as `across()`, `where()`, and `starts_with()`. These helpers are useful when we want to apply a functions, i.e. `summarise()`, or `mutate()` to several columns.
+In this section we will say a bit more about the so called tidyverse helpers such as `across()`, `where()`, and `starts_with()`. These helpers are useful when we want to apply a functions, i.e. `summarise()` or `mutate()` to several columns.
 
 ### Using `across()` to select columns
 
@@ -503,7 +503,7 @@ In both cases, the column must be explicitly passed in and `.` serves that role 
 
 ### Multiple Summary Statistics with `na.rm = TRUE`
 
-Now let’s compute **several** stats per column, all with `na.rm = TRUE. Here we chose just the integer columns`:
+Now let’s compute **several** stats per column, all with `na.rm = TRUE`. Here we chose just the integer columns:
 
 ```{r}
 stats <- df_comb %>%
@@ -592,9 +592,9 @@ df_comb <- df_comb %>%
 
 ## Sample outliers across variables
 
-Instead of visualizing variables one by one, we can also look at samples across a set of variables and identify outliers that way. If we have a lot of integer and numeric values in our dataset, one thing that might make sense is to make a dendogram (tree) using hierarchical clustering and look at if any sample 'stand out'.
+Instead of visualizing variables one by one, we can also look at samples across a set of variables and identify outliers that way. If we have a lot of integer and numeric values in our dataset, one thing that might make sense is to make a dendogram (tree) using hierarchical clustering and identify if any of the samples 'stand out'.
 
-Lets try this for the integer variables in our dataset. 
+Let's try this for the integer variables in our dataset. 
 
 We first select all integer columns, drop missing values (they are non-informative for clustering anyways). Then, we make a plot to get an idea of data distributions:
 ```{r}
@@ -602,7 +602,7 @@ df_int <- df_comb %>%
   select(where(is.integer)) %>%
   drop_na()
 
-df_int[1:5, ]
+df_int %>% head()
 
 df_int %>% 
   pivot_longer(cols = where(is.integer),
@@ -612,13 +612,14 @@ df_int %>%
   geom_histogram(color= 'white') +
   facet_wrap(vars(variable), ncol = 2, scales = "free") + 
   theme_minimal()
-
 ```
 
 Next, we scale our data (more on this in Presentation 5.) and calculate the distances between all pairs of scaled variables and perform hierarchical clustering.
+
+Do you not see the plot clearly? Copy-paste the code into the console and the plot will appear in the *Plots* window. Press *Export* --> *Copy to Clipboard...* and drag out the plot as large as you can. Alternatively, save it in a large format and look at it outside of R studio. 
 ```{r}
 # Euclidean pairwise distances
-df_int_dist <-  df_int %>% 
+df_int_dist <- df_int %>% 
   mutate(across(everything(), scale)) %>%
   dist(., method = 'euclidean')
 
@@ -626,12 +627,12 @@ df_int_dist <-  df_int %>%
 hclust_int <- hclust(df_int_dist, method = 'ward.D2')
 
 # Plot the result of clustering
-plot(hclust_int, main="Clustering based on scaled integer values", cex=0.7)
-
+# png("dendrogram_plot.png", width = 2000, height = 500)
+plot(hclust_int, main = "Clustering based on scaled integer values", cex = 0.7)
+# dev.off()
 ```
 
-
-From our plot we see that a couple of samples seem to have very short branch lengths (which may indicate and outlier). One such sample is 208 (row id). Lets have a look at it:
+From our plot we see that a couple of samples seem to have very short branch lengths (which may indicate an outlier). One such sample is 208 (row id). Lets have a look at it:
 
 ```{r}
 df_int <- df_comb %>%
@@ -640,8 +641,8 @@ df_int <- df_comb %>%
 
 df_int[208, ]
 ```
-We can now compare the values of this sample to the distributions above to try an figure out what makes it an outlier and IF it should be removed. 
-
+We can now compare the values of this sample to the distributions above (histograms) to try an figure out what makes it an outlier and IF it should be removed. 
+For the sample in row 208, age at diagnosis and days to death is with in normal range, though percent stromal and not tumor cell is in the very high end while percent tumor cells is in the very low end. These are pretty extreme values for several of the variables - why one would consider removing this sample. 
 
 ## Handling Missing Data
 

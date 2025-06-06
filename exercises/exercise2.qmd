@@ -1,86 +1,131 @@
 ---
-title: "Exercise 2: Summary Statistics"
+title: "Exercise 2: Summary Statitics, Data Wrangling and Plotting"
 format: html
 project:
  type: website
  output-dir: ../docs
 ---
 
+## Introduction
+
 In this exercise you will do some more advance tidyverse operations such as pivoting and nesting.
 
-## Getting started
+## First steps
 
 1.  Load packages.
 
-2.  Load the joined diabetes data set you created in exercise 1 (e.g. "diabetes_join.xlsx") and the glucose dataset `df_glucose.xlsx` from the data folder.
+2.  Load the joined diabetes data set you created in exercise 1 (e.g. "diabetes_join.xlsx") and the glucose dataset `df_glucose.xlsx` from the data folder. If you did not make it all the way through exercise 1 you can find the dataset you need in `data/exercise1_diabetes_join.xlsx`
 
-## Wrangling
+## Change format
 
-3.  Have a look at the glucose dataset. It has three columns with measurements from a Oral Glucose Tolerance Test where blood glucose is measured at fasting (Glucose_0), 1 hour/60 mins after glucose intake (Glucose_6), and 2 hours/120 mins after (Glucose_120). The last columns is an ID column. Change the data type of the ID column to `factor` in both `diabetes_join` and `df_glucose`.
+3. Have a look at the glucose dataset. It has three columns with measurements from a Oral Glucose Tolerance Test where blood glucose is measured at fasting (Glucose_0), 1 hour/60 mins after glucose intake (Glucose_6), and 2 hours/120 mins after (Glucose_120). The last columns is an ID column. Change the data type of the ID column to `factor` in both `diabetes_join` and `df_glucose`.
 
-4.  Restructure the glucose dataset into a long format. Name the column that describes which measurement the row refers to, i.e. Glucose_0, Glucose_60 or Glucose_120, `Measurement`. How many rows are there per ID? Does that make sense?
+4. Restructure the glucose dataset into a long format. Think about which columns should be included in the pivot.
 
-5. In your long format dataframe you should have one column that described which measurement the row refers to, i.e. Glucose_0, Glucose_60 or Glucose_120. Transform this column so that you only have the numerical part, i.e. **only** 0, 60 or 120. Then change the data type of that column to `factor`. Check the order of the factor levels and if necessary change them to the proper order.
+5. How many rows are there per ID? Does that make sense?
+
+## Change factor levels 
+6. In your long formatted dataframe you should have one column that described which measurement the row refers to, i.e. Glucose_0, Glucose_60 or Glucose_120. Transform this column so you only have the numerical part, i.e. **only** 0, 60 or 120. Then change the data type of that column to `factor`. Check the order of the factor levels and if necessary change them to the proper order.
 
 ::: {.callout-tip collapse="true"}
 ## Hint
-The `stringr` packages is a part of tidyverse and has many functions for manipulating strings. Find a function that can **split** the string so you can extract the numbers on the other side of the underscore. 
-
 Have a look at the help for factors `?factors` to see how to influence the levels.
 :::
 
-6. Merge the long formatted glucose dataset you made in **4** with the joined diabetes dataset you loaded in **2**.
+## Join datasets
 
-7.  Pull the glucose measurements from your favorite ID.
+7. Join the long formatted glucose dataset you made in **4** with the joined diabetes dataset you loaded in **2**. Do the wrangling needed to make it happen!
 
+## Summary stats 
 8. Calculate the mean glucose measure for each measurement time point.
 
-9. Calculate mean and standard deviation for all numeric columns.
-
 ::: {.callout-tip collapse="true"}
 ## Hint
-You will need to use `summarise()` and `across()`, selecting numeric columns.
-:::
-
-10. Nest the glucose measurements and values such that there is only one row per ID and call the nested column OGTT (Oral Glucose Tolerance Test). Display the resulting tibble to confirm that you have succeeded.
-
-::: {.callout-tip collapse="true"}
-## Hint
-
-Remember the flow:
-
-```{r eval = FALSE}
-group_by() %>% 
-  nest() %>% 
-  ungroup()
-```
+You will need to use `group_by()` and `summerise()`.
 
 :::
 
-11. Export the final dataset. Since the dataset is nested, you cannot export it as an excel file. Export the dataset as an `.rds` file. Have a guess at what the function is called.
+9. Make a figure with boxplots of the glucose measurements across the three time points. 
 
-## Simple plotting
+10. Calculate mean and standard deviation for all numeric columns and reformat the data frame into a manageable format like we did in the presentation. 
 
-Before we move on, let's refresh the plotting package in tidyverse: `ggplot2`. 
+::: {.callout-tip collapse="true"}
+## Hint
+You will need to use `summarise()` and `across()` to select numeric columns.
 
-12. For p1, plot the density of the glucose measurements at time 0. For p2, make the same plot as p1 but add stratification on the diabetes status. Give the plot a meaningful title. Consider the densities - do they make sense?
+For a nice reformatting like in the presentation with need both `pivot_longer` and `pivot_wider`.
+
+:::
+
+11. Plot `PhysicalActivity` and `BMI` against eachother in a scatter plot and stratify it by `Diabetes`. Look at the legend - does it look like expected? 
+
+12. Change the Diabetes column to factor (if you haven't already) and remake the plot.
+
+## Sample outliers across variables
+
+13. Just like we did in the presentation, make a histogram for each numeric variable in the dataset. You can copy-paste the code from the presentation and make very few changes to make it work in this case. 
+
+::: {.callout-tip collapse="true"}
+## Hint
+Check the class of the variables in the dataset.
+:::
+
+14. Check for outlier samples using the dendogram showed in the presentation. This includes scaling, calculating the distances between all pairs of scaled variables and hierarchical clustering. Remember that this can only be done for the numeric variables. 
+
+We will not spot any outliers via the dendogram in this dataset so we will add a fake outlier for you to detect. Here, the outlier has a value of the maximum value + 5 in each of the variables - pretty unrealistic. Play around with the values of the fake outlier and see how extreme it needs to be to be spotted in the dendogram. 
 ```{r}
-p1 <- # code for p1
+outlier <- tibble(Age = max(diabetes_glucose_num$Age) + 5, 
+                  BloodPressure = max(diabetes_glucose_num$BloodPressure) + 5,
+                  BMI = max(diabetes_glucose_num$BMI) + 5,
+                  PhysicalActivity = max(diabetes_glucose_num$PhysicalActivity) + 5,
+                  Serum_ca2 = max(diabetes_glucose_num$Serum_ca2) + 5,
+                  `Glucose (mmol/L)` = max(diabetes_glucose_num$`Glucose (mmol/L)`) + 5,
+                  )
 
-p2 <- # code for p2
+# Add a new row
+diabetes_glucose_num_outlier <- add_row(diabetes_glucose_num, outlier)
 
-# Get plots side by side.
-library(patchwork)
-p1 + p2 + plot_annotation(title = "TITLE")
+# Keep adding outliters
+# diabetes_glucose_num_outlier <- add_row(diabetes_glucose_num_outlier, outlier)
 ```
 
-13. Do the same for the glucose measurements at time 60.
+15. Export the final dataset (**without** the outlier!) in whichever format you prefer. 
 
-14. Now, create one plot for the glucose measurement where the densities are stratified on measurement time (0, 60, 120) and diabetes status (0, 1). You should see 6 density curves in your plot. 
+## More Plotting
+
+Let's make some more advanced `ggplot`s!
+
+16. For p1, plot the density of the glucose measurements at time 0. For p2, make the same plot as p1 but add stratification on the diabetes status. Give the plot a meaningful title. Consider the densities - do the plots make sense?
+```{r eval = FALSE}
+p1 <- # code for plot 1
+
+p2 <- # code for plot 2
+
+library(patchwork)
+p1 + p2 + plot_annotation(title = "Glucose measurements at time 0")
+```
+
+17. Do the same for the glucose measurements at time 60.
+
+18. Now, create one plot for the glucose measurement where the densities are stratified on measurement time (0, 60, 120) and diabetes status (0, 1). You should see 6 density curves in your plot. 
 
 ::: {.callout-tip collapse="true"}
 ## Hint
 There two ways of stratifying a density plot in ggplot2: `color` and `linetype`.
 :::
 
+19. Calculate the mean glucose levels for each time point. 
 
+20. Make the same calculation as above, but additionally group the results by `Diabetes`. Save the data frame in a variable.
+
+::: {.callout-tip collapse="true"}
+## Hint
+Group by several variables: `group_by(var1, var2)`.
+
+:::
+
+21. Create a plot that visualizes glucose measurements across time points, with one line for each patient ID. Then color the lines by their diabetes status. In summary, each patient's glucose measurements should be connected with a line, grouped by their ID, and color-coded by `Diabetes`. Give the plot a meaningful title. 
+
+22. Recreate the plot you made above and include the mean value for each glucose measurement for the two diabetes statuses (0 and 1) you calculated in **e2**. This plot should look like this:
+
+![](../figures/figure3_13.png){fig-align="center"}

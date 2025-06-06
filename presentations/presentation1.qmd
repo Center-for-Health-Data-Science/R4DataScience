@@ -52,20 +52,6 @@ Before jumping into statistics or modeling, we need to think about what scientif
 
 This will help us get an overview of the data, help you avoid mistakes, and choose the right analysis methods.
 
-## Accessing Data Characteristics
-
-Let’s start by taking a look at our dataset to get a feel for the data distribution and identify any potential data-related issues.
-
-Get summary stats:
-
--   Central tendency (mean, median)
-
--   Spread (standard deviation, range)
-
--   Skewness/Kurtosis
-
--   Missing value percentages
-
 ### Basics
 
 We can get a little reminder of base R and tidyverse functions and explore some basic data characteristics.
@@ -73,17 +59,17 @@ We can get a little reminder of base R and tidyverse functions and explore some 
 Take a look at categorical and numerical variables, access elements in list.
 
 ```{r}
+# output: vector
 df_ov$vital_status %>% 
   head()
 
-# Tidyverse 
+# output: one-column-tibble 
 df_ov %>%
   select(vital_status) %>% 
   head()
 ```
 
 Get a vector the tidyverse way:
-
 ```{r}
 df_ov %>%
   select(vital_status) %>% 
@@ -107,8 +93,7 @@ Remove rows with missing data (careful - this can reduce sample size too much):
 
 ```{r}
 df_ov %>% 
-  drop_na() %>% 
-  head()
+  drop_na()
 ```
 
 #### Check groups of categorical variables

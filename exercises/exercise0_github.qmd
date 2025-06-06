@@ -27,7 +27,7 @@ Your file tree should look something like this:
 
 3.  As you have Rstudio open, **access your current working directory** by typing `getwd()` in the console.
 
-The working directory in R (or other programming environments) is the folder on your computer where R looks for files to read or write by default. When you load or save data, R will use the working directory unless you specify another path. A path can either be **absolute** or **relative**:
+The working directory in R (and other programming environments) is the folder on your computer where R looks for files to read or write by default. When you load or save data, R will use the working directory unless you specify another path. A path can either be **absolute** or **relative**:
 
 -   **Absolute path**: The path from the root of your file system to the input file.
 

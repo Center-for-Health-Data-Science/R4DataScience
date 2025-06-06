@@ -3,8 +3,8 @@ DAY 1
 (30 minutes)    Exercise 0: Getting started
 (45 minutes)    Presentation 1: Data Cleaning and Wrangling
 (45 minutes)    Exercise 1: Data Cleaning and Wrangling
-(45 minutes)    Presentation 2: Summary Statitics 
-(60 minutes)    Exercise 2: Summary Statitics 
+(45 minutes)    Presentation 2: Summary Statitics, Data Wrangling and Plotting
+(60 minutes)    Exercise 2: Summary Statitics, Data Wrangling and Plotting
 
 DAY 2
 Before Lunch:

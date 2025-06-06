@@ -1,5 +1,5 @@
 ---
-title: "Solution 2: Summary Statistics"
+title: "Solution 2: Summary Statitics, Data Wrangling and Plotting"
 format: html
 project:
  type: website
@@ -18,10 +18,10 @@ In this exercise you will do some more advance tidyverse operations such as pivo
 library(tidyverse)
 ```
 
-2.  Load the joined diabetes data set you created in exercise 1 (e.g. "diabetes_join.xlsx") and the glucose dataset `df_glucose.xlsx` from the data folder.
+2.  Load the joined diabetes data set you created in exercise 1 (e.g. "diabetes_join.xlsx") and the glucose dataset `df_glucose.xlsx` from the data folder. If you did not make it all the way through exercise 1 you can find the dataset you need in `data/exercise1_diabetes_join.xlsx`
 
 ```{r}
-diabetes_join <- readxl::read_excel('../out/diabetes_join.xlsx')
+diabetes_join <- readxl::read_excel('../data/exercise1_diabetes_join.xlsx')
 df_glucose <- readxl::read_excel('../data/df_glucose.xlsx')
 ```
 
@@ -51,13 +51,12 @@ head(df_glucose_long)
 
 ```{r}
 # There are three rows for each ID, corresponding to the three glucose measurements
-
 df_glucose_long %>%
   count(ID) %>%
   head()
 ```
 
-
+## Change factor levels 
 6. In your long formatted dataframe you should have one column that described which measurement the row refers to, i.e. Glucose_0, Glucose_60 or Glucose_120. Transform this column so you only have the numerical part, i.e. **only** 0, 60 or 120. Then change the data type of that column to `factor`. Check the order of the factor levels and if necessary change them to the proper order.
 
 ::: {.callout-tip collapse="true"}
@@ -80,6 +79,8 @@ Adjust levels to proper order:
 df_glucose_long$Measurement <- factor(df_glucose_long$Measurement, levels = c('0', '60','120'))
 ```
 
+## Join datasets
+
 7. Join the long formatted glucose dataset you made in **4** with the joined diabetes dataset you loaded in **2**. Do the wrangling needed to make it happen!
 
 ```{r}
@@ -90,8 +91,14 @@ diabetes_glucose <- diabetes_join %>%
 head(diabetes_glucose)
 ```
 
-
+## Summary stats 
 8. Calculate the mean glucose measure for each measurement time point.
+
+::: {.callout-tip collapse="true"}
+## Hint
+You will need to use `group_by()` and `summerise()`.
+
+:::
 
 ```{r}
 diabetes_glucose %>%
@@ -99,7 +106,18 @@ diabetes_glucose %>%
   summarise(mean = mean(`Glucose (mmol/L)`))
 ```
 
-9. Calculate mean and standard deviation for all numeric columns and reformat the data frame into a manageable format like we did in the presentation. 
+9. Make a figure with boxplots of the glucose measurements across the three time points. 
+```{r}
+diabetes_glucose %>% 
+  ggplot(aes(y = `Glucose (mmol/L)`,
+             x = Measurement, 
+             fill = Measurement)) + 
+  geom_boxplot() + 
+  theme_bw()
+```
+
+
+10. Calculate mean and standard deviation for all numeric columns and reformat the data frame into a manageable format like we did in the presentation. 
 
 ::: {.callout-tip collapse="true"}
 ## Hint
@@ -122,22 +140,98 @@ diabetes_glucose %>%
               values_from = value)
 ```
 
+11. Plot `PhysicalActivity` and `BMI` against eachother in a scatter plot and stratify it by `Diabetes`. Look at the legend - does it look like expected? 
+```{r}
+diabetes_glucose %>% 
+  ggplot(aes(x = PhysicalActivity, 
+             y = BMI, 
+             color = Diabetes)) + 
+  geom_point() + 
+  theme_bw()
+```
 
-10. Finally, change the Diabetes column to factor.
+12. Change the Diabetes column to factor (if you haven't already) and remake the plot.
 ```{r}
 diabetes_glucose$Diabetes <- as.factor(diabetes_glucose$Diabetes)
 ```
-
-11. Export the final dataset in what ever format you prefer. 
+ 
 ```{r}
-writexl::write_xlsx(diabetes_glucose, '../out/diabetes_glucose.xlsx')
+diabetes_glucose %>% 
+  ggplot(aes(x = PhysicalActivity, 
+             y = BMI, 
+             color = Diabetes)) + 
+  geom_point() + 
+  theme_bw()
 ```
 
-## Plotting
+## Sample outliers across variables
 
-Let's make some `ggplot`s!
+13. Just like we did in the presentation, make a histogram for each numeric variable in the dataset. You can copy-paste the code from the presentation and make very few changes to make it work in this case. 
 
-12. For p1, plot the density of the glucose measurements at time 0. For p2, make the same plot as p1 but add stratification on the diabetes status. Give the plot a meaningful title. Consider the densities - do the plots make sense?
+::: {.callout-tip collapse="true"}
+## Hint
+Check the class of the variables in the dataset.
+:::
+
+```{r}
+diabetes_glucose_num <- diabetes_glucose %>%
+  select(where(is.numeric)) %>%
+  drop_na()
+
+diabetes_glucose_num[1:5, ]
+
+diabetes_glucose_num %>% 
+  pivot_longer(cols = where(is.numeric),
+               names_to = "variable",
+               values_to = "value") %>%
+  ggplot(., aes(x = value)) +
+  geom_histogram(color= 'white') +
+  facet_wrap(vars(variable), ncol = 2, scales = "free") + 
+  theme_minimal()
+
+```
+
+14. Check for outlier samples using the dendogram showed in the presentation. This includes scaling, calculating the distances between all pairs of scaled variables and hierarchical clustering. Remember that this can only be done for the numeric variables. 
+
+We will not spot any outliers via the dendogram in this dataset so we will add a fake outlier for you to detect. Here, the outlier has a value of the maximum value + 5 in each of the variables - pretty unrealistic. Play around with the values of the fake outlier and see how extreme it needs to be to be spotted in the dendogram. 
+```{r}
+outlier <- tibble(Age = max(diabetes_glucose_num$Age) + 5, 
+                  BloodPressure = max(diabetes_glucose_num$BloodPressure) + 5,
+                  BMI = max(diabetes_glucose_num$BMI) + 5,
+                  PhysicalActivity = max(diabetes_glucose_num$PhysicalActivity) + 5,
+                  Serum_ca2 = max(diabetes_glucose_num$Serum_ca2) + 5,
+                  `Glucose (mmol/L)` = max(diabetes_glucose_num$`Glucose (mmol/L)`) + 5,
+                  )
+
+# Add a new row
+diabetes_glucose_num_outlier <- add_row(diabetes_glucose_num, outlier)
+
+# Keep adding outliters
+# diabetes_glucose_num_outlier <- add_row(diabetes_glucose_num_outlier, outlier)
+```
+
+```{r}
+# Euclidean pairwise distances
+diabetes_glucose_dist <- diabetes_glucose_num_outlier %>% 
+  mutate(across(everything(), scale)) %>%
+  dist(., method = 'euclidean') 
+
+# Hierarchical clustering with Ward's distance metric
+hclust_num <- hclust(diabetes_glucose_dist, method = 'ward.D2')
+
+plot(hclust_num, main="Clustering based on scaled integer values", cex=0.7)
+```
+
+15. Export the final dataset (**without** the outlier!) in whichever format you prefer. 
+```{r}
+writexl::write_xlsx(diabetes_glucose, '../data/exercise2_diabetes_glucose.xlsx')
+```
+
+## More Plotting
+
+Let's make some more advanced `ggplot`s!
+
+16. For p1, plot the density of the glucose measurements at time 0. For p2, make the same plot as p1 but add stratification on the diabetes status. Give the plot a meaningful title. Consider the densities - do the plots make sense?
 ```{r}
 p1 <- diabetes_glucose %>% 
   filter(Measurement == 0) %>% 
@@ -154,7 +248,7 @@ library(patchwork)
 p1 + p2 + plot_annotation(title = "Glucose measurements at time 0")
 ```
 
-13. Do the same for the glucose measurements at time 60.
+17. Do the same for the glucose measurements at time 60.
 ```{r}
 p1 <- diabetes_glucose %>% 
   filter(Measurement == 60) %>% 
@@ -171,7 +265,7 @@ library(patchwork)
 p1 + p2 + plot_annotation(title = "Glucose measurements at time 60")
 ```
 
-14. Now, create one plot for the glucose measurement where the densities are stratified on measurement time (0, 60, 120) and diabetes status (0, 1). You should see 6 density curves in your plot. 
+18. Now, create one plot for the glucose measurement where the densities are stratified on measurement time (0, 60, 120) and diabetes status (0, 1). You should see 6 density curves in your plot. 
 ::: {.callout-tip collapse="true"}
 ## Hint
 There two ways of stratifying a density plot in ggplot2: `color` and `linetype`.
@@ -188,15 +282,7 @@ p1 <- diabetes_glucose %>%
 p1
 ```
 
-## Extra Exercises
-
-e1. Calculate the mean glucose levels for each time point. 
-
-::: {.callout-tip collapse="true"}
-## Hint
-You will need to use `group_by()` and `summerise()`.
-
-:::
+19. Calculate the mean glucose levels for each time point. 
 
 ```{r}
 diabetes_glucose %>%
@@ -205,7 +291,7 @@ diabetes_glucose %>%
 ```
 
 
-e2. Make the same calculation as above, but additionally group the results by `Diabetes`. Save the data frame in a variable.
+20. Make the same calculation as above, but additionally group the results by `Diabetes`. Save the data frame in a variable.
 
 ::: {.callout-tip collapse="true"}
 ## Hint
@@ -222,8 +308,7 @@ glucose_mean <- diabetes_glucose %>%
 glucose_mean
 ```
 
-
-e3. Create a plot that visualizes glucose measurements across time points, with one line for each patient ID. Then color the lines by their diabetes status. In summary, each patient's glucose measurements should be connected with a line, grouped by their ID, and color-coded by `Diabetes`. Give the plot a meaningful title. 
+21. Create a plot that visualizes glucose measurements across time points, with one line for each patient ID. Then color the lines by their diabetes status. In summary, each patient's glucose measurements should be connected with a line, grouped by their ID, and color-coded by `Diabetes`. Give the plot a meaningful title. 
 
 ```{r}
 diabetes_glucose %>%
@@ -235,9 +320,9 @@ diabetes_glucose %>%
 ```
 
 
-e4. Recreate the plot you made above and include the mean value for each glucose measurement for the two diabetes statuses (0 and 1) you calculated in **e2**. This plot should look like this:
+22. Recreate the plot you made above and include the mean value for each glucose measurement for the two diabetes statuses (0 and 1) you calculated in **e2**. This plot should look like this:
 
-![](../out/figure3_13.png){fig-align="center"}
+![](../figures/figure3_13.png){fig-align="center"}
 
 
 ```{r}
@@ -251,7 +336,7 @@ diabetes_glucose %>%
                                      group = Diabetes, linetype = Diabetes)) +
   labs(title = "Glucose Measurements with Mean by Diabetes Status")
 
-ggsave('../out/figure3_13.png')
+ggsave('../figures/figure3_13.png')
 ```
 
 
