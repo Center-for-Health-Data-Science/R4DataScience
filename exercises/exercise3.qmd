@@ -10,9 +10,40 @@ This exercise deals with creating and visualizing a principal component analysis
 
 ## Getting started 
 
-1. Load packages. 
+1. Load packages the you think you might immediately need, e.g. `tidyverse`. No worries if you forget any, you always load then later on.  
 
-2. Load data from the `.rds` file you created in Exercise 2.
+
+2. Read in the joined diabetes data set you created in `Exercise 2`. If you did not make it all the way through exercise 2 you can find the dataset you need in `../data/exercise2_diabetes_glucose.xlsx`. Have a look at the data type (`numeric`, `categorical`, `factor`) of each column to ensure these make sense. If need, convert variables to the correct (most logical) type.
+
+As you will see at the end of the dataset you have `Measurement` and `Glucose (mmol/L)`. The `Measurement` variable actually denote at what time the `Glucose (mmol/L)` value was taken. We would like to separate these values out into three columns. 
+
+3. Extract the `Glucose (mmol/L)` column into three columns. Below you have some pseudo code as help:
+
+```{r, eval=FALSE}
+my_df %>% 
+  pivot_wider(names_from = ,
+              values_from = ,
+              names_prefix = 'Measurement_')
+```
+
+
+## Check Data Distributions
+
+Lets have a look at the distributions of our numerical variables.
+
+4. Make histograms of the three `Glucose (mmol/L)` measurement variables in your dataset. What do you observe? Are these three variables normally distributed?
+
+5. Just as in question 3 above, histograms of the three `Glucose (mmol/L)` measurement variables in your dataset, BUT this time stratify your dataset by the variable `Diabetes`. How do your distributions look now?
+
+::: {.callout-tip collapse="true"}
+## Hint
+Instead of using `facet_wrap()` try: `facet_grid(Diabetes ~ variable, scales = "free")`.
+:::
+
+6. Make a qqnorm plot for the variables `Age`, `Bloodpressure`, `BMI` and `PhysicalActivity`. What do they tell you?
+
+
+
 
 ## PCA 
 
