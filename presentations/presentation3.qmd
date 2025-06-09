@@ -8,7 +8,11 @@ project:
 
 ## Exploratory Data Analysis: Multivariate Analysis
 
-Understanding high-dimensional data requires more than just looking at two variables at a time. When relationships involve multiple predictors—especially in genomics or clinical studies—**multivariate visualization** can help us uncover trends, clusters, and interactions.
+Multivariate visualization can help us uncover trends, clusters, and interactions.
+
+We’re now moving beyond summary statistics and simple two-variable plots to explore more complex relationships in our data.
+
+-   Our focus is to assess whether the collagen (COL) gene family plays a role in ovarian cancer, and whether cell type proportions (tumor, stromal, or normal) influence collagen expression. We also want to examine whether patient characteristics, such as tumor stage, correlate with gene expression patterns.
 
 ## Load packages
 
@@ -17,11 +21,11 @@ Understanding high-dimensional data requires more than just looking at two varia
 #    install.packages("BiocManager")
 # BiocManager::install("DESeq2")
 library(DESeq2)
-library(readxl)
+#library(readxl)
 library(tidyverse)
 library(FactoMineR)
 library(factoextra)
-library(corrplot)
+#library(corrplot)
 library(ggpubr)
 ```
 
@@ -31,85 +35,9 @@ library(ggpubr)
 load("../data/Ovarian_comb_prep_temp.RData")
 ```
 
-## From Pairs to Triads
+However, as the number of variables grows—dozens of genes, clinical features, and categorical groups—traditional visualizations become overwhelming and hard to interpret.
 
-We are now ready to explore more **complex relationships** between variables — going beyond summary statistics and 2 variable plots. Our focus here is to investigate whether the **collagen (COL) gene family** plays a role in **ovarian cancer**, and whether **cell type proportions** (such as tumor, stromal, or normal cell percentages) influence collagen expression patterns.
-
-We also aim to assess whether **patient characteristics** like **stage** show any correlation with collagen gene expression.
-
-To gain deeper insight, we’ll now:
-
--   Use **faceted scatter plots** to visualize relationships across 3 variables
-
--   Explore **correlation matrices** to assess pairwise associations at scale
-
-This approach allows us to assess whether certain genes increase or decrease with tumor burden or are associated with specific patient groups.
-
-Let's try to look at a couple of plots. Only collagen genes that start with 1 "COL1..", `tumorstage` and `age_at_initial_path_diagn.`
-
-```{r warning=FALSE}
-#| fig-height: 7
-
-df_long <- df_comb %>% 
-  select(starts_with("COL1") | any_of(c("percent_tumor_cells", "age_at_initial_path_diagn", "tumorstage"))) %>%
-  pivot_longer(cols = starts_with("COL"), names_to = "gene", values_to = "value")
-
-
-ggplot(df_long, aes(x = percent_tumor_cells, y = value, color = tumorstage)) +
-  geom_point() + 
-  scale_color_viridis_d() +
-  theme_minimal() + 
-  facet_wrap(vars(gene), nrow = 3, scales = "free") +
-  labs(title = "tumorstage") +
-  theme(legend.position = "bottom")
-
-ggplot(df_long, aes(x = age_at_initial_path_diagn, y = value, color = tumorstage)) +
-  geom_point() + 
-  scale_color_viridis_d(option = "A") +
-  theme_minimal() + 
-  facet_wrap(vars(gene), nrow = 3, scales = "free") +
-  labs(title = "tumorstage") +
-  theme(legend.position = "bottom")
-
-```
-
-This scatter plot shows gene expression on the y-axis, tumor cell percentage or age at initial diagnosis on the x-axis, and uses colors to encode tumor stage. **However, unfortunately this plot does not seem helpful.**
-
-When visualizing dozens of variables, pairwise scatter plots become overwhelming. Maybe correlation matrices provide a concise summary of linear relationships across all numeric features.
-
-A quick way to see linear relationships across many numeric variables.
-
-```{r}
-# Custom color pallet
-col_pal <- c("#440154FF", "#482878FF", "#3E4A89FF", "#31688EFF", "#26828EFF",
-             "#1F9E89FF", "#35B779FF", "#6DCD59FF", "#B4DE2CFF", "#FDE725FF")
-
-# All Integer Variables
-corr_matrix <- df_comb %>% 
-  select(where(is.integer)) %>% 
-  cor(use = "complete.obs")
-
-# Correlation plot
-corrplot(corr_matrix, method = "circle", type = "lower", tl.cex = 0.8,   tl.col = "black",
-         col = col_pal)
-```
-
-```{r}
-#| out-width: 100%
-
-# All Integer Variables
-corr_matrix <- df_comb %>% 
-  select(starts_with("COL")) %>% 
-  cor(use = "complete.obs")
-
-corrplot(corr_matrix, method = "circle", type = "lower", tl.cex = 0.8,   tl.col = "black", order = c("hclust"), col = col_pal)
-```
-
-Again, this plot however beautiful is still very difficult to interpret. Can we do better?
-
-We are clearly challenged by data complexity. As the number of variables increases—especially if you have **dozens of gene expression values**, **categorical groups**, and **clinical variables**—simple visualizations become difficult to interpret and visually overwhelming.
-
-It is time to transition to PCA or clustering to uncover deeper structures.
+It’s time to move toward dimensionality reduction techniques like PCA or clustering to uncover deeper structure and highlight the most informative patterns.
 
 # Normality and Data Transformation
 
@@ -123,15 +51,6 @@ Real-world data is often messy: skewed, non-linear, or heteroscedastic (i.e., va
 
 -   Meet model assumptions (e.g., normality, homoscedasticity)
 
-Common Data Transformation Techniques
-
-| Technique | Description | Use case |
-|------------------------|------------------------|------------------------|
-| **Z-score scaling** | Rescales variables to mean 0 and SD 1 | Good for PCA, regression |
-| **Min-Max scaling** | Rescales variables to 0–1 range | Needed for neural nets, clustering |
-| **Log transformation** | Compresses large values, reduces right skew | Count data, income, RNA-seq |
-| **Square-root transformation** | Similar to log but gentler | Right-skewed count data, Poisson-like |
-| **Square/power transformations** | Expands right tail, reduces left skew | Left-skewed variables |
 
 ## Checking for Normality
 
