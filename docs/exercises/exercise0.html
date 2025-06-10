@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Exercise 0: R script and Quarto – R for Data Science</title>
+<title>Exercise 0: Getting started – R for Data Science</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -337,7 +337,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../exercises/exercise0.html">Exercises</a></li><li class="breadcrumb-item"><a href="../exercises/exercise0.html">Exercise 0: R script and Quarto</a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title">Exercise 0: R script and Quarto</h1>
+<h1 class="title">Exercise 0: Getting started</h1>
 </div>
 
 
@@ -357,10 +357,17 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="file-management-data-download" class="level2">
 <h2 class="anchored" data-anchor-id="file-management-data-download">File Management &amp; Data Download</h2>
 <ol type="1">
-<li><p><strong>Make a new directory</strong> for this course.</p></li>
-<li><p><strong>Go to course website</strong> and to the Data tab. Press the <strong>Download Data</strong> button.</p></li>
-<li><p>Move the Data folder to your course directory.</p></li>
-<li><p>Under your course directory, make a new folder for your scripts, one for our output, and another for the presentations you download.</p></li>
+<li>To get this material you went to the github repository of this course: https://github.com/Center-for-Health-Data-Science/R4DataScience, pressed <strong>Clone</strong> → <strong>Download ZIP</strong> and downloaded the directory with the course material called <em>R4DataScience</em> or <em>R4DataScience-main</em>. This folder contains several sub directory with more and less relevant material. The files you need for this course is:</li>
+</ol>
+<ul>
+<li><code>slides/R4datascience_slides.pdf</code>: contains the lecture slides in pdf format.</li>
+<li><code>presentations/*</code>: all the scripts that the lectures will go through in plenum during the course.</li>
+<li><code>exercises/*</code>: all the exercises that you will go through yourselves. You are currently looking at <code>exercises/exercise0.qmd</code>.</li>
+<li><code>data/*</code>: all the data you need for the exercises.</li>
+</ul>
+<p>Ignore or delete the material that is not mentioned above.</p>
+<ol start="2" type="1">
+<li>Under the course directory, make a sub directory for the outputs that you will generate doing the exercises.</li>
 </ol>
 <p>Your file tree should look something like this:</p>
 <div class="quarto-figure quarto-figure-center">
@@ -371,11 +378,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="working-directories" class="level2">
 <h2 class="anchored" data-anchor-id="working-directories">Working directories</h2>
-<ol start="5" type="1">
-<li><p><strong>Open R studio</strong>.</p></li>
-<li><p><strong>Access your current working directory</strong> by writing <code>getwd()</code> in the console.</p></li>
+<ol start="3" type="1">
+<li>As you have Rstudio open, <strong>access your current working directory</strong> by typing <code>getwd()</code> in the console.</li>
 </ol>
-<p>The working directory in R (or other programming environments) is the folder on your computer where R looks for files to read or write by default. When you load or save data, R will use the working directory unless you specify another path. A path can either be <strong>absolute</strong> or <strong>relative</strong>:</p>
+<p>The working directory in R (and other programming environments) is the folder on your computer where R looks for files to read or write by default. When you load or save data, R will use the working directory unless you specify another path. A path can either be <strong>absolute</strong> or <strong>relative</strong>:</p>
 <ul>
 <li><p><strong>Absolute path</strong>: The path from the root of your file system to the input file.</p></li>
 <li><p><strong>Relative path</strong>: The path from the working directory to the input file.</p></li>
@@ -383,24 +389,24 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="r-script" class="level2">
 <h2 class="anchored" data-anchor-id="r-script">R Script</h2>
-<ol start="7" type="1">
-<li>Create an R script and save it in your work folder.</li>
+<ol start="4" type="1">
+<li>Create an R script and save it in your exercise folder.</li>
 </ol>
 <p>An R script is a plain text file containing a series of R commands and code used for data analysis. R scripts have a <code>.R</code> extension and can be executed line-by-line in an interactive R session or as a whole script. They are ideal for automating workflows and keeping your analyses reproducible and organized. R scripts can be submitted to a job on a supercomputer unlike Quarto documents.</p>
-<ol start="9" type="1">
+<ol start="5" type="1">
 <li><p>Type <code>getwd()</code> in your R script and run the line. Compare the working directory with the one from the console.</p></li>
 <li><p>Change the working directory using <code>setwd()</code>.</p></li>
 <li><p>Run <code>getwd()</code> again.</p></li>
-<li><p>Type in a few lines of code and some comments and re-save the file.</p></li>
+<li><p>Read in the file from <code>data/diabetes.csv</code> using the <code>read_csv()</code> function and check the structure of the data with the <code>str()</code> function. Re-save the file.</p></li>
 </ol>
 </section>
 <section id="quarto" class="level2">
 <h2 class="anchored" data-anchor-id="quarto">Quarto</h2>
-<ol start="13" type="1">
-<li>Create an Quarto document and save it in your work folder.</li>
+<ol start="9" type="1">
+<li>Create an Quarto document and save it in your exercise folder.</li>
 </ol>
 <p>Quarto is an open-source publishing system designed to help you create dynamic, reproducible documents, presentations, and websites. It extends the ideas of tools like R Markdown, combining simplicity with powerful customization options for modern scientific and technical communication.</p>
-<ol start="14" type="1">
+<ol start="10" type="1">
 <li><p>Type <code>getwd()</code> in a code chunk in your Quarto document and run the line. Compare the working directory with the one from the console.</p></li>
 <li><p>Change the working directory in one chuck using <code>setwd()</code>.</p></li>
 <li><p>Run <code>getwd()</code> in the same chunk as <code>setwd()</code> AND in another chunk. What do you observe?</p></li>
@@ -418,7 +424,7 @@ Hint
 <div id="callout-1" class="callout-1-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">setwd</span>(<span class="st">''</span>)</span>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">setwd</span>(<span class="st">'PATH'</span>)</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">getwd</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell">
@@ -427,8 +433,8 @@ Hint
 </div>
 </div>
 </div>
-<ol start="17" type="1">
-<li><p>Create some code chunks, write text and headers. Re-save the file.</p></li>
+<ol start="13" type="1">
+<li><p>Create a code chunks and write the same code as you did in <strong>8</strong>. Write a description of what you did above the code chunk. Re-save the file.</p></li>
 <li><p>Render the Quarto document and have a look at the html file.</p></li>
 </ol>
 <div class="callout callout-style-default callout-note callout-titled">
@@ -463,9 +469,9 @@ Resources for Quarto
 <p><img src="../figures/file_tree_Rproject.jpg" class="img-fluid quarto-figure quarto-figure-center figure-img"></p>
 </figure>
 </div>
-<ol start="19" type="1">
+<ol start="15" type="1">
 <li><p>Create an R project by clicking the <em>Project (None)</em> in the top right → <em>New Project</em> → <em>Existing Directory</em> and choose an appropriate location. Look at the top-right corner to check that you are in your R project.</p></li>
-<li><p>Reopen the the R script and Quarto document you created in Exercise 7 and 13 respectively. Check each of their working directories. Are they as you expect? Explain.</p></li>
+<li><p>Reopen the the R script and Quarto document you created in Exercise 4 and 9 respectively. Check each of their working directories. Are they as you expect? Explain.</p></li>
 </ol>
 <div class="callout callout-style-default callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-3-contents" aria-controls="callout-3" aria-expanded="false" aria-label="Toggle callout">
@@ -486,7 +492,7 @@ Hint
 </div>
 </div>
 </div>
-<ol start="21" type="1">
+<ol start="17" type="1">
 <li>If you like the flow of the R project, keep it. If not, delete it. It is not necessary to have an R project. <strong>NB</strong> If you delete it, click the R project drop-down menu in the top-right corner → <em>Close Project</em>.</li>
 </ol>
 

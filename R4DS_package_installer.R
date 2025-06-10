@@ -30,8 +30,8 @@ packages_needed = c("tidyverse", "readxl", "writexl",
                     "table1","knitr","GGally","emmeans", "ggpubr",
                     "quarto", "broom", "patchwork", "quarto",
                     "glue", "ggforce", 
-                    "FactoMineR", "ggpubr", "factoextra", "corrplot", "ggpubr", 
-                    "caret", "ContaminatedMixt", "ggfortify", 
+                    "FactoMineR", "ggpubr", "factoextra", "corrplot",
+                    "caret", "ContaminatedMixt", "ggfortify", "DESeq2",
                     "glmnet", 
                     "MASS", "randomForest")
 
