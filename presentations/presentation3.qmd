@@ -126,7 +126,7 @@ Real-world data is often messy: skewed, non-linear, or heteroscedastic (i.e., va
 Common Data Transformation Techniques
 
 | Technique | Description | Use case |
-|------------------------|------------------------|------------------------|
+|----|----|----|
 | **Z-score scaling** | Rescales variables to mean 0 and SD 1 | Good for PCA, regression |
 | **Min-Max scaling** | Rescales variables to 0–1 range | Needed for neural nets, clustering |
 | **Log transformation** | Compresses large values, reduces right skew | Count data, income, RNA-seq |
