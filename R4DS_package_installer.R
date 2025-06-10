@@ -26,63 +26,88 @@ if(as.numeric(base::version$major) < 4){
 #####################
 
 # list package names that are needed from CRAN
-packages_needed = c("tidyverse", "readxl", "writexl",
-                    "table1","knitr","GGally","emmeans", "ggpubr",
-                    "quarto", "broom", "patchwork", "quarto",
-                    "glue", "ggforce", 
-                    "FactoMineR", "ggpubr", "factoextra", "corrplot",
-                    "caret", "ContaminatedMixt", "ggfortify", "DESeq2",
-                    "glmnet", 
-                    "MASS", "randomForest")
+l.packages <-  c("tidyverse",
+                 "ggplot2",
+                 "readxl", 
+                 "writexl",
+                 "GGally",
+                 "ggpubr",
+                 "quarto", 
+                 "ggforce", 
+                 "FactoMineR",
+                 "factoextra",
+                 "corrplot",
+                 "caret",
+                 "ContaminatedMixt",
+                 "ggfortify",
+                 "DESeq2",
+                 "glmnet", 
+                 "MASS", 
+                 "randomForest",
+                 "caTools",
+                 "ModelMetrics")
 
-finished = FALSE
+#broom
+#patchwork
+#glue
+#emmeans
 
-n_runs = 0
 
-while(!finished){
-  # list the packages that are already installed
-  packages_installed = installed.packages()[,"Package"]
+# Empty vector to hold packages not yet installed:
+m.packages <- c()
+
+# Check is package is already installed
+for(p in 1:length(l.packages)) {
   
-  #####################
-  # loop over necessary packages and install them if needed
-  #####################
+  if (l.packages[p] %in% rownames(installed.packages())) {
+    print(paste0(l.packages[p], ' is installed!'))
+    try(library(l.packages[[p]], character.only = TRUE))
+    
+  } else {
+    m.packages <- append(m.packages, l.packages[p])
+  }
+}
+
+
+
+
+# Unlist missing packages
+m.packages <- unlist(m.packages)
+
+
+
+# Installing and loading missing packages:
+if (length(m.packages) > 0) {
+  sp <- paste(m.packages,collapse=", ")
+  print(paste0('Package(s): ', sp, ' are missing, installing and loading now.'))
   
-  # here you can also see how loops look :)
-  for(package_name in packages_needed){ # iterate through all package names
-    if(!(package_name %in% packages_installed)){ # check whether package name is in list of installed packages
-      cat('package',package_name,'missing\ninstalling now\n') # if not, print that to console
-      install.packages(package_name, dependencies = TRUE) # and install it
+  for (p in 1:length(m.packages)) {
+    print(paste0('Installing package ', m.packages[p],' from CRAN Repository'))
+    try(install.packages(m.packages[p]))
+    out <- try(library(m.packages[p], character.only = TRUE))
+    
+    if (class(out) == "try-error") {
+      print(paste0('Installing package ', m.packages[p],' from Bioconductor Repository'))
+      try(BiocManager::install(m.packages[p])) 
+      out <- try(library(m.packages[p], character.only = TRUE))
+      
+      if (class(out) == "try-error") {
+        print(paste0(m.packages[p], ' cannot be installed!'))
+      }
     }
   }
-  
-  
-  #####################
-  # check and print out whether all packages are installed
-  #####################
-  
-  packages_installed = installed.packages()[,"Package"] # now update the list of installed packages
-  all_packages_needed = packages_needed # combining two vectors
-  
-  count = 0 # use this count to keep track if all necessary packages are installed
-  for(package_name in all_packages_needed){
-    if(!(package_name %in% packages_installed)){
-      cat('package',package_name,'missing\n')
-    } else{
-      count = count + 1
-    }
-  }
-  if(count == length(all_packages_needed)){
-    print('all packages have been successfully installed')
-    finished = TRUE
-  }else{
-    print('not all packages installed. please run the whole script again.')
-    print('------------------------')
-    print('running again')
-    print('------------------------')
-  }
-  n_runs = n_runs + 1
-  if(n_runs == 10){
-    finished = TRUE
-    print('Tried installing 10 times. There is a problem. Get help.')
-  }
+}
+
+
+
+# Are all packages loaded
+all.packages <- (.packages(all.available = TRUE))
+
+
+if(length(intersect(l.packages, all.packages)) == length(l.packages)) {
+  print('all packages have been successfully installed')
+} else {
+  notInstalled <-  paste(setdiff(l.packages, all.packages), collapse = ", ") 
+  print(paste0('Packages: ', notInstalled, ' not installed!')) 
+  print('Try running the script again OR installing them manually with install.packages(name_of_package)')
 }
