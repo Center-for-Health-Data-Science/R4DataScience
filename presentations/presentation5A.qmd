@@ -372,7 +372,7 @@ y_pred
 As you see, the predictions we get out are not $yes$ or $no$, they are instead a probability (as discussed above), so, we will convert them to class labels.
 
 ```{r}
-y_pred <- ifelse(as.numeric(y_pred) >= 0.5, 'yes', 'no') %>% 
+y_pred <- ifelse(as.numeric(y_pred) >= 0.5, 1, 0) %>% 
   as.factor()
 ```
 

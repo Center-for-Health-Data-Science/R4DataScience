@@ -172,7 +172,7 @@ awesome_plot <- df_comb %>%
 
 If R is being every pesky about showing you plots (e.g. if you want to display them in a loop) wrapping `print()` around the name of the plot object usually helps:
 
-```{r warning="FALSE"}
+```{r warning=FALSE}
 print(awesome_plot)
 ```
 

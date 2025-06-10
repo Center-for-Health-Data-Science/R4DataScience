@@ -60,22 +60,22 @@ website:
           - href: exercises/exercise5B.qmd
             text: "Exercise 5B: Models and Model Evaluation in R" 
 
-      - section: "Solutions"
-        contents:
-          - href: solutions/solution1.qmd
-            text: "Solution 1: Data Cleaning"
-          - href: solutions/solution2.qmd
-            text: "Solution 2: Summary Statistics and Data Wrangling"
-          - href: solutions/solution3.qmd
-            text: "Solution 3: Exploratory Data Analysis"
-          - href: solutions/solution4A.qmd
-            text: "Solution 4A: Conditions and For-loops" 
-          - href: solutions/solution4B.qmd
-            text: "Solution 4B: Functions" 
-          - href: solutions/solution5A.qmd
-            text: "Solution 5A: Intro to Regression in R"
-          - href: solutions/solution5B.qmd
-            text: "Solution 5B: Models and Model Evaluation in R" 
+      # - section: "Solutions"
+      #   contents:
+      #     - href: tdhh/solutions_not_up.qmd # tdhh1.qmd 
+      #       text: "Solution 1: Data Cleaning"
+      #     - href: tdhh/solutions_not_up.qmd # tdhh2.qmd
+      #       text: "Solution 2: Summary Statistics and Data Wrangling"
+      #     - href: tdhh/solutions_not_up.qmd # tdhh3.qmd
+      #       text: "Solution 3: Exploratory Data Analysis"
+      #     - href: tdhh/solutions_not_up.qmd # tdhh4A.qmd
+      #       text: "Solution 4A: Conditions and For-loops" 
+      #     - href: tdhh/solutions_not_up.qmd # tdhh4B.qmd
+      #       text: "Solution 4B: Functions" 
+      #     - href: tdhh/solutions_not_up.qmd # tdhh5A.qmd
+      #       text: "Solution 5A: Intro to Regression in R"
+      #     - href: tdhh/solutions_not_up.qmd # tdhh5B.qmd
+      #       text: "Solution 5B: Models and Model Evaluation in R" 
 
       - section: "Cheat Sheets"
         contents:

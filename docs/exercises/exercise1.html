@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Exercise 1: Data Cleanup (Base R and Tidyverse) – R for Data Science</title>
+<title>Exercise 1: Data Cleaning – R for Data Science</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -19,40 +19,6 @@ ul.task-list li input[type="checkbox"] {
   width: 0.8em;
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
-}
-/* CSS for syntax highlighting */
-pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { line-height: 1.25; }
-pre > code.sourceCode > span:empty { height: 1.2em; }
-.sourceCode { overflow: visible; }
-code.sourceCode > span { color: inherit; text-decoration: inherit; }
-div.sourceCode { margin: 1em 0; }
-pre.sourceCode { margin: 0; }
-@media screen {
-div.sourceCode { overflow: auto; }
-}
-@media print {
-pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
-}
-pre.numberSource code
-  { counter-reset: source-line 0; }
-pre.numberSource code > span
-  { position: relative; left: -4em; counter-increment: source-line; }
-pre.numberSource code > span > a:first-child::before
-  { content: counter(source-line);
-    position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; display: inline-block;
-    -webkit-touch-callout: none; -webkit-user-select: none;
-    -khtml-user-select: none; -moz-user-select: none;
-    -ms-user-select: none; user-select: none;
-    padding: 0 4px; width: 4em;
-  }
-pre.numberSource { margin-left: 3em;  padding-left: 4px; }
-div.sourceCode
-  {   }
-@media screen {
-pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 </style>
 
@@ -143,7 +109,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../exercises/exercise0.html">Exercises</a></li><li class="breadcrumb-item"><a href="../exercises/exercise1.html">Exercise 1: Data Cleanup</a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../exercises/exercise0.html">Exercises</a></li><li class="breadcrumb-item"><a href="../exercises/exercise1.html">Exercise 1: Data Cleaning</a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
     </div>
@@ -173,13 +139,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../presentations/presentation1.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Presentation 1: Data Cleanup</span></a>
+ <span class="menu-text">Presentation 1: Data Cleaning</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../presentations/presentation2.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Presentation 2: Advanced Data Wrangling</span></a>
+ <span class="menu-text">Presentation 2: Summary Statistics and Data Wrangling</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -190,32 +156,26 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../presentations/named_lists.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">R Objects: Named Lists</span></a>
+  <a href="../presentations/presentation4A.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Presentation 4A: Conditions and For-loops</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../presentations/presentation4_main_script.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Presentation 4: Scripting in R</span></a>
+  <a href="../presentations/presentation4B.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Presentation 4B: Functions</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../presentations/presentation4_functions.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Presentation 4, Functions: Scripting in R</span></a>
+  <a href="../presentations/presentation5A.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Presentation 5A: Intro to Regression in R</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../presentations/presentation5.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Presentation 5: Intro to Modelling in R</span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../presentations/s4_objects.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">R objects: S4 objects</span></a>
+  <a href="../presentations/presentation5B.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Presentation 5B: Models and Model Evaluation in R</span></a>
   </div>
 </li>
       </ul>
@@ -244,43 +204,43 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../exercises/exercise1.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text">Exercise 1: Data Cleanup</span></a>
+ <span class="menu-text">Exercise 1: Data Cleaning</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../exercises/exercise2.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Exercise 2: Advanced Data Wrangling</span></a>
+ <span class="menu-text">Exercise 2: Summary Statistics and Data Wrangling</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../exercises/exercise3A.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Exercise 3 A: Exploratory Data Analysis - Plotting</span></a>
+  <a href="../exercises/exercise3.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Exercise 3: Exploratory Data Analysis</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../exercises/exercise3B.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Exercise 3 B: Exploratory Data Analysis - PCA</span></a>
+  <a href="../exercises/exercise4A.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Exercise 4A: Conditions and For-loops</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../exercises/exercise4.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Exercise 4: Scripting in R</span></a>
+  <a href="../exercises/exercise4B.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Exercise 4B: Functions</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../exercises/exercise5.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Exercise 5: Modelling in R</span></a>
+  <a href="../exercises/exercise5A.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Exercise 5A: Intro to Regression in R</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../exercises/exercise6.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Exercise 6: Understanding and improving an R script</span></a>
+  <a href="../exercises/exercise5B.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Exercise 5B: Models and Model Evaluation in R</span></a>
   </div>
 </li>
       </ul>
@@ -288,71 +248,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
             <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="false">
- <span class="menu-text">Solutions</span></a>
+ <span class="menu-text">Cheat Sheets</span></a>
           <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="false" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
       <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 ">  
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../solutions/solution1.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Exercise 1 - Solution</span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../solutions/solution2.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Exercise 2 - Solution</span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../solutions/solution3A.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Exercise 3 A - Solution</span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../solutions/solution3B.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Exercise 3 B - Solution</span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../solutions/solution4.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Exercise 4 - Solution</span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../solutions/solution4_functions.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Exercise 4, Functions - Solution</span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../solutions/solution5.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Exercise 5 - Solution</span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../solutions/solution6.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Exercise 6 - Solution</span></a>
-  </div>
-</li>
-      </ul>
-  </li>
-        <li class="sidebar-item sidebar-item-section">
-      <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="false">
- <span class="menu-text">Cheat Sheets</span></a>
-          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="false" aria-label="Toggle section">
-            <i class="bi bi-chevron-right ms-2"></i>
-          </a> 
-      </div>
-      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 ">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../CheatSheet/quartoCheatSheet.pdf" class="sidebar-item-text sidebar-link">
@@ -392,17 +293,18 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#getting-started" id="toc-getting-started" class="nav-link active" data-scroll-target="#getting-started">Getting started</a></li>
   <li><a href="#explore-the-data" id="toc-explore-the-data" class="nav-link" data-scroll-target="#explore-the-data">Explore the data</a></li>
   <li><a href="#clean-up-the-data" id="toc-clean-up-the-data" class="nav-link" data-scroll-target="#clean-up-the-data">Clean up the data</a></li>
-  <li><a href="#meta-data" id="toc-meta-data" class="nav-link" data-scroll-target="#meta-data">Meta Data</a></li>
+  <li><a href="#metadata" id="toc-metadata" class="nav-link" data-scroll-target="#metadata">Metadata</a></li>
   <li><a href="#join-the-datasets" id="toc-join-the-datasets" class="nav-link" data-scroll-target="#join-the-datasets">Join the datasets</a></li>
+  <li><a href="#manipulate-some-strings" id="toc-manipulate-some-strings" class="nav-link" data-scroll-target="#manipulate-some-strings">Manipulate some strings</a></li>
   </ul>
 </nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../exercises/exercise0.html">Exercises</a></li><li class="breadcrumb-item"><a href="../exercises/exercise1.html">Exercise 1: Data Cleanup</a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../exercises/exercise0.html">Exercises</a></li><li class="breadcrumb-item"><a href="../exercises/exercise1.html">Exercise 1: Data Cleaning</a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title">Exercise 1: Data Cleanup (Base R and Tidyverse)</h1>
+<h1 class="title">Exercise 1: Data Cleaning</h1>
 </div>
 
 
@@ -419,24 +321,20 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<p>In this exercise you will practice your R skills by loading, inspecting and cleaning a dataset. You can use base R and/or tidyverse to solve the exercises, it is up to you.</p>
 <section id="getting-started" class="level2">
 <h2 class="anchored" data-anchor-id="getting-started">Getting started</h2>
 <ol type="1">
-<li>Load the packages you think you will need. There is no need to spend too much time on this part. If you later realize you need another package just add it here and re-run the chunk.</li>
-</ol>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">#your packages here</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<ol start="2" type="1">
-<li>Load in the data set <code>diabetes_clinical_toy_messy.xlsx</code>.</li>
+<li><p>Load packages.</p></li>
+<li><p>Load in the <code>diabetes_clinical_toy_messy.xlsx</code> data set.</p></li>
 </ol>
 </section>
 <section id="explore-the-data" class="level2">
 <h2 class="anchored" data-anchor-id="explore-the-data">Explore the data</h2>
+<p>Use can you either base R or/and tidyverse to solve the exercises.</p>
 <ol start="3" type="1">
-<li><p>How many missing values (NA’s) are there in each column?</p></li>
-<li><p>Check the distribution of each of the variables. Consider that the variables are of different classes. Do any values strike you as odd?</p></li>
+<li><p>How many missing values (NA’s) are there in each column.</p></li>
+<li><p>Check the ranges and distribution of each of the numeric variables in the dataset. Do any values seem weird or unexpected? Extract summary statistics on these, e.g.&nbsp;means and standard deviation.</p></li>
+<li><p>Some variables in the dataset are categorical or factor variables. Figure out what levels these have and how many observations there are for each level.</p></li>
 </ol>
 </section>
 <section id="clean-up-the-data" class="level2">
@@ -444,13 +342,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>Now that we have had a look at the data, it is time to correct fixable mistakes and remove observations that cannot be corrected.</p>
 <p>Consider the following:</p>
 <ul>
-<li><p>What should we do with the rows that contain NAs? Do we remove them or keep them?</p></li>
-<li><p>Which mistakes in the data can be corrected, and which cannot?</p></li>
+<li><p>What should we do with the rows that contain NA’s? Do we remove them or keep them?</p></li>
+<li><p>Which odd things in the data can we correct with confidence and which cannot?</p></li>
 <li><p>Are there zeros in the data? Are they true zeros or errors?</p></li>
-<li><p>Do you want to change any of the data types of the variables?</p></li>
+<li><p>Do you want to change any of the classes of the variables?</p></li>
 </ul>
-<ol start="5" type="1">
-<li>Clean the data according to your considerations.</li>
+<ol start="6" type="1">
+<li>Make a clean version of the dataset according to your considerations.</li>
 </ol>
 <div class="callout callout-style-default callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
@@ -464,62 +362,42 @@ Hint
 </div>
 <div id="callout-1" class="callout-1-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<p>Have a look at <code>BloodPressure</code>, <code>BMI</code>, <code>Sex</code>, <code>Diabetes</code> and <code>ID</code>.</p>
+<p>Have a look at <code>BloodPressure</code>, <code>BMI</code>, and <code>Sex</code>.</p>
 </div>
 </div>
 </div>
 </section>
-<section id="meta-data" class="level2">
-<h2 class="anchored" data-anchor-id="meta-data">Meta Data</h2>
-<p>There is some metadata to accompany the dataset you have just cleaned in <code>diabetes_meta_toy_messy.csv</code>. This is a csv file, not an excel sheet, so you need to use the <code>read_delim</code> function to load it. Load in the dataset and inspect it.</p>
-<ol start="6" type="1">
-<li>Now clean the metadata and do data exploration by repeating step 3-5 from above.</li>
+<section id="metadata" class="level2">
+<h2 class="anchored" data-anchor-id="metadata">Metadata</h2>
+<ol start="7" type="1">
+<li>There is some metadata to accompany the dataset you have just cleaned in <code>diabetes_meta_toy_messy.csv</code>. This is a csv file, not an excel sheet, so you need to use the <code>read_delim()</code> function to load it. Load in the dataset and inspect it.</li>
 </ol>
+<p>7.1. How many missing values (NA’s) are there in each column.</p>
+<p>7.2. Check the distribution of each of the variables. Consider that the variables are of different classes. Do any of the distributions seam odd to you?</p>
+<p>7.3. Make a clean version of the dataset according to your considerations.</p>
 </section>
 <section id="join-the-datasets" class="level2">
 <h2 class="anchored" data-anchor-id="join-the-datasets">Join the datasets</h2>
-<p>We will combine both datasets together into one tibble.</p>
-<ol start="7" type="1">
-<li>Consider what variable the datasets should be joined on.</li>
-</ol>
-<div class="callout callout-style-default callout-tip callout-titled">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-Hint
-</div>
-<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
-</div>
-<div id="callout-2" class="callout-2-contents callout-collapse collapse">
-<div class="callout-body-container callout-body">
-<p>The joining variable must be the same type in both datasets.</p>
-</div>
-</div>
-</div>
 <ol start="8" type="1">
-<li><p>Join the datasets by the variable you selected above.</p></li>
-<li><p>How many rows does the joined dataset have? Explain why.</p></li>
+<li><p>Consider which variable the datasets should be joined on.</p></li>
+<li><p>Consider how you want to join the datasets. Do you want to use <code>full_join</code>, <code>inner_join</code>, <code>left_join</code> and <code>rigth_join</code>?</p></li>
 </ol>
-<div class="callout callout-style-default callout-tip callout-titled">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-3-contents" aria-controls="callout-3" aria-expanded="false" aria-label="Toggle callout">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-Hint
-</div>
-<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
-</div>
-<div id="callout-3" class="callout-3-contents callout-collapse collapse">
-<div class="callout-body-container callout-body">
-<p>Because we used left_join, only the IDs that are in <code>diabetes_clinical_clean</code> are kept.</p>
-</div>
-</div>
-</div>
+<p>The joining variable must be the same type in both datasets.</p>
 <ol start="10" type="1">
-<li>Export the joined dataset. Think about which directory you want to save the file in.</li>
+<li><p>Join the cleaned versions of the clinical and metadataset by the variable and with the function you considered above.</p></li>
+<li><p>How many rows does the joined dataset have? Explain how the join-function you used resulted in the given number of rows.</p></li>
+</ol>
+</section>
+<section id="manipulate-some-strings" class="level2">
+<h2 class="anchored" data-anchor-id="manipulate-some-strings">Manipulate some strings</h2>
+<p>When we look at the column <code>Work</code>, we can see that we have three levels <code>Public</code>, <code>Private</code> and <code>Self-employed</code>. Some special characters, including: <code>- / \[\] (), etc.</code> can sometimes prove problematic in variable names, as they are also used for operations in R. For example, are dashes (<code>-</code>) used to indicate a contrast in some functions.</p>
+<ol start="12" type="1">
+<li>To avoid potential issues in downstream analysis, change the <code>Work</code> variable so that <code>Self-employed</code> becomes <code>SelfEmployed</code>.</li>
+</ol>
+<p>Additionally, we are not so happy with the fact that the <code>ID</code> is simply denoted by a number. The reason for this is that if we write out our dataset and read it in again (which we will do later), R will think it is a numeric or integer variable.</p>
+<ol start="13" type="1">
+<li><p>Add the string <code>ID_</code> in front of the number and convert it to a factor variable.</p></li>
+<li><p>Export the joined dataset. Think about which directory you want to save the file in.</p></li>
 </ol>
 
 

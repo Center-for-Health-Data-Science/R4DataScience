@@ -1,0 +1,229 @@
+---
+title: "Exercise 4A - Solutions: Scripting in R - Conditions and For-loops"
+format: html
+project:
+ type: website
+ output-dir: ../docs
+---
+
+In this exercise you will practice your scripting in R.
+
+## Getting started
+
+Load libraries and the joined diabetes data set.
+
+```{r message=FALSE, warning=FALSE}
+library(tidyverse)
+library(glue)
+```
+
+```{r}
+diabetes_glucose <- readxl::read_excel('../data/exercise2_diabetes_glucose.xlsx')
+diabetes_glucose
+```
+
+## If-else statements
+
+In these exercises we don't use the dataframe yet, that comes later when we have loops. For this part, just declare variables to test your statements, e.g. `bp <- 120`.
+
+1.  Write an if-else statement that prints whether a person has high (more than 100), low (lower than 50) or normal blood pressure (between 50 and 100).
+
+```{r}
+bp <- 80
+
+if (bp > 100){
+  print('High blood pressure')
+} else if (bp < 50) {
+  print('Low blood pressure')
+} else {
+  print('Normal blood pressure')
+} 
+
+```
+
+2.  Write an if-else statement that assigns people high, moderate or low health risk based on their smoking habits (variable `Smoker`) and BMI:
+
+-   Smoker and BMI greater than 35 -\> high risk
+
+-   Smoker or BMI greater than 35 -\> moderate risk
+
+-   otherwise low risk
+
+And `Smoker` should be one of "Smoker", "Former", "Never", "Unknown".
+
+Verify that your statement works for different combinations of smoking habits and BMI.
+
+```{r}
+Smoker <- 'Smoker'
+BMI <- 40
+
+if (Smoker == 'Smoker' & BMI > 35){
+  print('High risk')
+} else if (Smoker == 'Smoker' | BMI > 35) {
+  print('Moderate risk')
+} else {
+  print('Low risk')
+}
+
+```
+
+## Loops
+
+3.  Create a vector with at least five elements of your choice. Use a for loop to print each element individually.
+
+```{r}
+my_v <- c(1, 78, 5, 'hello', 7)
+
+for (el in my_v) {
+  print(el)
+}
+
+```
+
+4.  Print each column name in the `diabetes_glucose` data frame using a for loop.
+
+```{r}
+for (col in colnames(diabetes_glucose)) {
+  print(col)
+}
+```
+
+5.  Loop over all rows of diabetes_glucose and determine whether the person's blood pressure is high, low or normal with the same conditions as in 1. Print the blood pressure value as well as the statement so you can verify whether you have classified the blood pressure correctly as high, normal or low. 
+
+```{r}
+#We'll only show the first 10 rows here for brevity
+#for (i in 1:nrow(diabetes_glucose)) {
+
+for (i in 1:10) {
+  bp <- diabetes_glucose$BloodPressure[i]
+
+  if (bp > 100){
+    print(paste(bp,'is high blood pressure'))
+  } else if (bp < 50) {
+    print(paste(bp,'is low blood pressure'))
+  } else {
+    print(paste(bp,'is normal blood pressure'))
+  } 
+  
+}
+```
+
+6.  Loop over all rows of diabetes_glucose and extract the smoking habits and BMI for each row and determine the health risk with the same conditions as in Exercise 4.2. Print the smoking habits and BMI as well as the health risk level to make it easier to see whether your code works correctly.
+
+::: {.callout-tip collapse="true"}
+## Hint
+
+Extract value for i'th row in specific column: `df$col1[i]`
+
+An easy way to printing several variables is to pass a vector into print: `print(c(this, and_that, and_this_too))`
+:::
+
+```{r}
+#We'll only show the first 10 rows here for brevity
+#for (i in 1:nrow(diabetes_glucose)) {
+
+for (i in 1:10) {
+  Smoker <- diabetes_glucose$Smoker[i]
+  BMI <- diabetes_glucose$BMI[i]
+
+  if (Smoker == 'Smoker' & BMI > 35){
+    print(c(Smoker, BMI, 'High risk'))
+  } else if (Smoker == 'Smoker' | BMI > 35) {
+    print(c(Smoker, BMI,'Moderate risk'))
+  } else {
+    print(c(Smoker, BMI,'Low risk'))
+  }
+}
+
+```
+
+7.  Do the same as above but instead of printing the risk status, append it to a list. Start by initiating an empty list.
+
+```{r}
+# Initiate list
+risk_status <- list()
+```
+
+```{r}
+for (i in 1:nrow(diabetes_glucose)) {
+  Smoker <- diabetes_glucose$Smoker[i]
+  BMI <- diabetes_glucose$BMI[i]
+    
+  if (Smoker == 'Smoker' & BMI > 35){
+    risk_status <- append(risk_status, 'High risk')
+  } else if (Smoker == 'Smoker' | BMI > 35) {
+    risk_status <- append(risk_status, 'Moderate risk')
+  } else {
+    risk_status <- append(risk_status, 'Low risk')
+  }
+}
+
+```
+
+```{r}
+risk_status %>% head()
+```
+
+8.  Check the length of the list. Is it as expected?
+
+Since we looped through all the rows in the `diabetes_glucose` dataframe, the list should be as long as there are row in the dataframe.
+
+```{r}
+length(risk_status)
+```
+
+```{r}
+nrow(diabetes_glucose)
+```
+
+9.  Add the list as a new column in the `diabetes_glucose` data frame. Note: Before assigning it, use the `unlist()` function to convert the list to a flat vector. This ensures that each value aligns correctly with the rows of the data frame.
+
+```{r}
+diabetes_glucose$risk_status <- unlist(risk_status)
+```
+
+```{r}
+diabetes_glucose %>% select(BMI, Smoker, risk_status)
+```
+
+10. Make a list of all the column names in `diabetes_glucose` that contain categorical variables. Write a `for` loop that goes through the list and prints a barplot for each of the categorical variables.
+
+```{r}
+categorical <- list('Sex', 'Smoker', 'Diabetes', 'Married', 'Work')
+```
+
+```{r}
+for (var in categorical){
+  
+  p <- ggplot(diabetes_glucose, 
+         aes(x = !!sym(var))) + 
+    geom_bar() +
+    labs(title = paste('Barplot of', var))
+  
+  print(p)
+  
+}
+```
+
+11. Make a list of all the column names in `diabetes_glucose` that contain numeric variables. Make a for loop that goes through the list and prints a boxplot for each of the categorical variables.
+
+```{r}
+head(diabetes_glucose)
+```
+
+```{r}
+numeric <- list('Age', 'BloodPressure', 'BMI', 'PhysicalActivity', 'Serum_ca2')
+```
+
+```{r}
+for (var in numeric){
+  
+  p <- ggplot(diabetes_glucose, 
+         aes(y = !!sym(var))) + 
+    geom_boxplot() + 
+    labs(title = paste('Boxplot of', var))
+  
+  print(p)
+  
+}
+```

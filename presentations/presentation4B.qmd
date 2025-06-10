@@ -310,7 +310,7 @@ rm(list = "calculate_bmi", "calculate_bmi_2")
 By `sourcing` a script, all global variables (including functions) in that script will be loaded and appear in the Global environment in the top left corner. Here we source the `functions.R` script. Check the environment to confirm that the two functions appeared.
 
 ```{r}
-source('./presentation4B_functions.R')
+source('./presentation4B.R')
 ```
 
 After we sourced the functions script the `calculate_bmi` function can be used just like if it was defined in the main script. If you work on a larger project and write multiple functions, it is best practice to have a function script and source it in your main script.

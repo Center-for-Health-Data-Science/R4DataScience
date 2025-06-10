@@ -53,7 +53,7 @@ The remaining 28 variables we will consider as potential explanatory variables f
 3.  Do some basic summary statistics. How many categorical variables and how many numeric variables do you have? Try to make distributional plots for a couple of your numeric variables (or all if you would like) to get a feel for some of the data distributions you have.
 
 4. Some of the numeric variables are actually categorical. We have identified them in the `facCols` vector. Here, we change their type from numeric to character (since the other categorical variables are of this type). This code is sightly different from changing the type to factor, why we have written the code for you. Try to understand what is going on. 
-```{r}
+```{r eval=FALSE}
 facCols <- c("Race", 
              "ETXU_CAT5", 
              "BL.Anti.inf", 
@@ -124,7 +124,7 @@ Now, let's see how well your model performed.
 
 15. Predict if an individual is likely to give birth before the 37th week using your model and your test set. See pseudo-code below.
 
-```{r, eval = FALSE}
+```{r eval = FALSE}
 y_pred <- predict(model, test, type = 'class')
 ```
 
@@ -163,7 +163,7 @@ Now, let's try a Random Forest classifier. We will continue using the `Obt_Perio
 
 First the cross-validation parameters:
 
-```{r, , eval=FALSE}
+```{r eval=FALSE}
 set.seed(123)
 
 # Set up cross-validation: 5-fold CV
@@ -178,7 +178,7 @@ RFcv <- trainControl(
 
 Next we train the model:
 
-```{r, eval=FALSE}
+```{r eval=FALSE}
 # Train Random Forest
 set.seed(123)
 rf_model <- train(
@@ -197,7 +197,7 @@ print(rf_model)
 
 22. Plot your model fit. How does your model improve when you add 10, 20, 30, etc. predictors?
 
-```{r, eval=FALSE}
+```{r eval=FALSE}
 # Best parameters
 rf_model$bestTune
 
@@ -209,7 +209,7 @@ plot(rf_model)
 
 24. Extract the predictive variables with the greatest importance from your fit.
 
-```{r, eval=FALSE}
+```{r eval=FALSE}
 varImpOut <- varImp(rf_model)
 
 varImpOut$importance

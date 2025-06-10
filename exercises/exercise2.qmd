@@ -73,7 +73,7 @@ Check the class of the variables in the dataset.
 14. Check for outlier samples using the dendogram showed in the presentation. This includes scaling, calculating the distances between all pairs of scaled variables and hierarchical clustering. Remember that this can only be done for the numeric variables. 
 
 We will not spot any outliers via the dendogram in this dataset so we will add a fake outlier for you to detect. Here, the outlier has a value of the maximum value + 5 in each of the variables - pretty unrealistic. Play around with the values of the fake outlier and see how extreme it needs to be to be spotted in the dendogram. 
-```{r}
+```{r eval=FALSE}
 outlier <- tibble(Age = max(diabetes_glucose_num$Age) + 5, 
                   BloodPressure = max(diabetes_glucose_num$BloodPressure) + 5,
                   BMI = max(diabetes_glucose_num$BMI) + 5,
@@ -96,7 +96,7 @@ diabetes_glucose_num_outlier <- add_row(diabetes_glucose_num, outlier)
 Let's make some more advanced `ggplot`s!
 
 16. For p1, plot the density of the glucose measurements at time 0. For p2, make the same plot as p1 but add stratification on the diabetes status. Give the plot a meaningful title. Consider the densities - do the plots make sense?
-```{r eval = FALSE}
+```{r eval=FALSE}
 p1 <- # code for plot 1
 
 p2 <- # code for plot 2

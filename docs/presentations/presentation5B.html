@@ -1,0 +1,1960 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.5.57">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Presentation 5B: Modelling in R – R for Data Science</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<script src="../site_libs/quarto-html/quarto.js"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-dark.min.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+</head>
+
+<body class="nav-sidebar floating nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../index.html">
+    <span class="navbar-title">R for Data Science</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../index.html"> 
+<span class="menu-text">Course Material</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../about_heads.html"> 
+<span class="menu-text">About us</span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+  <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../presentations/presentation1.html">Presentations</a></li><li class="breadcrumb-item"><a href="../presentations/presentation5B.html">Presentation 5B: Models and Model Evaluation in R</a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../slides/R4datascience_slides.pdf" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Slides️</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+ <span class="menu-text">Presentations</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../presentations/presentation1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Presentation 1: Data Cleaning</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../presentations/presentation2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Presentation 2: Summary Statistics and Data Wrangling</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../presentations/presentation3.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Presentation 3: Exploratory Data Analysis</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../presentations/presentation4A.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Presentation 4A: Conditions and For-loops</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../presentations/presentation4B.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Presentation 4B: Functions</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../presentations/presentation5A.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Presentation 5A: Intro to Regression in R</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../presentations/presentation5B.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">Presentation 5B: Models and Model Evaluation in R</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../data/data.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Data️</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="false">
+ <span class="menu-text">Exercises</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../exercises/exercise0.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Exercise 0: R script and Quarto</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../exercises/exercise1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Exercise 1: Data Cleaning</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../exercises/exercise2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Exercise 2: Summary Statistics and Data Wrangling</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../exercises/exercise3.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Exercise 3: Exploratory Data Analysis</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../exercises/exercise4A.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Exercise 4A: Conditions and For-loops</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../exercises/exercise4B.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Exercise 4B: Functions</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../exercises/exercise5A.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Exercise 5A: Intro to Regression in R</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../exercises/exercise5B.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Exercise 5B: Models and Model Evaluation in R</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="false">
+ <span class="menu-text">Cheat Sheets</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../CheatSheet/quartoCheatSheet.pdf" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Quarto</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../CheatSheet/BaseRCheatSheet.pdf" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Base R</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../CheatSheet/TidyverseCheatSheet.pdf" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Tidyverse</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../CheatSheet/ggplotCheatSheet.pdf" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">ggplot2</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#part-1-penalized-regression" id="toc-part-1-penalized-regression" class="nav-link active" data-scroll-target="#part-1-penalized-regression">Part 1: Penalized Regression</a>
+  <ul class="collapse">
+  <li><a href="#elastic-net-regression" id="toc-elastic-net-regression" class="nav-link" data-scroll-target="#elastic-net-regression">Elastic Net regression</a></li>
+  </ul></li>
+  <li><a href="#part-2-random-forest" id="toc-part-2-random-forest" class="nav-link" data-scroll-target="#part-2-random-forest">Part 2: Random Forest</a>
+  <ul class="collapse">
+  <li><a href="#rf-model" id="toc-rf-model" class="nav-link" data-scroll-target="#rf-model">RF Model</a></li>
+  </ul></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../presentations/presentation1.html">Presentations</a></li><li class="breadcrumb-item"><a href="../presentations/presentation5B.html">Presentation 5B: Models and Model Evaluation in R</a></li></ol></nav>
+<div class="quarto-title">
+<h1 class="title">Presentation 5B: Modelling in R</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="part-1-penalized-regression" class="level2">
+<h2 class="anchored" data-anchor-id="part-1-penalized-regression">Part 1: Penalized Regression</h2>
+<p><strong>Elastic Net regression</strong> is part of the family of <strong>penalized regressions</strong>, which also includes <strong>Ridge regression</strong> and <strong>LASSO regression</strong>. Penalized regressions are useful when dealing with many predictors, as they help eliminate less informative ones while retaining the important predictors, making them ideal for high-dimensional datasets. If you are interested in knowing more about penalized regressions, you can have a look at this excellent tutorial from <a href="https://www.datacamp.com/tutorial/tutorial-ridge-lasso-elastic-net">Datacamp</a>.</p>
+<p>In linear regression, we estimate the relationship between predictors <span class="math inline">\(X\)</span> and an outcome <span class="math inline">\(y\)</span> using parameters <span class="math inline">\(β\)</span>, chosen to minimize the residual sum of squares (<strong>RSS</strong>). Two key properties of these <span class="math inline">\(β\)</span> estimates are bias (the difference between the true parameter and the estimate) and variance (how much the estimates vary across different samples). While <strong>OLS</strong> (Ordinary Least Squares) gives unbiased estimates, it can suffer from high variance - especially when predictors are numerous or highly correlated — leading to poor predictions.</p>
+<p>To address this, we can introduce regularization, which slightly biases the estimates in exchange for reduced variance and improved predictive performance. This trade-off is essential: as model complexity grows, variance increases and bias decreases, so regularization helps find a better balance between the two.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../figures/PenalizedRegression.png" class="img-fluid quarto-figure quarto-figure-center figure-img"></p>
+</figure>
+</div>
+<p><strong>Ridge Regression</strong> = L2 penalty (adds the sum of the squares of the coefficients to the loss function). It discourages large coefficients by penalizing their squared magnitudes, shrinking them towards zero. This reduces overfitting while keeping all variables in the model.</p>
+<p><strong>Lasso Regression</strong> = L1 penalty (adds the sum of the absolute values of the coefficients to the loss function). This penalty encourages sparsity, causing some coefficients to become exactly zero for large <span class="math inline">\(λ\)</span>s, thereby performing variable selection.</p>
+<p><strong>Elastic Net</strong> combines L1 and L2 penalties to balance variable selection and coefficient shrinkage. One of the key advantages of Elastic Net over other types of penalized regression is its ability to handle multicollinearity and situations where the number of predictors exceeds the number of observations.</p>
+<p><strong>Lambda</strong>, <span class="math inline">\((λ)\)</span>, controls the strength of the penalty. As <span class="math inline">\(λ\)</span> increases, variance decreases ands bias increases, raising the key question: how much bias are we willing to accept to reduce variance?</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../figures/penalty_regularization.png" class="img-fluid quarto-figure quarto-figure-center figure-img"></p>
+</figure>
+</div>
+<section id="elastic-net-regression" class="level3">
+<h3 class="anchored" data-anchor-id="elastic-net-regression">Elastic Net regression</h3>
+<p>Load the R packages needed for analysis:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(caret)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(glmnet)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(MASS)</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(randomForest)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>For this exercise we will use a dataset from patients with Heart Disease. Information on the columns in the dataset can be found <a href="https://www.kaggle.com/datasets/redwankarimsony/heart-disease-data">here</a>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>HD <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"../data/HeartDisease.csv"</span>)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(HD)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 6 × 14
+    age   sex chestPainType restBP  chol fastingBP restElecCardio maxHR
+  &lt;dbl&gt; &lt;dbl&gt;         &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt;     &lt;dbl&gt;          &lt;dbl&gt; &lt;dbl&gt;
+1    52     1             0    125   212         0              1   168
+2    53     1             0    140   203         1              0   155
+3    70     1             0    145   174         0              1   125
+4    61     1             0    148   203         0              1   161
+5    62     0             0    138   294         1              1   106
+6    58     0             0    100   248         0              0   122
+# ℹ 6 more variables: exerciseAngina &lt;dbl&gt;, STdepEKG &lt;dbl&gt;,
+#   slopePeakExST &lt;dbl&gt;, nMajorVessels &lt;dbl&gt;, DefectType &lt;dbl&gt;,
+#   heartDisease &lt;dbl&gt;</code></pre>
+</div>
+</div>
+<p>Firstly, let’s convert some of the variables that are encoded as numeric datatypes but should be factors:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>facCols <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"sex"</span>, </span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>             <span class="st">"chestPainType"</span>, </span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>             <span class="st">"fastingBP"</span>, </span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>             <span class="st">"restElecCardio"</span>, </span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>             <span class="st">"exerciseAngina"</span>, </span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>             <span class="st">"slopePeakExST"</span>, </span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>             <span class="st">"DefectType"</span>, </span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>             <span class="st">"heartDisease"</span>)</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>HD <span class="ot">&lt;-</span> HD <span class="sc">%&gt;%</span> </span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate_if</span>(<span class="fu">names</span>(.) <span class="sc">%in%</span> facCols, as.factor) </span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(HD)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 6 × 14
+    age sex   chestPainType restBP  chol fastingBP restElecCardio maxHR
+  &lt;dbl&gt; &lt;fct&gt; &lt;fct&gt;          &lt;dbl&gt; &lt;dbl&gt; &lt;fct&gt;     &lt;fct&gt;          &lt;dbl&gt;
+1    52 1     0                125   212 0         1                168
+2    53 1     0                140   203 1         0                155
+3    70 1     0                145   174 0         1                125
+4    61 1     0                148   203 0         1                161
+5    62 0     0                138   294 1         1                106
+6    58 0     0                100   248 0         0                122
+# ℹ 6 more variables: exerciseAngina &lt;fct&gt;, STdepEKG &lt;dbl&gt;,
+#   slopePeakExST &lt;fct&gt;, nMajorVessels &lt;dbl&gt;, DefectType &lt;fct&gt;,
+#   heartDisease &lt;fct&gt;</code></pre>
+</div>
+</div>
+<p>Let’s do some summary statistics to have a look at the variables we have in our dataset. Firstly, the numeric columns. We can get a quick overview of variable distributions and ranges with some histograms.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Reshape data to long format for ggplot2</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>long_data <span class="ot">&lt;-</span> HD <span class="sc">%&gt;%</span> </span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">select</span>(<span class="fu">where</span>(is.numeric)) <span class="sc">%&gt;%</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="at">cols =</span> <span class="fu">everything</span>(), </span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>               <span class="at">names_to =</span> <span class="st">"variable"</span>, </span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>               <span class="at">values_to =</span> <span class="st">"value"</span>)</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(long_data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 6 × 2
+  variable      value
+  &lt;chr&gt;         &lt;dbl&gt;
+1 age              52
+2 restBP          125
+3 chol            212
+4 maxHR           168
+5 STdepEKG          1
+6 nMajorVessels     2</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot histograms for each numeric variable in one grid</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(long_data, </span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>       <span class="fu">aes</span>(<span class="at">x =</span> value)) <span class="sc">+</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="at">binwidth =</span> <span class="fl">0.5</span>, <span class="at">fill =</span> <span class="st">"#9395D3"</span>, <span class="at">color =</span><span class="st">'grey30'</span>) <span class="sc">+</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="fu">vars</span>(variable), <span class="at">scales =</span> <span class="st">"free"</span>) <span class="sc">+</span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="presentation5B_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>In opposition to hypothesis tests and classic linear regression, penalized regression has no assumption that predictors, nor model residuals, must be normally distributed so we do not have to test that, yeah! However, it does still assume that the relationship between predictors and the outcome is linear and that observations are independent from one another.</p>
+<p>Importantly, penalized regression can be sensitive to large differences in the range of numeric/integer variables and it does not like missing values, so lets remove missing (if any) and scale our numeric variables.</p>
+<p>Question: What happens to the data when it is scaled?</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>HD_EN <span class="ot">&lt;-</span> HD <span class="sc">%&gt;%</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">drop_na</span>(.) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>HD_EN <span class="ot">&lt;-</span>HD <span class="sc">%&gt;%</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="fu">across</span>(<span class="fu">where</span>(is.numeric), scale))</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(HD_EN)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 6 × 14
+  age[,1] sex   chestPainType restBP[,1] chol[,1] fastingBP restElecCardio
+    &lt;dbl&gt; &lt;fct&gt; &lt;fct&gt;              &lt;dbl&gt;    &lt;dbl&gt; &lt;fct&gt;     &lt;fct&gt;         
+1  -0.268 1     0                 -0.377  -0.659  0         1             
+2  -0.158 1     0                  0.479  -0.833  1         0             
+3   1.72  1     0                  0.764  -1.40   0         1             
+4   0.724 1     0                  0.936  -0.833  0         1             
+5   0.834 0     0                  0.365   0.930  1         1             
+6   0.393 0     0                 -1.80    0.0388 0         0             
+# ℹ 7 more variables: maxHR &lt;dbl[,1]&gt;, exerciseAngina &lt;fct&gt;,
+#   STdepEKG &lt;dbl[,1]&gt;, slopePeakExST &lt;fct&gt;, nMajorVessels &lt;dbl[,1]&gt;,
+#   DefectType &lt;fct&gt;, heartDisease &lt;fct&gt;</code></pre>
+</div>
+</div>
+<p>Now, let’s check the balance of the categorical/factor variables.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>HD_EN <span class="sc">%&gt;%</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">select</span>(<span class="fu">where</span>(is.factor)) <span class="sc">%&gt;%</span></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="fu">everything</span>(), <span class="at">names_to =</span> <span class="st">"Variable"</span>, <span class="at">values_to =</span> <span class="st">"Level"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(Variable, Level, <span class="at">name =</span> <span class="st">"Count"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 22 × 3
+   Variable       Level Count
+   &lt;chr&gt;          &lt;fct&gt; &lt;int&gt;
+ 1 DefectType     0         7
+ 2 DefectType     1        64
+ 3 DefectType     2       544
+ 4 DefectType     3       410
+ 5 chestPainType  0       497
+ 6 chestPainType  1       167
+ 7 chestPainType  2       284
+ 8 chestPainType  3        77
+ 9 exerciseAngina 0       680
+10 exerciseAngina 1       345
+# ℹ 12 more rows</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># OR</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="co"># cat_cols &lt;- HD_EN %&gt;% dplyr::select(where(is.factor)) %&gt;% colnames()</span></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a><span class="co"># </span></span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a><span class="co"># for (col in cat_cols){</span></span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a><span class="co">#   print(col)</span></span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a><span class="co">#   print(table(HD_EN[[col]]))</span></span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a><span class="co"># }</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>From our count table above we see that variables <code>DefectType</code>, <code>chestPainType</code>, <code>restElecCardio</code>, and <code>slopePeakExST</code> are unbalanced. Especially <code>DefectType</code> and <code>restElecCardio</code> are problematic with only 7 and 15 observations for one of the factor levels. To avoid issues when modelling, we will filter out these observations and re-level these two variables.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>HD_EN <span class="ot">&lt;-</span> HD_EN <span class="sc">%&gt;%</span> </span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(DefectType <span class="sc">!=</span> <span class="dv">0</span> <span class="sc">&amp;</span> restElecCardio <span class="sc">!=</span><span class="dv">2</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">DefectType =</span> <span class="fu">as.factor</span>(<span class="fu">as.character</span>(DefectType)), </span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>         <span class="at">restElecCardio =</span> <span class="fu">as.factor</span>(<span class="fu">as.character</span>(restElecCardio)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>We will use <code>heartDisease</code> (0 = no, 1 = yes) as the outcome.</p>
+<p>We split our dataset into train and test set, we will keep 70% of the data in the training set and take out 30% for the test set. To keep track of our train and test samples, we will make an ID variable. Importantly, afterwards we must again ensure that all levels of each factor variable are represented in both sets.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Add ID column</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>HD_EN <span class="ot">&lt;-</span> HD_EN <span class="sc">%&gt;%</span> </span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">ID =</span> <span class="fu">paste0</span>(<span class="st">"W"</span>, <span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(HD_EN)))</span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Set seed</span></span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Training set</span></span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a>train <span class="ot">&lt;-</span> HD_EN <span class="sc">%&gt;%</span> </span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">sample_frac</span>(<span class="fl">0.70</span>) </span>
+<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Check group levels</span></span>
+<span id="cb16-13"><a href="#cb16-13" aria-hidden="true" tabindex="-1"></a>train <span class="sc">%&gt;%</span></span>
+<span id="cb16-14"><a href="#cb16-14" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">select</span>(<span class="fu">where</span>(is.factor)) <span class="sc">%&gt;%</span></span>
+<span id="cb16-15"><a href="#cb16-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="fu">everything</span>(), <span class="at">names_to =</span> <span class="st">"Variable"</span>, <span class="at">values_to =</span> <span class="st">"Level"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb16-16"><a href="#cb16-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(Variable, Level, <span class="at">name =</span> <span class="st">"Count"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 20 × 3
+   Variable       Level Count
+   &lt;chr&gt;          &lt;fct&gt; &lt;int&gt;
+ 1 DefectType     1        42
+ 2 DefectType     2       374
+ 3 DefectType     3       286
+ 4 chestPainType  0       330
+ 5 chestPainType  1       120
+ 6 chestPainType  2       196
+ 7 chestPainType  3        56
+ 8 exerciseAngina 0       478
+ 9 exerciseAngina 1       224
+10 fastingBP      0       601
+11 fastingBP      1       101
+12 heartDisease   0       333
+13 heartDisease   1       369
+14 restElecCardio 0       346
+15 restElecCardio 1       356
+16 sex            0       209
+17 sex            1       493
+18 slopePeakExST  0        50
+19 slopePeakExST  1       323
+20 slopePeakExST  2       329</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Test sett</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>test  <span class="ot">&lt;-</span> <span class="fu">anti_join</span>(HD_EN, train, <span class="at">by =</span> <span class="st">'ID'</span>) </span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Check group levels</span></span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>test <span class="sc">%&gt;%</span></span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">select</span>(<span class="fu">where</span>(is.factor)) <span class="sc">%&gt;%</span></span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="fu">everything</span>(), <span class="at">names_to =</span> <span class="st">"Variable"</span>, <span class="at">values_to =</span> <span class="st">"Level"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(Variable, Level, <span class="at">name =</span> <span class="st">"Count"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 20 × 3
+   Variable       Level Count
+   &lt;chr&gt;          &lt;fct&gt; &lt;int&gt;
+ 1 DefectType     1        18
+ 2 DefectType     2       163
+ 3 DefectType     3       120
+ 4 chestPainType  0       151
+ 5 chestPainType  1        47
+ 6 chestPainType  2        82
+ 7 chestPainType  3        21
+ 8 exerciseAngina 0       192
+ 9 exerciseAngina 1       109
+10 fastingBP      0       253
+11 fastingBP      1        48
+12 heartDisease   0       150
+13 heartDisease   1       151
+14 restElecCardio 0       148
+15 restElecCardio 1       153
+16 sex            0        89
+17 sex            1       212
+18 slopePeakExST  0        20
+19 slopePeakExST  1       144
+20 slopePeakExST  2       137</code></pre>
+</div>
+</div>
+<p>After dividing into train and test set, we pull out the outcome variable <code>heartDisease</code> into its own vector for both datasets, we name these: <code>y_train</code> and <code>y_test</code>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>y_train <span class="ot">&lt;-</span> train <span class="sc">%&gt;%</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pull</span>(heartDisease)</span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>y_test <span class="ot">&lt;-</span> test <span class="sc">%&gt;%</span> </span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pull</span>(heartDisease)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Next, we remove the outcome variable <code>heartDisease</code> from the train and test set, as well as <code>ID</code> as we should obviously not use this for training or testing.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>train <span class="ot">&lt;-</span> train <span class="sc">%&gt;%</span> </span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">select</span>(<span class="sc">!</span><span class="fu">c</span>(ID, heartDisease))</span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>test <span class="ot">&lt;-</span> test <span class="sc">%&gt;%</span> </span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">select</span>(<span class="sc">!</span><span class="fu">c</span>(ID, heartDisease))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Another benefit of a regularized regression, such as Elastic Net, is that this type of model can accommodate a categorical or a numeric variable as outcome, and handle a mix of these types as predictors, making it super flexible.</p>
+<p>However, if you do use categorical variables as your predictors within the <code>glmnet()</code> function, you need to ensure that your variables are <strong>Dummy-coded (one-hot encoded)</strong>. <strong>Dummy-coding</strong> means that categorical levels are converted into binary numeric indicators. You can do this ‘manually’, but there is a super easy way to do it with <code>model.matrix()</code> as shown below.</p>
+<p>Let’s create the model matrix needed for input to <code>glmnet()</code> and <code>cv.glmnet()</code> functions:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>modTrain <span class="ot">&lt;-</span> <span class="fu">model.matrix</span>(<span class="sc">~</span> ., <span class="at">data =</span> train)</span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(modTrain)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  (Intercept)         age sex1 chestPainType1 chestPainType2 chestPainType3
+1           1  0.28282315    0              0              0              0
+2           1  0.61350040    0              0              0              1
+3           1 -1.37056311    1              0              1              0
+4           1 -0.04785411    0              0              1              0
+5           1 -0.48875711    1              0              0              0
+6           1  0.83395190    1              0              1              0
+       restBP       chol fastingBP1 restElecCardio1       maxHR exerciseAngina1
+1 -0.66289286  2.0933271          0               1  0.60358256               1
+2  1.04975673 -0.1162960          0               1  0.95132211               0
+3 -0.09200966 -1.2792555          0               1  0.03850579               0
+4 -1.34795270  0.4070358          0               0  0.77745234               0
+5  0.70722681 -0.8916023          0               0 -1.00471285               1
+6 -0.09200966 -0.2907399          0               1 -0.13536398               0
+    STdepEKG slopePeakExST1 slopePeakExST2 nMajorVessels DefectType2
+1 -0.4012688              0              1    -0.7316143           1
+2 -0.1459612              0              1    -0.7316143           1
+3 -0.9118839              0              1    -0.7316143           1
+4 -0.9118839              0              1    -0.7316143           1
+5 -0.1459612              1              0    -0.7316143           0
+6  0.6199615              1              0     2.1787531           0
+  DefectType3
+1           0
+2           0
+3           0
+4           0
+5           1
+6           1</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>modTest <span class="ot">&lt;-</span> <span class="fu">model.matrix</span>(<span class="sc">~</span> ., <span class="at">data =</span> test)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Let’s create your Elastic Net Regression model with <code>glmnet()</code>.</p>
+<p>The parameter <span class="math inline">\(α\)</span> essentially tells <code>glmnet()</code> whether we are performing <strong>Ridge Regression</strong> (<span class="math inline">\(α\)</span> = 0), <strong>LASSO regression</strong> (<span class="math inline">\(α\)</span> = 1) or <strong>Elastic Net regression</strong> (0 &lt; <span class="math inline">\(α\)</span> &lt; 1 ). Furthermore, like for logistic regression we must specify if our outcome is; <code>binominal</code>, <code>multinomial</code>, <code>gaussian</code>, etc.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>EN_model <span class="ot">&lt;-</span> <span class="fu">glmnet</span>(modTrain, y_train, <span class="at">alpha =</span> <span class="fl">0.5</span>, <span class="at">family =</span> <span class="st">"binomial"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>As you may recall from the first part of this presentation, penalized regressions have a hyperparameter, <span class="math inline">\(λ\)</span>, which determines the strength of shrinkage of the coefficients. We can use <strong>k-fold cross-validation</strong> to find the value of lambda that minimizes the cross-validated prediction error. For classification problems such as the one we have here the prediction error is usually binominal deviance, which is related to log-loss (a measure of how well predicted probabilities match true class labels).</p>
+<p>Let’s use <code>cv.glmnet()</code> to attain the best value of the hyperparameter lambda (<span class="math inline">\(λ\)</span>). We should remember to set a seed for reproducible results.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>cv_model <span class="ot">&lt;-</span> <span class="fu">cv.glmnet</span>(modTrain, y_train, <span class="at">alpha =</span> <span class="fl">0.5</span>, <span class="at">family =</span> <span class="st">"binomial"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>We can plot all the values of lambda tested during cross validation by calling <code>plot()</code> on the output of your <code>cv.glmnet()</code> and we can extract the best lambda value from the <code>cv.glmnet()</code> model and save it as an object.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(cv_model)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="presentation5B_files/figure-html/unnamed-chunk-17-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>bestLambda <span class="ot">&lt;-</span> cv_model<span class="sc">$</span>lambda.min</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>The plot shows how the model’s prediction error changes with different values of lambda, <span class="math inline">\(λ\)</span>. It helps to identify the largest <span class="math inline">\(λ\)</span> we can choose before the penalty starts to hurt performance - too much shrinkage can remove important predictors, increasing prediction error.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>bestLambda</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.003892802</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="fu">log</span>(bestLambda)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] -5.548626</code></pre>
+</div>
+</div>
+<p>Time to see how well our model performs. Let’s predict if a individual is likely to have heart disease using our model and our test set.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>y_pred <span class="ot">&lt;-</span> <span class="fu">predict</span>(EN_model, <span class="at">s =</span> bestLambda, <span class="at">newx =</span> modTest, <span class="at">type =</span> <span class="st">'class'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Just like for the logistic regression model we can calculate the accuracy of the prediction by comparing it to <code>y_test</code> with <code>confusionMatrix()</code>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>y_pred <span class="ot">&lt;-</span> <span class="fu">as.factor</span>(y_pred)</span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a>caret<span class="sc">::</span><span class="fu">confusionMatrix</span>(y_pred, y_test)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Confusion Matrix and Statistics
+
+          Reference
+Prediction   0   1
+         0 124  21
+         1  26 130
+                                         
+               Accuracy : 0.8439         
+                 95% CI : (0.7978, 0.883)
+    No Information Rate : 0.5017         
+    P-Value [Acc &gt; NIR] : &lt;2e-16         
+                                         
+                  Kappa : 0.6877         
+                                         
+ Mcnemar's Test P-Value : 0.5596         
+                                         
+            Sensitivity : 0.8267         
+            Specificity : 0.8609         
+         Pos Pred Value : 0.8552         
+         Neg Pred Value : 0.8333         
+             Prevalence : 0.4983         
+         Detection Rate : 0.4120         
+   Detection Prevalence : 0.4817         
+      Balanced Accuracy : 0.8438         
+                                         
+       'Positive' Class : 0              
+                                         </code></pre>
+</div>
+</div>
+<p>Our model performs relatively well with a Balanced Accuracy of 0.84.</p>
+<p>Just like with linear or logistic regression, we can pull out the coefficients (weights) from our model to asses which variable(s) are the most explanatory for heart disease. We use the function <code>coef()</code> for this.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>coeffs <span class="ot">&lt;-</span> <span class="fu">coef</span>(EN_model, <span class="at">s =</span> bestLambda)</span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a>coeffs</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>19 x 1 sparse Matrix of class "dgCMatrix"
+                         s1
+(Intercept)      0.95882434
+(Intercept)      .         
+age             -0.05655191
+sex1            -1.43934620
+chestPainType1   1.25864082
+chestPainType2   1.78218231
+chestPainType3   1.54620643
+restBP          -0.39618395
+chol            -0.25008673
+fastingBP1       0.26580351
+restElecCardio1  0.48972814
+maxHR            0.46432403
+exerciseAngina1 -0.53276269
+STdepEKG        -0.48792249
+slopePeakExST1  -0.94223986
+slopePeakExST2   0.05350876
+nMajorVessels   -0.75218427
+DefectType2      0.01746632
+DefectType3     -1.22858328</code></pre>
+</div>
+</div>
+<p>First of all we see that none of our explanatory variables have been penalized so much that they have been removed, although some like <code>age</code> contribute very little to the model.</p>
+<p>Let’s order the coefficients by size and plot them to get an easy overview. First we do a little data wrangling to set up the dataset.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a>coeffsDat <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(<span class="fu">as.matrix</span>(coeffs)) <span class="sc">%&gt;%</span> </span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rownames_to_column</span>(<span class="at">var =</span> <span class="st">'VarName'</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(s1)) <span class="sc">%&gt;%</span>  </span>
+<span id="cb38-4"><a href="#cb38-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">str_detect</span>(VarName,<span class="st">"(Intercept)"</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb38-5"><a href="#cb38-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">VarName =</span> <span class="fu">factor</span>(VarName, <span class="at">levels=</span>VarName))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Now we can make a bar plot to visualize our results.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot</span></span>
+<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(coeffsDat, <span class="fu">aes</span>(<span class="at">x =</span> VarName, <span class="at">y =</span> s1)) <span class="sc">+</span></span>
+<span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">stat =</span> <span class="st">"identity"</span>, <span class="at">fill =</span> <span class="st">"#9395D3"</span>) <span class="sc">+</span></span>
+<span id="cb39-4"><a href="#cb39-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_flip</span>() <span class="sc">+</span></span>
+<span id="cb39-5"><a href="#cb39-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Feature Importance for Elastic Net"</span>, </span>
+<span id="cb39-6"><a href="#cb39-6" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Features"</span>, </span>
+<span id="cb39-7"><a href="#cb39-7" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Absolute Coefficients"</span>) <span class="sc">+</span></span>
+<span id="cb39-8"><a href="#cb39-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_classic</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="presentation5B_files/figure-html/unnamed-chunk-23-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>From the coefficients above it seem like cheat pain of any type (0 vs 1, 2 or 3) is a strong predictor of the outcome, e.g.&nbsp;heart disease. In opposition, having a <code>DefectType3</code> significantly lowers the predicted probability of belonging to the event class (1 = Heart Disease). Specifically, it decreases the log-odds of the outcome. A large negative value like this suggests that <code>DefectType3</code> is strongly associated with a lower likelihood of an event.</p>
+</section>
+</section>
+<section id="part-2-random-forest" class="level2">
+<h2 class="anchored" data-anchor-id="part-2-random-forest">Part 2: Random Forest</h2>
+<p>In this section, we will train a <strong>Random Forest (RF)</strong> model using the same dataset and outcome as above. <strong>Random Forest</strong> is a simple ensemble machine learning method that builds multiple decision trees and combines their predictions to improve accuracy and robustness. By averaging the results of many trees, it reduces overfitting and increases generalization, making it particularly effective for complex, <strong>non-linear</strong> relationships. One of its key strengths is its ability to handle large datasets with many features, while also providing insights into feature importance.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../figures/RandomForest.png" class="img-fluid quarto-figure quarto-figure-center figure-img"></p>
+</figure>
+</div>
+<p>Why do we want to try a <strong>RF</strong>? Unlike linear, logistic, or elastic net regression, RF does not assume a linear relationship between predictors and the outcome — it can naturally capture non-linear patterns and complex interactions between variables.</p>
+<p>Another advantage is that RF considers one predictor at a time when splitting, making it robust to differences in variable scales and allowing it to handle categorical variables directly, without requiring dummy coding.</p>
+<p>The downside to a is RF model is that it typically require a reasonably large sample size to perform well and can be less interpretable compared to regression-based approaches.</p>
+<section id="rf-model" class="level3">
+<h3 class="anchored" data-anchor-id="rf-model">RF Model</h3>
+<p>Luckily, we already have a good understanding of our dataset so we won’t spend time on exploratory data analysis. We have the data loaded already:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(HD)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 6 × 14
+    age sex   chestPainType restBP  chol fastingBP restElecCardio maxHR
+  &lt;dbl&gt; &lt;fct&gt; &lt;fct&gt;          &lt;dbl&gt; &lt;dbl&gt; &lt;fct&gt;     &lt;fct&gt;          &lt;dbl&gt;
+1    52 1     0                125   212 0         1                168
+2    53 1     0                140   203 1         0                155
+3    70 1     0                145   174 0         1                125
+4    61 1     0                148   203 0         1                161
+5    62 0     0                138   294 1         1                106
+6    58 0     0                100   248 0         0                122
+# ℹ 6 more variables: exerciseAngina &lt;fct&gt;, STdepEKG &lt;dbl&gt;,
+#   slopePeakExST &lt;fct&gt;, nMajorVessels &lt;dbl&gt;, DefectType &lt;fct&gt;,
+#   heartDisease &lt;fct&gt;</code></pre>
+</div>
+</div>
+<p>For RF there is no need to scale numeric predictors or dummy code categorical predictors However, we do need to covert the outcome variable <code>heartDisease</code> from binary (0 or 1) to a category name (this is required by the function we will use for random forest later).</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Mutate outcome to category and add ID column for splitting</span></span>
+<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a>HD_RF <span class="ot">&lt;-</span> HD <span class="sc">%&gt;%</span> </span>
+<span id="cb42-3"><a href="#cb42-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">heartDisease =</span> <span class="fu">as.factor</span>(<span class="fu">as.character</span>(<span class="fu">ifelse</span>(heartDisease <span class="sc">==</span> <span class="dv">1</span>, <span class="st">"yesHD"</span>, <span class="st">"noHD"</span>)))) <span class="sc">%&gt;%</span></span>
+<span id="cb42-4"><a href="#cb42-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">ID =</span> <span class="fu">paste0</span>(<span class="st">"W"</span>, <span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(HD)))</span>
+<span id="cb42-5"><a href="#cb42-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-6"><a href="#cb42-6" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(HD_RF<span class="sc">$</span>heartDisease)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] noHD  noHD  noHD  noHD  noHD  yesHD
+Levels: noHD yesHD</code></pre>
+</div>
+</div>
+<p>Then, we can split our dataset into training and test. You may notice that in opposition to the elastic net regression above, we keep the outcome variable in the dataset. Weather you need to keep it in or must pull it out depends on the R-package (functions) you are using.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Set seed</span></span>
+<span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb44-3"><a href="#cb44-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb44-4"><a href="#cb44-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Training set</span></span>
+<span id="cb44-5"><a href="#cb44-5" aria-hidden="true" tabindex="-1"></a>train <span class="ot">&lt;-</span> HD_RF <span class="sc">%&gt;%</span> </span>
+<span id="cb44-6"><a href="#cb44-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">sample_frac</span>(<span class="fl">0.70</span>) </span>
+<span id="cb44-7"><a href="#cb44-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb44-8"><a href="#cb44-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Test set</span></span>
+<span id="cb44-9"><a href="#cb44-9" aria-hidden="true" tabindex="-1"></a>test  <span class="ot">&lt;-</span> <span class="fu">anti_join</span>(HD_RF, train, <span class="at">by =</span> <span class="st">'ID'</span>) </span>
+<span id="cb44-10"><a href="#cb44-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb44-11"><a href="#cb44-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb44-12"><a href="#cb44-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb44-13"><a href="#cb44-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Remove the ID, which we do not want to use for training.</span></span>
+<span id="cb44-14"><a href="#cb44-14" aria-hidden="true" tabindex="-1"></a>train <span class="ot">&lt;-</span> train <span class="sc">%&gt;%</span> </span>
+<span id="cb44-15"><a href="#cb44-15" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">select</span>(<span class="sc">-</span>ID)</span>
+<span id="cb44-16"><a href="#cb44-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb44-17"><a href="#cb44-17" aria-hidden="true" tabindex="-1"></a>test <span class="ot">&lt;-</span> test <span class="sc">%&gt;%</span> </span>
+<span id="cb44-18"><a href="#cb44-18" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">select</span>(<span class="sc">-</span>ID)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Now let’s set up a Random Forest model with cross-validation - this way we do not overfit our model. The R-package <code>caret</code> has a very versatile function <code>trainControl()</code> which can be used with a range of resampling methods including bootstrapping, out-of-bag error, and leave-one-out cross-validation.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-3"><a href="#cb45-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Set up cross-validation: 5-fold CV</span></span>
+<span id="cb45-4"><a href="#cb45-4" aria-hidden="true" tabindex="-1"></a>RFcv <span class="ot">&lt;-</span> <span class="fu">trainControl</span>(</span>
+<span id="cb45-5"><a href="#cb45-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">method =</span> <span class="st">"cv"</span>,</span>
+<span id="cb45-6"><a href="#cb45-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">number =</span> <span class="dv">5</span>,</span>
+<span id="cb45-7"><a href="#cb45-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">classProbs =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb45-8"><a href="#cb45-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">summaryFunction =</span> twoClassSummary,</span>
+<span id="cb45-9"><a href="#cb45-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">savePredictions =</span> <span class="st">"final"</span></span>
+<span id="cb45-10"><a href="#cb45-10" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Now that we have set up parameters for cross validation in the <code>RFcv</code> object above, we can feed it to the <code>train()</code> function from the <code>caret</code> packages. We also specify the <strong>training data</strong>, the <strong>name of the outcome variable</strong>, and, importantly, that we want to perform random forest (<code>method = "rf"</code>) as the <code>train()</code> function can be used for different models.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Train Random Forest</span></span>
+<span id="cb46-2"><a href="#cb46-2" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb46-3"><a href="#cb46-3" aria-hidden="true" tabindex="-1"></a>rf_model <span class="ot">&lt;-</span> <span class="fu">train</span>(</span>
+<span id="cb46-4"><a href="#cb46-4" aria-hidden="true" tabindex="-1"></a>  heartDisease <span class="sc">~</span> .,</span>
+<span id="cb46-5"><a href="#cb46-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> train,</span>
+<span id="cb46-6"><a href="#cb46-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">method =</span> <span class="st">"rf"</span>,</span>
+<span id="cb46-7"><a href="#cb46-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">trControl =</span> RFcv,</span>
+<span id="cb46-8"><a href="#cb46-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">metric =</span> <span class="st">"ROC"</span>,</span>
+<span id="cb46-9"><a href="#cb46-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">tuneLength =</span> <span class="dv">5</span>          </span>
+<span id="cb46-10"><a href="#cb46-10" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb46-11"><a href="#cb46-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb46-12"><a href="#cb46-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb46-13"><a href="#cb46-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Model summary</span></span>
+<span id="cb46-14"><a href="#cb46-14" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(rf_model)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Random Forest 
+
+718 samples
+ 13 predictor
+  2 classes: 'noHD', 'yesHD' 
+
+No pre-processing
+Resampling: Cross-Validated (5 fold) 
+Summary of sample sizes: 575, 574, 574, 575, 574 
+Resampling results across tuning parameters:
+
+  mtry  ROC        Sens       Spec     
+   2    0.9916503  0.9464386  0.9587900
+   6    0.9978648  0.9802817  0.9670852
+  10    0.9976344  0.9830986  0.9670852
+  14    0.9972088  0.9830986  0.9670852
+  19    0.9966214  0.9830986  0.9616058
+
+ROC was used to select the optimal model using the largest value.
+The final value used for the model was mtry = 6.</code></pre>
+</div>
+</div>
+<p>Next, we can plot your model fit to see how many explanatory variables significantly contribute to our model.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb48"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Best parameters</span></span>
+<span id="cb48-2"><a href="#cb48-2" aria-hidden="true" tabindex="-1"></a>rf_model<span class="sc">$</span>bestTune</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  mtry
+2    6</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb50"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot performance</span></span>
+<span id="cb50-2"><a href="#cb50-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(rf_model)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="presentation5B_files/figure-html/unnamed-chunk-29-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Now, we use the test set to evaluate our model performance.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb51"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Predict class probabilities</span></span>
+<span id="cb51-2"><a href="#cb51-2" aria-hidden="true" tabindex="-1"></a>y_pred <span class="ot">&lt;-</span> <span class="fu">predict</span>(rf_model, <span class="at">newdata =</span> test, <span class="at">type =</span> <span class="st">"prob"</span>)</span>
+<span id="cb51-3"><a href="#cb51-3" aria-hidden="true" tabindex="-1"></a>y_pred</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>     noHD yesHD
+1   0.914 0.086
+2   0.980 0.020
+3   0.928 0.072
+4   0.922 0.078
+5   0.950 0.050
+6   1.000 0.000
+7   0.782 0.218
+8   0.998 0.002
+9   0.882 0.118
+10  0.038 0.962
+11  0.002 0.998
+12  0.014 0.986
+13  0.972 0.028
+14  0.006 0.994
+15  0.000 1.000
+16  0.126 0.874
+17  0.866 0.134
+18  0.950 0.050
+19  0.066 0.934
+20  0.982 0.018
+21  0.048 0.952
+22  0.918 0.082
+23  0.008 0.992
+24  0.912 0.088
+25  0.852 0.148
+26  0.916 0.084
+27  0.990 0.010
+28  0.976 0.024
+29  0.022 0.978
+30  0.706 0.294
+31  0.000 1.000
+32  0.026 0.974
+33  0.998 0.002
+34  0.206 0.794
+35  0.890 0.110
+36  0.002 0.998
+37  0.098 0.902
+38  0.076 0.924
+39  0.932 0.068
+40  0.942 0.058
+41  0.302 0.698
+42  0.996 0.004
+43  1.000 0.000
+44  0.024 0.976
+45  0.000 1.000
+46  0.066 0.934
+47  0.320 0.680
+48  0.730 0.270
+49  0.044 0.956
+50  0.044 0.956
+51  0.990 0.010
+52  0.002 0.998
+53  0.082 0.918
+54  0.022 0.978
+55  0.126 0.874
+56  0.076 0.924
+57  0.112 0.888
+58  0.010 0.990
+59  0.998 0.002
+60  0.084 0.916
+61  0.998 0.002
+62  0.054 0.946
+63  0.286 0.714
+64  0.006 0.994
+65  0.044 0.956
+66  0.060 0.940
+67  0.964 0.036
+68  0.022 0.978
+69  0.002 0.998
+70  0.000 1.000
+71  0.706 0.294
+72  1.000 0.000
+73  0.318 0.682
+74  0.960 0.040
+75  1.000 0.000
+76  0.006 0.994
+77  0.998 0.002
+78  0.988 0.012
+79  0.000 1.000
+80  0.942 0.058
+81  0.260 0.740
+82  0.000 1.000
+83  0.942 0.058
+84  0.036 0.964
+85  0.096 0.904
+86  0.912 0.088
+87  0.006 0.994
+88  0.034 0.966
+89  0.142 0.858
+90  0.976 0.024
+91  0.988 0.012
+92  0.474 0.526
+93  0.034 0.966
+94  0.024 0.976
+95  0.048 0.952
+96  0.984 0.016
+97  0.416 0.584
+98  0.002 0.998
+99  0.068 0.932
+100 0.996 0.004
+101 0.060 0.940
+102 0.902 0.098
+103 0.024 0.976
+104 0.000 1.000
+105 0.002 0.998
+106 0.014 0.986
+107 0.882 0.118
+108 0.202 0.798
+109 0.998 0.002
+110 0.064 0.936
+111 0.028 0.972
+112 0.016 0.984
+113 0.932 0.068
+114 0.958 0.042
+115 0.002 0.998
+116 0.992 0.008
+117 0.968 0.032
+118 0.898 0.102
+119 0.068 0.932
+120 0.026 0.974
+121 0.072 0.928
+122 0.980 0.020
+123 0.038 0.962
+124 1.000 0.000
+125 0.416 0.584
+126 0.072 0.928
+127 0.004 0.996
+128 0.036 0.964
+129 0.990 0.010
+130 0.984 0.016
+131 0.002 0.998
+132 0.008 0.992
+133 0.000 1.000
+134 0.990 0.010
+135 0.024 0.976
+136 0.076 0.924
+137 0.990 0.010
+138 0.000 1.000
+139 0.994 0.006
+140 0.868 0.132
+141 1.000 0.000
+142 0.084 0.916
+143 0.206 0.794
+144 0.036 0.964
+145 0.318 0.682
+146 0.230 0.770
+147 0.964 0.036
+148 0.008 0.992
+149 0.064 0.936
+150 0.002 0.998
+151 0.942 0.058
+152 0.142 0.858
+153 1.000 0.000
+154 0.956 0.044
+155 0.868 0.132
+156 0.980 0.020
+157 0.000 1.000
+158 0.928 0.072
+159 0.982 0.018
+160 0.882 0.118
+161 0.916 0.084
+162 0.286 0.714
+163 0.988 0.012
+164 0.012 0.988
+165 0.024 0.976
+166 0.014 0.986
+167 0.970 0.030
+168 0.230 0.770
+169 0.926 0.074
+170 1.000 0.000
+171 0.942 0.058
+172 0.000 1.000
+173 0.064 0.936
+174 0.976 0.024
+175 0.072 0.928
+176 0.002 0.998
+177 1.000 0.000
+178 0.868 0.132
+179 0.004 0.996
+180 1.000 0.000
+181 0.008 0.992
+182 0.006 0.994
+183 1.000 0.000
+184 0.962 0.038
+185 0.474 0.526
+186 0.938 0.062
+187 0.938 0.062
+188 0.978 0.022
+189 0.928 0.072
+190 0.942 0.058
+191 0.064 0.936
+192 0.964 0.036
+193 1.000 0.000
+194 0.002 0.998
+195 0.890 0.110
+196 0.854 0.146
+197 0.052 0.948
+198 0.000 1.000
+199 0.914 0.086
+200 0.024 0.976
+201 0.064 0.936
+202 0.060 0.940
+203 0.190 0.810
+204 0.998 0.002
+205 0.320 0.680
+206 0.962 0.038
+207 0.922 0.078
+208 0.000 1.000
+209 0.986 0.014
+210 0.002 0.998
+211 0.782 0.218
+212 0.998 0.002
+213 0.002 0.998
+214 0.994 0.006
+215 0.962 0.038
+216 0.004 0.996
+217 0.148 0.852
+218 1.000 0.000
+219 0.008 0.992
+220 0.474 0.526
+221 0.054 0.946
+222 0.016 0.984
+223 0.016 0.984
+224 0.932 0.068
+225 0.982 0.018
+226 0.014 0.986
+227 0.998 0.002
+228 0.982 0.018
+229 0.114 0.886
+230 0.048 0.952
+231 0.866 0.134
+232 0.026 0.974
+233 0.992 0.008
+234 1.000 0.000
+235 0.998 0.002
+236 0.994 0.006
+237 0.854 0.146
+238 1.000 0.000
+239 0.036 0.964
+240 0.730 0.270
+241 0.064 0.936
+242 0.302 0.698
+243 0.992 0.008
+244 0.014 0.986
+245 0.022 0.978
+246 0.002 0.998
+247 0.964 0.036
+248 0.026 0.974
+249 0.202 0.798
+250 0.148 0.852
+251 0.076 0.924
+252 0.988 0.012
+253 0.114 0.886
+254 0.230 0.770
+255 0.706 0.294
+256 0.980 0.020
+257 0.998 0.002
+258 0.976 0.024
+259 0.988 0.012
+260 0.026 0.974
+261 0.416 0.584
+262 0.852 0.148
+263 0.914 0.086
+264 0.060 0.940
+265 0.320 0.680
+266 0.040 0.960
+267 0.880 0.120
+268 0.084 0.916
+269 0.934 0.066
+270 0.988 0.012
+271 0.988 0.012
+272 0.782 0.218
+273 0.230 0.770
+274 0.854 0.146
+275 0.994 0.006
+276 0.004 0.996
+277 0.994 0.006
+278 0.004 0.996
+279 0.902 0.098
+280 0.978 0.022
+281 1.000 0.000
+282 0.014 0.986
+283 0.010 0.990
+284 0.954 0.046
+285 0.034 0.966
+286 0.190 0.810
+287 0.038 0.962
+288 0.974 0.026
+289 0.012 0.988
+290 0.034 0.966
+291 0.976 0.024
+292 0.318 0.682
+293 0.082 0.918
+294 0.032 0.968
+295 0.124 0.876
+296 0.956 0.044
+297 0.918 0.082
+298 0.006 0.994
+299 0.932 0.068
+300 0.260 0.740
+301 0.004 0.996
+302 0.054 0.946
+303 0.932 0.068
+304 0.922 0.078
+305 1.000 0.000
+306 1.000 0.000
+307 0.988 0.012</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb53"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a>y_pred <span class="ot">&lt;-</span> <span class="fu">as.factor</span>(<span class="fu">ifelse</span>(y_pred<span class="sc">$</span>yesHD <span class="sc">&gt;</span> <span class="fl">0.5</span>, <span class="st">"yesHD"</span>, <span class="st">"noHD"</span>))</span>
+<span id="cb53-2"><a href="#cb53-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb53-3"><a href="#cb53-3" aria-hidden="true" tabindex="-1"></a>caret<span class="sc">::</span><span class="fu">confusionMatrix</span>(y_pred, test<span class="sc">$</span>heartDisease)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Confusion Matrix and Statistics
+
+          Reference
+Prediction noHD yesHD
+     noHD   145     0
+     yesHD    0   162
+                                     
+               Accuracy : 1          
+                 95% CI : (0.9881, 1)
+    No Information Rate : 0.5277     
+    P-Value [Acc &gt; NIR] : &lt; 2.2e-16  
+                                     
+                  Kappa : 1          
+                                     
+ Mcnemar's Test P-Value : NA         
+                                     
+            Sensitivity : 1.0000     
+            Specificity : 1.0000     
+         Pos Pred Value : 1.0000     
+         Neg Pred Value : 1.0000     
+             Prevalence : 0.4723     
+         Detection Rate : 0.4723     
+   Detection Prevalence : 0.4723     
+      Balanced Accuracy : 1.0000     
+                                     
+       'Positive' Class : noHD       
+                                     </code></pre>
+</div>
+</div>
+<p>Lastly, we can extract the predictive variables with the greatest importance from your fit.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb55"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb55-1"><a href="#cb55-1" aria-hidden="true" tabindex="-1"></a>varImpOut <span class="ot">&lt;-</span> <span class="fu">varImp</span>(rf_model)</span>
+<span id="cb55-2"><a href="#cb55-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb55-3"><a href="#cb55-3" aria-hidden="true" tabindex="-1"></a>varImpOut<span class="sc">$</span>importance</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                   Overall
+age              70.849045
+sex1             23.642161
+chestPainType1    8.087142
+chestPainType2   33.997946
+chestPainType3   16.629339
+restBP           61.528727
+chol             67.870275
+fastingBP1        7.750244
+restElecCardio1  15.653588
+restElecCardio2   0.000000
+maxHR            95.828681
+exerciseAngina1  58.691710
+STdepEKG         76.039553
+slopePeakExST1   20.352056
+slopePeakExST2   33.839912
+nMajorVessels    91.600454
+DefectType1       3.171842
+DefectType2     100.000000
+DefectType3      67.485474</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb57"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb57-1"><a href="#cb57-1" aria-hidden="true" tabindex="-1"></a>varImportance <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(<span class="fu">as.matrix</span>(varImpOut<span class="sc">$</span>importance)) <span class="sc">%&gt;%</span> </span>
+<span id="cb57-2"><a href="#cb57-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rownames_to_column</span>(<span class="at">var =</span> <span class="st">'VarName'</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb57-3"><a href="#cb57-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(Overall))</span>
+<span id="cb57-4"><a href="#cb57-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb57-5"><a href="#cb57-5" aria-hidden="true" tabindex="-1"></a>varImportance</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>           VarName    Overall
+1      DefectType2 100.000000
+2            maxHR  95.828681
+3    nMajorVessels  91.600454
+4         STdepEKG  76.039553
+5              age  70.849045
+6             chol  67.870275
+7      DefectType3  67.485474
+8           restBP  61.528727
+9  exerciseAngina1  58.691710
+10  chestPainType2  33.997946
+11  slopePeakExST2  33.839912
+12            sex1  23.642161
+13  slopePeakExST1  20.352056
+14  chestPainType3  16.629339
+15 restElecCardio1  15.653588
+16  chestPainType1   8.087142
+17      fastingBP1   7.750244
+18     DefectType1   3.171842
+19 restElecCardio2   0.000000</code></pre>
+</div>
+</div>
+<p>Variable importance is based on how much each variable improves the model’s accuracy across splits. <code>DefectType2</code> might be involved in important interaction or split the data in a very informative way early in trees.</p>
+<p>In terms of comparing the outcome of the Random Forest model with the Elastic Net Regression, don’t expect identical top features — they reflect different model assumptions.</p>
+<p>Use both models as complementary tools:</p>
+<p><strong>EN: for interpretable, linear relationships</strong></p>
+<p><strong>RF: for capturing complex patterns and variable interactions</strong></p>
+<p>If a feature ranks high in both models, it’s a strong signal that the feature is important.</p>
+<p>If a feature ranks high in one but not the other — explore further: interaction? non-linearity? collinearity?</p>
+
+
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const disableStylesheet = (stylesheets) => {
+    for (let i=0; i < stylesheets.length; i++) {
+      const stylesheet = stylesheets[i];
+      stylesheet.rel = 'prefetch';
+    }
+  }
+  const enableStylesheet = (stylesheets) => {
+    for (let i=0; i < stylesheets.length; i++) {
+      const stylesheet = stylesheets[i];
+      stylesheet.rel = 'stylesheet';
+    }
+  }
+  const manageTransitions = (selector, allowTransitions) => {
+    const els = window.document.querySelectorAll(selector);
+    for (let i=0; i < els.length; i++) {
+      const el = els[i];
+      if (allowTransitions) {
+        el.classList.remove('notransition');
+      } else {
+        el.classList.add('notransition');
+      }
+    }
+  }
+  const toggleGiscusIfUsed = (isAlternate, darkModeDefault) => {
+    const baseTheme = document.querySelector('#giscus-base-theme')?.value ?? 'light';
+    const alternateTheme = document.querySelector('#giscus-alt-theme')?.value ?? 'dark';
+    let newTheme = '';
+    if(darkModeDefault) {
+      newTheme = isAlternate ? baseTheme : alternateTheme;
+    } else {
+      newTheme = isAlternate ? alternateTheme : baseTheme;
+    }
+    const changeGiscusTheme = () => {
+      // From: https://github.com/giscus/giscus/issues/336
+      const sendMessage = (message) => {
+        const iframe = document.querySelector('iframe.giscus-frame');
+        if (!iframe) return;
+        iframe.contentWindow.postMessage({ giscus: message }, 'https://giscus.app');
+      }
+      sendMessage({
+        setConfig: {
+          theme: newTheme
+        }
+      });
+    }
+    const isGiscussLoaded = window.document.querySelector('iframe.giscus-frame') !== null;
+    if (isGiscussLoaded) {
+      changeGiscusTheme();
+    }
+  }
+  const toggleColorMode = (alternate) => {
+    // Switch the stylesheets
+    const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
+    manageTransitions('#quarto-margin-sidebar .nav-link', false);
+    if (alternate) {
+      enableStylesheet(alternateStylesheets);
+      for (const sheetNode of alternateStylesheets) {
+        if (sheetNode.id === "quarto-bootstrap") {
+          toggleBodyColorMode(sheetNode);
+        }
+      }
+    } else {
+      disableStylesheet(alternateStylesheets);
+      toggleBodyColorPrimary();
+    }
+    manageTransitions('#quarto-margin-sidebar .nav-link', true);
+    // Switch the toggles
+    const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
+    for (let i=0; i < toggles.length; i++) {
+      const toggle = toggles[i];
+      if (toggle) {
+        if (alternate) {
+          toggle.classList.add("alternate");     
+        } else {
+          toggle.classList.remove("alternate");
+        }
+      }
+    }
+    // Hack to workaround the fact that safari doesn't
+    // properly recolor the scrollbar when toggling (#1455)
+    if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
+      manageTransitions("body", false);
+      window.scrollTo(0, 1);
+      setTimeout(() => {
+        window.scrollTo(0, 0);
+        manageTransitions("body", true);
+      }, 40);  
+    }
+  }
+  const isFileUrl = () => { 
+    return window.location.protocol === 'file:';
+  }
+  const hasAlternateSentinel = () => {  
+    let styleSentinel = getColorSchemeSentinel();
+    if (styleSentinel !== null) {
+      return styleSentinel === "alternate";
+    } else {
+      return false;
+    }
+  }
+  const setStyleSentinel = (alternate) => {
+    const value = alternate ? "alternate" : "default";
+    if (!isFileUrl()) {
+      window.localStorage.setItem("quarto-color-scheme", value);
+    } else {
+      localAlternateSentinel = value;
+    }
+  }
+  const getColorSchemeSentinel = () => {
+    if (!isFileUrl()) {
+      const storageValue = window.localStorage.getItem("quarto-color-scheme");
+      return storageValue != null ? storageValue : localAlternateSentinel;
+    } else {
+      return localAlternateSentinel;
+    }
+  }
+  const darkModeDefault = false;
+  let localAlternateSentinel = darkModeDefault ? 'alternate' : 'default';
+  // Dark / light mode switch
+  window.quartoToggleColorScheme = () => {
+    // Read the current dark / light value 
+    let toAlternate = !hasAlternateSentinel();
+    toggleColorMode(toAlternate);
+    setStyleSentinel(toAlternate);
+    toggleGiscusIfUsed(toAlternate, darkModeDefault);
+  };
+  // Ensure there is a toggle, if there isn't float one in the top right
+  if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
+    const a = window.document.createElement('a');
+    a.classList.add('top-right');
+    a.classList.add('quarto-color-scheme-toggle');
+    a.href = "";
+    a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+    const i = window.document.createElement("i");
+    i.classList.add('bi');
+    a.appendChild(i);
+    window.document.body.appendChild(a);
+  }
+  // Switch to dark mode if need be
+  if (hasAlternateSentinel()) {
+    toggleColorMode(true);
+  } else {
+    toggleColorMode(false);
+  }
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const onCopySuccess = function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
+  });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    // For code content inside modals, clipBoardJS needs to be initialized with a container option
+    // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>
