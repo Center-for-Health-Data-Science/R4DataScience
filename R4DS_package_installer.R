@@ -21,6 +21,16 @@ if(as.numeric(base::version$major) < 4){
   print('https://uvastatlab.github.io/phdplus/installR.html')
 }
 
+
+
+#####################
+# Ensure BiocManger is installed!
+#####################
+if (!require("BiocManager", quietly = TRUE))
+  install.packages("BiocManager")
+BiocManager::install(version = "3.21")
+
+
 #####################
 # create lists of packages to be installed and which ones are already installed
 #####################
