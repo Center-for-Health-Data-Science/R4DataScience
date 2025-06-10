@@ -24,21 +24,19 @@ website:
       - section: "Presentations"
         contents:
           - href: presentations/presentation1.qmd
-            text: "Presentation 1: Data Cleanup"
+            text: "Presentation 1: Data Cleaning"
           - href: presentations/presentation2.qmd
-            text: "Presentation 2: Advanced Data Wrangling" 
+            text: "Presentation 2: Summary Statistics and Data Wrangling" 
           - href: presentations/presentation3.qmd
             text: "Presentation 3: Exploratory Data Analysis"
-          - href: presentations/named_lists.qmd
-            text: "R Objects: Named Lists"            
-          - href: presentations/presentation4_main_script.qmd
-            text: "Presentation 4: Scripting in R" 
-          - href: presentations/presentation4_functions.qmd
-            text: "Presentation 4, Functions: Scripting in R"
-          - href: presentations/presentation5.qmd
-            text: "Presentation 5: Intro to Modelling in R"
-          - href: presentations/s4_objects.qmd
-            text: "R objects: S4 objects" 
+          - href: presentations/presentation4A.qmd
+            text: "Presentation 4A: Conditions and For-loops" 
+          - href: presentations/presentation4B.qmd
+            text: "Presentation 4B: Functions"
+          - href: presentations/presentation5A.qmd
+            text: "Presentation 5A: Intro to Regression in R"
+          - href: presentations/presentation5B.qmd
+            text: "Presentation 5B: Models and Model Evaluation in R" 
 
       - href: data/data.qmd
         text: "Data️"
@@ -48,38 +46,36 @@ website:
           - href: exercises/exercise0.qmd
             text: "Exercise 0: R script and Quarto"
           - href: exercises/exercise1.qmd
-            text: "Exercise 1: Data Cleanup"
+            text: "Exercise 1: Data Cleaning"
           - href: exercises/exercise2.qmd
-            text: "Exercise 2: Advanced Data Wrangling"
-          - href: exercises/exercise3A.qmd
-            text: "Exercise 3 A: Exploratory Data Analysis - Plotting"
-          - href: exercises/exercise3B.qmd
-            text: "Exercise 3 B: Exploratory Data Analysis - PCA"
-          - href: exercises/exercise4.qmd
-            text: "Exercise 4: Scripting in R"            
-          - href: exercises/exercise5.qmd
-            text: "Exercise 5: Modelling in R"
-          - href: exercises/exercise6.qmd
-            text: "Exercise 6: Understanding and improving an R script"
+            text: "Exercise 2: Summary Statistics and Data Wrangling"
+          - href: exercises/exercise3.qmd
+            text: "Exercise 3: Exploratory Data Analysis"
+          - href: exercises/exercise4A.qmd
+            text: "Exercise 4A: Conditions and For-loops" 
+          - href: exercises/exercise4B.qmd
+            text: "Exercise 4B: Functions" 
+          - href: exercises/exercise5A.qmd
+            text: "Exercise 5A: Intro to Regression in R"
+          - href: exercises/exercise5B.qmd
+            text: "Exercise 5B: Models and Model Evaluation in R" 
 
       - section: "Solutions"
         contents:
-            - href: solutions/solution1.qmd # solutions/solution_not_up.qmd #
-              text: "Exercise 1 - Solution"
-            - href: solutions/solution2.qmd # solutions/solution_not_up.qmd #
-              text: "Exercise 2 - Solution"
-            - href: solutions/solution3A.qmd # solutions/solution_not_up.qmd #
-              text: "Exercise 3 A - Solution"
-            - href: solutions/solution3B.qmd # solutions/solution_not_up.qmd #
-              text: "Exercise 3 B - Solution"
-            - href: solutions/solution4.qmd # solutions/solution_not_up.qmd #
-              text: "Exercise 4 - Solution"
-            - href: solutions/solution4_functions.qmd # solutions/solution_not_up.qmd #
-              text: "Exercise 4, Functions - Solution"
-            - href: solutions/solution5.qmd # solutions/solution_not_up.qmd #
-              text: "Exercise 5 - Solution"
-            - href: solutions/solution6.qmd # solutions/solution_not_up.qmd #
-              text: "Exercise 6 - Solution"
+          - href: solutions/solution1.qmd
+            text: "Solution 1: Data Cleaning"
+          - href: solutions/solution2.qmd
+            text: "Solution 2: Summary Statistics and Data Wrangling"
+          - href: solutions/solution3.qmd
+            text: "Solution 3: Exploratory Data Analysis"
+          - href: solutions/solution4A.qmd
+            text: "Solution 4A: Conditions and For-loops" 
+          - href: solutions/solution4B.qmd
+            text: "Solution 4B: Functions" 
+          - href: solutions/solution5A.qmd
+            text: "Solution 5A: Intro to Regression in R"
+          - href: solutions/solution5B.qmd
+            text: "Solution 5B: Models and Model Evaluation in R" 
 
       - section: "Cheat Sheets"
         contents:
