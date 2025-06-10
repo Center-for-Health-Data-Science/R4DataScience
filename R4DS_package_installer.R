@@ -28,7 +28,7 @@ if(as.numeric(base::version$major) < 4){
 #####################
 if (!require("BiocManager", quietly = TRUE))
   install.packages("BiocManager")
-BiocManager::install(version = "3.21")
+
 
 
 #####################
