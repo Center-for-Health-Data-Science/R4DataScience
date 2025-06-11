@@ -105,8 +105,7 @@ Here we count how many dead or alive individuals we have. This is useful for che
 ```{r}
 df_ov %>% 
   select(vital_status) %>% 
-  table(useNA = 'ifany') #%>% 
-  # barplot()
+  table(useNA = 'ifany') #%>% barplot()
 ```
 
 Looks like we have two groups of deceased and living. Let's have a closer look at the unique values of this variable.
@@ -126,7 +125,7 @@ str_trim(" Hello World!   ")
 
 Trim whitespace and standardize:
 
-Like other function, the `str_trim()` function can also be used inside the `mutate()` function to alter the data frame.
+Like other function, the `str_trim()` function can also be used inside the `mutate()` function to alter the dataframe.
 
 ```{r}
 df_ov <- df_ov %>% 
@@ -156,7 +155,7 @@ df_ov$vital_status %>%
 
 ### Step 1: Drop Variables with Too Many Missing Values
 
-1.  If a variable has more than \~10/30% missing data, it probably won’t be useful. Let’s remove those:
+1.  If a variable has more than \~20% missing data, it probably won’t be useful. Let’s remove those:
 
 `~ mean(is.na(.)) < threshold` explained: `~` = “Define a function” `.` is a placeholder for the input (in this case, a column of the data frame) `mean(is.na(.))` calculates the proportion of missing values `< threshold` returns TRUE or FALSE — which where() uses to decide if a column should be kept
 
@@ -214,14 +213,21 @@ df_ov <- df_ov %>%
 Sometimes we want to **set the order of factor levels manually**, especially if there's a natural or meaningful order (e.g., "low" → "high"): This helps when plotting or interpreting regression coefficients.
 
 ```{r}
-# Summary grade
+# Recode factor 
 df_ov$summarygrade %>% table()
 
 df_ov <- df_ov %>% 
   mutate(summarygrade = fct_recode(summarygrade, "high" = "HIGH"),
-         summarygrade = fct_recode(summarygrade, "low" = "LOW")) 
+         summarygrade = fct_recode(summarygrade, "low" = "LOW"))
 
 df_ov$summarygrade %>% table()
+
+# Reorder levels 
+levels(df_ov$summarygrade)
+
+df_ov$summarygrade <- factor(df_ov$summarygrade, levels = c('low', 'high'))
+
+levels(df_ov$summarygrade)
 ```
 
 ## Create New Variables
@@ -407,15 +413,21 @@ A **full join** keeps *everything* — all rows from both `df_ov_subset` and `df
 ```{r}
 df_ov_subset %>% 
   full_join(df_exp_subset, by = "unique_patient_ID")
+
+# N row:
+# union(df_exp_subset$unique_patient_ID, df_ov_subset$unique_patient_ID) %>% length()
 ```
 
 #### Inner Join
 
 An **inner join** keeps only the rows that appear in **both** data frames. So if an ID exists in one but not the other, it’s dropped.
 
-```{r,eval=FALSE, echo=TRUE}
+```{r}
 df_ov_subset %>% 
   inner_join(df_exp_subset, by = "unique_patient_ID")
+
+# N row:
+# intersect(df_exp_subset$unique_patient_ID, df_ov_subset$unique_patient_ID) %>% length()
 ```
 
 #### Left Join
@@ -425,15 +437,21 @@ A **left join** keeps **all rows from** `df_ov_subset`, and matches info from `d
 ```{r}
 df_ov_subset %>% 
   left_join(df_exp_subset, by = "unique_patient_ID")
+
+# N row:
+# df_ov_subset$unique_patient_ID %>% length()
 ```
 
 #### Right Join
 
 A **right join** is the opposite: it keeps **all rows from** `df_ov_subset` and adds matching data from `df_exp_subset` wherever it can.
 
-```{r, eval=FALSE, echo=TRUE}
+```{r}
 df_ov_subset %>% 
   right_join(df_exp_subset, by = "unique_patient_ID")
+
+# N row:
+# df_exp_subset$unique_patient_ID %>% length()
 ```
 
 ### Let's join our datasets
