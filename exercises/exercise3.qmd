@@ -8,9 +8,9 @@ project:
 
 ## Getting started
 
-1.  Load in the packages the you think you might need for this exercise. You will be doing PCA, so have a look at which packages we used in Presentation 3. No worries if you forget any, you always load then later on.
+1.  Load in the packages the you think you need for this exercise. You will be doing PCA, so have a look at which packages we used in Presentation 3. No worries if you forget any, you always load then later on.
 
-2.  Read in the joined diabetes data set you created in `Exercise 2`. If you did not make it all the way through exercise 2 you can find the dataset you need in `../data/exercise2_diabetes_glucose.xlsx`.
+2.  Read in the joined diabetes data set you created in Exercise 2. If you did not make it all the way through Exercise 2 you can find the dataset you need in `../data/exercise2_diabetes_glucose.xlsx`.
 
 3.  Have a look at the data type (`numeric`, `categorical`, `factor`) of each column to ensure these make sense. If need, convert variables to the correct (most logical) type.
 
@@ -18,7 +18,7 @@ project:
 
 Let's have a look at the distributions of the numerical variables.
 
-4.  Make histograms of the three `Glucose (mmol/L)` measurement variables in your dataset. What do you observe? Are these three variables normally distributed?
+4.  Make histograms of the three `Glucose (mmol/L)` measurements in your dataset. What do you observe? Are the three groups of values normally distributed?
 
 5.  Just as in question 3 above, make histograms of the three `Glucose (mmol/L)` measurement variables, BUT this time stratify your dataset by the variable `Diabetes`. How do your distributions look now?
 
@@ -32,44 +32,44 @@ Try: `facet_wrap(Var1 ~ Var2, scales = "free")`.
 
 7.  From the qq-norm plot above you will see that especially one of the variables seems to be far from normally distributed. What type of transformation could you potentially apply to this variable to make it normal? Transform and make a histogram or qqnorm plot. Did the transformation help?
 
-Luckily for us it is not a requirement for dimensionality reduction methods like PCA that neither variables nor their residuals were normally distibuted. Requirements for normality becomes important when performing statistical tests and modelling, including t-tests, ANOVA and regression models (more on this in part 5).
+Luckily for us it is not a requirement for dimensionality reduction methods like PCA that neither variables nor their residuals were normally distributed. Requirements for normality becomes important when performing statistical tests and modelling, including t-tests, ANOVA and regression models (more on this in part 5).
 
 ## Data Cleaning
 
 While PCA is very forgiving in terms of variable distributions, there are some things it does not handle well, including missing values and varying ranges of numeric variables. So, before you go on you need to do a little data management.
 
-6.  The `Glucose (mmol/L)` variable in the dataset which denotes the result of the `Oral Glucose Tolerance Test` with measurements at times the `0, 60, 120 min` should be separated out into three columns, one for each time point.
+8.  The `Glucose (mmol/L)` variable in the dataset which denotes the result of the `Oral Glucose Tolerance Test` with measurements at times the `0`, `60`, `120` min should be separated out into three columns, one for each time point.
 
 ::: {.callout-tip collapse="true"}
 ## Hint
 
-pivot_wider(names_from = ..., values_from = ..., names_prefix = 'Measurement\_')
+`pivot_wider(names_from = ..., values_from = ..., names_prefix = 'Measurement\_')`
 :::
 
-8.  Remove any missing values from your dataset.
+9.  Remove any missing values from your dataset.
 
-9.  Extract all numeric variables AND scale these so they have comparable ranges. This numeric dataset you will use for PCA.
+10.  Extract all numeric variables AND scale these so they have comparable ranges. This numeric dataset you will use for PCA.
 
-10. Extract all categorical variables from your dataset and save them to a new object. You will use these as labels for the PCA.
+11. Extract all categorical variables from your dataset and save them to a new object. You will use these as labels for the PCA.
 
 ## Principal Component Analysis
 
-11. Calculate the PCs on your numeric dataset using the function `PCA()` from the `FactoMineR` package. Note that you should set `scale.unit = FALSE` as you have already scaled your dataset.
+12. Calculate the PCs on your numeric dataset using the function `PCA()` from the `FactoMineR` package. Note that you should set `scale.unit = FALSE` as you have already scaled your dataset.
 
-12. Make a plot that shows how much variance is captured by each component (in each dimension). There a two ways of making this plot, either you can use the function `fviz_screeplot()` from the `factoextra` package as we did in the exercise. OR, you can use ggplot2, by extracting the `res.pca$eig` and plotting the `percentage of variance` column.
+13. Make a plot that shows how much variance is captured by each component (in each dimension). There are two ways of making this plot: either you can use the function `fviz_screeplot()` from the `factoextra` package as we did in the exercise OR, you can use ggplot2, by extracting the `res.pca$eig` and plotting the `percentage of variance` column.
 
-13. Now, make a biplot (the round one with the arrows we showed in the presentation). Although this type of plot is a little complicated with ggplot alone, so either use the `fviz_pca_var()` function from the `factoextra` package we showed in the presentation, or if you want to challenge yourself and try another function you can look `autoplot()` from the `ggfortify` package.
+14. Now, make a biplot (the round one with the arrows we showed in the presentation). This type of plot is a little complicated with ggplot alone, so either use the `fviz_pca_var()` function from the `factoextra` package we showed in the presentation, or - if you want to challenge yourself - try `autoplot()` from the `ggfortify` package.
 
-14. Have a look at the `var$contrib` from your PCA object and compare it to the biplot, what do they tell you, i.e. which variables contribute the most to PC1 (dim1) and PC2 (dim2)? Also, look at the correlation matrix between variables in each component (`$var$cor`), what can you conclude from this?
+15. Have a look at the `$var$contrib` from your PCA object and compare it to the biplot, what do they tell you, i.e. which variables contribute the most to PC1 (dim1) and PC2 (dim2)? Also, look at the correlation matrix between variables in each component (`$var$cor`), what can you conclude from this?
 
-15. Plot your samples in the new dimensions, i.e. PC1 (dim1) vs PC2 (dim2), with the function `fviz_pca_ind()`. Add color and/or labels to the points using categorical variables you extracted above. What pattern of clustering (in any) do you observe?
+16. Plot your samples in the new dimensions, i.e. PC1 (dim1) vs PC2 (dim2), with the function `fviz_pca_ind()`. Add color and/or labels to the points using categorical variables you extracted above. What pattern of clustering (in any) do you observe?
 
-16. Try to call `var$cos2` from your PCA object. What does it tell you about the first 5 components. Are there any of these, in addition to Dim 1 and Dim 2, which seem to capture some variance? If so, try to plot these components and overlay the plot with the categorical variables from above to figure out which it might be capturing.
+17. Try to call `$var$cos2` from your PCA object. What does it tell you about the first 5 components? Are there any of these, in addition to Dim 1 and Dim 2, which seem to capture some variance? If so, try to plot these components and overlay the plot with the categorical variables from above to figure out which it might be capturing.
 
 The `Oral Glucose Tolerance Test` is the one used to produce the OGTT measurements `(0, 60, 120)`. As these measurement are directly used to diagnose diabetes we are not surprised that they separate the dataset well - we are being completely bias.
 
-17. Omit the Glucose measurement columns, calculate a PCA and create the plot above. Do do the remaining variables still capture the Diabetes pattern?
+18. Omit the Glucose measurement columns, calculate a PCA and create the plot above. Do the remaining variables still capture the `Diabetes` pattern?
 
-18. From the exploratory analysis you have performed, which variables (numeric and/or categorical) would you as a minimum include in a model for prediction of `Diabetes`?
+19. From the exploratory analysis you have performed, which variables (numeric and/or categorical) would you as a minimum include in a model for prediction of `Diabetes`?
 
 **N.B** again you should not include the actual glucose measurement variables as they where used to the define the outcome you are looking at.

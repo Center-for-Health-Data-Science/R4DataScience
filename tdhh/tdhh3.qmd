@@ -8,7 +8,7 @@ project:
 
 ## Getting started
 
-1.  Load in the packages the you think you might need for this exercise. You will be doing PCA, so have a look at which packages we used in Presentation 3. No worries if you forget any, you always load then later on.
+1.  Load in the packages the you think you need for this exercise. You will be doing PCA, so have a look at which packages we used in Presentation 3. No worries if you forget any, you always load then later on.
 
 ```{r message=FALSE, warning=FALSE}
 library(tidyverse)
@@ -17,7 +17,7 @@ library(FactoMineR)
 library(factoextra)
 ```
 
-2.  Read in the joined diabetes data set you created in `Exercise 2`. If you did not make it all the way through exercise 2 you can find the dataset you need in `../data/exercise2_diabetes_glucose.xlsx`.
+2.  Read in the joined diabetes data set you created in Exercise 2. If you did not make it all the way through Exercise 2 you can find the dataset you need in `../data/exercise2_diabetes_glucose.xlsx`.
 
 3.  Have a look at the data type (`numeric`, `categorical`, `factor`) of each column to ensure these make sense. If need, convert variables to the correct (most logical) type.
 
@@ -31,7 +31,7 @@ diabetes_glucose
 
 Let's have a look at the distributions of the numerical variables.
 
-4.  Make histograms of the three `Glucose (mmol/L)` measurement variables in your dataset. What do you observe? Are these three variables normally distributed?
+4.  Make histograms of the three `Glucose (mmol/L)` measurements in your dataset. What do you observe? Are the three groups of values normally distributed?
 
 ```{r}
 ggplot(diabetes_glucose, aes(x = `Glucose (mmol/L)`)) +
@@ -87,13 +87,13 @@ ggplot(diabetes_glucose, aes(x = log2(Age))) +
   theme_minimal()
 ```
 
-Luckily for us it is not a requirement for dimensionality reduction methods like PCA that neither variables nor their residuals were normally distibuted. Requirements for normality becomes important when performing statistical tests and modelling, including t-tests, ANOVA and regression models (more on this in part 5).
+Luckily for us it is not a requirement for dimensionality reduction methods like PCA that neither variables nor their residuals were normally distributed. Requirements for normality becomes important when performing statistical tests and modelling, including t-tests, ANOVA and regression models (more on this in part 5).
 
 ## Data Cleaning
 
 While PCA is very forgiving in terms of variable distributions, there are some things it does not handle well, including missing values and varying ranges of numeric variables. So, before you go on you need to do a little data management.
 
-6.  The `Glucose (mmol/L)` variable in the dataset which denotes the result of the `Oral Glucose Tolerance Test` with measurements at times the `0, 60, 120 min` should be separated out into three columns, one for each time point.
+8.  The `Glucose (mmol/L)` variable in the dataset which denotes the result of the `Oral Glucose Tolerance Test` with measurements at times the `0`, `60`, `120` min should be separated out into three columns, one for each time point.
 
 ```{r, eval=FALSE}
 diabetes_glucose <- diabetes_glucose %>% 
@@ -104,35 +104,35 @@ diabetes_glucose <- diabetes_glucose %>%
 diabetes_glucose
 ```
 
-8.  Remove any missing values from your dataset.
+9.  Remove any missing values from your dataset.
 
 ```{r}
 diabetes_glucose <- diabetes_glucose %>% 
-  drop_na(.)
+  drop_na()
 ```
 
-9.  Extract all numeric variables AND scale these so they have comparable ranges. This numeric dataset you will use for PCA.
+10.  Extract all numeric variables AND scale these so they have comparable ranges. This numeric dataset you will use for PCA.
 
 ```{r}
 diab_glu_num <- diabetes_glucose %>% 
-  dplyr::select_if(is.numeric) %>%
-  scale(.)
+  dplyr::select(where(is.numeric)) %>%
+  scale()
 
 head(diab_glu_num)
 ```
 
-10. Extract all categorical variables from your dataset and save them to a new object. You will use these as labels for the PCA.
+11. Extract all categorical variables from your dataset and save them to a new object. You will use these as labels for the PCA.
 
 ```{r}
 diab_glu_cat <- diabetes_glucose %>% 
-  dplyr::select_if(is.character)
+  dplyr::select(where(is.character))
 
 head(diab_glu_cat)
 ```
 
 ## Principal Component Analysis
 
-11. Calculate the PCs on your numeric dataset using the function `PCA()` from the `FactoMineR` package. Note that you should set `scale.unit = FALSE` as you have already scaled your dataset.
+12. Calculate the PCs on your numeric dataset using the function `PCA()` from the `FactoMineR` package. Note that you should set `scale.unit = FALSE` as you have already scaled your dataset.
 
 ```{r}
 res.pca <- PCA(diab_glu_num, graph = FALSE)
@@ -141,7 +141,7 @@ res.pca
 
 ```
 
-12. Make a plot that shows how much variance is captured by each component (in each dimension). There a two ways of making this plot, either you can use the function `fviz_screeplot()` from the `factoextra` package as we did in the exercise. OR, you can use ggplot2, by extracting the `res.pca$eig` and plotting the `percentage of variance` column.
+13. Make a plot that shows how much variance is captured by each component (in each dimension). There are two ways of making this plot: either you can use the function `fviz_screeplot()` from the `factoextra` package as we did in the exercise OR, you can use ggplot2, by extracting the `res.pca$eig` and plotting the `percentage of variance` column.
 
 ```{r}
 PC_df <- as.data.frame(res.pca$eig) %>% 
@@ -156,7 +156,7 @@ ggplot(PC_df, aes(x=components, y=`percentage of variance`, fill = eigenvalue)) 
   geom_text(aes(label = labs), vjust = -0.5)
 ```
 
-13. Now, make a biplot (the round one with the arrows we showed in the presentation). Although this type of plot is a little complicated with ggplot alone, so either use the `fviz_pca_var()` function from the `factoextra` package we showed in the presentation, or if you want to challenge yourself and try another function you can look `autoplot()` from the `ggfortify` package.
+14. Now, make a biplot (the round one with the arrows we showed in the presentation). This type of plot is a little complicated with ggplot alone, so either use the `fviz_pca_var()` function from the `factoextra` package we showed in the presentation, or - if you want to challenge yourself - try `autoplot()` from the `ggfortify` package.
 
 ```{r}
 fviz_pca_var(res.pca, col.var = "cos2",
@@ -164,9 +164,9 @@ fviz_pca_var(res.pca, col.var = "cos2",
              repel = TRUE) # Avoid text overlapping)
 ```
 
-14. Have a look at the `var$contrib` from your PCA object and compare it to the biplot, what do they tell you, i.e. which variables contribute the most to PC1 (dim1) and PC2 (dim2)? Also, look at the correlation matrix between variables in each component (`$var$cor`), what can you conclude from this?
+15. Have a look at the `$var$contrib` from your PCA object and compare it to the biplot, what do they tell you, i.e. which variables contribute the most to PC1 (dim1) and PC2 (dim2)? Also, look at the correlation matrix between variables in each component (`$var$cor`), what can you conclude from this?
 
-15. Plot your samples in the new dimensions, i.e. PC1 (dim1) vs PC2 (dim2), with the function `fviz_pca_ind()`. Add color and/or labels to the points using categorical variables you extracted above. What pattern of clustering (in any) do you observe?
+16. Plot your samples in the new dimensions, i.e. PC1 (dim1) vs PC2 (dim2), with the function `fviz_pca_ind()`. Add color and/or labels to the points using categorical variables you extracted above. What pattern of clustering (in any) do you observe?
 
 ```{r}
 p1 <- fviz_pca_ind(res.pca, 
@@ -181,7 +181,7 @@ p1
 
 ```
 
-16. Try to call `var$cos2` from your PCA object. What does it tell you about the first 5 components. Are there any of these, in addition to Dim 1 and Dim 2, which seem to capture some variance? If so, try to plot these components and overlay the plot with the categorical variables from above to figure out which it might be capturing.
+17. Try to call `$var$cos2` from your PCA object. What does it tell you about the first 5 components? Are there any of these, in addition to Dim 1 and Dim 2, which seem to capture some variance? If so, try to plot these components and overlay the plot with the categorical variables from above to figure out which it might be capturing.
 
 ```{r}
 p1 <- fviz_pca_ind(res.pca, 
@@ -198,12 +198,12 @@ p1
 
 The `Oral Glucose Tolerance Test` is the one used to produce the OGTT measurements `(0, 60, 120)`. As these measurement are directly used to diagnose diabetes we are not surprised that they separate the dataset well - we are being completely bias.
 
-17. Omit the Glucose measurement columns, calculate a PCA and create the plot above. Do do the remaining variables still capture the Diabetes pattern?
+18. Omit the Glucose measurement columns, calculate a PCA and create the plot above. Do the remaining variables still capture the `Diabetes` pattern?
 
 ```{r eval=FALSE}
 diab_glu_num <- diabetes_glucose %>% 
   dplyr::select(Age,BloodPressure, BMI, PhysicalActivity, Serum_ca2) %>%
-  scale(.)
+  scale()
 
 head(diab_glu_num)
 ```
@@ -231,7 +231,7 @@ fviz_pca_ind(res.pca,
   theme(legend.position = "bottom")
 ```
 
-18. From the exploratory analysis you have performed, which variables (numeric and/or categorical) would you as a minimum include in a model for prediction of `Diabetes`? **N.B** again you should not include the actual glucose measurement variables as they where used to the define the outcome you are looking at.
+19. From the exploratory analysis you have performed, which variables (numeric and/or categorical) would you as a minimum include in a model for prediction of `Diabetes`? **N.B** again you should not include the actual glucose measurement variables as they where used to the define the outcome you are looking at.
 
 ```{r}
 diab_model <- lm(Diabetes ~ PhysicalActivity + BMI + BloodPressure + Smoker, data = diabetes_glucose)
