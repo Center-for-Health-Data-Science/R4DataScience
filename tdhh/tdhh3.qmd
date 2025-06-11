@@ -1,24 +1,25 @@
 ---
-title: "Exercise 3 B - Solutions"
+title: "Exercise 3: Exploratory Data Analysis - Solution"
 format: html
 project:
  type: website
  output-dir: ../docs
 ---
 
-## Getting started 
+## Getting started
 
-## Getting started 
-
-1. Load packages the you think you might immediately need, e.g. `tidyverse`. No worries if you forget any, you always load then later on.  
+1.  Load in the packages the you think you might need for this exercise. You will be doing PCA, so have a look at which packages we used in Presentation 3. No worries if you forget any, you always load then later on.
 
 ```{r message=FALSE, warning=FALSE}
 library(tidyverse)
 library(readxl)
+library(FactoMineR)
+library(factoextra)
 ```
 
+2.  Read in the joined diabetes data set you created in `Exercise 2`. If you did not make it all the way through exercise 2 you can find the dataset you need in `../data/exercise2_diabetes_glucose.xlsx`.
 
-2. Read in the joined diabetes data set you created in `Exercise 2`. If you did not make it all the way through exercise 2 you can find the dataset you need in `../data/exercise2_diabetes_glucose.xlsx`. Have a look at the data type (`numeric`, `categorical`, `factor`) of each column to ensure these make sense. If need, convert variables to the correct (most logical) type.
+3.  Have a look at the data type (`numeric`, `categorical`, `factor`) of each column to ensure these make sense. If need, convert variables to the correct (most logical) type.
 
 ```{r}
 diabetes_glucose <- read_xlsx('../data/exercise2_diabetes_glucose.xlsx')
@@ -26,219 +27,215 @@ diabetes_glucose <- read_xlsx('../data/exercise2_diabetes_glucose.xlsx')
 diabetes_glucose
 ```
 
-As you will see at the end of the dataset you have `Measurement` and `Glucose (mmol/L)`. The `Measurement` variable actually denote at what time the `Glucose (mmol/L)` value was taken. We would like to separate these values out into three columns. 
+## Check Data Distributions
 
-3. Extract the `Glucose (mmol/L)` column into three columns. Below you have some pseudo code as help:
+Let's have a look at the distributions of the numerical variables.
+
+4.  Make histograms of the three `Glucose (mmol/L)` measurement variables in your dataset. What do you observe? Are these three variables normally distributed?
+
+```{r}
+ggplot(diabetes_glucose, aes(x = `Glucose (mmol/L)`)) +
+  geom_histogram(bins = 30, fill = "#482878FF", color = "white") +
+  theme_minimal() +
+  facet_wrap(vars(Measurement), nrow = 2, scales = "free")
+```
+
+5.  Just as in question 3 above, make histograms of the three `Glucose (mmol/L)` measurement variables, BUT this time stratify your dataset by the variable `Diabetes`. How do your distributions look now?
+
+::: {.callout-tip collapse="true"}
+## Hint
+
+Try: `facet_wrap(Var1 ~ Var2, scales = "free")`.
+:::
+
+```{r}
+ggplot(diabetes_glucose, aes(x = `Glucose (mmol/L)`)) +
+  geom_histogram(bins = 30, fill = "#482878FF", color = "white") +
+  theme_minimal() +
+  facet_wrap(Diabetes ~ Measurement, nrow = 2, scales = "free")
+
+```
+
+6.  Make a qqnorm plot for the other numeric variables; `Age`, `Bloodpressure`, `BMI`, `PhysicalActivity` and `Serum_ca2`. What do the plots tell you?
+
+```{r}
+df_long <- diabetes_glucose %>% 
+  dplyr::select(Age, BloodPressure, BMI, PhysicalActivity, Serum_ca2)  %>%
+  pivot_longer(cols = everything(),
+               names_to = "variable", 
+               values_to = "value")
+
+# QQ plot
+ggplot(df_long, aes(sample = value)) + 
+  geom_qq_line(color = "magenta4") +
+  geom_qq(alpha = 0.7, size = 0.5) +
+  labs(title = "QQ Plot for Gene Expression",
+       x = "Theoretical Quantiles", y = "Sample Quantiles") +
+  theme_minimal() +
+  facet_wrap(vars(variable), nrow = 2, scales = "free")
+```
+
+7.  From the qq-norm plot above you will see that especially one of the variables seems to be far from normally distributed. What type of transformation could you potentially apply to this variable to make it normal? Transform and make a histogram or qqnorm plot. Did the transformation help?
+
+```{r}
+ggplot(diabetes_glucose, aes(x = Age)) +
+  geom_histogram(bins = 30, fill = "#A8D898", color = "white") +
+  theme_minimal()
+
+ggplot(diabetes_glucose, aes(x = log2(Age))) +
+  geom_histogram(bins = 30, fill = "#A8D898", color = "white") +
+  theme_minimal()
+```
+
+Luckily for us it is not a requirement for dimensionality reduction methods like PCA that neither variables nor their residuals were normally distibuted. Requirements for normality becomes important when performing statistical tests and modelling, including t-tests, ANOVA and regression models (more on this in part 5).
+
+## Data Cleaning
+
+While PCA is very forgiving in terms of variable distributions, there are some things it does not handle well, including missing values and varying ranges of numeric variables. So, before you go on you need to do a little data management.
+
+6.  The `Glucose (mmol/L)` variable in the dataset which denotes the result of the `Oral Glucose Tolerance Test` with measurements at times the `0, 60, 120 min` should be separated out into three columns, one for each time point.
 
 ```{r, eval=FALSE}
 diabetes_glucose <- diabetes_glucose %>% 
   pivot_wider(names_from = Measurement,
               values_from = `Glucose (mmol/L)`,
               names_prefix = 'Measurement_')
+
+diabetes_glucose
 ```
 
-
-## Check Data Distributions
-
-Lets have a look at the distributions of our numerical variables.
-
-4. Make histograms of the three `Glucose (mmol/L)` measurement variables in your dataset. What do you observe? Are these three variables normally distributed?
-```{r}
-ggplot(diabetes_glucose, aes(x = `Glucose (mmol/L)`)) +
-  geom_histogram(bins = 30, fill = "#482878FF", color = "white") +
-  theme_minimal() +
-  facet_wrap(vars(Measurement), nrow = 2, scales = "free") +
-  labs(title = "Distribution of Gene Expression")
-
-```
-
-
-5. Just as in question 3 above, histograms of the three `Glucose (mmol/L)` measurement variables in your dataset, BUT this time stratify your dataset by the variable `Diabetes`. How do your distributions look now?
-
-
-::: {.callout-tip collapse="true"}
-## Hint
-Instead of using `facet_wrap()` try: `facet_grid(Diabetes ~ variable, scales = "free")`.
-:::
-
+8.  Remove any missing values from your dataset.
 
 ```{r}
-ggplot(diabetes_glucose, aes(x = `Glucose (mmol/L)`)) +
-  geom_histogram(bins = 30, fill = "#482878FF", color = "white") +
-  theme_minimal() +
-  facet_wrap(Diabetes ~ Measurement, nrow = 2, scales = "free") +
-  labs(title = "Distribution of Gene Expression")
-
+diabetes_glucose <- diabetes_glucose %>% 
+  drop_na(.)
 ```
 
-6. Make a qqnorm plot for the variables `Age`, `Bloodpressure`, `BMI` and `PhysicalActivity`. What do they tell you?
+9.  Extract all numeric variables AND scale these so they have comparable ranges. This numeric dataset you will use for PCA.
 
 ```{r}
-par(mfrow=c(2,2))
-qqnorm(diabetes_glucose$Age, pch = 1)
-qqline(diabetes_glucose$Age, col = "red", lwd = 2)
+diab_glu_num <- diabetes_glucose %>% 
+  dplyr::select_if(is.numeric) %>%
+  scale(.)
 
-qqnorm(diabetes_glucose$BloodPressure, pch = 1)
-qqline(diabetes_glucose$BloodPressure, col = "red", lwd = 2)
-
-qqnorm(diabetes_glucose$BMI, pch = 1)
-qqline(diabetes_glucose$BMI, col = "red", lwd = 2)
-
-qqnorm(diabetes_glucose$PhysicalActivity, pch = 1)
-qqline(diabetes_glucose$PhysicalActivity, col = "red", lwd = 2)
+head(diab_glu_num)
 ```
 
+10. Extract all categorical variables from your dataset and save them to a new object. You will use these as labels for the PCA.
 
+```{r}
+diab_glu_cat <- diabetes_glucose %>% 
+  dplyr::select_if(is.character)
 
-
-## Plotting - Part 3: PCA 
-
-For this exercise we will use this [tutorial](https://cran.r-project.org/web/packages/ggfortify/vignettes/plot_pca.html) to make a principal component analysis (PCA). First, we perform some preprocessing to get our data into the right format. 
-
-3. Let's start by unnesting the OGTT data and using pivot wider so that each Glucose measurement time point gets its own column (again). 
-
-```{r eval=FALSE}
-diabetes_glucose_unnest <-  diabetes_glucose %>%
-  unnest(OGTT) %>%
-  pivot_wider(names_from = Measurement,
-              values_from = `Glucose (mmol/L)`,
-              names_prefix = "Glucose_")
-
-diabetes_glucose_unnest
+head(diab_glu_cat)
 ```
 
-4. Have a look at your unnested diabetes data set. Can you use all the variables to perform PCA? Subset the dataset to only include the relevant variables.
+## Principal Component Analysis
 
-::: {.callout-tip collapse="true"}
-## Hint
-PCA can only be performed on numerical values. Extract these (except ID!) from the dataset. 
-Numerical columns can easily be selected with the `where(is.numeric)` helper.
-:::
+11. Calculate the PCs on your numeric dataset using the function `PCA()` from the `FactoMineR` package. Note that you should set `scale.unit = FALSE` as you have already scaled your dataset.
 
+```{r}
+res.pca <- PCA(diab_glu_num, graph = FALSE)
 
-Extract the numerical columns, including the OGTT measurements. 
+res.pca
 
-```{r eval=FALSE}
-diabetes_glucose_numerical <- diabetes_glucose_unnest %>%
-  select(where(is.numeric))
-
-diabetes_glucose_numerical
 ```
 
+12. Make a plot that shows how much variance is captured by each component (in each dimension). There a two ways of making this plot, either you can use the function `fviz_screeplot()` from the `factoextra` package as we did in the exercise. OR, you can use ggplot2, by extracting the `res.pca$eig` and plotting the `percentage of variance` column.
 
-5. PCA cannot handle NA's in the dataset. Remove all rows with NA in any column in your numerical subset. 
-Then, go back to the original unnested data `diabetes_glucose_unnest` (or what you have called it) and also here drop rows that have NAs in the numerical columns (so the same rows you dropped from the numeric subset).This is important because we want to use (categorical) columns present in the original data to later color the resulting PCA, so the two dataframes (original and only numeric columns) need to be aligned and contain the same rows.
+```{r}
+PC_df <- as.data.frame(res.pca$eig) %>% 
+  rownames_to_column(var = 'components')
 
+labs <- round(PC_df$`percentage of variance`, digits = 2) %>% 
+  as.character()
 
-```{r eval=FALSE}
-diabetes_glucose_numerical <- drop_na(diabetes_glucose_numerical)
-nrow(diabetes_glucose_numerical)
-```
-
-Align original data.
-
-```{r eval=FALSE}
-diabetes_glucose_unnest <- diabetes_glucose_unnest %>%
-  drop_na(colnames(diabetes_glucose_numerical))
-nrow(diabetes_glucose_unnest)
-```
-
-Now our data is ready to make a PCA.
-
-6. Calculate the PCA by running `prcomp` on our prepared data and create a plot of the resulting PCA (see the tutorial). 
-
-```{r eval=FALSE}
-library(ggfortify)
-
-pca_res <- prcomp(diabetes_glucose_numerical, scale. = TRUE)
-
-autoplot(pca_res)
-```
-
-7. Color your PCA plot by the outcome variable (`Diaetes`) and add loadings. Think about which variable you want to color by. Remember to refer to the dataset that has this variable (probably not your numeric subset!)
-
-```{r eval=FALSE}
-autoplot(pca_res, data = diabetes_glucose_unnest, colour = 'Diabetes',
-         loadings = TRUE, loadings.colour = 'black',
-         loadings.label = TRUE, loadings.label.size = 3)
-```
-
-8. Add a ggplot `theme` and title to your plot and save it. 
-
-
-```{r eval=FALSE}
-autoplot(pca_res, data = diabetes_glucose_unnest, colour = "Diabetes",
-         loadings = TRUE, loadings.colour = "grey30", loadings.label.colour = "black",
-         loadings.label = TRUE, loadings.label.size = 3.5) + 
+ggplot(PC_df, aes(x=components, y=`percentage of variance`, fill = eigenvalue)) + 
+  geom_col() +
   theme_minimal() + 
-  labs(title = "PCA of Diabetes Dataset")
-
-ggsave('../figures/PCA_diabetes.png', width = 7, height = 5)
+  geom_text(aes(label = labs), vjust = -0.5)
 ```
 
-9. Calculate the variance explained by each of the PC's using the following formula:
+13. Now, make a biplot (the round one with the arrows we showed in the presentation). Although this type of plot is a little complicated with ggplot alone, so either use the `fviz_pca_var()` function from the `factoextra` package we showed in the presentation, or if you want to challenge yourself and try another function you can look `autoplot()` from the `ggfortify` package.
 
-$$
-\text{Variance Explained} = \frac{\text{sdev}^2}{\sum \text{sdev}^2} \times 100
-$$
+```{r}
+fviz_pca_var(res.pca, col.var = "cos2",
+             gradient.cols = c("#00AFBB", "#E7B800", "#FC4E07"), 
+             repel = TRUE) # Avoid text overlapping)
+```
 
-::: {.callout-tip collapse="true"}
-## Hint
+14. Have a look at the `var$contrib` from your PCA object and compare it to the biplot, what do they tell you, i.e. which variables contribute the most to PC1 (dim1) and PC2 (dim2)? Also, look at the correlation matrix between variables in each component (`$var$cor`), what can you conclude from this?
 
-You can access the standard deviation from the PCA object like this: `pca_res$sdev`. 
+15. Plot your samples in the new dimensions, i.e. PC1 (dim1) vs PC2 (dim2), with the function `fviz_pca_ind()`. Add color and/or labels to the points using categorical variables you extracted above. What pattern of clustering (in any) do you observe?
 
-:::
+```{r}
+p1 <- fviz_pca_ind(res.pca, 
+                   axes = c(1, 2), 
+                   col.ind = diab_glu_cat$Diabetes,
+                   geom = "point", 
+                   legend.title = "Diabetes") + 
+  scale_color_viridis_d() +
+  theme(legend.position = "bottom")
+
+p1
+
+```
+
+16. Try to call `var$cos2` from your PCA object. What does it tell you about the first 5 components. Are there any of these, in addition to Dim 1 and Dim 2, which seem to capture some variance? If so, try to plot these components and overlay the plot with the categorical variables from above to figure out which it might be capturing.
+
+```{r}
+p1 <- fviz_pca_ind(res.pca, 
+                   axes = c(1, 4), 
+                   col.ind = diab_glu_cat$Smoker,
+                   geom = "point", 
+                   legend.title = "Smoker") + 
+  scale_color_viridis_d() +
+  theme(legend.position = "bottom")
+
+p1
+
+```
+
+The `Oral Glucose Tolerance Test` is the one used to produce the OGTT measurements `(0, 60, 120)`. As these measurement are directly used to diagnose diabetes we are not surprised that they separate the dataset well - we are being completely bias.
+
+17. Omit the Glucose measurement columns, calculate a PCA and create the plot above. Do do the remaining variables still capture the Diabetes pattern?
 
 ```{r eval=FALSE}
-variance_explained <- ((pca_res$sdev^2) / sum(pca_res$sdev^2)) * 100
-variance_explained
+diab_glu_num <- diabetes_glucose %>% 
+  dplyr::select(Age,BloodPressure, BMI, PhysicalActivity, Serum_ca2) %>%
+  scale(.)
+
+head(diab_glu_num)
 ```
 
-10. Create a two column data-frame with the names of the PC's (PC1, PC2, ect) in one column and the variance explained by that PC in the other column. 
+```{r}
+res.pca <- PCA(diab_glu_num, graph = FALSE)
 
-```{r eval=FALSE}
-df_variance_explained <- tibble(PC = c(paste0('PC', 1:length(variance_explained))),
-                                variance_explained = variance_explained)
+res.pca$var$cos2
 
-df_variance_explained
+
+
+
+fviz_pca_var(res.pca, col.var = "cos2",
+             gradient.cols = c("#00AFBB", "#E7B800", "#FC4E07"), 
+             repel = TRUE) 
+
+
+
+fviz_pca_ind(res.pca, 
+             axes = c(1, 2), 
+             col.ind = diab_glu_cat$Diabetes,
+             geom = "point", 
+             legend.title = "Diabetes") + 
+  scale_color_viridis_d() +
+  theme(legend.position = "bottom")
 ```
 
-11. Now create a bar plot (using `geom_col`), showing for each PC the amount of explained variance. This type of plot is called a scree plot.  
+18. From the exploratory analysis you have performed, which variables (numeric and/or categorical) would you as a minimum include in a model for prediction of `Diabetes`? **N.B** again you should not include the actual glucose measurement variables as they where used to the define the outcome you are looking at.
 
+```{r}
+diab_model <- lm(Diabetes ~ PhysicalActivity + BMI + BloodPressure + Smoker, data = diabetes_glucose)
 
-```{r eval=FALSE}
-df_variance_explained %>% 
-  ggplot(aes(x = PC, 
-             y = variance_explained))+ 
-  geom_col() + 
-  labs(title = "Varinace explained for each PC", 
-       y = "Variance Explained")
-```
-
-12. Lastly, render you quarto document and review the resulting html file.
-
----------------------------
-
-## Extra exercises
-
-e1. The Oral Glucose Tolerance Test is used to diagnose diabetes so we are not surprised that it separates the dataset well. In this part, we will look at a PCA without the OGTT measurements and see how we fare. Omit the Glucose measurement columns, calculate a PCA and create the plot.
-
-```{r eval=FALSE}
-pca_no_gluc <-diabetes_glucose_numerical %>%
-  select(-Glucose_0,-Glucose_60,-Glucose_120) %>%
-  prcomp(scale. = TRUE)
+summary(diab_model)
 
 ```
-
-
-```{r eval=FALSE}
-autoplot(pca_no_gluc, data = diabetes_glucose_unnest, colour = "Diabetes",
-         loadings = TRUE, loadings.colour = "grey30", loadings.label.colour = "black",
-         loadings.label = TRUE, loadings.label.size = 3.5) + 
-  theme_minimal() + 
-  labs(title = "PCA of Diabetes Dataset")
-```
-
-Without the Glucose measurement data our strongest separating variables are BMI and Physical Activity.
-
-
