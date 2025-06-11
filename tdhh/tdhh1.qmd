@@ -24,8 +24,6 @@ head(diabetes_clinical)
 
 ## Explore the data
 
-Use can you either base R or/and tidyverse to solve the exercises.
-
 3.  How many missing values (NA's) are there in each column.
 
 ```{r}

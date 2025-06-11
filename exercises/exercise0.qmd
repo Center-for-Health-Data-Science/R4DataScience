@@ -8,7 +8,7 @@ project:
 
 ## File Management & Data Download
 
-1.  To get this material you went to the github repository of this course: https://github.com/Center-for-Health-Data-Science/R4DataScience, pressed **Clone** → **Download ZIP** and downloaded the directory with the course material called *R4DataScience* or *R4DataScience-main*. This folder contains several sub directory with more and less relevant material. The files you need for this course is:
+1.  To get this material you went to the github repository of this course: https://github.com/Center-for-Health-Data-Science/R4DataScience, pressed **Code** → **Download ZIP** and downloaded the directory with the course material called *R4DataScience* or *R4DataScience-main*. This folder contains several sub directory with more and less relevant material. The files you need for this course is:
 
 -   `slides/R4datascience_slides.pdf`: contains the lecture slides in pdf format.
 -   `presentations/*`: all the scripts that the lectures will go through in plenum during the course.
@@ -55,7 +55,7 @@ Quarto is an open-source publishing system designed to help you create dynamic, 
 
 10. Type `getwd()` in a code chunk in your Quarto document and run the line. Compare the working directory with the one from the console.
 
-11. Change the working directory in one chuck using `setwd()`.
+11. Change the working directory in one chunk using `setwd()`.
 
 12. Run `getwd()` in the same chunk as `setwd()` AND in another chunk. What do you observe?
 
@@ -72,7 +72,7 @@ getwd()
 ```
 :::
 
-13. Create a code chunks and write the same code as you did in **8**. Write a description of what you did above the code chunk. Re-save the file.
+13. Create a code chunk and write the same code as you did in **8**. Write a description of what you did above the code chunk. Re-save the file.
 
 14. Render the Quarto document and have a look at the html file.
 
@@ -93,7 +93,16 @@ An R project in RStudio creates a self-contained working environment tied to a s
 
 ![](../figures/file_tree_Rproject.jpg){fig-align="center"}
 
-15. Create an R project by clicking the *Project (None)* in the top right → *New Project* → *Existing Directory* and choose an appropriate location. Look at the top-right corner to check that you are in your R project.
+15. Before doing this exercise, we need to brief you about what will happen when you do the instructions below:
+
+- Rstudio will ask you if you want to save your current workspace and to that you will answer **Don't Save**.
+
+- Rstudio will close down your current session and open a new one which means that this Quarto will not be open in Rstudio anymore. After you have done the instructions below, simply **navigate to this document and reopen it**.
+
+Great - now to the exercise:
+
+Create an R project by clicking the *Project (None)* in the top right → *New Project* → *Existing Directory* and choose an appropriate location. Look at the top-right corner to check that you are in your R project.
+
 
 16. Reopen the the R script and Quarto document you created in Exercise 4 and 9 respectively. Check each of their working directories. Are they as you expect? Explain.
 
@@ -105,4 +114,3 @@ An R project in RStudio creates a self-contained working environment tied to a s
 -   The working directory of the Quarto document is always the same as the location of the document.
 :::
 
-17. If you like the flow of the R project, keep it. If not, delete it. It is not necessary to have an R project. **NB** If you delete it, click the R project drop-down menu in the top-right corner → *Close Project*.
