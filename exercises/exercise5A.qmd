@@ -121,7 +121,7 @@ caret::confusionMatrix(y_pred, y_test)
 
 ## Part 3: Clustering
 
-In this part we will run clustering on the joined diabetes dataset (`diabetes_join.xlsx`) from exercise 1. Load it here if you don't have it already from Part 2 above.
+In this part we will run clustering on the joined diabetes dataset (`diabetes_join.xlsx`) from Exercise 1. Load it here if you don't have it already from Part 2 above.
 
 19. Before running K-means clustering. Remove any missing values across all variables in your dataset. Consider which columns you can use and if you have to do anything to them before clustering?
 

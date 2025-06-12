@@ -13,6 +13,7 @@ library(tidyverse)
 library(readxl)
 library(ggfortify)
 library(factoextra)
+library(readxl)
 ```
 
 ## Part 1: Linear regression
@@ -186,11 +187,11 @@ caret::confusionMatrix(y_pred, test$Diabetes)
 
 ## Part 3: Clustering
 
-In this part we will run clustering on the joined diabetes dataset from exercise 1. Load it here if you don't have it already from Part 2.
+In this part we will run clustering on the joined diabetes dataset from Exercise 1. Load it here if you don't have it already from Part 2.
 
 ```{r}
 #in case
-load('../out/diabetes_join.Rdata')
+diabetes_join <- read_excel('../data/exercise1_diabetes_join.xlsx')
 
 head(diabetes_join)
 ```
