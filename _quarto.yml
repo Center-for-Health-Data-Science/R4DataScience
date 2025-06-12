@@ -38,8 +38,8 @@ website:
           - href: presentations/presentation5B.qmd
             text: "Presentation 5B: Models and Model Evaluation in R" 
 
-      - href: data/data.qmd
-        text: "Data️"
+      # - href: data/data.qmd
+      #   text: "Data️"
 
       - section: "Exercises"
         contents:

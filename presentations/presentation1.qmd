@@ -27,6 +27,7 @@ We’ll work with two datasets:
 We use the `load()` function, which automatically imports an R object - let's have a look at it.
 
 ```{r warning=FALSE, message=FALSE}
+# .RData can contain several objects 
 load("../data/Ovarian_data_Col.RData")
 
 class(df_ov)
@@ -140,6 +141,17 @@ df_ov$vital_status %>%
   unique()
 ```
 
+Change "NA" to actual NA. 
+```{r}
+df_ov <- df_ov %>%
+  mutate(vital_status = na_if(vital_status, "NA"))
+```
+
+```{r}
+df_ov$vital_status %>% 
+  unique()
+```
+
 ## Data wrangling and cleaning
 
 **Let's do some cleanup**
@@ -166,7 +178,7 @@ threshold <- 0.2 # 20% threshold
 df_ov <- df_ov %>% 
   select(where(~mean(is.na(.)) < threshold))
 
-head(df_ov)
+dim(df_ov)
 ```
 
 This keeps only the variables that are mostly complete.
@@ -261,7 +273,9 @@ Create logical variables with `ifelse`. Adding a column with content based on a 
 
 ```{r results="show"}
 df_ov <- df_ov %>% 
-  mutate(dominant_cell_type = ifelse(percent_not_cancer_cells > percent_tumor_cells, "not_cancer_cells", "cancer_cells"))
+  mutate(dominant_cell_type = ifelse(percent_not_cancer_cells > percent_tumor_cells, 
+                                     "not_cancer_cells", 
+                                     "cancer_cells"))
 
 table(df_ov$dominant_cell_type)
 ```

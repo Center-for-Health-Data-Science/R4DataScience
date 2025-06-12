@@ -15,8 +15,6 @@ project:
 -   `exercises/*`: all the exercises that you will go through yourselves. You are currently looking at `exercises/exercise0.qmd`.
 -   `data/*`: all the data you need for the exercises.
 
-Ignore or delete the material that is not mentioned above.
-
 2.  Under the course directory, make a sub directory for the outputs that you will generate doing the exercises.
 
 Your file tree should look something like this:
