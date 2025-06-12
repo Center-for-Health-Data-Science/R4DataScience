@@ -119,16 +119,48 @@ glm(..., family = 'binomial')
 caret::confusionMatrix(y_pred, y_test)
 ```
 
-## Part 3: Clustering
 
-In this part we will run clustering on the joined diabetes dataset (`diabetes_join.xlsx`) from Exercise 1. Load it here if you don't have it already from Part 2 above.
+## Part 3: K-Means Clustering
 
-19. Before running K-means clustering. Remove any missing values across all variables in your dataset. Consider which columns you can use and if you have to do anything to them before clustering?
+In this part we will run K-means clustering. To mix it up a bit we will work with a new dataset from patients with kidney disease. The dataset contains aprox. 20 biological measures (variables) collected across 400 patients. The outcome is the `classification` variable which denotes whether a person suffers from **ckd=chronic kidney disease** `ckd` or not `notckd`.
 
-20. Run the k-means clustering algorithm with 4 centers on the data.
+```         
+        age     -   age
+        bp      -   blood pressure
+        rbc     -   red blood cells
+        pc      -   pus cell
+        pcc     -   pus cell clumps
+        ba      -   bacteria
+        bgr     -   blood glucose random
+        bu      -   blood urea
+        sc      -   serum creatinine
+        sod     -   sodium
+        pot     -   potassium
+        hemo    -   hemoglobin
+        pcv     -   packed cell volume
+        wc      -   white blood cell count
+        rc      -   red blood cell count
+        htn     -   hypertension
+        dm      -   diabetes mellitus
+        cad     -   coronary artery disease
+        appet   -   appetite
+        pe      -   pedal edema
+        ane     -   anemia
+        class   -   classification  
+```
 
-21. Visualize the results of your clustering.
+19. Load in the dataset named `kidney_disease.Rdata`.
 
-22. Investigate the best number of clusters. Try to use the `silhouette` metric. How many clusters are there?
+20. Before running K-means clustering please remove any missing values across all variables in your dataset. Consider which columns you can use and if you have to do anything to them before clustering?
 
-23. Re-do the clustering (plus visualization) with that number. What do you think the clusters represent in this case?
+21. Run the k-means clustering algorithm with 4 centers on the data. Look at the plot you have generated.
+
+22. Visualize the results of your clustering. Do 4 clusters seems like a good fit for our data in the first two dimensions (Dim1 and Dim2)? How about if you have a look at Dim3 or Dim4?
+
+23. Investigate the best number of clusters for this dataset. Use the `silhouette` metric.
+
+24. Re-do the clustering (plus visualization) with the optimal number of clusters.
+
+25. Now, try to figure out what the two clusters might represent. There are different ways to do this, but one easy way would be to simply compare the `clusters IDs` from the Kmeans output with one or more of the categorical variables from the dataset. You could use `count() or table()` for this.
+
+26. The `withiness` measure (within cluster variance/spread) is much larger for one cluster then the other, what biological reason could there be for that?

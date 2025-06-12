@@ -107,7 +107,7 @@ As the outcome we are studying, `Diabetes`, is categorical variable we will perf
 
 ```{r}
 
-load("../out/diabetes_join.Rdata")
+diabetes_join <- read_xlsx("../data/exercise1_diabetes_join.xlsx")
 
 head(diabetes_join)
 ```
@@ -135,8 +135,7 @@ test  <- anti_join(diabetes_df, train, by = 'ID')
 train_counts <- train[,-1] %>%
   dplyr::select(where(is.character)) %>%
   pivot_longer(everything(), names_to = "Variable", values_to = "Level") %>%
-  count(Variable, Level, name = "Count")
-
+  dplyr::count(Variable, Level, name = "Count")
 
 train_counts
 
@@ -145,7 +144,7 @@ train_counts
 test_counts <- test[,-1] %>%
   dplyr::select(where(is.character)) %>%
   pivot_longer(everything(), names_to = "Variable", values_to = "Level") %>%
-  count(Variable, Level, name = "Count")
+  dplyr::count(Variable, Level, name = "Count")
 
 
 test_counts
@@ -185,40 +184,67 @@ y_pred <- as.factor(ifelse(y_pred > 0.5, 1, 0))
 caret::confusionMatrix(y_pred, test$Diabetes)
 ```
 
-## Part 3: Clustering
+## Part 3: K-Means Clustering
 
-In this part we will run clustering on the joined diabetes dataset from Exercise 1. Load it here if you don't have it already from Part 2.
+In this part we will run K-means clustering. To mix it up a bit we will work with a new dataset from patients with kidney disease. The dataset contains aprox. 20 biological measures (variables) collected across 400 patients. The outcome is the `classification` variable which denotes whether a person suffers from **ckd=chronic kidney disease** `ckd` or not `notckd`.
 
-```{r}
-#in case
-diabetes_join <- read_excel('../data/exercise1_diabetes_join.xlsx')
-
-head(diabetes_join)
+```         
+        age     -   age
+        bp      -   blood pressure
+        rbc     -   red blood cells
+        pc      -   pus cell
+        pcc     -   pus cell clumps
+        ba      -   bacteria
+        bgr     -   blood glucose random
+        bu      -   blood urea
+        sc      -   serum creatinine
+        sod     -   sodium
+        pot     -   potassium
+        hemo    -   hemoglobin
+        pcv     -   packed cell volume
+        wc      -   white blood cell count
+        rc      -   red blood cell count
+        htn     -   hypertension
+        dm      -   diabetes mellitus
+        cad     -   coronary artery disease
+        appet   -   appetite
+        pe      -   pedal edema
+        ane     -   anemia
+        class   -   classification  
 ```
 
-In this part we will run clustering on the joined diabetes dataset (`diabetes_join.xlsx`) from exercise 1. Load it here if you don't have it already from Part 2 above.
+19. Load in the dataset named `kidney_disease.Rdata`.
 
-19. Before running K-means clustering. Remove any missing values across all variables in your dataset. Consider which columns you can use and if you have to do anything to them before clustering?
+```{r, warning=FALSE}
+#in case
+load("../data/kidney_disease.Rdata")
+
+```
+
+20. Before running K-means clustering please remove any missing values across all variables in your dataset. Consider which columns you can use and if you have to do anything to them before clustering?
+
 ```{r}
 # Set seed to ensure reproducibility
 set.seed(123)  
 
 # scale data
-diabetes_df <- diabetes_join %>%
-  drop_na(.) %>%
+kidney <- kidney %>%
+  drop_na(.) 
+
+
+kidney_num <- kidney %>%
   mutate(across(where(is.numeric), scale)) %>%
-  dplyr::select(where(is.numeric))
+  dplyr::select_if(is.numeric)
 ```
 
-
-20. Run the k-means clustering algorithm with 3 centers on the data.
+21. Run the k-means clustering algorithm with 4 centers on the data. Look at the plot you have generated.
 
 ```{r}
 # Set seed to ensure reproducibility
 set.seed(123)  
 
 # run kmeans
-kmeans_res <- diabetes_df %>% 
+kmeans_res <- kidney_num %>% 
   kmeans(centers = 4, nstart = 25)
 
 kmeans_res
@@ -228,26 +254,24 @@ kmeans_res
 kmeans_res$centers
 ```
 
-
-21. Visualize the results of your clustering.
+22. Visualize the results of your clustering. Do 4 clusters seems like a good fit for our data in the first two dimensions (Dim1 and Dim2)? How about if you have a look at Dim3 or Dim4?
 
 ```{r}
-fviz_cluster(kmeans_res, data = diabetes_df,
+fviz_cluster(kmeans_res, data = kidney_num, axes=c(1,2),
              palette = c("#2E9FDF", "#00AFBB", "#E7B800", "orchid3"), 
              geom = "point",
              ellipse.type = "norm", 
              ggtheme = theme_bw())
 ```
 
-
-22. Investigate the best number of clusters. Use the `silhouette` metric.
+23. Investigate the best number of clusters for this dataset. Use the `silhouette` metric.
 
 ```{r}
-diabetes_df %>%
+kidney_num %>%
   fviz_nbclust(kmeans, method = "silhouette")
 ```
 
-23. Re-do the clustering (plus visualization) with that number. What do you think the clusters represent in this case?
+24. Re-do the clustering (plus visualization) with the optimal number of clusters.
 
 ```{r}
 # Set seed to ensure reproducibility
@@ -255,18 +279,29 @@ set.seed(123)
 
 #run kmeans
 
-kmeans_res <- diabetes_df %>% 
+kmeans_res <- kidney_num %>% 
   kmeans(centers = 2, nstart = 25)
 
 kmeans_res
 ```
 
-
-
 ```{r}
-fviz_cluster(kmeans_res, data = diabetes_df,
+fviz_cluster(kmeans_res, data = kidney_num,
              palette = c("#00AFBB", "#E7B800"), 
              geom = "point",
              ellipse.type = "norm", 
              ggtheme = theme_bw())
 ```
+
+25. Now, try to figure out what the two clusters might represent. There are different ways to do this, but one easy way would be to simply compare the `clusters IDs` from the Kmeans output with one or more of the categorical variables from the dataset. You could use `count() or table()` for this.
+
+```{r}
+table(kidney$htn, kmeans_res$cluster)
+
+table(kidney$dm, kmeans_res$cluster)
+
+table(kidney$classification, kmeans_res$cluster)
+
+```
+
+26. The `withiness` measure (within cluster variance/spread) is much larger for one cluster then the other, what biological reason could there be for that?
