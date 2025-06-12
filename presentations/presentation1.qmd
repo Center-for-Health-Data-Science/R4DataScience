@@ -24,10 +24,10 @@ We’ll work with two datasets:
 
 -   `df_exp`: gene expression data for cytochrome genes.
 
-We use the `load()` function, which automatically imports an R object - let's have a look at it. 
+We use the `load()` function, which automatically imports an R object - let's have a look at it.
 
 ```{r warning=FALSE, message=FALSE}
-load("../data/Ovarian_data.RData")
+load("../data/Ovarian_data_Col.RData")
 
 class(df_ov)
 dim(df_ov)
@@ -70,6 +70,7 @@ df_ov %>%
 ```
 
 Get a vector the tidyverse way:
+
 ```{r}
 df_ov %>%
   select(vital_status) %>% 
@@ -133,6 +134,7 @@ df_ov <- df_ov %>%
 ```
 
 Accessing the unique values of the `vital_status` column. After clean up we only have one group of deceased and living - perfect!
+
 ```{r}
 df_ov$vital_status %>% 
   unique()
@@ -151,7 +153,6 @@ df_ov$vital_status %>%
 4.  Recode and Reorder Factors
 
 5.  Create New Variables from existing ones
-
 
 ### Step 1: Drop Variables with Too Many Missing Values
 
@@ -181,8 +182,8 @@ df_ov$primarysite <- as.factor(df_ov$primarysite)
 
 # In one go:
 cols_to_factor <- c('sample_type', 'primarysite', 'summarygrade',
-                    'summarystage', 'recurrence_status',
-                    'vital_status', 'tumorstage', 'grade', 'batch')
+                    'recurrence_status', 'vital_status', 
+                    'tumorstage', 'grade', 'batch')
 
 df_ov <- df_ov %>%
   mutate(across(.cols = all_of(cols_to_factor), 
@@ -244,13 +245,14 @@ df_ov <- df_ov %>%
 ```
 
 For character vectors you can use functions `paste` and `paste0` . The `paste` function concatenates two strings into one. This one is from baseR.
+
 ```{r}
 paste('TCGA', 'Data', sep = ' ')
 ```
 
 ```{r}
 df_ov <- df_ov %>% 
-  mutate(stage = paste(tumorstage, summarygrade, sep = '-'))
+  mutate(stage = paste(tumorstage, substage, sep = '-'))
 
 head(df_ov$stage)
 ```
@@ -268,10 +270,10 @@ Extension of `ifelse`: `case_when`
 
 ```{r results="show"}
 df_ov <- df_ov %>% 
-  mutate(group = case_when(age_at_initial_path_diagn < 60 & summarystage == "early" ~ "Early stage - Young",
-                           age_at_initial_path_diagn < 60 & summarystage == "late" ~ "Late stage - Young",
-                           age_at_initial_path_diagn >= 60 & summarystage == "early" ~ "Early stage - Mature",
-                           age_at_initial_path_diagn >= 60 & summarystage == "late" ~ "Late stage - Mature",
+  mutate(group = case_when(age_at_initial_path_diagn < 60 & summarygrade == "low" ~ "Low grade - Young",
+                           age_at_initial_path_diagn < 60 & summarygrade == "high" ~ "High grade - Young",
+                           age_at_initial_path_diagn >= 60 & summarygrade == "low" ~ "Low grade - Mature",
+                           age_at_initial_path_diagn >= 60 & summarygrade == "high" ~ "High grade - Mature",
                            .default = NA))
 
 table(df_ov$group)
@@ -301,7 +303,7 @@ It might look a little weird (lots of slashes, dots, and symbols), but once you 
 
 ![](../figures/regex1.png){fig-align="center"}
 
-We will do string manipulation the tidyverse way: using the `stringr` package where all the functions starts with `str_`. These functions often has a parameter called `pattern` which can take a regular expression as an argument. Let's start with some simple examples. 
+We will do string manipulation the tidyverse way: using the `stringr` package where all the functions starts with `str_`. These functions often has a parameter called `pattern` which can take a regular expression as an argument. Let's start with some simple examples.
 
 ### Examples
 
@@ -353,6 +355,7 @@ tail(df_ov)
 ```
 
 We can also replace text patterns:
+
 ```{r}
 str_replace_all('TCGA', 'A', 'aaaaaaaaaa')
 ```
@@ -457,6 +460,7 @@ df_ov_subset %>%
 ### Let's join our datasets
 
 We will join the two full datasets.
+
 ```{r}
 df_comb <- df_ov %>% 
   left_join(df_exp, by = "unique_patient_ID")
