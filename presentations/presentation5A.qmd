@@ -13,9 +13,6 @@ In this section we'll look at how to define and fit regression models in R.
 ```{r warning=FALSE, message=FALSE}
 library(tidyverse)
 library(caret)
-#library(caTools)
-#library(ModelMetrics)
-#library(ggfortify)
 library(readxl)
 ```
 
@@ -28,7 +25,7 @@ df_smoke <- read_csv('../data/smoking_cat.csv')
 df_smoke
 ```
 
-Looking at the variables in my dataset I see that I have; daily cigarettes smoked (number) and life (in years). Both of these are numeric variables. I also have a variable named exercise, it seems that this variable might in fact be an ordinal factor variable, e.g. exercise amount 0, 1 or 2. Exercise is encoded as a numeric variable, so the first thing we will do is to convert it to a factor.
+We have daily cigarettes smoked (number) and life (in years). Both of these are numeric variables. We also have a variable named exercise, it seems that this variable might in fact be an ordinal factor variable. Exercise is encoded as a numeric variable, so the first thing we will do is to convert it to a factor.
 
 ```{r}
 df_smoke %>% distinct(exercise)
@@ -54,7 +51,8 @@ set.seed(123)
 # add an ID column to keep track of observations
 df_smoke$ID <- 1:nrow(df_smoke)
 
-train <- df_smoke %>% sample_frac(0.75)
+train <- df_smoke %>% 
+  sample_frac(0.75)
 nrow(train)
 head(train)
 ```
@@ -103,7 +101,6 @@ model <- lm(life ~ daily_cigarettes + exercise, data = train)
 By calling `lm` we have already trained our model! The return of `lm()` is, just like the return of `prcomp()`, a named list.
 
 ```{r}
-typeof(model)
 class(model)
 names(model)
 ```
@@ -121,9 +118,9 @@ The **Coefficients** table shows the estimated values for each coefficient inclu
 
 In the bottom section we have some information about how well the model fits the training data.
 
-The **Residual Standard Error (RSE)** provides a measure of accuracy as it represents the average size of the residuals.
+The **Residual Standard Error (RSE)** is the standard deviation of the residuals (prediction errors). It tells you, **on average, how far the observed values deviate from the regression line**.
 
-The **R-squared** value indicates the proportion of variance explained by the model, with the Adjusted R-squared accounting for the number of predictors to prevent overfitting.
+The **R-squared** value indicates the proportion of variance explained by the model, with the Adjusted R-squared accounting for the number of predictors.
 
 Finally, the **F-statistic** and its p-value tests whether the model as a whole explains a significant portion of the variance in the response variable (the outcome, $y$).
 
@@ -133,14 +130,7 @@ We can extract the `model` object's components with `$`:
 model$coefficients
 ```
 
-```{r}
-hist(model$residuals, 
-     breaks = 30, 
-     main = 'Histogram of residuals', 
-     xlab = 'Residual')
-```
-
-Slightly fancier plot:
+Lets plot the results:
 
 ```{r}
 par(mfrow=c(2,2))
@@ -152,7 +142,6 @@ plot(model)
 Plot to understand the model:
 
 ```{r}
-# Predict life expectancy for each combination
 train$predicted_life <- predict(model, newdata = train)
 
 ggplot(train) + 
@@ -192,7 +181,6 @@ We now use our held out test data to evaluate the model performance. For that we
 ```{r}
 #use the fitted model to make predictions for the test data
 y_pred <- predict(model, test)
-y_pred
 ```
 
 Let's see how the predicted values fit with the observed values.
@@ -239,7 +227,8 @@ set.seed(123)
 #add an ID column to keep track of observations
 df_smoke$ID <- 1:nrow(df_smoke)
 
-train <- df_smoke %>% sample_frac(0.75)
+train <- df_smoke %>% 
+  sample_frac(0.75)
 
 table(train$early_death)
 
@@ -271,7 +260,7 @@ In a logistic regression model the link function is the logit. In a linear model
 
 In order to understand what that means we'll need a tiny bit of math.
 
-Our $y$ is either 0 (no, the person is not dead before 75) or 1 (yes, the person is dead before 75). However we cannot model that so instead we will model the probability of the outcome being 1: $P(earlydeath == 1)$. Except probabilities are bounded between 0 and 1 which is mathematically difficult to impose (it means all $y$'s have to be between these two values and how are we gonna enforce that?) So instead, we will model the log-odds of early death:
+Our $y$ is either 0 or 1. However we cannot model that, so instead we will model the probability of the outcome being 1: $P(earlydeath == 1)$. Except probabilities are bounded between 0 and 1 which is mathematically difficult to impose (it means all $y's$ have to be between these two values and how are we gonna enforce that?) So instead, we will model the log-odds of early death:
 
 $$ y = \log(\frac{P(earlydeath == 1)}{1-P(earlydeath == 1)})$$
 
@@ -279,11 +268,11 @@ It may not look like it but we promise you this $y$ is a well behaved number bec
 
 $$ \log(\frac{P(earlydeath == 1)}{1-P(earlydeath == 1)} = \beta * X$$
 
-And if we want to know what this means for the probability of dying before 75 we just take the logit of $y$ :
+And if we want to know what this means for the probability of dying early, we just take invert the link function:
 
 $$ P(earlydeath == 1) = \frac{1}{1+ e^{(-y)}} $$
 
-Which makes the link between what we're actually interested in (people's chances of dying before 75) and what we're modelling the logit. End of math.
+Which serves as the `link` between what we're actually interested in (the probability of a person dying early) and what we're modelling using logit. End of math.
 
 ### Model formulation in R
 
@@ -330,7 +319,7 @@ So the larger $y$ the smaller $e^{(-y)}$ and the closer we get to $P(earlydeath 
 
 ### Model comparison
 
-So now we know how to fit linear models and interpret the results. But often there are several predictors we could include or not include, so how do we know that one model is better than another?
+Now we know how to fit linear models and interpret the results. But often there are several predictors we could include or not include, so how do we know that one model is better than another?
 
 There are several ways to compare models. One is the likelihood ratio test which tests whether adding predictors significantly improves model fit by comparing the log-likelihoods of the two models. Another much used comparison is to look at the AIC (Akaike Information Criterion) or BIC (Bayesian Information Criterion). Lower AIC/BIC values generally indicate a better trade-off between model fit and complexity.
 
@@ -357,7 +346,7 @@ anova(model_reduced, model_log, test = 'Chisq')
 
 The p-value of the Chi-square test tells us if there is evidence that the difference in log-likelihoods is significant. If it is not significant, we do not have evidence that the more complex model is a better fit than the less complex model and we would therefore choose the less complex model with fewer predictors since that gives us more statistical power and less overfitting.
 
-In this case the p-value is significant which means that the more complex model, that includes exercises, is a better fit. Discuss in small groups if you think this makes sense with the exercises levels not being significant predictors when we looked at `summary(model_log)`.
+In this case the p-value is significant which means that the more complex model, that includes exercises, is a better fit. Do you think this makes sense with the exercises levels not being significant predictors when we looked at `summary(model_log)`.
 
 ### Model Evaluation
 
@@ -374,6 +363,8 @@ As you see, the predictions we get out are not $yes$ or $no$, they are instead a
 ```{r}
 y_pred <- ifelse(as.numeric(y_pred) >= 0.5, 1, 0) %>% 
   as.factor()
+
+y_pred
 ```
 
 Now we will compare the predicted class with the observed class for the test set. You can do this in different ways, but here we will use the accuracy.
