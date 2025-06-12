@@ -214,12 +214,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </li>
       </ul>
   </li>
-        <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../data/data.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Data️</span></a>
-  </div>
-</li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
             <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true">
@@ -282,12 +276,65 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
             <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="false">
- <span class="menu-text">Cheat Sheets</span></a>
+ <span class="menu-text">Solutions</span></a>
           <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="false" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
       <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../tdhh/tdhh1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Solution 1: Data Cleaning</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../tdhh/tdhh2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Solution 2: Summary Statistics and Data Wrangling</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../tdhh/tdhh3.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Solution 3: Exploratory Data Analysis</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../tdhh/tdhh4A.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Solution 4A: Conditions and For-loops</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../tdhh/tdhh4B.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Solution 4B: Functions</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../tdhh/tdhh5A.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Solution 5A: Intro to Regression in R</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../tdhh/tdhh5B.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Solution 5B: Models and Model Evaluation in R</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="false">
+ <span class="menu-text">Cheat Sheets</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 ">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../CheatSheet/quartoCheatSheet.pdf" class="sidebar-item-text sidebar-link">
@@ -331,7 +378,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#making-a-model" id="toc-making-a-model" class="nav-link" data-scroll-target="#making-a-model">Making a model</a></li>
   </ul></li>
   <li><a href="#part-2-logistic-regression" id="toc-part-2-logistic-regression" class="nav-link" data-scroll-target="#part-2-logistic-regression">Part 2: Logistic regression</a></li>
-  <li><a href="#part-3-clustering" id="toc-part-3-clustering" class="nav-link" data-scroll-target="#part-3-clustering">Part 3: Clustering</a></li>
+  <li><a href="#part-3-k-means-clustering" id="toc-part-3-k-means-clustering" class="nav-link" data-scroll-target="#part-3-k-means-clustering">Part 3: K-Means Clustering</a></li>
   </ul>
 </nav>
     </div>
@@ -504,15 +551,40 @@ Hint
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>caret<span class="sc">::</span><span class="fu">confusionMatrix</span>(y_pred, y_test)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
-<section id="part-3-clustering" class="level2">
-<h2 class="anchored" data-anchor-id="part-3-clustering">Part 3: Clustering</h2>
-<p>In this part we will run clustering on the joined diabetes dataset (<code>diabetes_join.xlsx</code>) from exercise 1. Load it here if you don’t have it already from Part 2 above.</p>
+<section id="part-3-k-means-clustering" class="level2">
+<h2 class="anchored" data-anchor-id="part-3-k-means-clustering">Part 3: K-Means Clustering</h2>
+<p>In this part we will run K-means clustering. To mix it up a bit we will work with a new dataset from patients with kidney disease. The dataset contains approximately 20 biological measures (variables) collected across 400 patients. The outcome is the <code>classification</code> variable which denotes whether a person suffers from <strong>ckd=chronic kidney disease</strong> <code>ckd</code> or not <code>notckd</code>.</p>
+<pre><code>        age     -   age
+        bp      -   blood pressure
+        rbc     -   red blood cells
+        pc      -   pus cell
+        pcc     -   pus cell clumps
+        ba      -   bacteria
+        bgr     -   blood glucose random
+        bu      -   blood urea
+        sc      -   serum creatinine
+        sod     -   sodium
+        pot     -   potassium
+        hemo    -   hemoglobin
+        pcv     -   packed cell volume
+        wc      -   white blood cell count
+        rc      -   red blood cell count
+        htn     -   hypertension
+        dm      -   diabetes mellitus
+        cad     -   coronary artery disease
+        appet   -   appetite
+        pe      -   pedal edema
+        ane     -   anemia
+        class   -   classification  </code></pre>
 <ol start="19" type="1">
-<li><p>Before running K-means clustering. Remove any missing values across all variables in your dataset. Consider which columns you can use and if you have to do anything to them before clustering?</p></li>
-<li><p>Run the k-means clustering algorithm with 4 centers on the data.</p></li>
-<li><p>Visualize the results of your clustering.</p></li>
-<li><p>Investigate the best number of clusters. Try to use the <code>silhouette</code> metric. How many clusters are there?</p></li>
-<li><p>Re-do the clustering (plus visualization) with that number. What do you think the clusters represent in this case?</p></li>
+<li><p>Load in the dataset named <code>kidney_disease.Rdata</code>.</p></li>
+<li><p>Before running K-means clustering please remove rows with any missing values across all variables in your dataset - yes, you will lose quite a lot of rows. Consider which columns you can use and if you have to do anything to them before clustering?</p></li>
+<li><p>Run the k-means clustering algorithm with 4 centers on the data. Look at the clusters you have generated.</p></li>
+<li><p>Visualize the results of your clustering. Do 4 clusters seems like a good fit for our data in the first two dimensions (Dim1 and Dim2)? How about if you have a look at Dim3 or Dim4?</p></li>
+<li><p>Investigate the best number of clusters for this dataset. Use the <code>silhouette</code> metric.</p></li>
+<li><p>Re-do the clustering (plus visualization) with the optimal number of clusters.</p></li>
+<li><p>Now, try to figure out what the two clusters might represent. There are different ways to do this, but one easy way would be to simply compare the <code>clusters IDs</code> from the Kmeans output with one or more of the categorical variables from the dataset. You could use <code>count()</code> or <code>table()</code> for this.</p></li>
+<li><p>The <code>withiness</code> measure (within cluster variance/spread) is much larger for one cluster then the other, what biological reason could there be for that?</p></li>
 </ol>
 
 

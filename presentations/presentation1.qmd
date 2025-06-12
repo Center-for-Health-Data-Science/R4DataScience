@@ -22,7 +22,7 @@ We’ll work with two datasets:
 
 -   `df_ov`: clinical information for ovarian cancer patients.
 
--   `df_exp`: gene expression data for cytochrome genes.
+-   `df_exp`: gene expression data for collagen genes.
 
 We use the `load()` function, which automatically imports an R object - let's have a look at it.
 
@@ -86,9 +86,8 @@ Check which columns contain NA values and how many:
 ```{r}
 df_ov %>% 
   is.na() %>% 
-  colSums() 
-
-#%>% barplot(las=2, cex.names=0.6) # baseR barplot since we are plotting a vector
+  colSums() %>% 
+  barplot(las=2, cex.names=0.6) # baseR barplot since we are plotting a vector
 ```
 
 Remove rows with missing data (careful - this can reduce sample size too much):
@@ -134,18 +133,21 @@ df_ov <- df_ov %>%
   mutate(vital_status = str_trim(vital_status))
 ```
 
-Accessing the unique values of the `vital_status` column. After clean up we only have one group of deceased and living - perfect!
+Accessing the unique values of the `vital_status` column.
 
 ```{r}
 df_ov$vital_status %>% 
   unique()
 ```
 
-Change "NA" to actual NA. 
+Change "NA" to actual NA.
+
 ```{r}
 df_ov <- df_ov %>%
   mutate(vital_status = na_if(vital_status, "NA"))
 ```
+
+After clean up we only have one group of deceased, living, and NA - perfect!
 
 ```{r}
 df_ov$vital_status %>% 
@@ -168,9 +170,9 @@ df_ov$vital_status %>%
 
 ### Step 1: Drop Variables with Too Many Missing Values
 
-1.  If a variable has more than \~20% missing data, it probably won’t be useful. Let’s remove those:
+If a variable has more than \~20% missing data, it probably won’t be useful. Let’s remove those:
 
-`~ mean(is.na(.)) < threshold` explained: `~` = “Define a function” `.` is a placeholder for the input (in this case, a column of the data frame) `mean(is.na(.))` calculates the proportion of missing values `< threshold` returns TRUE or FALSE — which where() uses to decide if a column should be kept
+`~ mean(is.na(.)) < threshold` explained: `~` = “Define a function” `.` is a placeholder for the input (in this case, a column of the data frame) `mean(is.na(.))` calculates the proportion of missing values `< threshold` returns TRUE or FALSE — which `where()` uses to decide if a column should be kept
 
 ```{r}
 threshold <- 0.2 # 20% threshold
@@ -198,7 +200,7 @@ cols_to_factor <- c('sample_type', 'primarysite', 'summarygrade',
                     'tumorstage', 'grade', 'batch')
 
 df_ov <- df_ov %>%
-  mutate(across(.cols = all_of(cols_to_factor), 
+  mutate(across(.cols = cols_to_factor, 
                 .fns = as.factor))
 
 str(df_ov)
@@ -236,11 +238,11 @@ df_ov <- df_ov %>%
 df_ov$summarygrade %>% table()
 
 # Reorder levels 
-levels(df_ov$summarygrade)
+levels(df_ov$summarygrade) # high, low
 
 df_ov$summarygrade <- factor(df_ov$summarygrade, levels = c('low', 'high'))
 
-levels(df_ov$summarygrade)
+levels(df_ov$summarygrade) # low, high
 ```
 
 ## Create New Variables
@@ -266,7 +268,7 @@ paste('TCGA', 'Data', sep = ' ')
 df_ov <- df_ov %>% 
   mutate(stage = paste(tumorstage, substage, sep = '-'))
 
-head(df_ov$stage)
+unique(df_ov$stage)
 ```
 
 Create logical variables with `ifelse`. Adding a column with content based on a condition with `ifelse`.
@@ -301,9 +303,9 @@ To extract and work with this kind of information, we can use what is called a *
 
 ### Regex: Regular expression
 
-Regular expressions (regex) are used to search for patterns in text strings. Regular expressions are super flexible and very powerful, BUT they can be slightly confusing at times...
+Regular expressions (regex) are used to **search for patterns in text strings**. Regular expressions are super flexible and very powerful, BUT they can be slightly confusing at times...
 
-Instead of looking for an exact word like **cat**, a **regex** lets you search for things like:
+Instead of looking for an exact word like *cat*, a regex lets you search for things like:
 
 -   "Any word that starts with ‘c’ and ends with ‘t’"
 
@@ -365,13 +367,13 @@ df_ov <- df_ov %>%
   mutate(sample_code_manual = str_detect(sample_code, '01.{0,1}'), 
          .after = sample_type)
 
-tail(df_ov)
+df_ov %>% select(sample_code, sample_code_manual) %>% slice(100:110)
 ```
 
 We can also replace text patterns:
 
 ```{r}
-str_replace_all('TCGA', 'A', 'aaaaaaaaaa')
+str_replace_all(string = 'TCGA', pattern = 'A', replacement = 'aaaaaaaaaa')
 ```
 
 ```{r}
@@ -408,7 +410,7 @@ Let's make a subset of each of the datasets to have a better overview of what is
 
 ```{r}
 df_exp_subset <- df_exp %>% arrange(unique_patient_ID) %>% slice(1:5) %>% select(1:5)
-df_ov_subset <- df_ov %>% arrange(unique_patient_ID) %>% slice(3:7) %>% select(1:5)
+df_ov_subset <- df_ov %>% arrange(unique_patient_ID) %>% slice(3:7) %>% select(1:3, vital_status)
 
 df_exp_subset$unique_patient_ID %in% df_ov_subset$unique_patient_ID %>% table()
 ```

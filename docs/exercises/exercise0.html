@@ -214,12 +214,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </li>
       </ul>
   </li>
-        <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../data/data.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Data️</span></a>
-  </div>
-</li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
             <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true">
@@ -282,12 +276,65 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
             <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="false">
- <span class="menu-text">Cheat Sheets</span></a>
+ <span class="menu-text">Solutions</span></a>
           <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="false" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
       <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../tdhh/tdhh1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Solution 1: Data Cleaning</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../tdhh/tdhh2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Solution 2: Summary Statistics and Data Wrangling</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../tdhh/tdhh3.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Solution 3: Exploratory Data Analysis</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../tdhh/tdhh4A.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Solution 4A: Conditions and For-loops</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../tdhh/tdhh4B.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Solution 4B: Functions</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../tdhh/tdhh5A.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Solution 5A: Intro to Regression in R</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../tdhh/tdhh5B.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Solution 5B: Models and Model Evaluation in R</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="false">
+ <span class="menu-text">Cheat Sheets</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 ">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../CheatSheet/quartoCheatSheet.pdf" class="sidebar-item-text sidebar-link">
@@ -357,7 +404,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="file-management-data-download" class="level2">
 <h2 class="anchored" data-anchor-id="file-management-data-download">File Management &amp; Data Download</h2>
 <ol type="1">
-<li>To get this material you went to the github repository of this course: https://github.com/Center-for-Health-Data-Science/R4DataScience, pressed <strong>Clone</strong> → <strong>Download ZIP</strong> and downloaded the directory with the course material called <em>R4DataScience</em> or <em>R4DataScience-main</em>. This folder contains several sub directory with more and less relevant material. The files you need for this course is:</li>
+<li>To get this material you went to the github repository of this course: https://github.com/Center-for-Health-Data-Science/R4DataScience, pressed <strong>Code</strong> → <strong>Download ZIP</strong> and downloaded the directory with the course material called <em>R4DataScience</em> or <em>R4DataScience-main</em>. This folder contains several sub directory with more and less relevant material. The files you need for this course is:</li>
 </ol>
 <ul>
 <li><code>slides/R4datascience_slides.pdf</code>: contains the lecture slides in pdf format.</li>
@@ -365,7 +412,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li><code>exercises/*</code>: all the exercises that you will go through yourselves. You are currently looking at <code>exercises/exercise0.qmd</code>.</li>
 <li><code>data/*</code>: all the data you need for the exercises.</li>
 </ul>
-<p>Ignore or delete the material that is not mentioned above.</p>
 <ol start="2" type="1">
 <li>Under the course directory, make a sub directory for the outputs that you will generate doing the exercises.</li>
 </ol>
@@ -408,7 +454,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>Quarto is an open-source publishing system designed to help you create dynamic, reproducible documents, presentations, and websites. It extends the ideas of tools like R Markdown, combining simplicity with powerful customization options for modern scientific and technical communication.</p>
 <ol start="10" type="1">
 <li><p>Type <code>getwd()</code> in a code chunk in your Quarto document and run the line. Compare the working directory with the one from the console.</p></li>
-<li><p>Change the working directory in one chuck using <code>setwd()</code>.</p></li>
+<li><p>Change the working directory in one chunk using <code>setwd()</code>.</p></li>
 <li><p>Run <code>getwd()</code> in the same chunk as <code>setwd()</code> AND in another chunk. What do you observe?</p></li>
 </ol>
 <div class="callout callout-style-default callout-tip callout-titled">
@@ -434,7 +480,7 @@ Hint
 </div>
 </div>
 <ol start="13" type="1">
-<li><p>Create a code chunks and write the same code as you did in <strong>8</strong>. Write a description of what you did above the code chunk. Re-save the file.</p></li>
+<li><p>Create a code chunk and write the same code as you did in <strong>8</strong>. Write a description of what you did above the code chunk. Re-save the file.</p></li>
 <li><p>Render the Quarto document and have a look at the html file.</p></li>
 </ol>
 <div class="callout callout-style-default callout-note callout-titled">
@@ -470,8 +516,16 @@ Resources for Quarto
 </figure>
 </div>
 <ol start="15" type="1">
-<li><p>Create an R project by clicking the <em>Project (None)</em> in the top right → <em>New Project</em> → <em>Existing Directory</em> and choose an appropriate location. Look at the top-right corner to check that you are in your R project.</p></li>
-<li><p>Reopen the the R script and Quarto document you created in Exercise 4 and 9 respectively. Check each of their working directories. Are they as you expect? Explain.</p></li>
+<li>Before doing this exercise, we need to brief you about what will happen when you do the instructions below:</li>
+</ol>
+<ul>
+<li><p>Rstudio will ask you if you want to save your current workspace and to that you will answer <strong>Don’t Save</strong>.</p></li>
+<li><p>Rstudio will close down your current session and open a new one which means that this Quarto will not be open in Rstudio anymore. After you have done the instructions below, simply <strong>navigate to this document and reopen it</strong>.</p></li>
+</ul>
+<p>Great - now to the exercise:</p>
+<p>Create an R project by clicking the <em>Project (None)</em> in the top right → <em>New Project</em> → <em>Existing Directory</em> and choose an appropriate location. Look at the top-right corner to check that you are in your R project.</p>
+<ol start="16" type="1">
+<li>Reopen the the R script and Quarto document you created in Exercise 4 and 9 respectively. Check each of their working directories. Are they as you expect? Explain.</li>
 </ol>
 <div class="callout callout-style-default callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-3-contents" aria-controls="callout-3" aria-expanded="false" aria-label="Toggle callout">
@@ -492,9 +546,6 @@ Hint
 </div>
 </div>
 </div>
-<ol start="17" type="1">
-<li>If you like the flow of the R project, keep it. If not, delete it. It is not necessary to have an R project. <strong>NB</strong> If you delete it, click the R project drop-down menu in the top-right corner → <em>Close Project</em>.</li>
-</ol>
 
 
 </section>

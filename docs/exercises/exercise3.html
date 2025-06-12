@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Exercise 3 B: Exploratory Data Analysis (EDA) - PCA – R for Data Science</title>
+<title>Exercise 3: Exploratory Data Analysis – R for Data Science</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -19,40 +19,6 @@ ul.task-list li input[type="checkbox"] {
   width: 0.8em;
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
-}
-/* CSS for syntax highlighting */
-pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { line-height: 1.25; }
-pre > code.sourceCode > span:empty { height: 1.2em; }
-.sourceCode { overflow: visible; }
-code.sourceCode > span { color: inherit; text-decoration: inherit; }
-div.sourceCode { margin: 1em 0; }
-pre.sourceCode { margin: 0; }
-@media screen {
-div.sourceCode { overflow: auto; }
-}
-@media print {
-pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
-}
-pre.numberSource code
-  { counter-reset: source-line 0; }
-pre.numberSource code > span
-  { position: relative; left: -4em; counter-increment: source-line; }
-pre.numberSource code > span > a:first-child::before
-  { content: counter(source-line);
-    position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; display: inline-block;
-    -webkit-touch-callout: none; -webkit-user-select: none;
-    -khtml-user-select: none; -moz-user-select: none;
-    -ms-user-select: none; user-select: none;
-    padding: 0 4px; width: 4em;
-  }
-pre.numberSource { margin-left: 3em;  padding-left: 4px; }
-div.sourceCode
-  {   }
-@media screen {
-pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 </style>
 
@@ -103,35 +69,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   }
 }</script>
 
-  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
-  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
-
-<script type="text/javascript">
-const typesetMath = (el) => {
-  if (window.MathJax) {
-    // MathJax Typeset
-    window.MathJax.typeset([el]);
-  } else if (window.katex) {
-    // KaTeX Render
-    var mathElements = el.getElementsByClassName("math");
-    var macros = [];
-    for (var i = 0; i < mathElements.length; i++) {
-      var texText = mathElements[i].firstChild;
-      if (mathElements[i].tagName == "SPAN") {
-        window.katex.render(texText.data, mathElements[i], {
-          displayMode: mathElements[i].classList.contains('display'),
-          throwOnError: false,
-          macros: macros,
-          fleqn: false
-        });
-      }
-    }
-  }
-}
-window.Quarto = {
-  typesetMath
-};
-</script>
 
 </head>
 
@@ -243,12 +180,6 @@ window.Quarto = {
 </li>
       </ul>
   </li>
-        <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../data/data.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Data️</span></a>
-  </div>
-</li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
             <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true">
@@ -311,12 +242,65 @@ window.Quarto = {
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
             <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="false">
- <span class="menu-text">Cheat Sheets</span></a>
+ <span class="menu-text">Solutions</span></a>
           <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="false" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
       <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../tdhh/tdhh1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Solution 1: Data Cleaning</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../tdhh/tdhh2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Solution 2: Summary Statistics and Data Wrangling</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../tdhh/tdhh3.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Solution 3: Exploratory Data Analysis</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../tdhh/tdhh4A.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Solution 4A: Conditions and For-loops</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../tdhh/tdhh4B.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Solution 4B: Functions</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../tdhh/tdhh5A.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Solution 5A: Intro to Regression in R</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../tdhh/tdhh5B.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Solution 5B: Models and Model Evaluation in R</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="false">
+ <span class="menu-text">Cheat Sheets</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 ">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../CheatSheet/quartoCheatSheet.pdf" class="sidebar-item-text sidebar-link">
@@ -355,8 +339,8 @@ window.Quarto = {
   <ul>
   <li><a href="#getting-started" id="toc-getting-started" class="nav-link active" data-scroll-target="#getting-started">Getting started</a></li>
   <li><a href="#check-data-distributions" id="toc-check-data-distributions" class="nav-link" data-scroll-target="#check-data-distributions">Check Data Distributions</a></li>
-  <li><a href="#pca" id="toc-pca" class="nav-link" data-scroll-target="#pca">PCA</a></li>
-  <li><a href="#extra-exercises" id="toc-extra-exercises" class="nav-link" data-scroll-target="#extra-exercises">Extra exercises</a></li>
+  <li><a href="#data-cleaning" id="toc-data-cleaning" class="nav-link" data-scroll-target="#data-cleaning">Data Cleaning</a></li>
+  <li><a href="#principal-component-analysis" id="toc-principal-component-analysis" class="nav-link" data-scroll-target="#principal-component-analysis">Principal Component Analysis</a></li>
   </ul>
 </nav>
     </div>
@@ -365,7 +349,7 @@ window.Quarto = {
 
 <header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../exercises/exercise0.html">Exercises</a></li><li class="breadcrumb-item"><a href="../exercises/exercise3.html">Exercise 3: Exploratory Data Analysis</a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title">Exercise 3 B: Exploratory Data Analysis (EDA) - PCA</h1>
+<h1 class="title">Exercise 3: Exploratory Data Analysis</h1>
 </div>
 
 
@@ -382,30 +366,20 @@ window.Quarto = {
 </header>
 
 
-<p>This exercise deals with creating and visualizing a principal component analysis (PCA). For a quick introduction to the main idea behind PCA you can have a look at <a href="https://www.youtube.com/watch?v=HMOI_lkzW08&amp;t=194">this video</a>.</p>
 <section id="getting-started" class="level2">
 <h2 class="anchored" data-anchor-id="getting-started">Getting started</h2>
 <ol type="1">
-<li><p>Load packages the you think you might immediately need, e.g.&nbsp;<code>tidyverse</code>. No worries if you forget any, you always load then later on.</p></li>
-<li><p>Read in the joined diabetes data set you created in <code>Exercise 2</code>. If you did not make it all the way through exercise 2 you can find the dataset you need in <code>../data/exercise2_diabetes_glucose.xlsx</code>. Have a look at the data type (<code>numeric</code>, <code>categorical</code>, <code>factor</code>) of each column to ensure these make sense. If need, convert variables to the correct (most logical) type.</p></li>
+<li><p>Load in the packages the you think you need for this exercise. You will be doing PCA, so have a look at which packages we used in Presentation 3. No worries if you forget any, you always load then later on.</p></li>
+<li><p>Read in the joined diabetes data set you created in Exercise 2. If you did not make it all the way through Exercise 2 you can find the dataset you need in <code>../data/exercise2_diabetes_glucose.xlsx</code>.</p></li>
+<li><p>Have a look at the data type (<code>numeric</code>, <code>categorical</code>, <code>factor</code>) of each column to ensure these make sense. If need, convert variables to the correct (most logical) type.</p></li>
 </ol>
-<p>As you will see at the end of the dataset you have <code>Measurement</code> and <code>Glucose (mmol/L)</code>. The <code>Measurement</code> variable actually denote at what time the <code>Glucose (mmol/L)</code> value was taken. We would like to separate these values out into three columns.</p>
-<ol start="3" type="1">
-<li>Extract the <code>Glucose (mmol/L)</code> column into three columns. Below you have some pseudo code as help:</li>
-</ol>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>my_df <span class="sc">%&gt;%</span> </span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_wider</span>(<span class="at">names_from =</span> ,</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>              <span class="at">values_from =</span> ,</span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>              <span class="at">names_prefix =</span> <span class="st">'Measurement_'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
 </section>
 <section id="check-data-distributions" class="level2">
 <h2 class="anchored" data-anchor-id="check-data-distributions">Check Data Distributions</h2>
-<p>Lets have a look at the distributions of our numerical variables.</p>
+<p>Let’s have a look at the distributions of the numerical variables.</p>
 <ol start="4" type="1">
-<li><p>Make histograms of the three <code>Glucose (mmol/L)</code> measurement variables in your dataset. What do you observe? Are these three variables normally distributed?</p></li>
-<li><p>Just as in question 3 above, histograms of the three <code>Glucose (mmol/L)</code> measurement variables in your dataset, BUT this time stratify your dataset by the variable <code>Diabetes</code>. How do your distributions look now?</p></li>
+<li><p>Make histograms of the three <code>Glucose (mmol/L)</code> measurements in your dataset. What do you observe? Are the three groups of values normally distributed?</p></li>
+<li><p>Just as in question 3 above, make histograms of the three <code>Glucose (mmol/L)</code> measurement variables, BUT this time stratify your dataset by the variable <code>Diabetes</code>. How do your distributions look now?</p></li>
 </ol>
 <div class="callout callout-style-default callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
@@ -419,20 +393,21 @@ Hint
 </div>
 <div id="callout-1" class="callout-1-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<p>Instead of using <code>facet_wrap()</code> try: <code>facet_grid(Diabetes ~ variable, scales = "free")</code>.</p>
+<p>Try: <code>facet_wrap(Var1 ~ Var2, scales = "free")</code>.</p>
 </div>
 </div>
 </div>
 <ol start="6" type="1">
-<li>Make a qqnorm plot for the variables <code>Age</code>, <code>Bloodpressure</code>, <code>BMI</code> and <code>PhysicalActivity</code>. What do they tell you?</li>
+<li><p>Make a qqnorm plot for the other numeric variables; <code>Age</code>, <code>Bloodpressure</code>, <code>BMI</code>, <code>PhysicalActivity</code> and <code>Serum_ca2</code>. What do the plots tell you?</p></li>
+<li><p>From the qq-norm plot above you will see that especially one of the variables seems to be far from normally distributed. What type of transformation could you potentially apply to this variable to make it normal? Transform and make a histogram or qqnorm plot. Did the transformation help?</p></li>
 </ol>
+<p>Luckily for us it is not a requirement for dimensionality reduction methods like PCA that neither variables nor their residuals were normally distributed. Requirements for normality becomes important when performing statistical tests and modelling, including t-tests, ANOVA and regression models (more on this in part 5).</p>
 </section>
-<section id="pca" class="level2">
-<h2 class="anchored" data-anchor-id="pca">PCA</h2>
-<p>For this exercise we will use this <a href="https://cran.r-project.org/web/packages/ggfortify/vignettes/plot_pca.html">tutorial</a> to make a principal component analysis (PCA). First, we perform some preprocessing to get our data into the right format.</p>
-<ol start="3" type="1">
-<li><p>Let’s start by unnesting the OGTT data and using pivot wider so that each Glucose measurement time point gets its own column (again).</p></li>
-<li><p>Have a look at your unnested diabetes data set. Can you use all the variables to perform PCA? Subset the dataset to only include the relevant variables.</p></li>
+<section id="data-cleaning" class="level2">
+<h2 class="anchored" data-anchor-id="data-cleaning">Data Cleaning</h2>
+<p>While PCA is very forgiving in terms of variable distributions, there are some things it does not handle well, including missing values and varying ranges of numeric variables. So, before you go on you need to do a little data management.</p>
+<ol start="8" type="1">
+<li>The <code>Glucose (mmol/L)</code> variable in the dataset which denotes the result of the <code>Oral Glucose Tolerance Test</code> with measurements at times the <code>0</code>, <code>60</code>, <code>120</code> min should be separated out into three columns, one for each time point.</li>
 </ol>
 <div class="callout callout-style-default callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
@@ -446,49 +421,32 @@ Hint
 </div>
 <div id="callout-2" class="callout-2-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<p>PCA can only be performed on numerical values. Extract these (except ID!) from the dataset. Numerical columns can easily be selected with the <code>where(is.numeric)</code> helper.</p>
+<p><code>pivot_wider(names_from = ..., values_from = ..., names_prefix = 'Measurement\_')</code></p>
 </div>
 </div>
 </div>
-<ol start="5" type="1">
-<li>PCA cannot handle NA’s in the dataset. Remove all rows with NA in any column in your numerical subset. Then, go back to the original unnested data <code>diabetes_glucose_unnest</code> (or what you have called it) and also here drop rows that have NAs in the numerical columns (so the same rows you dropped from the numeric subset).This is important because we want to use (categorical) columns present in the original data to later color the resulting PCA, so the two dataframes (original and only numeric columns) need to be aligned and contain the same rows.</li>
+<ol start="9" type="1">
+<li><p>Remove any missing values from your dataset.</p></li>
+<li><p>Extract all numeric variables AND scale these so they have comparable ranges. This numeric dataset you will use for PCA.</p></li>
+<li><p>Extract all categorical variables from your dataset and save them to a new object. You will use these as labels for the PCA.</p></li>
 </ol>
-<p>Now our data is ready to make a PCA.</p>
-<ol start="6" type="1">
-<li><p>Calculate the PCA by running <code>prcomp</code> on our prepared data (see the tutorial). Then, create a plot of the resulting PCA (also shown in tutorial).</p></li>
-<li><p>Color your PCA plot and add loadings. Think about which variable you want to color by. Remember to refer to the dataset that has this variable (probably not your numeric subset!)</p></li>
-<li><p>Add a ggplot <code>theme</code> and title to your plot and save it.</p></li>
-<li><p>Calculate the variance explained by each of the PC’s using the following formula:</p></li>
-</ol>
-<p><span class="math display">\[
-\text{Variance Explained} = \frac{\text{sdev}^2}{\sum \text{sdev}^2} \times 100
-\]</span></p>
-<div class="callout callout-style-default callout-tip callout-titled">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-3-contents" aria-controls="callout-3" aria-expanded="false" aria-label="Toggle callout">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-Hint
-</div>
-<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
-</div>
-<div id="callout-3" class="callout-3-contents callout-collapse collapse">
-<div class="callout-body-container callout-body">
-<p>You can access the standard deviation from the PCA object like this: <code>pca_res$sdev</code>.</p>
-</div>
-</div>
-</div>
-<ol start="10" type="1">
-<li><p>Create a two column data-frame with the names of the PC’s (PC1, PC2, ect) in one column and the variance explained by that PC in the other column.</p></li>
-<li><p>Now create a bar plot (using <code>geom_col</code>), showing for each PC the amount of explained variance. This type of plot is called a scree plot.</p></li>
-<li><p>Lastly, render you quarto document and review the resulting html file.</p></li>
-</ol>
-<hr>
 </section>
-<section id="extra-exercises" class="level2">
-<h2 class="anchored" data-anchor-id="extra-exercises">Extra exercises</h2>
-<p>e1. The Oral Glucose Tolerance Test is used to diagnose diabetes so we are not surprised that it separates the dataset well. In this part, we will look at a PCA without the OGTT measurements and see how we fare. Omit the Glucose measurement columns, calculate a PCA and create the plot.</p>
+<section id="principal-component-analysis" class="level2">
+<h2 class="anchored" data-anchor-id="principal-component-analysis">Principal Component Analysis</h2>
+<ol start="12" type="1">
+<li><p>Calculate the PCs on your numeric dataset using the function <code>PCA()</code> from the <code>FactoMineR</code> package. Note that you should set <code>scale.unit = FALSE</code> as you have already scaled your dataset.</p></li>
+<li><p>Make a plot that shows how much variance is captured by each component (in each dimension). There are two ways of making this plot: either you can use the function <code>fviz_screeplot()</code> from the <code>factoextra</code> package as we did in the exercise OR, you can use ggplot2, by extracting the <code>res.pca$eig</code> and plotting the <code>percentage of variance</code> column.</p></li>
+<li><p>Now, make a biplot (the round one with the arrows we showed in the presentation). This type of plot is a little complicated with ggplot alone, so either use the <code>fviz_pca_var()</code> function from the <code>factoextra</code> package we showed in the presentation, or - if you want to challenge yourself - try <code>autoplot()</code> from the <code>ggfortify</code> package.</p></li>
+<li><p>Have a look at the <code>$var$contrib</code> from your PCA object and compare it to the biplot, what do they tell you, i.e.&nbsp;which variables contribute the most to PC1 (dim1) and PC2 (dim2)? Also, look at the correlation matrix between variables in each component (<code>$var$cor</code>), what can you conclude from this?</p></li>
+<li><p>Plot your samples in the new dimensions, i.e.&nbsp;PC1 (dim1) vs PC2 (dim2), with the function <code>fviz_pca_ind()</code>. Add color and/or labels to the points using categorical variables you extracted above. What pattern of clustering (in any) do you observe?</p></li>
+<li><p>Try to call <code>$var$cos2</code> from your PCA object. What does it tell you about the first 5 components? Are there any of these, in addition to Dim 1 and Dim 2, which seem to capture some variance? If so, try to plot these components and overlay the plot with the categorical variables from above to figure out which it might be capturing.</p></li>
+</ol>
+<p>The <code>Oral Glucose Tolerance Test</code> is the one used to produce the OGTT measurements <code>(0, 60, 120)</code>. As these measurement are directly used to diagnose diabetes we are not surprised that they separate the dataset well - we are being completely bias.</p>
+<ol start="18" type="1">
+<li><p>Omit the Glucose measurement columns, calculate a PCA and create the plot above. Do the remaining variables still capture the <code>Diabetes</code> pattern?</p></li>
+<li><p>From the exploratory analysis you have performed, which variables (numeric and/or categorical) would you as a minimum include in a model for prediction of <code>Diabetes</code>?</p></li>
+</ol>
+<p><strong>N.B</strong> again you should not include the actual glucose measurement variables as they where used to the define the outcome you are looking at.</p>
 
 
 </section>

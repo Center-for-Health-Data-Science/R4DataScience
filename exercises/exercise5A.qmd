@@ -122,7 +122,7 @@ caret::confusionMatrix(y_pred, y_test)
 
 ## Part 3: K-Means Clustering
 
-In this part we will run K-means clustering. To mix it up a bit we will work with a new dataset from patients with kidney disease. The dataset contains aprox. 20 biological measures (variables) collected across 400 patients. The outcome is the `classification` variable which denotes whether a person suffers from **ckd=chronic kidney disease** `ckd` or not `notckd`.
+In this part we will run K-means clustering. To mix it up a bit we will work with a new dataset from patients with kidney disease. The dataset contains approximately 20 biological measures (variables) collected across 400 patients. The outcome is the `classification` variable which denotes whether a person suffers from **ckd=chronic kidney disease** `ckd` or not `notckd`.
 
 ```         
         age     -   age
@@ -151,9 +151,9 @@ In this part we will run K-means clustering. To mix it up a bit we will work wit
 
 19. Load in the dataset named `kidney_disease.Rdata`.
 
-20. Before running K-means clustering please remove any missing values across all variables in your dataset. Consider which columns you can use and if you have to do anything to them before clustering?
+20. Before running K-means clustering please remove rows with any missing values across all variables in your dataset - yes, you will lose quite a lot of rows. Consider which columns you can use and if you have to do anything to them before clustering?
 
-21. Run the k-means clustering algorithm with 4 centers on the data. Look at the plot you have generated.
+21. Run the k-means clustering algorithm with 4 centers on the data. Look at the clusters you have generated.
 
 22. Visualize the results of your clustering. Do 4 clusters seems like a good fit for our data in the first two dimensions (Dim1 and Dim2)? How about if you have a look at Dim3 or Dim4?
 
@@ -161,6 +161,6 @@ In this part we will run K-means clustering. To mix it up a bit we will work wit
 
 24. Re-do the clustering (plus visualization) with the optimal number of clusters.
 
-25. Now, try to figure out what the two clusters might represent. There are different ways to do this, but one easy way would be to simply compare the `clusters IDs` from the Kmeans output with one or more of the categorical variables from the dataset. You could use `count() or table()` for this.
+25. Now, try to figure out what the two clusters might represent. There are different ways to do this, but one easy way would be to simply compare the `clusters IDs` from the Kmeans output with one or more of the categorical variables from the dataset. You could use `count()` or `table()` for this.
 
 26. The `withiness` measure (within cluster variance/spread) is much larger for one cluster then the other, what biological reason could there be for that?
