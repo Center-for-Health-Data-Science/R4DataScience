@@ -8,7 +8,9 @@ project:
 
 ## Part 1: Penalized Regression
 
-**Elastic Net regression** is part of the family of **penalized regressions**, which also includes **Ridge regression** and **LASSO regression**. Penalized regressions are useful when dealing with many predictors, as they help eliminate less informative ones while retaining the important predictors, making them ideal for high-dimensional datasets. If you are interested in knowing more about penalized regressions, you can have a look at this excellent tutorial from [Datacamp](https://www.datacamp.com/tutorial/tutorial-ridge-lasso-elastic-net).
+**Elastic Net regression** is part of the family of **penalized regressions**, which also includes **Ridge regression** and **LASSO regression**. Penalized regressions are useful when dealing with many predictors, as they help eliminate less informative ones while retaining the important predictors, making them ideal for high-dimensional datasets.
+
+If you are interested in knowing more about penalized regressions, you can have a look at this excellent tutorial from [Datacamp](https://www.datacamp.com/tutorial/tutorial-ridge-lasso-elastic-net).
 
 In linear regression, we estimate the relationship between predictors $X$ and an outcome $y$ using parameters $β$, chosen to minimize the residual sum of squares (**RSS**). Two key properties of these $β$ estimates are bias (the difference between the true parameter and the estimate) and variance (how much the estimates vary across different samples). While **OLS** (Ordinary Least Squares) gives unbiased estimates, it can suffer from high variance - especially when predictors are numerous or highly correlated — leading to poor predictions.
 
@@ -18,11 +20,11 @@ To address this, we can introduce regularization, which slightly biases the esti
 
 **Ridge Regression** = L2 penalty (adds the sum of the squares of the coefficients to the loss function). It discourages large coefficients by penalizing their squared magnitudes, shrinking them towards zero. This reduces overfitting while keeping all variables in the model.
 
-**Lasso Regression** = L1 penalty (adds the sum of the absolute values of the coefficients to the loss function). This penalty encourages sparsity, causing some coefficients to become exactly zero for large $λ$s, thereby performing variable selection.
+**Lasso Regression** = L1 penalty (adds the sum of the absolute values of the coefficients to the loss function). This penalty encourages sparsity, causing some coefficients to become exactly zero for large $λ$, thereby performing variable selection.
 
 **Elastic Net** combines L1 and L2 penalties to balance variable selection and coefficient shrinkage. One of the key advantages of Elastic Net over other types of penalized regression is its ability to handle multicollinearity and situations where the number of predictors exceeds the number of observations.
 
-**Lambda**, $(λ)$, controls the strength of the penalty. As $λ$ increases, variance decreases ands bias increases, raising the key question: how much bias are we willing to accept to reduce variance?
+**Lambda**, $(λ)$, controls the strength of the penalty. As $λ$ increases, variance decreases and bias increases, raising the key question: how much bias are we willing to accept to reduce variance?
 
 ![](../figures/penalty_regularization.png){fig-align="center"}
 
@@ -124,7 +126,9 @@ HD_EN %>%
 # }
 ```
 
-From our count table above we see that variables `DefectType`, `chestPainType`, `restElecCardio`, and `slopePeakExST` are unbalanced. Especially `DefectType` and `restElecCardio` are problematic with only 7 and 15 observations for one of the factor levels. To avoid issues when modelling, we will filter out these observations and re-level these two variables.
+From our count table above we see that variables `DefectType`, `chestPainType`, `restElecCardio`, and `slopePeakExST` are unbalanced. Especially `DefectType` and `restElecCardio` are problematic with only 7 and 15 observations for one of the factor levels.
+
+To avoid issues when modelling, we will filter out these observations and re-level these two variables.
 
 ```{r}
 HD_EN <- HD_EN %>% 
@@ -140,7 +144,7 @@ We split our dataset into train and test set, we will keep 70% of the data in th
 ```{r}
 # Add ID column
 HD_EN <- HD_EN %>% 
-  mutate(ID = paste0("W", 1:nrow(HD_EN)))
+  mutate(ID = paste0("ID", 1:nrow(HD_EN)))
 
 # Set seed
 set.seed(123)
@@ -157,7 +161,7 @@ train %>%
 ```
 
 ```{r}
-# Test sett
+# Test set
 test  <- anti_join(HD_EN, train, by = 'ID') 
 
 # Check group levels
@@ -195,10 +199,10 @@ However, if you do use categorical variables as your predictors within the `glmn
 Let's create the model matrix needed for input to `glmnet()` and `cv.glmnet()` functions:
 
 ```{r}
-modTrain <- model.matrix(~ ., data = train)
+modTrain <- model.matrix(~ .- 1, data = train)
 head(modTrain)
 
-modTest <- model.matrix(~ ., data = test)
+modTest <- model.matrix(~ .- 1,, data = test)
 ```
 
 Let's create your Elastic Net Regression model with `glmnet()`.
@@ -266,7 +270,7 @@ Let's order the coefficients by size and plot them to get an easy overview. Firs
 ```{r}
 coeffsDat <- as.data.frame(as.matrix(coeffs)) %>% 
   rownames_to_column(var = 'VarName') %>%
-  arrange(desc(s1)) %>%  
+  arrange(desc(s0)) %>%  
   filter(!str_detect(VarName,"(Intercept)")) %>% 
   mutate(VarName = factor(VarName, levels=VarName))
 ```
@@ -275,7 +279,7 @@ Now we can make a bar plot to visualize our results.
 
 ```{r}
 # Plot
-ggplot(coeffsDat, aes(x = VarName, y = s1)) +
+ggplot(coeffsDat, aes(x = VarName, y = s0)) +
   geom_bar(stat = "identity", fill = "#9395D3") +
   coord_flip() +
   labs(title = "Feature Importance for Elastic Net", 
@@ -284,7 +288,7 @@ ggplot(coeffsDat, aes(x = VarName, y = s1)) +
   theme_classic()
 ```
 
-From the coefficients above it seem like cheat pain of any type (0 vs 1, 2 or 3) is a strong predictor of the outcome, e.g. heart disease. In opposition, having a `DefectType3` significantly lowers the predicted probability of belonging to the event class (1 = Heart Disease). Specifically, it decreases the log-odds of the outcome. A large negative value like this suggests that `DefectType3` is strongly associated with a lower likelihood of an event.
+From the coefficients above it seem like cheat pain of any type (0 vs 1, 2 or 3) is a strong predictor of the outcome, e.g. heart disease. In opposition, having a `DefectType3` significantly lowers the predicted probability of belonging to the event class (1 = Heart Disease). Specifically, it decreases the log-odds of belonging to class 1. 
 
 ## Part 2: Random Forest
 
@@ -355,7 +359,7 @@ RFcv <- trainControl(
 )
 ```
 
-Now that we have set up parameters for cross validation in the `RFcv` object above, we can feed it to the `train()` function from the `caret` packages. We also specify the **training data**, the **name of the outcome variable**, and, importantly, that we want to perform random forest (`method = "rf"`) as the `train()` function can be used for different models. 
+Now that we have set up parameters for cross validation in the `RFcv` object above, we can feed it to the `train()` function from the `caret` packages. We also specify the **training data**, the **name of the outcome variable**, and, importantly, that we want to perform random forest (`method = "rf"`) as the `train()` function can be used for different models.
 
 ```{r}
 # Train Random Forest
@@ -385,6 +389,7 @@ plot(rf_model)
 ```
 
 Now, we use the test set to evaluate our model performance.
+
 ```{r}
 # Predict class probabilities
 y_pred <- predict(rf_model, newdata = test, type = "prob")
@@ -416,7 +421,6 @@ In terms of comparing the outcome of the Random Forest model with the Elastic Ne
 
 Use both models as complementary tools:
 
-  
 **EN: for interpretable, linear relationships**
 
 **RF: for capturing complex patterns and variable interactions**
