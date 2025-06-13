@@ -16,11 +16,17 @@ library(caret)
 library(readxl)
 ```
 
+## Linear Regression
+
+We will perform a linear regression using daily cigarettes smoked and exercise level as predictors, $X$, and lived years as the outcome, $y$.
+
+![](../figures/lin_reg.jpg){fig-align="center"}
+
 ## Load data
 
 In order to focus on the technical aspects we'll use a simple toy dataset. It contains the number of cigarettes smoked per day and how long the person lived. It is inspired by [this paper](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC2598467/) if you want to take a look.
 
-```{r}
+```{r, warning=FALSE, message=FALSE}
 df_smoke <- read_csv('../data/smoking_cat.csv')
 df_smoke
 ```
@@ -34,17 +40,11 @@ df_smoke <- df_smoke %>%
   mutate(exercise = as.factor(exercise))
 ```
 
-## Linear Regression
-
-We will perform a linear regression using daily cigarettes smoked and exercise level as predictors, $X$, and lived years as the outcome, $y$.
-
-![](../figures/lin_reg.jpg){fig-align="center"}
-
 ### Split Data into Training and Test Set
 
 Now, we will split our data into a test and a training set. There are numerous ways to do this. We here show `sample_frac` from `dplyr`:
 
-```{r}
+```{r, warning=FALSE, message=FALSE}
 # Set seed to ensure reproducibility
 set.seed(123)  
 
@@ -53,13 +53,15 @@ df_smoke$ID <- 1:nrow(df_smoke)
 
 train <- df_smoke %>% 
   sample_frac(0.75)
+
 nrow(train)
+
 head(train)
 ```
 
 As you can see, the ID's in `train` are shuffled and it only has 75 rows since we asked for 75% of the data. Now all we have to do is identify the other 25%, i.e. the observations not in train.
 
-```{r}
+```{r, warning=FALSE, message=FALSE}
 #from df_smoke remove what is in train by checking the ID column
 test  <- df_smoke %>% 
   filter(!ID %in% train$ID) 
@@ -124,12 +126,6 @@ The **R-squared** value indicates the proportion of variance explained by the mo
 
 Finally, the **F-statistic** and its p-value tests whether the model as a whole explains a significant portion of the variance in the response variable (the outcome, $y$).
 
-We can extract the `model` object's components with `$`:
-
-```{r}
-model$coefficients
-```
-
 Lets plot the results:
 
 ```{r}
@@ -141,7 +137,7 @@ plot(model)
 
 Plot to understand the model:
 
-```{r}
+```{r, eval=FALSE, echo=FALSE}
 train$predicted_life <- predict(model, newdata = train)
 
 ggplot(train) + 
@@ -338,7 +334,7 @@ model_reduced <- glm(early_death ~ daily_cigarettes, data = train, family = "bin
 summary(model_reduced)
 ```
 
-We can use an anova with the Chi-square test to compare the log-likelihood of the two models. It is most common to compare the less complex model to the more complex model:
+We can use an anova with the Chi-square (kai-square) test to compare the log-likelihood of the two models. It is most common to compare the less complex model to the more complex model:
 
 ```{r}
 anova(model_reduced, model_log, test = 'Chisq')
@@ -377,7 +373,7 @@ You can calculate the accuracy yourself, or you can use a function like `confusi
 caret::confusionMatrix(y_pred, test$early_death)
 ```
 
-## Clustering
+## Kmeans Clustering
 
 Clustering is a type of unsupervised learning technique used to group similar data points together based on their features. The goal is to find inherent patterns or structures within the data, e.g. to see whether the data points fall into distinct groups with distinct features or not.
 
@@ -415,7 +411,9 @@ set.seed(123)
 # Pull numeric variables and scale these
 kmeans_df <- df_wine %>%
   dplyr::select(where(is.numeric)) %>%
-  mutate(across(where(is.numeric), scale)) 
+  mutate(across(everything(), scale))
+
+kmeans_df
 
 ```
 
@@ -431,13 +429,7 @@ kmeans_res
 
 ```
 
-We can call `kmeans_res$centers` to inspect the values the centroids:
-
-```{r}
-kmeans_res$centers
-```
-
-For example the center of cluster 1 is placed at the coordinates -0.79 for Alcohol, 0.04 for Malic Acid, 0.22 for Ash and so on. Since our data has 13 dimensions, i.e. features, the cluster centers also do.
+We can call `kmeans_res$centers` to inspect the values the centroids. For example the center of cluster 1 is placed at the coordinates -0.79 for Alcohol, 0.04 for Malic Acid, 0.22 for Ash and so on. Since our data has 13 dimensions, i.e. features, the cluster centers also do.
 
 This is not super practical if we would like to visually inspect the clustering since we cannot plot in 13 dimensions. How could we solve this?
 
@@ -456,7 +448,7 @@ fviz_cluster(object = kmeans_res,
 
 ### Optimal number of clusters
 
-There are several ways to investigate the ideal number of clusters and `fviz_nbclust` from the factoextra package provides three of them:
+There are several ways to investigate the ideal number of clusters and `fviz_nbclust` from the `factoextra` package provides three of them:
 
 The so-called elbow method observes how the sum of squared errors (sse) changes as we vary the number of clusters. This is also sometimes referred to as "within sum of square" (wss).
 
