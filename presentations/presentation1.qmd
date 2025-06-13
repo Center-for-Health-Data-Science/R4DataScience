@@ -12,7 +12,7 @@ In this section, we'll focus on cleaning a dataset. We'll primarily use function
 
 ```{r warning=FALSE, message=FALSE}
 library(tidyverse)
-library(ggforce)
+library(ggforce) # extension of ggplot2
 # unload MASS since it has select function we don't want to use. 
 ```
 
@@ -38,20 +38,6 @@ class(df_exp)
 dim(df_exp)
 df_exp %>% head()
 ```
-
-## Understanding the Data
-
-Before jumping into statistics or modeling, we need to think about what scientific question we are trying to answer and get an understanding of the dataset we are working with.
-
--   What does each column (variable) represent?
-
--   Are the values **numeric**, **categorical**, **character**, or something else?
-
--   Are there any **missing values**, or other data quality issues?
-
--   Are there **domain-specific rules** (e.g., medical standards)?
-
-This will help us get an overview of the data, help you avoid mistakes, and choose the right analysis methods.
 
 ### Basics
 
@@ -79,7 +65,7 @@ df_ov %>%
   head()
 ```
 
-#### Check for Missing Values
+### Check for Missing Values
 
 Check which columns contain NA values and how many:
 
@@ -97,7 +83,55 @@ df_ov %>%
   drop_na()
 ```
 
-#### Check groups of categorical variables
+## Data wrangling and cleaning
+
+**Let's do some cleanup**
+
+1.  Drop Non-Informative Variables
+
+2.  Drop Variables with Too Many Missing Values
+
+3.  Standardize Categorical Data
+
+4.  Fix Variable Types
+
+5.  Recode and Reorder Factors
+
+6.  Create New Variables from existing ones
+
+### Step 1: Drop Non-Informative Variables
+
+Let’s check a few categorical variables and remove any that are redundant or irrelevant. If they don’t provide useful or well-curated information, we can drop them:
+
+```{r}
+df_ov$histological_type %>% table()
+```
+
+```{r, warning=FALSE}
+target <- c("histological_type")
+
+df_ov <- df_ov %>% 
+  select(!target)
+```
+
+### Step 2: Drop Variables with Too Many Missing Values
+
+If a variable has more than \~20% missing data, it probably won’t be useful. Let’s remove those:
+
+`~ mean(is.na(.)) < threshold` explained: `~` = “Define a function” `.` is a placeholder for the input (in this case, a column of the data frame) `mean(is.na(.))` calculates the proportion of missing values `< threshold` returns TRUE or FALSE — which `where()` uses to decide if a column should be kept
+
+```{r}
+threshold <- 0.2 # 20% threshold
+
+df_ov <- df_ov %>% 
+  select(where(~mean(is.na(.)) < threshold))
+
+dim(df_ov)
+```
+
+This keeps only the variables that are mostly complete.
+
+### Step 3: Standardize Categorical Data
 
 Counting the number of occurrences for each level of a categorical variable.
 
@@ -154,38 +188,8 @@ df_ov$vital_status %>%
   unique()
 ```
 
-## Data wrangling and cleaning
 
-**Let's do some cleanup**
-
-1.  Drop Variables with Too Many Missing Values
-
-2.  Fix Variable Types
-
-3.  Drop Non-Informative Variables
-
-4.  Recode and Reorder Factors
-
-5.  Create New Variables from existing ones
-
-### Step 1: Drop Variables with Too Many Missing Values
-
-If a variable has more than \~20% missing data, it probably won’t be useful. Let’s remove those:
-
-`~ mean(is.na(.)) < threshold` explained: `~` = “Define a function” `.` is a placeholder for the input (in this case, a column of the data frame) `mean(is.na(.))` calculates the proportion of missing values `< threshold` returns TRUE or FALSE — which `where()` uses to decide if a column should be kept
-
-```{r}
-threshold <- 0.2 # 20% threshold
-
-df_ov <- df_ov %>% 
-  select(where(~mean(is.na(.)) < threshold))
-
-dim(df_ov)
-```
-
-This keeps only the variables that are mostly complete.
-
-### Step 2: Fix Variable Types
+### Step 3: Fix Variable Types
 
 Some variables are stored as **character** or **numeric** when they should actually be **factors** (i.e., categorical variables). Convert character/numeric columns to factors:
 
@@ -204,23 +208,6 @@ df_ov <- df_ov %>%
                 .fns = as.factor))
 
 str(df_ov)
-```
-
-### Step 3: Drop Non-Informative Variables
-
-Let’s check a few categorical variables and remove any that are redundant or irrelevant. If they don’t provide useful or well-curated information, we can drop them:
-
-```{r}
-df_ov$histological_type %>% table()
-
-df_ov$primarysite %>% table()
-```
-
-```{r, warning=FALSE}
-target <- c("histological_type", "primarysite")
-
-df_ov <- df_ov %>% 
-  select(!target)
 ```
 
 ### Step 4: Re-code and Reorder Factors
@@ -392,15 +379,17 @@ Nicely done!
 
 **At this point, we have:**
 
-1.  Dropped Variables with Too Many Missing Values
+1.  Dropped Non-Informative Variables
 
-2.  Fixed Variable Types
+2.  Dropped Variables with Too Many Missing Values
 
-3.  Dropped Non-Informative Variables
+3.  Standardized Categorical Data
 
-4.  Recoded and Reordered Factors
+4.  Fixed Variable Types
 
-5.  Created New Variables from existing ones
+5.  Recoded and Reordered Factors
+
+6.  Created New Variables from existing ones
 
 ## Joining Dataframes
 
