@@ -401,7 +401,7 @@ Hint
 <section id="summary-stats" class="level2">
 <h2 class="anchored" data-anchor-id="summary-stats">Summary stats</h2>
 <ol start="8" type="1">
-<li>Calculate the mean glucose measure for each measurement time point.</li>
+<li>Calculate the mean glucose levels for each time point.</li>
 </ol>
 <div class="callout callout-style-default callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
@@ -441,8 +441,8 @@ Hint
 </div>
 </div>
 <ol start="11" type="1">
-<li><p>Plot <code>PhysicalActivity</code> and <code>BMI</code> against eachother in a scatter plot and stratify it by <code>Diabetes</code>. Look at the legend - does it look like expected?</p></li>
-<li><p>Change the Diabetes column to factor (if you haven’t already) and remake the plot.</p></li>
+<li><p>Plot <code>PhysicalActivity</code> and <code>BMI</code> against each other in a scatter plot and color by <code>Glucose (mmol/L)</code>.</p></li>
+<li><p>Highlights any trends or patterns that emerge across <code>PhysicalActivity</code> and <code>BMI</code> values. Includes an indication of confidence around those trends. Change color palette.</p></li>
 </ol>
 </section>
 <section id="sample-outliers-across-variables" class="level2">
@@ -493,7 +493,7 @@ Hint
 <h2 class="anchored" data-anchor-id="more-plotting">More Plotting</h2>
 <p>Let’s make some more advanced <code>ggplot</code>s!</p>
 <ol start="16" type="1">
-<li>For p1, plot the density of the glucose measurements at time 0. For p2, make the same plot as p1 but add stratification on the diabetes status. Give the plot a meaningful title. Consider the densities - do the plots make sense?</li>
+<li>For p1, plot the density of the glucose measurements at time 0. For p2, make the same plot as p1 but add stratification on the diabetes status. Make sure Diabetes is a factor. Give the plot a meaningful title. Consider the densities - do the plots make sense?</li>
 </ol>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>p1 <span class="ot">&lt;-</span> <span class="co"># code for plot 1</span></span>
@@ -504,8 +504,8 @@ Hint
 <span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>p1 <span class="sc">+</span> p2 <span class="sc">+</span> <span class="fu">plot_annotation</span>(<span class="at">title =</span> <span class="st">"Glucose measurements at time 0"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <ol start="17" type="1">
-<li><p>Do the same for the glucose measurements at time 60.</p></li>
 <li><p>Now, create one plot for the glucose measurement where the densities are stratified on measurement time (0, 60, 120) and diabetes status (0, 1). You should see 6 density curves in your plot.</p></li>
+<li><p>That is not a very intuitive plot. Could we change the geom and the order of the variables to visualize the same information more intuitively?</p></li>
 </ol>
 <div class="callout callout-style-default callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-5-contents" aria-controls="callout-5" aria-expanded="false" aria-label="Toggle callout">
@@ -524,8 +524,7 @@ Hint
 </div>
 </div>
 <ol start="19" type="1">
-<li><p>Calculate the mean glucose levels for each time point.</p></li>
-<li><p>Make the same calculation as above, but additionally group the results by <code>Diabetes</code>. Save the data frame in a variable.</p></li>
+<li>Calculate mean Glucose level by time point and <code>Diabetes</code> status. Save the data frame in a variable.</li>
 </ol>
 <div class="callout callout-style-default callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-6-contents" aria-controls="callout-6" aria-expanded="false" aria-label="Toggle callout">
@@ -543,10 +542,12 @@ Hint
 </div>
 </div>
 </div>
-<ol start="21" type="1">
+<ol start="20" type="1">
 <li><p>Create a plot that visualizes glucose measurements across time points, with one line for each patient ID. Then color the lines by their diabetes status. In summary, each patient’s glucose measurements should be connected with a line, grouped by their ID, and color-coded by <code>Diabetes</code>. Give the plot a meaningful title.</p></li>
-<li><p>Recreate the plot you made above and include the mean value for each glucose measurement for the two diabetes statuses (0 and 1) you calculated in <strong>e2</strong>. This plot should look like this:</p></li>
+<li><p>Recreate the plot you made above.</p>
+<p>But this time: Jittered individual values to avoid over plotting. Overlay and connect the group means showing the mean trend for each group. Add a title, change color pallet and themes.</p></li>
 </ol>
+<p>This plot should look like this:</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="../figures/figure3_13.png" class="img-fluid quarto-figure quarto-figure-center figure-img"></p>

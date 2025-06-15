@@ -369,17 +369,17 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 1,422 × 13
    ID    Sex      Age BloodPressure   BMI PhysicalActivity Smoker  Diabetes
-   &lt;chr&gt; &lt;chr&gt;  &lt;dbl&gt;         &lt;dbl&gt; &lt;dbl&gt;            &lt;dbl&gt; &lt;chr&gt;   &lt;chr&gt;   
- 1 34120 Female    28            75  25.4               92 Never   0       
- 2 34120 Female    28            75  25.4               92 Never   0       
- 3 34120 Female    28            75  25.4               92 Never   0       
- 4 27458 Female    55            72  24.6               86 Never   0       
- 5 27458 Female    55            72  24.6               86 Never   0       
- 6 27458 Female    55            72  24.6               86 Never   0       
- 7 70630 Male      22            80  24.9              139 Unknown 0       
- 8 70630 Male      22            80  24.9              139 Unknown 0       
- 9 70630 Male      22            80  24.9              139 Unknown 0       
-10 13861 Female    56            72  37.1               64 Unknown 1       
+   &lt;chr&gt; &lt;chr&gt;  &lt;dbl&gt;         &lt;dbl&gt; &lt;dbl&gt;            &lt;dbl&gt; &lt;chr&gt;      &lt;dbl&gt;
+ 1 34120 Female    28            75  25.4               92 Never          0
+ 2 34120 Female    28            75  25.4               92 Never          0
+ 3 34120 Female    28            75  25.4               92 Never          0
+ 4 27458 Female    55            72  24.6               86 Never          0
+ 5 27458 Female    55            72  24.6               86 Never          0
+ 6 27458 Female    55            72  24.6               86 Never          0
+ 7 70630 Male      22            80  24.9              139 Unknown        0
+ 8 70630 Male      22            80  24.9              139 Unknown        0
+ 9 70630 Male      22            80  24.9              139 Unknown        0
+10 13861 Female    56            72  37.1               64 Unknown        1
 # ℹ 1,412 more rows
 # ℹ 5 more variables: Serum_ca2 &lt;dbl&gt;, Married &lt;chr&gt;, Work &lt;chr&gt;,
 #   Measurement &lt;chr&gt;, `Glucose (mmol/L)` &lt;dbl&gt;</code></pre>
@@ -537,13 +537,13 @@ Hint
 <span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(diab_glu_num)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>            Age BloodPressure        BMI PhysicalActivity  Serum_ca2
-[1,] -0.5095355    0.18808364 -0.7123872       0.31233047  0.6085078
-[2,] -0.5095355    0.18808364 -0.7123872       0.31233047  0.6085078
-[3,] -0.5095355    0.18808364 -0.7123872       0.31233047  0.6085078
-[4,]  1.8586337   -0.04390803 -0.8322613       0.07595423 -0.9482168
-[5,]  1.8586337   -0.04390803 -0.8322613       0.07595423 -0.9482168
-[6,]  1.8586337   -0.04390803 -0.8322613       0.07595423 -0.9482168
+<pre><code>            Age BloodPressure        BMI PhysicalActivity  Diabetes  Serum_ca2
+[1,] -0.5095355    0.18808364 -0.7123872       0.31233047 -1.003892  0.6085078
+[2,] -0.5095355    0.18808364 -0.7123872       0.31233047 -1.003892  0.6085078
+[3,] -0.5095355    0.18808364 -0.7123872       0.31233047 -1.003892  0.6085078
+[4,]  1.8586337   -0.04390803 -0.8322613       0.07595423 -1.003892 -0.9482168
+[5,]  1.8586337   -0.04390803 -0.8322613       0.07595423 -1.003892 -0.9482168
+[6,]  1.8586337   -0.04390803 -0.8322613       0.07595423 -1.003892 -0.9482168
      Glucose (mmol/L)
 [1,]       -1.0027491
 [2,]       -1.0027491
@@ -558,19 +558,20 @@ Hint
 </ol>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>diab_glu_cat <span class="ot">&lt;-</span> diabetes_glucose <span class="sc">%&gt;%</span> </span>
-<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">select</span>(<span class="fu">where</span>(is.character))</span>
-<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(diab_glu_cat)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">select</span>(<span class="fu">where</span>(is.character), Diabetes) <span class="sc">%&gt;%</span> </span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Diabetes =</span> <span class="fu">as.factor</span>(Diabetes))</span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(diab_glu_cat)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 6 × 7
-  ID    Sex    Smoker Diabetes Married Work         Measurement
-  &lt;chr&gt; &lt;chr&gt;  &lt;chr&gt;  &lt;chr&gt;    &lt;chr&gt;   &lt;chr&gt;        &lt;chr&gt;      
-1 34120 Female Never  0        No      Public       0          
-2 34120 Female Never  0        No      Public       60         
-3 34120 Female Never  0        No      Public       120        
-4 27458 Female Never  0        No      SelfEmployed 0          
-5 27458 Female Never  0        No      SelfEmployed 60         
-6 27458 Female Never  0        No      SelfEmployed 120        </code></pre>
+  ID    Sex    Smoker Married Work         Measurement Diabetes
+  &lt;chr&gt; &lt;chr&gt;  &lt;chr&gt;  &lt;chr&gt;   &lt;chr&gt;        &lt;chr&gt;       &lt;fct&gt;   
+1 34120 Female Never  No      Public       0           0       
+2 34120 Female Never  No      Public       60          0       
+3 34120 Female Never  No      Public       120         0       
+4 27458 Female Never  No      SelfEmployed 0           0       
+5 27458 Female Never  No      SelfEmployed 60          0       
+6 27458 Female Never  No      SelfEmployed 120         0       </code></pre>
 </div>
 </div>
 </section>
@@ -585,7 +586,7 @@ Hint
 <span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>res.pca</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>**Results for the Principal Component Analysis (PCA)**
-The analysis was performed on 1416 individuals, described by 6 variables
+The analysis was performed on 1416 individuals, described by 7 variables
 *The results are available in the following objects:
 
    name               description                          
@@ -703,12 +704,13 @@ The analysis was performed on 1416 individuals, described by 6 variables
 <span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>res.pca<span class="sc">$</span>var<span class="sc">$</span>cos2</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>                       Dim.1      Dim.2        Dim.3       Dim.4        Dim.5
-Age              0.251816881 0.40318991 1.203988e-02 0.252395170 0.0678629587
-BloodPressure    0.179962950 0.53966117 2.131818e-07 0.168687378 0.1027250115
-BMI              0.642084026 0.06934705 8.242825e-04 0.080857850 0.0089616517
-PhysicalActivity 0.482941064 0.12115313 5.392956e-03 0.138801037 0.2466208034
-Serum_ca2        0.003624175 0.00348858 9.833085e-01 0.009103989 0.0004376661
-Glucose (mmol/L) 0.650889586 0.05029448 8.549625e-04 0.020201393 0.1168282357</code></pre>
+Age              0.179044228 0.47738224 1.179010e-02 0.237077768 0.0822648503
+BloodPressure    0.113238994 0.60479871 2.125569e-06 0.156507251 0.1174344511
+BMI              0.697020728 0.03199509 6.799622e-04 0.066308130 0.0018402460
+PhysicalActivity 0.472545917 0.06049427 5.974280e-03 0.186643304 0.2670768712
+Diabetes         0.865617192 0.01854276 1.265714e-05 0.004176319 0.0085933098
+Serum_ca2        0.002695452 0.00411849 9.832735e-01 0.009567730 0.0002967391
+Glucose (mmol/L) 0.685119304 0.01840264 7.080813e-04 0.014552326 0.0759039042</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="fu">fviz_pca_var</span>(res.pca, <span class="at">col.var =</span> <span class="st">"cos2"</span>,</span>
 <span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>             <span class="at">gradient.cols =</span> <span class="fu">c</span>(<span class="st">"#00AFBB"</span>, <span class="st">"#E7B800"</span>, <span class="st">"#FC4E07"</span>), </span>

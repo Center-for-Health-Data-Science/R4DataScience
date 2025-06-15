@@ -270,7 +270,7 @@ Let's order the coefficients by size and plot them to get an easy overview. Firs
 ```{r}
 coeffsDat <- as.data.frame(as.matrix(coeffs)) %>% 
   rownames_to_column(var = 'VarName') %>%
-  arrange(desc(s0)) %>%  
+  arrange(desc(s1)) %>%  
   filter(!str_detect(VarName,"(Intercept)")) %>% 
   mutate(VarName = factor(VarName, levels=VarName))
 ```
@@ -279,7 +279,7 @@ Now we can make a bar plot to visualize our results.
 
 ```{r}
 # Plot
-ggplot(coeffsDat, aes(x = VarName, y = s0)) +
+ggplot(coeffsDat, aes(x = VarName, y = s1)) +
   geom_bar(stat = "identity", fill = "#9395D3") +
   coord_flip() +
   labs(title = "Feature Importance for Elastic Net", 

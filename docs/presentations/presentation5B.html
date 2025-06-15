@@ -382,7 +382,8 @@ window.Quarto = {
 
 <section id="part-1-penalized-regression" class="level2">
 <h2 class="anchored" data-anchor-id="part-1-penalized-regression">Part 1: Penalized Regression</h2>
-<p><strong>Elastic Net regression</strong> is part of the family of <strong>penalized regressions</strong>, which also includes <strong>Ridge regression</strong> and <strong>LASSO regression</strong>. Penalized regressions are useful when dealing with many predictors, as they help eliminate less informative ones while retaining the important predictors, making them ideal for high-dimensional datasets. If you are interested in knowing more about penalized regressions, you can have a look at this excellent tutorial from <a href="https://www.datacamp.com/tutorial/tutorial-ridge-lasso-elastic-net">Datacamp</a>.</p>
+<p><strong>Elastic Net regression</strong> is part of the family of <strong>penalized regressions</strong>, which also includes <strong>Ridge regression</strong> and <strong>LASSO regression</strong>. Penalized regressions are useful when dealing with many predictors, as they help eliminate less informative ones while retaining the important predictors, making them ideal for high-dimensional datasets.</p>
+<p>If you are interested in knowing more about penalized regressions, you can have a look at this excellent tutorial from <a href="https://www.datacamp.com/tutorial/tutorial-ridge-lasso-elastic-net">Datacamp</a>.</p>
 <p>In linear regression, we estimate the relationship between predictors <span class="math inline">\(X\)</span> and an outcome <span class="math inline">\(y\)</span> using parameters <span class="math inline">\(β\)</span>, chosen to minimize the residual sum of squares (<strong>RSS</strong>). Two key properties of these <span class="math inline">\(β\)</span> estimates are bias (the difference between the true parameter and the estimate) and variance (how much the estimates vary across different samples). While <strong>OLS</strong> (Ordinary Least Squares) gives unbiased estimates, it can suffer from high variance - especially when predictors are numerous or highly correlated — leading to poor predictions.</p>
 <p>To address this, we can introduce regularization, which slightly biases the estimates in exchange for reduced variance and improved predictive performance. This trade-off is essential: as model complexity grows, variance increases and bias decreases, so regularization helps find a better balance between the two.</p>
 <div class="quarto-figure quarto-figure-center">
@@ -391,9 +392,9 @@ window.Quarto = {
 </figure>
 </div>
 <p><strong>Ridge Regression</strong> = L2 penalty (adds the sum of the squares of the coefficients to the loss function). It discourages large coefficients by penalizing their squared magnitudes, shrinking them towards zero. This reduces overfitting while keeping all variables in the model.</p>
-<p><strong>Lasso Regression</strong> = L1 penalty (adds the sum of the absolute values of the coefficients to the loss function). This penalty encourages sparsity, causing some coefficients to become exactly zero for large <span class="math inline">\(λ\)</span>s, thereby performing variable selection.</p>
+<p><strong>Lasso Regression</strong> = L1 penalty (adds the sum of the absolute values of the coefficients to the loss function). This penalty encourages sparsity, causing some coefficients to become exactly zero for large <span class="math inline">\(λ\)</span>, thereby performing variable selection.</p>
 <p><strong>Elastic Net</strong> combines L1 and L2 penalties to balance variable selection and coefficient shrinkage. One of the key advantages of Elastic Net over other types of penalized regression is its ability to handle multicollinearity and situations where the number of predictors exceeds the number of observations.</p>
-<p><strong>Lambda</strong>, <span class="math inline">\((λ)\)</span>, controls the strength of the penalty. As <span class="math inline">\(λ\)</span> increases, variance decreases ands bias increases, raising the key question: how much bias are we willing to accept to reduce variance?</p>
+<p><strong>Lambda</strong>, <span class="math inline">\((λ)\)</span>, controls the strength of the penalty. As <span class="math inline">\(λ\)</span> increases, variance decreases and bias increases, raising the key question: how much bias are we willing to accept to reduce variance?</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="../figures/penalty_regularization.png" class="img-fluid quarto-figure quarto-figure-center figure-img"></p>
@@ -555,7 +556,8 @@ window.Quarto = {
 <span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a><span class="co">#   print(table(HD_EN[[col]]))</span></span>
 <span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a><span class="co"># }</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>From our count table above we see that variables <code>DefectType</code>, <code>chestPainType</code>, <code>restElecCardio</code>, and <code>slopePeakExST</code> are unbalanced. Especially <code>DefectType</code> and <code>restElecCardio</code> are problematic with only 7 and 15 observations for one of the factor levels. To avoid issues when modelling, we will filter out these observations and re-level these two variables.</p>
+<p>From our count table above we see that variables <code>DefectType</code>, <code>chestPainType</code>, <code>restElecCardio</code>, and <code>slopePeakExST</code> are unbalanced. Especially <code>DefectType</code> and <code>restElecCardio</code> are problematic with only 7 and 15 observations for one of the factor levels.</p>
+<p>To avoid issues when modelling, we will filter out these observations and re-level these two variables.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>HD_EN <span class="ot">&lt;-</span> HD_EN <span class="sc">%&gt;%</span> </span>
 <span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(DefectType <span class="sc">!=</span> <span class="dv">0</span> <span class="sc">&amp;</span> restElecCardio <span class="sc">!=</span><span class="dv">2</span>) <span class="sc">%&gt;%</span></span>
@@ -567,7 +569,7 @@ window.Quarto = {
 <div class="cell">
 <div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Add ID column</span></span>
 <span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>HD_EN <span class="ot">&lt;-</span> HD_EN <span class="sc">%&gt;%</span> </span>
-<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">ID =</span> <span class="fu">paste0</span>(<span class="st">"W"</span>, <span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(HD_EN)))</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">ID =</span> <span class="fu">paste0</span>(<span class="st">"ID"</span>, <span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(HD_EN)))</span>
 <span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Set seed</span></span>
 <span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
@@ -608,7 +610,7 @@ window.Quarto = {
 </div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Test sett</span></span>
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Test set</span></span>
 <span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>test  <span class="ot">&lt;-</span> <span class="fu">anti_join</span>(HD_EN, train, <span class="at">by =</span> <span class="st">'ID'</span>) </span>
 <span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Check group levels</span></span>
@@ -662,16 +664,16 @@ window.Quarto = {
 <p>However, if you do use categorical variables as your predictors within the <code>glmnet()</code> function, you need to ensure that your variables are <strong>Dummy-coded (one-hot encoded)</strong>. <strong>Dummy-coding</strong> means that categorical levels are converted into binary numeric indicators. You can do this ‘manually’, but there is a super easy way to do it with <code>model.matrix()</code> as shown below.</p>
 <p>Let’s create the model matrix needed for input to <code>glmnet()</code> and <code>cv.glmnet()</code> functions:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>modTrain <span class="ot">&lt;-</span> <span class="fu">model.matrix</span>(<span class="sc">~</span> ., <span class="at">data =</span> train)</span>
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>modTrain <span class="ot">&lt;-</span> <span class="fu">model.matrix</span>(<span class="sc">~</span> .<span class="sc">-</span> <span class="dv">1</span>, <span class="at">data =</span> train)</span>
 <span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(modTrain)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>  (Intercept)         age sex1 chestPainType1 chestPainType2 chestPainType3
-1           1  0.28282315    0              0              0              0
-2           1  0.61350040    0              0              0              1
-3           1 -1.37056311    1              0              1              0
-4           1 -0.04785411    0              0              1              0
-5           1 -0.48875711    1              0              0              0
-6           1  0.83395190    1              0              1              0
+<pre><code>          age sex0 sex1 chestPainType1 chestPainType2 chestPainType3
+1  0.28282315    1    0              0              0              0
+2  0.61350040    1    0              0              0              1
+3 -1.37056311    0    1              0              1              0
+4 -0.04785411    1    0              0              1              0
+5 -0.48875711    0    1              0              0              0
+6  0.83395190    0    1              0              1              0
        restBP       chol fastingBP1 restElecCardio1       maxHR exerciseAngina1
 1 -0.66289286  2.0933271          0               1  0.60358256               1
 2  1.04975673 -0.1162960          0               1  0.95132211               0
@@ -694,7 +696,7 @@ window.Quarto = {
 5           1
 6           1</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>modTest <span class="ot">&lt;-</span> <span class="fu">model.matrix</span>(<span class="sc">~</span> ., <span class="at">data =</span> test)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>modTest <span class="ot">&lt;-</span> <span class="fu">model.matrix</span>(<span class="sc">~</span> .<span class="sc">-</span> <span class="dv">1</span>,, <span class="at">data =</span> test)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Let’s create your Elastic Net Regression model with <code>glmnet()</code>.</p>
 <p>The parameter <span class="math inline">\(α\)</span> essentially tells <code>glmnet()</code> whether we are performing <strong>Ridge Regression</strong> (<span class="math inline">\(α\)</span> = 0), <strong>LASSO regression</strong> (<span class="math inline">\(α\)</span> = 1) or <strong>Elastic Net regression</strong> (0 &lt; <span class="math inline">\(α\)</span> &lt; 1 ). Furthermore, like for logistic regression we must specify if our outcome is; <code>binominal</code>, <code>multinomial</code>, <code>gaussian</code>, etc.</p>
@@ -778,25 +780,25 @@ Prediction   0   1
 <div class="cell-output cell-output-stdout">
 <pre><code>19 x 1 sparse Matrix of class "dgCMatrix"
                          s1
-(Intercept)      0.95882434
-(Intercept)      .         
-age             -0.05655191
-sex1            -1.43934620
-chestPainType1   1.25864082
-chestPainType2   1.78218231
-chestPainType3   1.54620643
-restBP          -0.39618395
-chol            -0.25008673
-fastingBP1       0.26580351
-restElecCardio1  0.48972814
-maxHR            0.46432403
-exerciseAngina1 -0.53276269
-STdepEKG        -0.48792249
-slopePeakExST1  -0.94223986
-slopePeakExST2   0.05350876
-nMajorVessels   -0.75218427
-DefectType2      0.01746632
-DefectType3     -1.22858328</code></pre>
+(Intercept)      0.22782401
+age             -0.05823254
+sex0             0.75259034
+sex1            -0.70972944
+chestPainType1   1.26049789
+chestPainType2   1.78481019
+chestPainType3   1.55254904
+restBP          -0.39726763
+chol            -0.25270564
+fastingBP1       0.26701756
+restElecCardio1  0.48761187
+maxHR            0.46555870
+exerciseAngina1 -0.53368076
+STdepEKG        -0.48693148
+slopePeakExST1  -0.94379010
+slopePeakExST2   0.05576804
+nMajorVessels   -0.75202020
+DefectType2      0.00917183
+DefectType3     -1.23099327</code></pre>
 </div>
 </div>
 <p>First of all we see that none of our explanatory variables have been penalized so much that they have been removed, although some like <code>age</code> contribute very little to the model.</p>
@@ -826,7 +828,7 @@ DefectType3     -1.22858328</code></pre>
 </div>
 </div>
 </div>
-<p>From the coefficients above it seem like cheat pain of any type (0 vs 1, 2 or 3) is a strong predictor of the outcome, e.g.&nbsp;heart disease. In opposition, having a <code>DefectType3</code> significantly lowers the predicted probability of belonging to the event class (1 = Heart Disease). Specifically, it decreases the log-odds of the outcome. A large negative value like this suggests that <code>DefectType3</code> is strongly associated with a lower likelihood of an event.</p>
+<p>From the coefficients above it seem like cheat pain of any type (0 vs 1, 2 or 3) is a strong predictor of the outcome, e.g.&nbsp;heart disease. In opposition, having a <code>DefectType3</code> significantly lowers the predicted probability of belonging to the event class (1 = Heart Disease). Specifically, it decreases the log-odds of belonging to class 1.</p>
 </section>
 </section>
 <section id="part-2-random-forest" class="level2">

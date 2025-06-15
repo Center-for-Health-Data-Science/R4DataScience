@@ -125,7 +125,8 @@ head(diab_glu_num)
 
 ```{r}
 diab_glu_cat <- diabetes_glucose %>% 
-  dplyr::select(where(is.character))
+  dplyr::select(where(is.character), Diabetes) %>% 
+  mutate(Diabetes = as.factor(Diabetes))
 
 head(diab_glu_cat)
 ```
