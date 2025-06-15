@@ -1,5 +1,5 @@
 ---
-title: "Presentation 3 - Exploratory Data Analysis - Multivariate Analysis"
+title: "Presentation 3 - EDA - Multivariate Analysis"
 format: html
 project:
  type: website
@@ -40,7 +40,6 @@ df_comb <- df_comb %>%
     where(is.factor) | 
     where(is.numeric)
   ) %>% 
-  select(-percent_not_cancer_cells) %>% 
   drop_na(where(is.integer))
 ```
 
@@ -546,25 +545,6 @@ ggplot(df_long, aes(x = percent_tumor_cells^3, y = value, color = percent_stroma
   labs(title = "Expression vs. Tumor Cell Composition") +
   theme(legend.position = "bottom")
 
-
-```
-
-```{r warning=FALSE, echo=FALSE}
-df_long <- df_comb %>%
-  select(any_of(sel_genes$gene), percent_tumor_cells, percent_stromal_cells) %>%
-  pivot_longer(cols = starts_with("COL"),
-               names_to = "gene",
-               values_to = "value")
-
-ggplot(df_long, aes(x = log2(percent_stromal_cells+1), y = value, color = percent_tumor_cells)) +
-  geom_point(alpha = 0.5) +
-  scale_color_viridis_c() +
-  theme_minimal() +
-  stat_smooth(method = "loess", col = "red") +
-  facet_wrap(vars(gene), ncol = 2, scales = "free") +
-  stat_cor(method = "pearson", p.accuracy = 0.001, r.accuracy = 0.001) +
-  labs(title = "Expression vs. Tumor Cell Composition") +
-  theme(legend.position = "bottom")
 
 ```
 

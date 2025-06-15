@@ -6,17 +6,7 @@ project:
  output-dir: ../docs
 ---
 
-Now that we've cleaned our data, it’s time to dig deeper into the actual contents of our dataset. Exploratory Data Analysis (EDA) is an essential step in any data analysis or modeling workflow.
-
-EDA is about getting an overview of your data before fitting it to any models. It helps us:
-
--   Understand **distributions**
-
--   Spot **outliers**
-
--   Reveal **patterns**
-
--   Explore **relationships** between variables
+Now that we've cleaned our data, it’s time to dig deeper into the actual contents of our dataset. Lets do some Exploratory Data Analysis (EDA). It is an essential step in any data analysis or modeling workflow.
 
 ## Load Packages and Data
 
@@ -28,49 +18,34 @@ library(factoextra)
 # library(ggforce) 
 ```
 
-Now, we load our dataset which was pre-processed and saved as an `.RData` file at the end of Presentation 1:
+Next, bring in the cleaned dataset we prepared earlier:
 
 ```{r message=FALSE}
 load("../data/Ovarian_comb_clean.RData")
 
-# Quick peek at the structure and contents
+# Check the structure and first few rows
 class(df_comb)
-#df_comb %>% slice(1:5)
+df_comb %>% slice(1:5)
+
+df_comb <- df_comb %>%
+  select(-percent_not_cancer_cells)
 ```
-
-Depending on how we want to investigate the variables, there are different tools in your EDA toolkit we can employ:
-
-Univariate Analysis
-
--   **Histograms** – Check distributions of numeric variables
-
--   **Boxplots** – Detect outliers and skewness
-
--   **Bar charts** – Explore frequency of categorical variables
-
--   **Summary stats** – Mean, median, standard deviation (SD), min, max, interquartile range (IQR)
-
-Bivariate Analysis
-
--   **Scatter plots** – Explore relationships between two numeric variables
-
--   **Correlation coefficients** – Assess linear strength (e.g., Pearson’s *r*)
-
--   **Contingency tables** – Analyze relationships between categorical variables
-
--   **Line graphs** – Track trends over time
 
 ## Data Overview and `ggplot2` Recap
 
-Let’s revisit some of the variables in the dataset and refresh our `ggplot2` skills.
+Depending on how we want to investigate the variables, there are many ways in EDA toolkit to explore variables:
 
-If you need a detailed refresher, refer to the [From Excel to R: Presentation 3](https://center-for-health-data-science.github.io/FromExceltoR/Presentations/presentation3.html).
+-   Use histograms or boxplots for single variables
+
+-   Use scatterplots or barplots to check relationships between variables
+
+Let’s revisit some of the variables. This is also a good chance to refresh your **ggplot2** skills. If you need a detailed refresher, refer to the [From Excel to R: Presentation 3](https://center-for-health-data-science.github.io/FromExceltoR/Presentations/presentation3.html).
 
 ```{r warning=FALSE}
 # Distribution of tumor cell percentage
 ggplot(df_comb, 
        aes(x = percent_tumor_cells)) +
-  geom_histogram(bins = 30) +
+  geom_histogram(bins = 30, fill="#482878FF") +
   theme_bw()
 
 # Tumor percentage by summary grade
@@ -80,7 +55,7 @@ ggplot(df_comb,
            fill = grade)) +
   geom_boxplot() +
   theme_bw() + 
-  scale_fill_viridis_d(na.value = "grey50")
+  scale_fill_viridis_d(na.value = "gray90")
 
 # Count with barplot
 ggplot(df_comb, 
@@ -88,7 +63,7 @@ ggplot(df_comb,
            fill = grade)) +
   geom_bar() +
   theme_bw() + 
-  scale_fill_viridis_d(na.value = "grey50")
+  scale_fill_viridis_d(na.value = "gray90")
 ```
 
 These simple plots give us an initial overview of the distribution of some of the variables - on their own and stratified by groups.
@@ -104,7 +79,7 @@ awesome_plot <-  df_comb %>%
              y = COL11A1, 
              color = summarygrade)) + 
   geom_point() +
-  scale_color_viridis_d(na.value = "grey50") +
+  scale_color_viridis_d(na.value = "gray90") +
   theme_bw()
 ```
 
@@ -116,32 +91,11 @@ print(awesome_plot)
 
 ## Formats: long and wide
 
-The doctrine of `ggplot` is that every information you want to plot must be in a column. There is one column that describes the x-axis, one for the y-axis, and one for each additional aesthetic like color, size, shape, ect.
-
 Now, let’s say we want to create a single plot and compare several **COL gene expression levels** across different categories.
-
-In the current **wide format** (like most spreadsheets), each gene is stored in its own column:
-
-| ID  | COL3A1 | COL4A3 | COL8A2 | ... |
-|-----|--------|--------|--------|-----|
-| 1   | 2.3    | 1.9    | 3.1    |     |
-| 2   |        |        |        |     |
-| 3   |        |        |        |     |
-
-This layout is fine for browsing spreadsheets, but to create the plot described above you’d have to write a separate plot for each gene/column — not efficient.
 
 To plot and analyze more effectively, we need to reshape the data into **long format**, where each row represents a single observation:
 
-| ID  | gene   | value |
-|-----|--------|-------|
-| 1   | COL3A1 | 2.3   |
-| 1   | COL4A3 | 1.9   |
-| 1   | COL8A2 | 3.1   |
-| ... | ...    | ...   |
-
-We can do this using `pivot_longer()`:
-
-The data can be reformatted to long format such that there is one line per gene per person. For this we use the `pivot_longer` function.
+The data can be reformatted to long format using `pivot_longer()`:
 
 ```{r}
 df_comb_long <- df_comb %>% 
@@ -150,7 +104,9 @@ df_comb_long <- df_comb %>%
                values_to = "value")
 
 df_comb_long %>% select(unique_patient_ID, age_at_initial_path_diagn, gene, value) %>% head() 
+```
 
+```{r}
 # one line per gene per person
 nrow(df_comb)
 nrow(df_comb_long)
@@ -158,7 +114,7 @@ nrow(df_comb_long)
 
 ### The Long Format is ggplot’s Best Friend
 
-With the reshaped `df_comb_long`, we can now create one **combined plot** that shows distributions for **all genes** in **a single** `ggplot` call:
+With the reshaped `df_comb_long`, we can now create one **combined plot** that shows distributions for **all genes** in **a single** `ggplot` call. More context: add color-stratification by `summarygrade` and compare distributions side-by-side:
 
 ```{r}
 ggplot(na.omit(df_comb_long), 
@@ -169,8 +125,6 @@ ggplot(na.omit(df_comb_long),
   theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
 
 ```
-
-More context: add color-stratification by `summarygrade` and compare distributions side-by-side:
 
 Want histograms for all genes?
 
@@ -204,13 +158,13 @@ head(df_comb)
 
 ## Exploring Factors (Categorical Variables)
 
-When working with **factor variables**, we often want to know:
+When working with factor variables, we often want to know:
 
--   Which levels (categories) exist
+-   Which **levels** (categories) exist
 
 -   Whether groups are **balanced**
 
--   How **missingness** overlaps across factors
+-   How **missing** **data** overlaps
 
 Let's have a look at the `vital_status` variable. It looks fairly balanced.
 
@@ -224,6 +178,8 @@ Now, let's see how the `vital_status` levels are distributed across the `tumorst
 table(df_comb$vital_status, df_comb$stage, useNA = "ifany")
 ```
 
+Some stage categories could be merged for more power and clearer groups:
+
 ```{r}
 # Relabel factor levels
 df_comb <- df_comb %>%
@@ -234,20 +190,17 @@ df_comb <- df_comb %>%
                             "2" = "2-c",
                             "4" = "4-NA",
                             NULL = "NA-NA"))
-
 ```
 
-### Pairwise Relationships Between Categorical Variables
-
-We will now have a look at the distribution of levels of the factor variables across `vital_status`.
+Let’s see how other categorical variables relate to `vital_status`:
 
 ```{r}
-# Keep only factor variables including vital_status
+# Plot faceted bar plots colored by vital_status
+
 df_comb %>% 
   select(where(is.factor), vital_status) %>% 
   drop_na() %>% 
   pivot_longer(cols = -vital_status, names_to = "variable", values_to = "value") %>% 
-  # Plot faceted bar plots colored by vital_status
   ggplot(aes(x = value, fill = vital_status)) +
   geom_bar() +
   facet_wrap(vars(variable), scales = "free_x") +
@@ -255,27 +208,23 @@ df_comb %>%
   theme_minimal() 
 ```
 
-#### After reviewing our categorical variables, we observed the following:
+After reviewing our categorical variables, we observed the following:
 
--   **`Tumorstage` and `grade` are imbalanced** — with certain stages and grades (e.g., 1 or 4) having low sample counts. This limits our ability to make reliable comparisons across all detailed levels.
+-   **`Tumorstage` and `grade`** are unbalanced. With certain stages and grades (e.g., 1 or 4) having low sample counts. This limits our ability to make reliable comparisons across all detailed levels. So we may combine levels into broader groups.
 
-    -   To address this, we may use broader categories:
+-   **`Batch` is evenly represented**, which reduces concerns about batch effects.
 
-        -   *Early vs. Late Stage* (e.g., Stage 1–2 vs. 3-4)
-
-        -   *Low vs. High Grade* (e.g., Grade 1–2 vs. 3–4)
-
--   **`Batch` is evenly represented**, which reduces concerns about batch effects in our analysis.
+<!-- -->
 
 -   **`Vital_status` is nicely balanced** making it well-suited for comparisons and modeling.
 
-These insights will help us structure our downstream analysis in a statistically sound and interpretable way.
+These insights help us design our downstream analysis in a statistically sound and interpretable way.
 
 ## Summary Statistics
 
 Even after initial data cleaning and harmonization, it’s important to make sure our variables are well-behaved and ready for downstream analysis and modeling.
 
-Let’s say we want to compute the mean of several columns. A basic (but tedious) approach might look like this:
+For this, let’s say we want to compute the mean of several columns. A basic (but tedious) approach might look like this:
 
 ```{r}
 df_comb %>%
@@ -288,15 +237,13 @@ df_comb %>%
 
 This works, but we need to name every column we want to apply `summarise` to. It’s verbose and error-prone — especially if you have dozens of variables.
 
-Instead of looking at individual variable, we’ll introduce some tidyverse helper functions that make summarizing variables much more efficient and scalable — so you don’t have to write repetitive code for every column.
+Instead of looking at individual variable, we’ll introduce some tidyverse helper functions: `across()`, `where()`and `starts_with()` - that make summarizing variables much more efficient and scalable — so you don’t have to write repetitive code for every column.
 
-### Tidyverse helpers: `across()` and `where()`
-
-In this section we will say a bit more about the so called tidyverse helpers such as `across()`, `where()`, and `starts_with()`. These helpers are useful when we want to apply a functions, i.e. `summarise()` or `mutate()` to several columns.
+These helpers are useful when we want to apply a functions, i.e. `summarise()` or `mutate()` to several columns.
 
 ### Using `across()` and `everything()` to select columns
 
-Enter `across()`: lets us select the columns which we want to apply `summarise` **across** in a dynamic fashion:
+Lets select the columns which we want to apply `summarise` **across** in a dynamic fashion:
 
 ```{r warning=FALSE, message=FALSE}
 df_comb %>%
@@ -305,7 +252,7 @@ df_comb %>%
   select(15:25)
 ```
 
-### Using `where()` and `starts_with()` to Select Numeric Columns
+### Using `where()` and `starts_with()` to select numeric columns
 
 We will probably not want to calculate means on non-numeric columns, so let's select only numeric columns. For that we need another helper caller `where()` that lets us select columns based on their properties, like data type.
 
@@ -328,7 +275,7 @@ These helpers make your code cleaner, more scalable, and easier to maintain. The
 
 ### `summarise()` becomes more powerful!
 
-So far, we've only applied a single function. But why stop at the mean? What if you want **multiple statistics** like mean, SD, min, and max — all in one go?
+So far, we've only applied a single function. But why stop at the mean? What if you want **multiple statistics** like mean, SD, min, and max - all in one go?
 
 With `across()`, you can pass a **list of functions**:
 
@@ -356,9 +303,7 @@ gene_summary
 
 Much better! Now the column names are readable and include both the variable and the statistic.
 
-Still not your preferred format?
-
-You can probably pivot your way out of that!
+But still not your preferred format? You can probably pivot your way out of that!
 
 ```{r}
 gene_summary %>%
@@ -371,7 +316,7 @@ gene_summary %>%
 
 Now you get a long format table with one row per variable and all your stats in columns — clean, tidy, and ready for interpretation.
 
-![](../figures/satisfying_meme.jpg){width="200px"}
+![](../figures/satisfying_meme.jpg){fig-align="center" width="200"}
 
 ### The anonymous function: `~` and `.`
 
@@ -432,6 +377,7 @@ stats <- df_comb %>%
   pivot_longer(cols = everything(), 
                names_to = c("variable", "statistic"), 
                names_sep = "-") %>%
+  mutate(value = round(value, 1)) %>%
   pivot_wider(names_from = statistic, 
               values_from = value) 
 
@@ -444,20 +390,17 @@ The helper functions can be used in other tidyverse operation such as `mutate` a
 
 ## Handling Outliers
 
-Now that we’ve explored summary statistics, it's time to consider **outliers** — data points that differ markedly from the rest. Outliers can be caused by measurement or entry errors, natural variability or rare events or anomalies.
-
-Outliers can skew your summary statistics, distort visualizations and can affect model performance, especially in regression.
+Now that we’ve explored summary statistics, it's time to consider **outliers** — data points that differ markedly from the rest.
 
 Let’s use our tidyverse skills to **calculate some basic stats** and **visualize potential outliers**.
 
 ```{r warning=FALSE}
 stats <- stats %>% 
-  mutate(threshold_upper = mean + 2 * sd,
-         threshold_lower = mean - 2 * sd) %>%
-  pivot_longer(cols = c(threshold_lower, threshold_upper), names_to = "threshold_type", values_to = "threshold")
+  mutate(thr_upper = mean + 2 * sd,
+         thr_lower = mean - 2 * sd) %>%
+  pivot_longer(cols = c(thr_lower, thr_upper), names_to = "thr_type", values_to = "threshold")
 
 print(stats)
-
 
 df_comb_longer <- df_comb %>% 
   pivot_longer(cols = where(is.integer),
@@ -468,46 +411,46 @@ df_comb_longer <- df_comb %>%
 ```{r warning=FALSE}
 ggplot(df_comb_longer, 
        aes(x = value)) +
-  geom_histogram(bins = 30) +
+  geom_histogram(bins = 30, fill="#482878FF") +
   geom_vline(data = stats, 
              aes(xintercept = threshold),
              color = "red", linetype = "dashed") +
-  facet_wrap(vars(variable), ncol = 2, scales = "free") + 
+  facet_wrap(vars(variable), ncol = 3, scales = "free") + 
   theme_minimal()
 ```
 
-Sometimes, visualizing values in relation to **other variables** can make potential outliers easier to spot. Below, you’ll notice that a patient with 0% cancer cells and 0% tumor cells likely represents an outlier:
+Sometimes, visualizing values in relation to other variables can make potential outliers easier to spot. Below, you’ll notice that a patient with 0% stromal cells and 0% tumor cells likely represents an outlier:
 
 ```{r warning=FALSE}
 # Bivariate scatter plot colored by stromal cell percentage
 ggplot(df_comb, 
-       aes(x = percent_tumor_cells, y = percent_not_cancer_cells, color = percent_stromal_cells)) +
+       aes(x = percent_tumor_cells, 
+           y = percent_stromal_cells, 
+           color = percent_normal_cells)) +
   geom_point() + 
   scale_color_viridis_c() +
   theme_bw()
 ```
 
-There are many different tools and strategies available to detect and handle outliers. However, in this case, we’ll keep it simple: we will remove patients where both `percent_tumor_cells` and `percent_not_cancer_cells` are less than 5%.
+We probably want to remove patients where both `percent_tumor_cells` and `percent_stromal_cells` are 0%.
 
 ```{r warning=FALSE}
 df_comb %>%
-  filter(percent_tumor_cells == 0 & percent_not_cancer_cells == 0)
+  filter(percent_tumor_cells == 0 & percent_stromal_cells == 0)
 
 df_comb <- df_comb %>%
   filter(
     (percent_tumor_cells != 0 | is.na(percent_tumor_cells) & 
-            percent_not_cancer_cells != 0) | is.na(percent_not_cancer_cells))
+            percent_stromal_cells != 0) | is.na(percent_stromal_cells))
 ```
-
-> **Be cautious when removing data**: Outlier removal should always be guided by domain knowledge and clear justification. Removing too much — or for the wrong reasons — can distort your analysis.
 
 ## Sample vs variable outliers
 
-Instead of visualizing variables one by one, we can also look at samples across a set of variables and identify outliers that way. If we have a lot of integer and numeric values in our dataset, one thing that might make sense is to make a dendogram (tree) using hierarchical clustering and identify if any of the samples 'stand out'.
+There are many ways to detect and handle outliers. Instead of checking each variable separately, we can also look at **all samples across multiple variables** to spot unusual patterns.
 
-Let's try this for the integer variables in our dataset.
+One useful approach for datasets with many numeric or integer variables is to create a **dendrogram** using **hierarchical clustering**. This helps reveal samples that **stand out** from the rest.
 
-We first select all integer columns, drop missing values (they are non-informative for clustering anyways). Then, we make a plot to get an idea of data distributions:
+Let´s try it, first, we select all integer columns and drop rows with missing values (they don’t help clustering).
 
 ```{r}
 df_int <- df_comb %>%
@@ -518,9 +461,9 @@ df_int %>% head()
 
 ```
 
-Next, we scale our data (more on this in Presentation 5.) and calculate the distances between all pairs of scaled variables and perform hierarchical clustering.
+Next, we **scale the data** (details in *Presentation 3*), calculate pairwise distances between all pairs of scaled variables, and run **hierarchical clustering** to build a **dendrogram**.
 
-Do you not see the plot clearly? Copy-paste the code into the console and the plot will appear in the *Plots* window. Press *Export* --\> *Copy to Clipboard...* and drag out the plot as large as you can. Alternatively, save it in a large format and look at it outside of R studio.
+This tree-like plot helps reveal samples that cluster far from the rest — potential outliers.
 
 ```{r}
 # Euclidean pairwise distances
@@ -533,25 +476,69 @@ hclust_int <- hclust(df_int_dist, method = 'average')
 
 ```
 
+> If the plot is hard to see:
+>
+> -   Copy-paste the code into the console to open it in the **Plots** pane.
+>
+> -   Click *Export → Copy to Clipboard***…** and enlarge it as needed.
+>
+> Or save it as a high-resolution file and inspect it outside RStudio.
+
 ```{r warning=FALSE}
 # Plot the result of clustering
 # png("dendrogram_plot.png", width = 2000, height = 500)
-plot(hclust_int, main = "Clustering based on scaled integer values", cex = 0.7)
+# plot(hclust_int, main = "Clustering based on scaled integer values", cex = 0.7)
 # dev.off()
-fviz_dend(hclust_int, h = 8) +
-     ylim(min(hclust_int$height), max(hclust_int$height))
+fviz_dend(hclust_int, h = 10)
 ```
 
-From our plot we see that a couple of samples seem to have very short branch lengths (which may indicate an outlier). One such sample is 208 (row id). Lets have a look at it:
+From the dendrogram, we can see a few samples that branch off far from the main cluster — these long **branch lengths (Height)** may indicate outliers.
+
+Let’s identify samples with unusually large heights and inspect them:
 
 ```{r}
-threshold <- quantile(hclust_int$height, 0.995)
+# Set a high threshold (top 0.1%)
+threshold <- quantile(hclust_int$height, 0.99)
+#threshold <- 4
+# Find their order in the clustering
 ord_inx <- hclust_int$order[hclust_int$height > threshold]
 ord_inx
+# See which samples they are
 df_int %>% slice(ord_inx)
 ```
 
-We can now compare the values of this sample to the distributions above (histograms) to try an figure out what makes it an outlier and IF it should be removed. For the sample in row 208, age at diagnosis and days to death is with in normal range, though percent stromal and not tumor cell is in the very high end while percent tumor cells is in the very low end. These are pretty extreme values for several of the variables - why one would consider removing this sample.
+Next, we’ll bring back our **summary statistics table** to see whether these measurements fall outside what’s typical for the dataset.
+
+```{r}
+stats
+```
+
+Now we can compare these flagged samples to our summary statistics to understand why they stand out - and decide if they should be removed.
+
+For these samples:
+
+-   Age at diagnosis and days to death are within a normal range.
+
+-   However, percent stromal cells and percent tumor cells are unusually low.
+
+-   These samples have uncharacteristically high normal cell proportions, which is extreme for this dataset.
+
+Given that they show extreme values across several key variables, it’s reasonable to treat them as outliers and remove them to avoid bias in our analysis.
+
+```{r}
+df_comb <- df_comb %>%
+  filter(!(
+    (percent_normal_cells == 30 & days_to_death == 3622) |
+      (percent_normal_cells == 40 & days_to_death == 2621) |
+      (percent_normal_cells == 50 & days_to_death == 506) |
+      (percent_normal_cells == 35 & days_to_death == 1354) |
+      (percent_normal_cells == 30 & days_to_death == 192)
+  ) |
+    is.na(percent_normal_cells) | is.na(days_to_death))
+
+```
+
+> **Be cautious when removing data**: Outlier removal should always be guided by domain knowledge and clear justification. Removing too much — or for the wrong reasons — can distort your analysis.
 
 ## Handling Missing Data
 
@@ -566,27 +553,33 @@ df_comb %>%
   slice_head(n = 10)
 ```
 
-Here we notice that most of the missing values come from samples where the patients were (**healthy (sample_recode)** - this points to either MAR or MNAR. Unless however we have evidence that, missingness is directly related to the observed values themselves, we prefer to assume MAR.
+Looking at our missing values, we see that most missingness comes from samples labeled as `Healthy`(`sample_recode`).
 
-There are two main approaches when deciding what to do:
+This makes sense: Healthy tissue lacks tumor-specific details like **tumor stage** or **percent tumor cells**. This is an example of MAR (Missing At Random) — the missingness is related to an observed category (healthy vs. tumor tissue).
 
--   **Remove rows** with missing values — useful when the proportion is small and missingness is MCAR.
-
--   **Impute values** — helps preserve sample size and may improve robustness, especially when missingness is MAR.
-
-Consider the impact of missing data. Even after imputing, missing data can cause uncertainty and bias so understands the result with caution.
-
-> **Caution**: Even after imputation, results may be biased. Always interpret findings with an understanding of how missing data was handled.
-
-Since we have very few samples with a high number of missing values AND we are not interested in working with these likely either misclassified or mislabled samples in our analysis, we can safely them:
+Since our focus is on tumor samples, not healthy tissue (few samples), we can remove these samples to clean up our data and avoid noise.
 
 ```{r}
 df_comb <- df_comb %>% filter(sample_recode == "Tumor")
+
+# Let’s inspect rows with the most missing values again.
+df_comb %>%
+  mutate(na_count = rowSums(is.na(.))) %>%
+  arrange(desc(na_count)) %>%
+  slice_head(n = 10)
 ```
 
-```{r}
-# Replace NA in x with the median of x (excluding NAs)
+There are two main approaches when deciding what to do:
 
+-   **Remove rows** with missing values
+
+-   **Impute values**
+
+In our case:
+
+We’ll replace numeric missing values with the median of each variable. We’ll replace missing factor levels with the most common category.
+
+```{r}
 df_comb <- df_comb %>%
   mutate(across(
     c(
@@ -600,33 +593,46 @@ df_comb <- df_comb %>%
     ~ if_else(is.na(.x), as.integer(median(.x, na.rm = TRUE)), as.integer(.x))
   ))
 
+df_comb <- df_comb %>%
+  mutate(across(
+    c(stage, grade),
+    ~ fct_explicit_na(.x, na_level = names(sort(table(.x), decreasing = TRUE))[1])
+  ))
 ```
 
-We’ll keep the remaining `NA`s as-is for now, depending on context.
+We’ll keep the remaining `NA`s as-is for now.
 
-<br> <br>
+> However always consider the impact of missing data. Even after imputing, missing data can cause uncertainty and bias so understands the result with caution.
 
-## In Summary
+<br>
 
-Key Takeaways
+### In Summary
 
--   Long format is your **best friend** when plotting or modeling.
+We conducted an initial **exploratory data analysis (EDA)** and, overall, the dataset looks clean and well-structured.
 
--   Use `across()` and helpers to write **clean, scalable summaries**.
+-   **Reshaped data** — switched between wide and long formats to easily plot multiple variables together.
+
+-   **Checked factors** — reviewed category balance, merged sparse groups, and visualized how factors relate.
+
+-   **Generated and inspected summary statistics** — used tidyverse helpers to calculate means, standard deviations, and more for many columns at once, confirming that values align with biological expectations.
+
+-   **Detected and removed outliers** — used clustering to identify and exclude extreme or inconsistent samples with unusually high normal cell content.
+
+-   **Handled missing data thoughtfully** — removed irrelevant samples and imputed remaining gaps where appropriate.
+
+<br>
+
+### Key Takeaways
+
+-   Long format is your best friend when plotting or modeling.
+
+-   Use `across()` and helpers to write clean, scalable summaries.
 
 -   Visual checks are as important as statistical checks.
 
--   **EDA is not optional** — it’s the foundation of trustworthy analysis.
+-   EDA is not optional — it’s the foundation of trustworthy analysis.
 
--   Keep your workflow **reproducible** and **tidy** for future modeling stages.
-
-We have conducted an initial **exploratory data analysis (EDA)** and overall, the dataset looks clean and well-structured.
-
--   We identified and **removed a few samples**, as they had many missing values.
-
--   One sample was also removed due to inconsistencies in cell type proportions.
-
--   We observed that the categories within stage and grade are **not fully balanced**, therefore we decided to use the **summary stage** and **summary grade** variables
+-   Keep your workflow reproducible and tidy for future modeling stages.
 
 ```{r}
 save(df_comb, file="../data/Ovarian_comb_prep_Col.RData")
