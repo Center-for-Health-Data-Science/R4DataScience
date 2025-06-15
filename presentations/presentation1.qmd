@@ -108,10 +108,8 @@ df_ov$histological_type %>% table()
 ```
 
 ```{r, warning=FALSE}
-target <- c("histological_type")
-
 df_ov <- df_ov %>% 
-  select(!target)
+  select(!histological_type)
 ```
 
 ### Step 2: Drop Variables with Too Many Missing Values
@@ -131,7 +129,7 @@ dim(df_ov)
 
 This keeps only the variables that are mostly complete.
 
-### Step 3: Standardize Categorical Data
+### Step 3: Standardize Categorical Variables
 
 Counting the number of occurrences for each level of a categorical variable.
 
@@ -189,7 +187,7 @@ df_ov$vital_status %>%
 ```
 
 
-### Step 3: Fix Variable Types
+### Step 4: Fix Variable Types
 
 Some variables are stored as **character** or **numeric** when they should actually be **factors** (i.e., categorical variables). Convert character/numeric columns to factors:
 
@@ -210,7 +208,7 @@ df_ov <- df_ov %>%
 str(df_ov)
 ```
 
-### Step 4: Re-code and Reorder Factors
+### Step 5: Re-code and Reorder Factors
 
 Sometimes we want to **set the order of factor levels manually**, especially if there's a natural or meaningful order (e.g., "low" → "high"): This helps when plotting or interpreting regression coefficients.
 
@@ -232,11 +230,9 @@ df_ov$summarygrade <- factor(df_ov$summarygrade, levels = c('low', 'high'))
 levels(df_ov$summarygrade) # low, high
 ```
 
-## Create New Variables
+### Step 6: Creating New Variables
 
 Now, we would like to create a new data column by extracting specific information or combining other columns.
-
-### Step 5: Creating New Variables
 
 Add a column combining other columns into one:
 
@@ -262,9 +258,7 @@ Create logical variables with `ifelse`. Adding a column with content based on a 
 
 ```{r results="show"}
 df_ov <- df_ov %>% 
-  mutate(dominant_cell_type = ifelse(percent_not_cancer_cells > percent_tumor_cells, 
-                                     "not_cancer_cells", 
-                                     "cancer_cells"))
+  mutate(dominant_cell_type = ifelse(percent_not_cancer_cells > percent_tumor_cells, "not_cancer_cells", "cancer_cells"))
 
 table(df_ov$dominant_cell_type)
 ```
