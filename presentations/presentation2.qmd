@@ -35,7 +35,7 @@ load("../data/Ovarian_comb_clean.RData")
 
 # Quick peek at the structure and contents
 class(df_comb)
-df_comb %>% slice(1:5)
+#df_comb %>% slice(1:5)
 ```
 
 Depending on how we want to investigate the variables, there are different tools in your EDA toolkit we can employ:
@@ -122,7 +122,6 @@ Now, let’s say we want to create a single plot and compare several **COL gene 
 
 In the current **wide format** (like most spreadsheets), each gene is stored in its own column:
 
-
 | ID  | COL3A1 | COL4A3 | COL8A2 | ... |
 |-----|--------|--------|--------|-----|
 | 1   | 2.3    | 1.9    | 3.1    |     |
@@ -170,8 +169,8 @@ ggplot(na.omit(df_comb_long),
   theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
 
 ```
-More context: add color-stratification by `summarygrade` and compare distributions side-by-side:
 
+More context: add color-stratification by `summarygrade` and compare distributions side-by-side:
 
 Want histograms for all genes?
 
@@ -189,7 +188,6 @@ This plot gives us a histogram for each gene, all in one go.
 -   No need to write separate plots manually.
 
 -   Much easier to compare variables side-by-side.
-
 
 ### Pivot back into wide format
 
@@ -229,13 +227,14 @@ table(df_comb$vital_status, df_comb$stage, useNA = "ifany")
 ```{r}
 # Relabel factor levels
 df_comb <- df_comb %>%
-  mutate(stage = fct_recode(stage, 
-                            "1" = "1-b", 
+  mutate(stage = fct_recode(stage,
+                            "1" = "1-b",
                             "1" = "1-c",
-                            "2" = "2-b", 
+                            "2" = "2-b",
                             "2" = "2-c",
-                            "4" = "4-NA", 
-                            "NA" = "NA-NA"))
+                            "4" = "4-NA",
+                            NULL = "NA-NA"))
+
 ```
 
 ### Pairwise Relationships Between Categorical Variables
@@ -306,7 +305,6 @@ df_comb %>%
   select(15:25)
 ```
 
-
 ### Using `where()` and `starts_with()` to Select Numeric Columns
 
 We will probably not want to calculate means on non-numeric columns, so let's select only numeric columns. For that we need another helper caller `where()` that lets us select columns based on their properties, like data type.
@@ -327,7 +325,6 @@ df_comb %>%
 ```
 
 These helpers make your code cleaner, more scalable, and easier to maintain. They can be used to select columns in tidyverse, also outside of `across()`.
-
 
 ### `summarise()` becomes more powerful!
 
@@ -494,10 +491,12 @@ There are many different tools and strategies available to detect and handle out
 
 ```{r warning=FALSE}
 df_comb %>%
-  filter(percent_tumor_cells < 5 & percent_not_cancer_cells < 5)
+  filter(percent_tumor_cells == 0 & percent_not_cancer_cells == 0)
 
-#df_comb <- df_comb %>%
-#  filter(percent_tumor_cells < 5 & percent_not_cancer_cells < 5)
+df_comb <- df_comb %>%
+  filter(
+    (percent_tumor_cells != 0 | is.na(percent_tumor_cells) & 
+            percent_not_cancer_cells != 0) | is.na(percent_not_cancer_cells))
 ```
 
 > **Be cautious when removing data**: Outlier removal should always be guided by domain knowledge and clear justification. Removing too much — or for the wrong reasons — can distort your analysis.
@@ -583,6 +582,24 @@ Since we have very few samples with a high number of missing values AND we are n
 
 ```{r}
 df_comb <- df_comb %>% filter(sample_recode == "Tumor")
+```
+
+```{r}
+# Replace NA in x with the median of x (excluding NAs)
+
+df_comb <- df_comb %>%
+  mutate(across(
+    c(
+      percent_normal_cells,
+      percent_stromal_cells,
+      percent_tumor_cells,
+      age_at_initial_path_diagn,
+      days_to_death,
+      days_to_tumor_recurrence
+    ),
+    ~ if_else(is.na(.x), as.integer(median(.x, na.rm = TRUE)), as.integer(.x))
+  ))
+
 ```
 
 We’ll keep the remaining `NA`s as-is for now, depending on context.
