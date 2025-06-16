@@ -6,7 +6,7 @@ project:
  output-dir: ../docs
 ---
 
-Now that we've cleaned our data, it’s time to dig deeper into the actual contents of our dataset. Lets do some Exploratory Data Analysis (EDA). It is an essential step in any data analysis or modeling workflow.
+Now that we've cleaned our data, it’s time to dig deeper into the actual contents of our dataset. Lets do some Exploratory Data Analysis (EDA).
 
 ## Load Packages and Data
 
@@ -15,7 +15,6 @@ Let’s begin by loading the packages we’ll need for data wrangling and plotti
 ```{r warning=FALSE, message=FALSE}
 library(tidyverse)
 library(factoextra)
-# library(ggforce) 
 ```
 
 Next, bring in the cleaned dataset we prepared earlier:
@@ -47,16 +46,9 @@ ggplot(df_comb,
        aes(x = percent_tumor_cells)) +
   geom_histogram(bins = 30, fill="#482878FF") +
   theme_bw()
+```
 
-# Tumor percentage by summary grade
-ggplot(df_comb, 
-       aes(x = grade, 
-           y = percent_tumor_cells, 
-           fill = grade)) +
-  geom_boxplot() +
-  theme_bw() + 
-  scale_fill_viridis_d(na.value = "gray90")
-
+```{r}
 # Count with barplot
 ggplot(df_comb, 
        aes(x = grade, 
@@ -66,28 +58,18 @@ ggplot(df_comb,
   scale_fill_viridis_d(na.value = "gray90")
 ```
 
-These simple plots give us an initial overview of the distribution of some of the variables - on their own and stratified by groups.
-
-### Pipe into `ggplot` and save the object
-
-Tired of cluttering your environment with dozens of intermediate data frames? There’s a solution: you can pipe (`%>%`) your filtered data directly into `ggplot()` without saving it first. When you do this, you don’t need to specify the `data = ...` argument inside `ggplot()` — the data is being *piped* into the function automatically.
-
-```{r warning=FALSE}
-awesome_plot <-  df_comb %>%
-  filter(sample_recode  == "Tumor") %>%
-  ggplot(aes(x = COL10A1, 
-             y = COL11A1, 
-             color = summarygrade)) + 
-  geom_point() +
-  scale_color_viridis_d(na.value = "gray90") +
-  theme_bw()
-```
-
-Just like data frames, `ggplot` plots are R objects. You can assign them to variables and display them later:
-
 ```{r}
-print(awesome_plot)
+# Tumor percentage by summary grade
+ggplot(df_comb, 
+       aes(x = grade, 
+           y = percent_tumor_cells, 
+           fill = grade)) +
+  geom_boxplot() +
+  theme_bw() + 
+  scale_fill_viridis_d(na.value = "gray90")
 ```
+
+These simple plots give us an initial overview of the distribution of some of the variables - on their own and stratified by groups.
 
 ## Formats: long and wide
 
@@ -210,11 +192,9 @@ df_comb %>%
 
 After reviewing our categorical variables, we observed the following:
 
--   **`Tumorstage` and `grade`** are unbalanced. With certain stages and grades (e.g., 1 or 4) having low sample counts. This limits our ability to make reliable comparisons across all detailed levels. So we may combine levels into broader groups.
+-   **`Tumorstage` and `grade`** are unbalanced. With certain stages and grades (e.g., 1 or 4) having low sample counts. This limits our ability to make reliable comparisons across all detailed levels.
 
 -   **`Batch` is evenly represented**, which reduces concerns about batch effects.
-
-<!-- -->
 
 -   **`Vital_status` is nicely balanced** making it well-suited for comparisons and modeling.
 
@@ -222,7 +202,7 @@ These insights help us design our downstream analysis in a statistically sound a
 
 ## Summary Statistics
 
-Even after initial data cleaning and harmonization, it’s important to make sure our variables are well-behaved and ready for downstream analysis and modeling.
+It’s important to make sure our variables are well-behaved and ready for downstream analysis and modeling.
 
 For this, let’s say we want to compute the mean of several columns. A basic (but tedious) approach might look like this:
 
@@ -258,7 +238,7 @@ We will probably not want to calculate means on non-numeric columns, so let's se
 
 ```{r}
 df_comb %>%
-  summarise(across(.cols = where(fn = is.numeric), # fn is a function that returns TRUE or FALSE
+  summarise(across(.cols = where(fn = is.numeric), 
                    .fns = mean)) %>% 
   select(5:15)
 ```
@@ -353,14 +333,6 @@ Let’s break it down:
 
 -   `.` is a placeholder for the current column being operated or 'the data previously referred to'. We need to use the `.` because `mean` when called as a proper function needs to have an argument (a vector of numbers) to work on.
 
-Compare it to this:
-
-```{r}
-mean(df_comb$age_at_initial_path_diagn, na.rm = TRUE)
-```
-
-In both cases, the column must be explicitly passed in and `.` serves that role inside anonymous functions.
-
 ### Multiple Summary Statistics with `na.rm = TRUE`
 
 Now let’s compute **several** stats per column, all with `na.rm = TRUE`. Here we chose just the integer columns:
@@ -401,14 +373,15 @@ stats <- stats %>%
   pivot_longer(cols = c(thr_lower, thr_upper), names_to = "thr_type", values_to = "threshold")
 
 print(stats)
+```
+
+```{r warning=FALSE}
 
 df_comb_longer <- df_comb %>% 
   pivot_longer(cols = where(is.integer),
                names_to = "variable",
                values_to = "value")
-```
 
-```{r warning=FALSE}
 ggplot(df_comb_longer, 
        aes(x = value)) +
   geom_histogram(bins = 30, fill="#482878FF") +
@@ -498,8 +471,8 @@ Let’s identify samples with unusually large heights and inspect them:
 
 ```{r}
 # Set a high threshold (top 0.1%)
-threshold <- quantile(hclust_int$height, 0.99)
-#threshold <- 4
+#threshold <- quantile(hclust_int$height, 0.99)
+threshold <- 6
 # Find their order in the clustering
 ord_inx <- hclust_int$order[hclust_int$height > threshold]
 ord_inx
@@ -528,9 +501,6 @@ Given that they show extreme values across several key variables, it’s reaso
 ```{r}
 df_comb <- df_comb %>%
   filter(!(
-    (percent_normal_cells == 30 & days_to_death == 3622) |
-      (percent_normal_cells == 40 & days_to_death == 2621) |
-      (percent_normal_cells == 50 & days_to_death == 506) |
       (percent_normal_cells == 35 & days_to_death == 1354) |
       (percent_normal_cells == 30 & days_to_death == 192)
   ) |
@@ -619,8 +589,6 @@ We conducted an initial **exploratory data analysis (EDA)** and, overall, the 
 -   **Detected and removed outliers** — used clustering to identify and exclude extreme or inconsistent samples with unusually high normal cell content.
 
 -   **Handled missing data thoughtfully** — removed irrelevant samples and imputed remaining gaps where appropriate.
-
-<br>
 
 ### Key Takeaways
 
