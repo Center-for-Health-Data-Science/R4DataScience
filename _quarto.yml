@@ -60,15 +60,15 @@ website:
           - href: exercises/exercise5B.qmd
             text: "Exercise 5B: Models and Model Evaluation in R" 
 
-      # - section: "Solutions"
-      #   contents:
-      #     # - href: tdhh/solutions_not_up.qmd
-      #     - href: tdhh/tdhh1.qmd
-      #       text: "Solution 1: Data Cleaning"
-      #     # - href: tdhh/solutions_not_up.qmd # tdhh2.qmd
-      #     - href: tdhh/tdhh2.qmd
-      #       text: "Solution 2: Summary Statistics and Data Wrangling"
-      #     # - href: tdhh/solutions_not_up.qmd
+      - section: "Solutions"
+        contents:
+          # - href: tdhh/solutions_not_up.qmd
+          - href: tdhh/tdhh1.qmd
+            text: "Solution 1: Data Cleaning"
+          # - href: tdhh/solutions_not_up.qmd # tdhh2.qmd
+          - href: tdhh/tdhh2.qmd
+            text: "Solution 2: Summary Statistics and Data Wrangling"
+          # - href: tdhh/solutions_not_up.qmd
       #     - href: tdhh/tdhh3.qmd
       #       text: "Solution 3: Exploratory Data Analysis"
       #     # - href: tdhh/solutions_not_up.qmd

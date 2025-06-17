@@ -10,7 +10,17 @@ project:
 
 1.  Load packages.
 
+```{r}
+library(tidyverse)
+library(readxl)
+```
+
 2.  Load in the `diabetes_clinical_toy_messy.xlsx` data set.
+
+```{r}
+diabetes <- read_xlsx("../data/diabetes_clinical_toy_messy.xlsx")
+head(diabetes)
+```
 
 ## Explore the data
 
@@ -40,7 +50,6 @@ Consider the following:
 ## Hint
 
 Have a look at `BloodPressure`, `BMI`, and `Sex`.
-
 :::
 
 ## Metadata

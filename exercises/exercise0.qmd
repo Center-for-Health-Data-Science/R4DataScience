@@ -31,6 +31,9 @@ The working directory in R (and other programming environments) is the folder on
 
 -   **Relative path**: The path from the working directory to the input file.
 
+
+
+
 ## R Script
 
 4.  Create an R script and save it in your exercise folder.

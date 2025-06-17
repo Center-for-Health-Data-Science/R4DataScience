@@ -367,6 +367,8 @@ df_ov %>% select(alt_sample_name, sample_code, sample_code_manual, sample_recode
 
 df_ov <- df_ov %>% 
   select(!c(sample_code_manual, sample_code, alt_sample_name, sample_type))
+
+df_ov %>% dim()
 ```
 
 Nicely done!
@@ -482,5 +484,5 @@ df_comb <- df_ov %>%
 **Your dataset `df_comb` is now ready for summary statistics and exploratory data analysis (EDA).**
 
 ```{r}
-save(df_comb, file="../data/Ovarian_comb_clean.RData")
+# save(df_comb, file="../data/Ovarian_comb_clean.RData")
 ```
