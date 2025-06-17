@@ -509,8 +509,8 @@ Hint
 <li>Create the model matrix needed for input to <code>glmnet()</code> and <code>cv.glmnet()</code>. See pseudo-code below:</li>
 </ol>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>modTrain <span class="ot">&lt;-</span> <span class="fu">model.matrix</span>(<span class="sc">~</span> ., <span class="at">data =</span> train)</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>modTest <span class="ot">&lt;-</span> <span class="fu">model.matrix</span>(<span class="sc">~</span> ., <span class="at">data =</span> test)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>modTrain <span class="ot">&lt;-</span> <span class="fu">model.matrix</span>(<span class="sc">~</span> .<span class="sc">-</span> <span class="dv">1</span>, <span class="at">data =</span> train)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>modTest <span class="ot">&lt;-</span> <span class="fu">model.matrix</span>(<span class="sc">~</span> .<span class="sc">-</span> <span class="dv">1</span>, <span class="at">data =</span> test)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <ol start="12" type="1">
 <li>Create your Elastic Net Regression model with <code>glmnet()</code>.</li>
