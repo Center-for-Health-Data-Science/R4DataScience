@@ -103,8 +103,8 @@ As we are working with a mix of categorical and numerical predictors, it is advi
 11. Create the model matrix needed for input to `glmnet()` and `cv.glmnet()`. See pseudo-code below:
 
 ```{r eval=FALSE}
-modTrain <- model.matrix(~ ., data = train)
-modTest <- model.matrix(~ ., data = test)
+modTrain <- model.matrix(~ .- 1, data = train)
+modTest <- model.matrix(~ .- 1, data = test)
 ```
 
 12. Create your Elastic Net Regression model with `glmnet()`.
