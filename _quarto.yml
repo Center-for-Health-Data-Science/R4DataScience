@@ -78,11 +78,11 @@ website:
           - href: tdhh/tdhh4B.qmd
             text: "Solution 4B: Functions"
           # - href: tdhh/solutions_not_up.qmd
-      #     - href: tdhh/tdhh5A.qmd
-      #       text: "Solution 5A: Intro to Regression in R"
-      #     # - href: tdhh/solutions_not_up.qmd
-      #     - href: tdhh/tdhh5B.qmd
-      #       text: "Solution 5B: Models and Model Evaluation in R"
+          - href: tdhh/tdhh5A.qmd
+            text: "Solution 5A: Intro to Regression in R"
+          # - href: tdhh/solutions_not_up.qmd
+          - href: tdhh/tdhh5B.qmd
+            text: "Solution 5B: Models and Model Evaluation in R"
 
       - section: "Cheat Sheets"
         contents:
