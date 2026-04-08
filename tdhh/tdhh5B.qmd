@@ -42,6 +42,7 @@ Below is a description of the variables in the dataset:
 ```{r}
 library(tidyverse)
 library(factoextra)
+library(ggplot2)
 ```
 
 2.  Load in the dataset named `kidney_disease.Rdata`.
@@ -246,7 +247,7 @@ test  <- optML[-idx, ]
 ```
 
 ```{r}
-train[,-1] %>%
+train %>%
   dplyr::select(where(is.character)) %>%
   pivot_longer(everything(), names_to = "variable", values_to = "level") %>%
   arrange(variable) %>%
@@ -254,7 +255,7 @@ train[,-1] %>%
 ```
 
 ```{r}
-test[,-1] %>%
+test %>%
   dplyr::select(where(is.character)) %>%
   pivot_longer(everything(), names_to = "variable", values_to = "level") %>%
   arrange(variable) %>%
@@ -277,13 +278,12 @@ RFcv <- trainControl(
 
 # Train Random Forest
 set.seed(123)
-rf_model <- train(
+rf_model <- caret::train(
   Preg.ended...37.wk ~ .,  # formula interface
   data = train,
   method = "rf",           # random forest
   trControl = RFcv,
   metric = "ROC",          # optimize AUC
-  #preProcess = c("center", "scale"),  # optional
   tuneLength = 5           # try 5 different mtry values
 )
 
@@ -340,8 +340,11 @@ model1out <- coef(summary(model1)) %>%
   filter(`Pr(>|z|)` <= 0.05 & VarName != "(Intercept)")
 
 model1out
+```
 
+
+```{r}
 # Compare output from Elastic Net with output from glm model
-intersect(as.character(coeffsDat$VarName), model1out$VarName) %>%
+intersect(as.character(varImportance$VarName), model1out$VarName) %>%
   sort()
 ```

@@ -273,11 +273,10 @@ for (col in colnames(plot_data_1)){
 
 ### If-else in loops
 
-We can now use what we have learned to loop through our `list1` and multiply all numeric values with 10:
+We can now use what we have learned to loop through a list, `list1` and multiply all numeric values with 10:
 
 ```{r}
-#to remember contents:
-list1
+list1 <- list(1, 2, 'hello', 3, 'world', 4)
 ```
 
 ```{r}
