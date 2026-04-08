@@ -18,9 +18,11 @@ In this exercise you will do some more advance tidyverse operations such as pivo
 
 ## Change format
 
-3.  Have a look at the glucose dataset. It has three columns with measurements from a Oral Glucose Tolerance Test where blood glucose is measured at fasting (Glucose_0), 1 hour/60 mins after glucose intake (Glucose_6), and 2 hours/120 mins after (Glucose_120). The last columns is an ID column. Change the data type of the ID column to `factor` in both `diabetes_join` and `df_glucose`.
+Have a look at the `df_glucose` dataset. It has three columns with measurements from a Oral Glucose Tolerance Test where blood glucose is measured at fasting (Glucose_0), 1 hour/60 mins after glucose intake (Glucose_6), and 2 hours/120 mins after (Glucose_120). The last columns is an ID column. 
 
-4.  Restructure the glucose dataset into a long format. Think about which columns should be included in the pivot.
+3.  Change the data type of the ID column to `factor` in the glucose dataset.
+
+4.  Restructure the glucose dataset into a long format. Name/rename the value column to `Glucose (mmol/L)` and the column that describes the measurement time to `Measurement`. Check the resulting dataset.
 
 5.  How many rows are there per ID? Does that make sense?
 
@@ -36,7 +38,14 @@ Have a look at the help for factors `?factors` to see how to influence the level
 
 ## Join datasets
 
-7.  Join the long formatted glucose dataset you made in **4** with the joined diabetes dataset you loaded in **2**. Do the wrangling needed to make it happen!
+7.  Using `left_join()`, join the (I) diabetes dataset you loaded in **2** with (II) the long formatted glucose dataset you created in **4**. Do the wrangling needed to make it happen.
+
+
+::: {.callout-tip collapse="true"}
+## Hint
+
+You will need to modify the ID column in one of the datasets.
+:::
 
 ## Summary stats
 
@@ -94,7 +103,7 @@ diabetes_glucose_num_outlier <- add_row(diabetes_glucose_num, outlier)
 # diabetes_glucose_num_outlier <- add_row(diabetes_glucose_num_outlier, outlier)
 ```
 
-15. Export the final dataset (**without** the outlier!) in whichever format you prefer.
+15. Export the final dataset (**without** the outlier) in whichever format you prefer.
 
 ## More Plotting
 
@@ -131,9 +140,7 @@ Group by several variables: `group_by(var1, var2)`.
 
 20. Create a plot that visualizes glucose measurements across time points, with one line for each patient ID. Then color the lines by their diabetes status. In summary, each patient's glucose measurements should be connected with a line, grouped by their ID, and color-coded by `Diabetes`. Give the plot a meaningful title.
 
-21. Recreate the plot you made above.
-
-    But this time: Jittered individual values to avoid over plotting. Overlay and connect the group means showing the mean trend for each group. Add a title, change color pallet and themes.
+21. Recreate the plot you made above. But this time: Jittered individual values to avoid over plotting. Overlay and connect the group means showing the mean trend for each group. Add a title, change color pallet and themes.
 
 This plot should look like this:
 

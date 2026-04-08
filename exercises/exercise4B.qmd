@@ -26,19 +26,17 @@ It should accept the following parameters:
 Initiate the risk score with a value of 0 and calculate the final risk score with the following rules:
 
 * if BloodPressure is > 90, add 0.5
-* if Smoking is 'Smoker', add 1 
+* if Smoker == 'Former' add 1. If Smoker == 'Smoker', add 2 
 * if BMI is > 30, add 1. If BMI > 40, add 2
 * if PhysicalActivity is > 110, substract 1
 
 The function should return the final risk score. Test it with some different inputs to verify that it works according to the rules detailed above. 
 
-2. Add a check to your function whether the supplied parameters are numeric, except for Smoking which should be a factor or a character (you can check that too if you want to). Test that your check works correctly.
+2. In a for-loop, apply your `calculate_risk_score` to each row in `diabetes_glucose`. Remember to use the appropriate column, i.e. `diabetes_glucose$BloodPressure` should be the argument for `BloodPressure` in the function. Add the calculated risk score to diabetes_glucose as a column `Risk_score`.
 
-3.  In a for-loop, apply your `calculate_risk_score` to each row in `diabetes_glucose`. Remember to use the appropriate column, i.e. `diabetes_glucose$BloodPressure` should be the argument for `BloodPressure` in the function. Add the calculated risk score to diabetes_glucose as a column `Risk_score`.
+3. Now, run `calculate_risk_score` on each row in `diabetes_glucose` by using `mapply` instead. Confirm that your result is the same. 
 
-4. Now, run `calculate_risk_score` on each row in `diabetes_glucose` by using `mapply` instead. Confirm that your result is the same. 
-
-5.  Create an R script file to contain your functions. Copy your functions there and remove them from your global environment with `rm(list="name_of_your_function")`. Now source the function R script in your quarto document and test that the functions work.
+4.  Create an R script file to contain your functions. Copy your functions there and remove them from your global environment with `rm(list="name_of_your_function")`. Now source the function R script in your quarto document and test that the functions work.
 
 ------------------------------------------------------------------------
 

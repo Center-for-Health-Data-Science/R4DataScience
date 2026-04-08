@@ -41,28 +41,19 @@ df_exp %>% head()
 
 ### Basics
 
-We can get a little reminder of base R and tidyverse functions and explore some basic data characteristics.
-
-Take a look at categorical and numerical variables, access elements in list.
-
+Firstly, lets take a look at the variable `vital_status` from the clinical metadata. This variable contains information about whether the patient is alive or deceased and in the analysis below we will denote this our outcome / response variable.
 ```{r}
-# output: vector
+# output: vector, base R
 df_ov$vital_status %>% 
   head()
 
-# output: one-column-tibble 
-df_ov %>%
-  select(vital_status) %>% 
-  head()
-```
 
-Get a vector the tidyverse way:
-
-```{r}
+# Goutput: vector the tidyverse
 df_ov %>%
-  select(vital_status) %>% 
-  pull() %>% 
-  head()
+  select(vital_status)
+
+
+table(df_ov$vital_status)
 ```
 
 ### Check for Missing Values
@@ -107,10 +98,12 @@ Let’s check a few categorical variables and remove any that are redundant or i
 df_ov$histological_type %>% table()
 ```
 
+Example of irrelevant variable: `histological_type` has 99% of the same value, so it’s not useful for analysis. We can drop it with `select()` and a minus sign.
 ```{r, warning=FALSE}
 df_ov <- df_ov %>% 
-  select(!histological_type)
+  select(-histological_type)
 ```
+
 
 ### Step 2: Drop Variables with Too Many Missing Values
 
@@ -239,6 +232,10 @@ Add a column combining other columns into one:
 ```{r}
 df_ov <- df_ov %>% 
   mutate(percent_not_cancer_cells = percent_stromal_cells + percent_normal_cells)
+
+df_ov %>% select(percent_stromal_cells, 
+                 percent_normal_cells, 
+                 percent_not_cancer_cells)
 ```
 
 For character vectors you can use functions `paste` and `paste0` . The `paste` function concatenates two strings into one. This one is from baseR.
@@ -251,14 +248,15 @@ paste('TCGA', 'Data', sep = ' ')
 df_ov <- df_ov %>% 
   mutate(stage = paste(tumorstage, substage, sep = '-'))
 
-unique(df_ov$stage)
+df_ov %>% select(stage)
+
 ```
 
 Create logical variables with `ifelse`. Adding a column with content based on a condition with `ifelse`.
 
 ```{r results="show"}
 df_ov <- df_ov %>% 
-  mutate(dominant_cell_type = ifelse(percent_not_cancer_cells > percent_tumor_cells, "not_cancer_cells", "cancer_cells"))
+  mutate(dominant_cell_type = if_else(percent_not_cancer_cells > percent_tumor_cells, "not_cancer_cells", "cancer_cells"))
 
 table(df_ov$dominant_cell_type)
 ```
@@ -305,7 +303,8 @@ We will do string manipulation the tidyverse way: using the `stringr` package wh
 ### Examples
 
 ```{r}
-df_ov$alt_sample_name %>% head(n = 1)
+df_ov$alt_sample_name %>% 
+  head(n = 1)
 ```
 
 Let’s say we want to extract part of the sample name. We can use the `str_split_i` function to split a string on a given character and access the i'th element.
@@ -326,11 +325,13 @@ table(df_ov$sample_code)
 We know that **01** encodes **primary tumor** while **11** encodes healthy tissue. We can use `str_detect()` to see if a sub-string contains the **01** or **11**.
 
 ```{r}
-str_detect(df_ov$sample_code, '01') %>% table(useNA = 'ifany')
+str_detect(df_ov$sample_code, '01') %>% 
+  table(useNA = 'ifany')
 ```
 
 ```{r}
-str_detect(df_ov$sample_code, '11') %>% table(useNA = 'ifany')
+str_detect(df_ov$sample_code, '11') %>% 
+  table(useNA = 'ifany')
 ```
 
 Add a column that records TRUE if sample is a primary tumor and place it after the `Sample_type` column.
@@ -348,7 +349,10 @@ df_ov <- df_ov %>%
   mutate(sample_code_manual = str_detect(sample_code, '01.{0,1}'), 
          .after = sample_type)
 
-df_ov %>% select(sample_code, sample_code_manual) %>% slice(100:110)
+
+df_ov %>% 
+  select(sample_code, sample_code_manual) %>% 
+  slice(100:110)
 ```
 
 We can also replace text patterns:
@@ -363,10 +367,17 @@ df_ov <- df_ov %>%
          sample_recode = str_replace_all(sample_recode, '11A', 'Healthy'),
          .after = sample_type)
 
-df_ov %>% select(alt_sample_name, sample_code, sample_code_manual, sample_recode) %>% tail()
+df_ov %>% select(alt_sample_name, 
+                 sample_code, 
+                 sample_code_manual, 
+                 sample_recode) %>% tail()
 
 df_ov <- df_ov %>% 
-  select(!c(sample_code_manual, sample_code, alt_sample_name, sample_type))
+  select(!c(sample_code_manual, 
+            sample_code, 
+            alt_sample_name, 
+            sample_type))
+
 
 df_ov %>% dim()
 ```
@@ -394,10 +405,19 @@ Often we have information stored in more than one table, and we want to merge th
 Let's make a subset of each of the datasets to have a better overview of what is going on.
 
 ```{r}
-df_exp_subset <- df_exp %>% arrange(unique_patient_ID) %>% slice(1:5) %>% select(1:5)
-df_ov_subset <- df_ov %>% arrange(unique_patient_ID) %>% slice(3:7) %>% select(1:3, vital_status)
+df_exp_subset <- df_exp %>% 
+  arrange(unique_patient_ID) %>% 
+  slice(1:5) %>% select(1:5)
 
-df_exp_subset$unique_patient_ID %in% df_ov_subset$unique_patient_ID %>% table()
+df_ov_subset <- df_ov %>% 
+  arrange(unique_patient_ID) %>% 
+  slice(3:7) %>% select(1:3, vital_status)
+
+
+
+df_exp_subset$unique_patient_ID %in% 
+  df_ov_subset$unique_patient_ID %>% 
+  table()
 ```
 
 A quick recap of join types from `dplyr`:

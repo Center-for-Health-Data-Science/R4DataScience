@@ -48,7 +48,7 @@ While PCA is very forgiving in terms of variable distributions, there are some t
 
 9.  Remove any missing values from your dataset.
 
-10.  Extract all numeric variables AND scale these so they have comparable ranges. This numeric dataset you will use for PCA.
+10. Extract all numeric variables AND scale these so they have comparable ranges. This numeric dataset you will use for PCA.
 
 11. Extract all categorical variables from your dataset and save them to a new object. You will use these as labels for the PCA.
 
@@ -58,7 +58,7 @@ While PCA is very forgiving in terms of variable distributions, there are some t
 
 13. Make a plot that shows how much variance is captured by each component (in each dimension). There are two ways of making this plot: either you can use the function `fviz_screeplot()` from the `factoextra` package as we did in the exercise OR, you can use ggplot2, by extracting the `res.pca$eig` and plotting the `percentage of variance` column.
 
-14. Now, make a biplot (the round one with the arrows we showed in the presentation). This type of plot is a little complicated with ggplot alone, so either use the `fviz_pca_var()` function from the `factoextra` package we showed in the presentation, or - if you want to challenge yourself - try `autoplot()` from the `ggfortify` package.
+14. Now, make a *loadings plot* (the round one with the arrows we showed in the presentation). This type of plot is a little complicated with ggplot alone, so either use the `fviz_pca_var()` function from the `factoextra` package we showed in the presentation, or - if you want to challenge yourself - try `autoplot()` from the `ggfortify` package.
 
 15. Have a look at the `$var$contrib` from your PCA object and compare it to the biplot, what do they tell you, i.e. which variables contribute the most to PC1 (dim1) and PC2 (dim2)? Also, look at the correlation matrix between variables in each component (`$var$cor`), what can you conclude from this?
 

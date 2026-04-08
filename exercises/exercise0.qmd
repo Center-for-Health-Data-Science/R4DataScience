@@ -31,28 +31,31 @@ The working directory in R (and other programming environments) is the folder on
 
 -   **Relative path**: The path from the working directory to the input file.
 
-
-
+**N.B** IF you are working on a windows computer and you copy a path from your file explorer to paste into Rstudio, you will have to change the direction of all the slashes in the path (backward to forward).
 
 ## R Script
 
 4.  Create an R script and save it in your exercise folder.
 
-An R script is a plain text file containing a series of R commands and code used for data analysis. R scripts have a `.R` extension and can be executed line-by-line in an interactive R session or as a whole script. They are ideal for automating workflows and keeping your analyses reproducible and organized. R scripts can be submitted to a job on a supercomputer unlike Quarto documents.
+An R script is a plain text file containing a series of R commands and code used for data analysis. R scripts have a `.R` extension and can be executed line-by-line in an interactive R session or as a whole script. They are ideal for automating workflows and keeping your analyses reproducible and organized. R scripts can be submitted to a job on a super computer unlike Quarto documents.
 
 5.  Type `getwd()` in your R script and run the line. Compare the working directory with the one from the console.
 
-6. Change the working directory using `setwd()`.
+6.  Change the working directory using `setwd()`. 
 
-7. Run `getwd()` again.
+*HINT:* if you are unsure what path you want to use go to session --> set working directory --> choose directory and select the folder you want to be your working directory. Then, copy the path from the console and paste it into the `setwd()` function.
 
-8. Read in the file from `data/diabetes.csv` using the `read_csv()` function and check the structure of the data with the `str()` function. Re-save the file.
+7.  Run `getwd()` again.
 
-## Quarto
+8.  Read in the file from `data/diabetes.csv` using the `read_csv()`. In order to use `read_csv()` you must first load the R-package `tidyverse`, as the function comes from this package. 
+Check the structure of the data with the `str()` function. 
+**Re-save the file!**
 
-9. Create an Quarto document and save it in your exercise folder.
+## Quarto Document
 
 Quarto is an open-source publishing system designed to help you create dynamic, reproducible documents, presentations, and websites. It extends the ideas of tools like R Markdown, combining simplicity with powerful customization options for modern scientific and technical communication.
+
+9.  Create an Quarto document and save it in your exercise folder.
 
 10. Type `getwd()` in a code chunk in your Quarto document and run the line. Compare the working directory with the one from the console.
 
@@ -96,14 +99,13 @@ An R project in RStudio creates a self-contained working environment tied to a s
 
 15. Before doing this exercise, we need to brief you about what will happen when you do the instructions below:
 
-- Rstudio will ask you if you want to save your current workspace and to that you will answer **Don't Save**.
+-   Rstudio will ask you if you want to save your current workspace and to that you will answer **Don't Save**.
 
-- Rstudio will close down your current session and open a new one which means that this Quarto will not be open in Rstudio anymore. After you have done the instructions below, simply **navigate to this document and reopen it**.
+-   Rstudio will close down your current session and open a new one which means that this Quarto will not be open in Rstudio anymore. After you have done the instructions below, simply **navigate to this document and reopen it**.
 
 Great - now to the exercise:
 
 Create an R project by clicking the *Project (None)* in the top right → *New Project* → *Existing Directory* and choose an appropriate location. Look at the top-right corner to check that you are in your R project.
-
 
 16. Reopen the the R script and Quarto document you created in Exercise 4 and 9 respectively. Check each of their working directories. Are they as you expect? Explain.
 
@@ -114,4 +116,3 @@ Create an R project by clicking the *Project (None)* in the top right → *New P
 
 -   The working directory of the Quarto document is always the same as the location of the document.
 :::
-

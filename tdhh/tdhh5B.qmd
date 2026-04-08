@@ -1,30 +1,167 @@
 ---
-title: "Exercise 5B - Solutions"
+title: "Exercise 5B - Solutions: Kmeans and Random Forest"
 format: html
 project:
   type: website
   output-dir: ../docs
 ---
 
-1.  Load the R packages needed for analysis:
+## Part 1: K-Means Clustering
+
+In this part you will run a `K-means clustering`. You will work with a dataset from patients with kidney disease. The dataset contains approximately 20 biological measures (variables) collected across 400 patients. The outcome is the `classification` variable which denotes whether a person suffers from **ckd=chronic kidney disease** `ckd` or not `notckd`.
+
+Below is a description of the variables in the dataset:
+
+```         
+        age     -   age
+        bp      -   blood pressure
+        rbc     -   red blood cells
+        pc      -   pus cell
+        pcc     -   pus cell clumps
+        ba      -   bacteria
+        bgr     -   blood glucose random
+        bu      -   blood urea
+        sc      -   serum creatinine
+        sod     -   sodium
+        pot     -   potassium
+        hemo    -   hemoglobin
+        pcv     -   packed cell volume
+        wc      -   white blood cell count
+        rc      -   red blood cell count
+        htn     -   hypertension
+        dm      -   diabetes mellitus
+        cad     -   coronary artery disease
+        appet   -   appetite
+        pe      -   pedal edema
+        ane     -   anemia
+        class   -   classification  
+```
+
+1.  Load the R packages needed for analysis. If you are in doubt about what packages you need, look at `Presentation 5B`. You will need to do some data-wrangling and will also need a package for K-means clustering and visualization.
+
+```{r}
+library(tidyverse)
+library(factoextra)
+```
+
+2.  Load in the dataset named `kidney_disease.Rdata`.
+
+```{r, warning=FALSE}
+#in case
+load("../data/kidney_disease.Rdata")
+```
+
+3.  Before running K-means clustering please remove rows with any missing values across all variables in your dataset - yes, you will lose quite a lot of rows. Consider which columns you can use and if you have to do anything to them before clustering?
+
+```{r}
+# Set seed to ensure reproducibility
+set.seed(123)  
+
+# remove any missing values
+kidney <- kidney %>%
+  drop_na() 
+
+# scale numeric values and only use these
+kidney_num <- kidney %>%
+  mutate(across(where(is.numeric), scale)) %>%
+  dplyr::select(where(is.numeric))
+```
+
+4.  Run the k-means clustering algorithm with 4 centers on the data. Look at the clusters you have generated.
+
+```{r}
+# Set seed to ensure reproducibility
+set.seed(123)  
+
+# run kmeans
+kmeans_res <- kidney_num %>% 
+  kmeans(centers = 4, nstart = 25)
+
+kmeans_res
+```
+
+```{r}
+kmeans_res$centers
+```
+
+5.  Visualize the results of your clustering. Do 4 clusters seems like a good fit for our data in the first two dimensions (Dim1 and Dim2)? How about if you have a look at Dim3 or Dim4?
+
+```{r}
+fviz_cluster(kmeans_res, data = kidney_num, axes=c(1,2),
+             palette = c("#2E9FDF", "#00AFBB", "#E7B800", "orchid3"), 
+             geom = "point",
+             ellipse.type = "norm", 
+             ggtheme = theme_bw())
+```
+
+6.  Investigate the best number of clusters for this dataset. Use the `silhouette` metric.
+
+```{r}
+kidney_num %>%
+  fviz_nbclust(kmeans, method = "silhouette")
+```
+
+7.  Re-do the clustering (plus visualization) with the optimal number of clusters.
+
+```{r}
+# Set seed to ensure reproducibility
+set.seed(123)  
+
+#run kmeans
+
+kmeans_res <- kidney_num %>% 
+  kmeans(centers = 2, nstart = 25)
+
+kmeans_res
+```
+
+```{r}
+fviz_cluster(kmeans_res, data = kidney_num,
+             palette = c("#00AFBB", "#E7B800"), 
+             geom = "point",
+             ellipse.type = "norm", 
+             ggtheme = theme_bw())
+```
+
+8.  Now, try to figure out what the two clusters might represent. There are different ways to do this, but one easy way would be to simply compare the `clusters IDs` from the Kmeans output with one or more of the categorical variables from the dataset. You could use `count()` or `table()` for this.
+
+```{r}
+table(kidney$htn, kmeans_res$cluster)
+
+table(kidney$dm, kmeans_res$cluster)
+
+table(kidney$classification, kmeans_res$cluster)
+```
+
+9.  The `withiness` measure (within cluster variance/spread) is much larger for one cluster then the other, what biological reason could there be for that?
+
+## Part 2: Random Forest
+
+For our Random Forest model we will use the [Obstetrics and Periodontal Therapy Dataset](https://higgi13425.github.io/medicaldata/reference/opt.html), which was collected in a randomized clinical trial. The trail was concerned with the effects of treatment of maternal periodontal disease and if it may reduce preterm birth risk.
+
+This dataset has a total of 823 observations and 171 variables. As is often the case with clinical data, the data has many missing values, and for most categorical variables there is an unbalanced in number of observations for each level.
+
+In order for you to not spend too much time on data cleaning and wrangling we have selected 33 variables (plus a patient ID column, `PID`) for which we have just enough observations per group level.
+
+### Summary Statistics
+
+10. Load the R packages needed for analysis. As for **Part 1** above, have a look at the accompanying presentation for this exercise to get an idea of what packages you might need.
+
+**N.B** that you may have some clashes of function names between these packages. Because of this, you will need to specify the package you are calling some of the functions from. You do this with the package name followed by two colons followed by the name of the function, e.g. `dplyr::select()`
 
 ```{r, warning=FALSE, message=FALSE}
 library(tidyverse)
 library(caret)
-library(glmnet)
-library(MASS)
 library(randomForest)
 ```
 
-## Summary Statistics
-
-2.  Load in the dataset `Obt_Perio_ML.Rdata` and inspect it.
+11. Load in the dataset `Obt_Perio_ML.Rdata` and inspect it.
 
 ```{r}
 load(file = "../data/Obt_Perio_ML.Rdata")
 ```
 
-3.  Do some basic summary statistics and distributional plots to get a feel for the data. Which types of variables do we have?
+12. Do some basic summary statistics and distributional plots to get a feel for the data. Which types of variables do we have?
 
 ```{r}
 
@@ -42,7 +179,8 @@ ggplot(long_data, aes(x = value)) +
   theme_minimal()
 ```
 
-4. Some of the numeric variables are actually categorical. We have identified them in the `facCols` vector. Here, we change their type from numeric to character (since the other categorical variables are of this type). This code is sightly different from changing the type to factor, why we have written the code for you. Try to understand what is going on. 
+13. Some of the numeric variables are actually categorical. We have identified them in the `facCols` vector. Here, we change their type from numeric to character (since the other categorical variables are of this type). This code is sightly different from changing the type to factor, why we have written the code for you. Try to understand what is going on.
+
 ```{r}
 facCols <- c("Race", 
              "ETXU_CAT5", 
@@ -63,214 +201,67 @@ optML <- optML %>%
 head(optML)
 ```
 
-5.  Make count tables of your categorical/factor variables, are they balanced?
+14. Make count tables of your categorical/factor variables, are they balanced?
+
 ```{r}
 # Count observations per level/group for each categorical variable
 
 factor_counts <- optML[,-1] %>%
   dplyr::select(where(is.character)) %>%
-  pivot_longer(everything(), names_to = "Variable", values_to = "Level") %>%
-  count(Variable, Level, name = "Count")
+  pivot_longer(everything(), names_to = "variable", values_to = "level") %>%
+  arrange(variable) %>%
+  dplyr::count(variable, level, sort = FALSE)
 
 factor_counts
 
 ```
 
-## Part 1: Elastic Net Regression
+### Random Forest Model
 
-6.  As you will use the response `Preg.ended...37.wk`, you should remove the other five possible outcome variables measures from your dataset.
+Now, let's try a Random Forest classifier. As we cannot model with multiple outcome variables, so we will select `Preg.ended...37.wk` as our outcome of interest. This variable is a factor variable which denotes if a women gave birth prematurely (1=yes, 0=no).
+
+15. Remove the other five possible outcome variables measures from the dataset, i.e.: `GA.at.outcome`, `Birthweight`, `Apgar1`, `Apgar5` and`Any.SAE.`. You will need to take out one more variable from the dataset before modelling, figure out which one and remove it.
+
 ```{r}
 optML <- optML %>% 
-  dplyr::select(!c(Apgar1, Apgar5, GA.at.outcome, Birthweight, Any.SAE.))
-```
-
-7.  Elastic net regression can be sensitive to large differences in the range of numeric/integer variables, as such these variables should be scaled. Scale all numeric/integer variables in your dataset.
-```{r}
-optML <- optML %>% 
-  mutate(across(where(is.numeric), scale))
-```
-
-8.  Split your dataset into train and test set, you should have 70% of the data in the training set and 30% in the test set. How you chose to split is up to you, BUT afterwards you should ensure that for the categorical/factor variables all levels are represented in both sets.
-
-```{r}
-
-# Set seed
-set.seed(123)
-
-# Training set
-train <- optML %>% 
-  sample_frac(0.70) 
-
-# Check group levels
-train_counts <- train[,-1] %>%
-  dplyr::select(where(is.character)) %>%
-  pivot_longer(everything(), names_to = "Variable", values_to = "Level") %>%
-  count(Variable, Level, name = "Count")
-
-train_counts
-
-
-
-
-test  <- anti_join(optML, train, by = 'PID') 
-
-
-
-# Check group levels
-#test_counts <- optML[,-1] %>%
-#  dplyr::select(where(is.character)) %>%
-#  pivot_longer(everything(), names_to = "Variable", values_to = "Level") %>%
-#  count(Variable, Level, name = "Count")
-
-#test_counts
-
-
+  dplyr::select(-c(Apgar1, Apgar5, GA.at.outcome, Birthweight, Any.SAE., PID))
 
 ```
 
-9.  After dividing into train and test set pull out the outcome variable, `Preg.ended...37.wk`, into its own vector for both datasets. Name these `y_train` and `y_test`.
+16. The R-package we are using to make a RF classifier requires the outcome variable to be categorical. As `Preg.ended...37.wk` is encoded as numeric (0 and 1), you will need to change these to categories!
 
 ```{r}
-
-y_train <- train %>%
-  pull(Preg.ended...37.wk)
-
-
-y_test <- test %>% 
-  pull(Preg.ended...37.wk)
-
-```
-
-10.  Remove the outcome variable, `Preg.ended...37.wk`, from the train and test set, as well as `PID` (if you have not already done so), as we should obviously not use this for training or testing.
-
-```{r}
-train <- train %>% 
-  dplyr::select(-c(PID, Preg.ended...37.wk))
-
-
-test <- test %>% 
-  dplyr::select(-c(PID, Preg.ended...37.wk))
-```
-
-You will employ the package `glmnet` to perform Elastic Net Regression. The main function from this package is `glmnet()` which we will use to fit the model. Additionally, you will also perform cross validation with `cv.glmnet()` to obtain the best value of the model hyper-parameter, lambda ($λ$).
-
-As we are working with a mix of categorical and numerical predictors, it is advisable to dummy-code the variables. You can easily do this by creating a model matrix for both the test and train set.
-
-11. Create the model matrix needed for input to `glmnet()` and `cv.glmnet()`.
-```{r}
-modTrain <- model.matrix(~ ., data = train)
-modTest <- model.matrix(~ ., data = test)
-```
-
-12. Create your Elastic Net Regression model with `glmnet()`.
-```{r}
-EN_model <- glmnet(modTrain, y_train, alpha = 0.5, family = "binomial")
-```
-
-13. Use `cv.glmnet()` to attain the best value of the hyperparameter lambda ($λ$). Remember to set a seed for reproducible results.
-
-```{r}
-set.seed(123)
-cv_model <- cv.glmnet(modTrain, y_train, alpha = 0.5, family = "binomial")
-```
-
-14. Plot all the values of lambda tested during cross validation by calling `plot()` on the output of your `cv.glmnet()`. Extract the best lambda value from the `cv.glmnet()` model and save it as an object.
-
-```{r}
-plot(cv_model)
-
-bestLambda <- cv_model$lambda.min
-```
-
-Now, let's see how well your model performed.
-
-15. Predict if an individual is likely to give birth before the 37th week using your model and your test set. See pseudo-code below
-
-```{r}
-y_pred <- predict(EN_model, s = bestLambda, newx = modTest, type = 'class')
-```
-
-16. Just like for the logistic regression model you can calculate the accuracy of the prediction by comparing it to `y_test` with `confusionMatrix()`. Do you have a good accuracy? N.B look at the 2x2 contingency table, what does it tell you?
-
-```{r}
-y_pred <- as.factor(y_pred)
-
-caret::confusionMatrix(y_pred, y_test)
-```
-
-17. Lastly, let's extract the variables which were retained in the model (e.g. not penalized out). We do this by calling the coefficient with `coef()` on our model. See pseudo-code below.
-
-```{r}
-coeffs <- coef(EN_model, s = bestLambda)
-
-# Convert coefficients to a data frame for easier viewing
-coeffsDat <- as.data.frame(as.matrix(coeffs)) %>% 
-  rownames_to_column(var = 'VarName')
- 
-```
-
-18. Make a plot that shows the absolute importance of the variables retained in your model. This could be a barplot with variable names on the y-axis and the length of the bars denoting absolute size of coefficient.
-
-```{r}
-# Make dataframe ready for plotting, remove intercept and coeffcients that are zero
-coeffsDat <- coeffsDat %>% 
-  mutate(AbsImp = abs(s1)) %>%
-  arrange(AbsImp) %>%
-  mutate(VarName = factor(VarName, levels=VarName)) %>%
-  filter(AbsImp > 0 & VarName != "(Intercept)")
-
-
-# Plot
-ggplot(coeffsDat, aes(x = VarName, y = AbsImp)) +
-  geom_bar(stat = "identity", fill = "#9395D3") +
-  coord_flip() +
-  labs(title = "Feature Importance for Elastic Net", 
-       x = "Features", 
-       y = "Absolute Coefficients") +
-  theme_classic()
-```
-
-19. Now repeat what you just did above, but this time instead of using `Preg.ended...37.wk` as outcome, try using a continuous variable, such as `GA.at.outcome`. N.B remember this means that you should evaluate the model using the RMSE and a scatter plot instead of the accuracy!
-
-## Part 2: Random Forest
-
-Now, lets make a Random Forest. We will continue using the `Obt_Perio_ML.Rdata` with `Preg.ended...37.wk` as outcome.
-
-20. Just like in the section on Elastic Net above, remove the outcome variables you will not be using and split the dataset into test and train set - this time keep the outcome variable `Preg.ended...37.wk` in the dataset. Remember to remove the `PID` column before training!
-
-```{r}
-load(file = "../data/Obt_Perio_ML.Rdata")
-
 optML <- optML %>%
   mutate(Preg.ended...37.wk = factor(Preg.ended...37.wk, levels = c(0, 1), labels = c("No", "Yes")))
 ```
 
-```{r}
-optML <- optML %>% 
-  dplyr::select(-c(Apgar1, Apgar5, GA.at.outcome, Birthweight, Any.SAE.))
-
-```
+17. Split your dataset into train and test set, you should have 70% of the data in the training set and 30% in the test set. How you chose to split is up to you, BUT afterwards you should ensure that for the categorical/factor variables all levels are represented in both sets.
 
 ```{r}
 set.seed(123)
 
-# Training set
-train <- optML %>% 
-  sample_frac(0.70) 
-
-
-test  <- anti_join(optML, train, by = 'PID') 
-
-
-train <- train %>% 
-  dplyr::select(-PID)
-
-
-test <- test %>% 
-  dplyr::select(-PID)
+idx <- createDataPartition(optML$Preg.ended...37.wk, p = 0.7, list = FALSE)
+train <- optML[idx, ]
+test  <- optML[-idx, ]
 ```
 
-21. Set up a Random Forest model with cross-validation. See pseudo-code below. Remember to set a seed.
+```{r}
+train[,-1] %>%
+  dplyr::select(where(is.character)) %>%
+  pivot_longer(everything(), names_to = "variable", values_to = "level") %>%
+  arrange(variable) %>%
+  dplyr::count(variable, level, sort = FALSE)
+```
+
+```{r}
+test[,-1] %>%
+  dplyr::select(where(is.character)) %>%
+  pivot_longer(everything(), names_to = "variable", values_to = "level") %>%
+  arrange(variable) %>%
+  dplyr::count(variable, level, sort = FALSE)
+```
+
+18. Set up a Random Forest model with cross-validation. See pseudo-code below. Remember to set a seed.
 
 ```{r}
 set.seed(123)
@@ -301,7 +292,7 @@ rf_model <- train(
 print(rf_model)
 ```
 
-22. Plot your model fit. How does your model improve when you add 10, 20, 30, etc. predictors?
+19. Plot your model fit. How does your model improve when you add 10, 20, 30, etc. predictors?
 
 ```{r}
 # Best parameters
@@ -311,7 +302,7 @@ rf_model$bestTune
 plot(rf_model)
 ```
 
-23. Use your test set to evaluate your model performance. How does the random forest compare to the elastic net regression?
+20. Use your test set to evaluate your model performance. How does the random forest compare to the elastic net regression?
 
 ```{r}
 # Predict class probabilities
@@ -322,7 +313,7 @@ y_pred <- as.factor(ifelse(y_pred$Yes > 0.5, "Yes", "No"))
 caret::confusionMatrix(y_pred, test$Preg.ended...37.wk)
 ```
 
-24. Extract the predictive variables with the greatest importance from your fit.
+21. Extract the predictive variables with the greatest importance from your fit.
 
 ```{r}
 varImpOut <- varImp(rf_model)
@@ -335,7 +326,7 @@ varImportance <- as.data.frame(as.matrix(varImpOut$importance)) %>%
 varImportance
 ```
 
-25. Make a logistic regression using the same dataset (you already have your train data, test data). How do the results of Elastic Net regression and Random Forest compare to the output of your glm.
+22. Make a logistic regression using the same dataset (you already have your train data, test data). How do the results of Elastic Net regression and Random Forest compare to the output of your glm.
 
 ```{r}
 # Model

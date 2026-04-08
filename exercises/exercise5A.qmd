@@ -1,5 +1,5 @@
 ---
-title: "Exercise 5A: Intro to Regression in R"
+title: "Exercise 5A: Linear and Logistic Regression"
 format: html
 project:
  type: website
@@ -8,7 +8,7 @@ project:
 
 ## Introduction
 
-In this exercise you will fit and interpret simple models.
+In this exercise you will fit and interpret simple regression models.
 
 1.  Load packages
 
@@ -85,11 +85,14 @@ Plot `y_test` against `y_pred`.
 
 ## Part 2: Logistic regression
 
-For this part we will use the joined diabetes data since it has a categorical outcome (Diabetes yes or no). We will not use the oral Glucose measurements as predictors since this is literally how you define diabetes, so we're loading the joined dataset we created in exercise 1, e.g. 'diabetes_join.xlsx' or what you have named it. N.B if you did not manage to finish making this dataset or forgot to save it, you can find a copy here: `../out/diabetes_join.Rdata`. Navigate to the file in the file window of Rstudio and click on it. Click "Yes" to confirm that the file can be loaded in your environment and check that it has happened.
+For this part we will use the joined diabetes data since it has a categorical outcome (diabetes yes or no). We will not use the oral Glucose measurements as predictors since this is literally how you define diabetes, so we're loading the joined dataset we created in exercise 1, e.g. 'diabetes_join.xlsx' or what you have named it. 
+N.B if you did not manage to finish making this dataset or forgot to save it, you can find a copy here: `data/exercise1_diabetes_join.xlsx`. 
+
+Navigate to the file in the file window of Rstudio and click on it. Click "Yes" to confirm that the file can be loaded in your environment and check that it has happened.
 
 As the outcome we are studying, `Diabetes`, is categorical variable we will perform logistic regression. We select serum calcium levels (`Serum_ca2`), `BMI` and smoking habits (`Smoker`) as predictive variables.
 
-12. Read in the Diabetes dataset.
+12. Read in the joined diabetes dataset.
 
 13. Logistic regression does not allow for any missing values so first ensure you do not have NAs in your dataframe. Ensure that your outcome variable `Diabetes` is a factor.
 
@@ -118,49 +121,3 @@ glm(..., family = 'binomial')
 ```{r, eval=FALSE}
 caret::confusionMatrix(y_pred, y_test)
 ```
-
-
-## Part 3: K-Means Clustering
-
-In this part we will run K-means clustering. To mix it up a bit we will work with a new dataset from patients with kidney disease. The dataset contains approximately 20 biological measures (variables) collected across 400 patients. The outcome is the `classification` variable which denotes whether a person suffers from **ckd=chronic kidney disease** `ckd` or not `notckd`.
-
-```         
-        age     -   age
-        bp      -   blood pressure
-        rbc     -   red blood cells
-        pc      -   pus cell
-        pcc     -   pus cell clumps
-        ba      -   bacteria
-        bgr     -   blood glucose random
-        bu      -   blood urea
-        sc      -   serum creatinine
-        sod     -   sodium
-        pot     -   potassium
-        hemo    -   hemoglobin
-        pcv     -   packed cell volume
-        wc      -   white blood cell count
-        rc      -   red blood cell count
-        htn     -   hypertension
-        dm      -   diabetes mellitus
-        cad     -   coronary artery disease
-        appet   -   appetite
-        pe      -   pedal edema
-        ane     -   anemia
-        class   -   classification  
-```
-
-19. Load in the dataset named `kidney_disease.Rdata`.
-
-20. Before running K-means clustering please remove rows with any missing values across all variables in your dataset - yes, you will lose quite a lot of rows. Consider which columns you can use and if you have to do anything to them before clustering?
-
-21. Run the k-means clustering algorithm with 4 centers on the data. Look at the clusters you have generated.
-
-22. Visualize the results of your clustering. Do 4 clusters seems like a good fit for our data in the first two dimensions (Dim1 and Dim2)? How about if you have a look at Dim3 or Dim4?
-
-23. Investigate the best number of clusters for this dataset. Use the `silhouette` metric.
-
-24. Re-do the clustering (plus visualization) with the optimal number of clusters.
-
-25. Now, try to figure out what the two clusters might represent. There are different ways to do this, but one easy way would be to simply compare the `clusters IDs` from the Kmeans output with one or more of the categorical variables from the dataset. You could use `count()` or `table()` for this.
-
-26. The `withiness` measure (within cluster variance/spread) is much larger for one cluster then the other, what biological reason could there be for that?

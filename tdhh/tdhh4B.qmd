@@ -52,9 +52,13 @@ calculate_risk_score <- function(BloodPressure, BMI, Smoking, PhysicalActivity){
     risk_score <- risk_score + 0.5
     }
 
-  if (Smoking == 'Smoker'){
+  if (Smoking == 'Former'){
     risk_score <- risk_score + 1
-    }
+  }
+  else if(Smoking == 'Smoker'){
+    risk_score <- risk_score + 2
+  }
+  
   
   #BMI > 30 includes BMIs that are larger than 40, so we need to be careful of
   #the order in which we check, or include that the BMI should be <= 40 in order 
@@ -81,77 +85,14 @@ calculate_risk_score <- function(BloodPressure, BMI, Smoking, PhysicalActivity){
 
 ```{r}
 #demo
-calculate_risk_score(120, 45, 'no', 115)
+calculate_risk_score(120, 45, 'Never', 90)
+calculate_risk_score(120, 45, 'Former', 115)
 calculate_risk_score(120, 45, 'Smoker', 115)
 calculate_risk_score(90, 35, 'Smoker', 60)
 
 ```
 
-
-2. Add a check to your function whether the supplied parameters are numeric, except for Smoking which should be a factor or a character (you can check that too if you want to). Test that your check works correctly.
-
-
-```{r error=TRUE}
-calculate_risk_score <- function(BloodPressure, BMI, Smoking, PhysicalActivity){
-  
-  if (!is.numeric(BloodPressure) | !is.numeric(BMI) | !is.numeric(PhysicalActivity)) {
-    stop("BloodPressure, BMI, and PhysicalActivity must be numeric values.")
-  }
-  
-  if(! (is.character(Smoking) | is.factor(Smoking)) ){
-    stop("Smoking should be a factor or character.")
-  }
-  
-  risk_score <- 0
-  
-  if (BloodPressure > 90){
-    risk_score <- risk_score + 0.5
-    }
-
-  if (Smoking == 'Smoker'){
-    risk_score <- risk_score + 1
-    }
-  
-  #BMI > 30 includes BMIs that are larger than 40, so we need to be careful of
-  #the order in which we check, or include that the BMI should be <= 40 in order 
-  #to add 1.   
-  
- if (BMI > 40){
-    risk_score <- risk_score + 2
-    } 
-  else if( BMI > 30) {
-    risk_score <- risk_score + 1
-    } 
-  
-  if (PhysicalActivity > 110){
-    risk_score <- risk_score - 1
-    }
-    
-  return(risk_score)
-  
-}
-
-```
-
-```{r eval=FALSE}
-calculate_risk_score('Hi', 35, 'Smoker', 60)
-
-# Error in calculate_risk_score("Hi", 35, "Smoker", 60) : 
-#   BloodPressure, BMI, and PhysicalActivity must be numeric values.
-```
-
-```{r eval=FALSE}
-calculate_risk_score(90, 35, 1, 60)
-
-# Error in calculate_risk_score(90, 35, 1, 60) : 
-#   Smoking should be a factor or character.
-```
-
-```{r}
-calculate_risk_score(90, 35, 'Smoker', 60)
-```
-
-3.  In a for-loop, apply your `calculate_risk_score` to each row in `diabetes_glucose`. Remember to use the appropriate column, i.e. `diabetes_glucose$BloodPressure` should be the argument for `BloodPressure` in the function. Add the calculated risk score to diabetes_glucose as a column `Risk_score`.
+2.  In a for-loop, apply your `calculate_risk_score` to each row in `diabetes_glucose`. Remember to use the appropriate column, i.e. `diabetes_glucose$BloodPressure` should be the argument for `BloodPressure` in the function. Add the calculated risk score to diabetes_glucose as a column `Risk_score`.
 
 ```{r}
 
@@ -173,7 +114,7 @@ diabetes_glucose
 ```
 
 
-4. Now, run `calculate_risk_score` on each row in `diabetes_glucose` by using `mapply` instead. Confirm that your result is the same. 
+3. Now, run `calculate_risk_score` on each row in `diabetes_glucose` by using `mapply` instead. Confirm that your result is the same. 
 
 ```{r}
 risk_scores <- mapply(FUN = calculate_risk_score, 
@@ -189,7 +130,7 @@ A quick check confirms that the `risk_scores` vector contains the same as the co
 all(risk_scores == diabetes_glucose$Risk_score)
 ```
 
-5.  Create an R script file to contain your functions. Copy your functions there and remove them from your global environment with `rm(list="name_of_your_function")`. Now source the function R script in your quarto document and test that the functions work.
+4.  Create an R script file to contain your functions. Copy your functions there and remove them from your global environment with `rm(list="name_of_your_function")`. Now source the function R script in your quarto document and test that the functions work.
 
 ```{r}
 #remove function from global environment so we can test if it loads properly from the script

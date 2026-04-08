@@ -34,9 +34,12 @@ website:
           - href: presentations/presentation4B.qmd
             text: "Presentation 4B: Functions"
           - href: presentations/presentation5A.qmd
-            text: "Presentation 5A: Intro to Regression in R"
+            text: "Presentation 5A: Linear and Logistic Regression"
           - href: presentations/presentation5B.qmd
-            text: "Presentation 5B: Models and Model Evaluation in R" 
+            text: "Presentation 5B: K-means and Random Forest"
+          - href: presentations/presentation5C.qmd
+            text: "Presentation 5C: Elastic Net Regression" 
+
 
       # - href: data/data.qmd
       #   text: "Data️"
@@ -56,9 +59,11 @@ website:
           - href: exercises/exercise4B.qmd
             text: "Exercise 4B: Functions" 
           - href: exercises/exercise5A.qmd
-            text: "Exercise 5A: Intro to Regression in R"
+            text: "Exercise 5A: Linear and Logistic Regression"
           - href: exercises/exercise5B.qmd
-            text: "Exercise 5B: Models and Model Evaluation in R" 
+            text: "Exercise 5B: K-means and Random Forest"
+          - href: exercises/exercise5C.qmd
+            text: "Exercise 5C: Elastic Net Regression" 
 
       - section: "Solutions"
         contents:
@@ -79,10 +84,13 @@ website:
             text: "Solution 4B: Functions"
           # - href: tdhh/solutions_not_up.qmd
           - href: tdhh/tdhh5A.qmd
-            text: "Solution 5A: Intro to Regression in R"
+            text: "Solution 5A: Linear and Logistic Regression"
           # - href: tdhh/solutions_not_up.qmd
           - href: tdhh/tdhh5B.qmd
-            text: "Solution 5B: Models and Model Evaluation in R"
+            text: "Solution 5B: K-means and Random Forest"
+          - href: tdhh/tdhh5C.qmd
+            text: "Solution 5C: Elastic Net Regression"
+
 
       - section: "Cheat Sheets"
         contents:

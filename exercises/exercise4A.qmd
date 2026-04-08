@@ -10,7 +10,7 @@ In this exercise you will practice your scripting in R.
 
 ## Getting started
 
-Load libraries and the joined diabetes data set.
+Load R libraries you think you will need for this exercise. You will be doing some data manipulation and plotting, so have a look at which packages we used in Presentation 2+3. No worries if you forget any, you always load then later on.
 
 ## If-else statements
 
@@ -18,7 +18,7 @@ In these exercises we don't use the dataframe yet, that comes later when we have
 
 1.  Write an if-else statement that prints whether a person has high (more than 100), low (lower than 50) or normal blood pressure (between 50 and 100).
 
-2.  Write an if-else statement that assigns people high, moderate or low health risk based on their smoking habits (variable `Smoker`) and BMI:
+2.  Write an if-else statement that assigns people high, moderate or low health risk based on their smoking habits (`Smoker <- 'Smoker'`) and BMI:
 
 -   Smoker and BMI greater than 35 -\> high risk
 
@@ -32,13 +32,13 @@ Verify that your statement works for different combinations of smoking habits an
 
 ## Loops
 
-3.  Create a vector with at least five elements of your choice. Use a for loop to print each element individually.
+3. Read in the joint diabetes dataset you created in Exercise 2. If you did not make it all the way through Exercise 2 you can find the dataset in `../data/exercise2_diabetes_glucose.xlsx`. Name the dataset `diabetes_glucose`. 
 
-4.  Print each column name in the `diabetes_glucose` data frame using a for loop.
+4.  Print each column name in the `diabetes_glucose` dataframe using a *for* loop.
 
-5.  Loop over all rows of diabetes_glucose and determine whether the person's blood pressure is high, low or normal with the same conditions as in 1. Print the blood pressure value as well as the statement so you can verify whether you have classified the blood pressure correctly as high, normal or low. 
+5.  Loop over all rows of diabetes_glucose and determine whether the person's blood pressure is high, denoted by `bp > 100`. If a person has high blood pressure, print the string "High blood pressure", along with the blood pressure value and the ID belonging to that person. 
 
-6.  Loop over all rows of diabetes_glucose and extract the smoking habits and BMI for each row and determine the health risk with the same conditions as in Exercise 4.2. Print the smoking habits and BMI as well as the health risk level to make it easier to see whether your code works correctly.
+6.  Loop over all rows of diabetes_glucose and extract the smoking habits and BMI for each row and determine the health risk with the same conditions as in Question 1 (high, low or normal blood pressure). Print the smoking habits and BMI as well as the health risk level to make it easier to see whether your code works correctly.
 
 ::: {.callout-tip collapse="true"}
 ## Hint
@@ -61,6 +61,6 @@ Since we looped through all the rows in the `diabetes_glucose` dataframe, the li
 
 9.  Add the list as a new column in the `diabetes_glucose` data frame. Note: Before assigning it, use the `unlist()` function to convert the list to a flat vector. This ensures that each value aligns correctly with the rows of the data frame.
 
-10. Make a list of all the column names in `diabetes_glucose` that contain categorical variables. Write a `for` loop that goes through the list and prints a barplot for each of the categorical variables.
+10. Write a `for` loop that creates a ggplot2 barplot for each of the categorical variables in the `diabetes_glucose`. You could do this in multiple ways, one way would be to make a list of all the column names in `diabetes_glucose` that contain categorical variables and loop over these. OR, instead of a list, you could use a conditional if-statement to check if a column is categorical.
 
-11. Make a list of all the column names in `diabetes_glucose` that contain numeric variables. Make a for loop that goes through the list and prints a boxplot for each of the categorical variables.
+11. Write a `for` loop that creates a ggplot2 boxplot for each of the numerical variables in the `diabetes_glucose`. You should stratify the boxplot by the `risk_status` variable you created in questions 7-9 above. 

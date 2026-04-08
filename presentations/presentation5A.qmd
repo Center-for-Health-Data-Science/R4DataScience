@@ -1,5 +1,5 @@
 ---
-title: "Presentation 5A: Intro to Regression in R"
+title: "Presentation 5A: Linear and Logistic Regression"
 format: html
 project:
  type: website
@@ -8,7 +8,7 @@ project:
 
 In this section we'll look at how to define and fit regression models in R.
 
-## Load packages
+### Load packages
 
 ```{r warning=FALSE, message=FALSE}
 library(tidyverse)
@@ -16,13 +16,13 @@ library(caret)
 library(readxl)
 ```
 
-## Linear Regression
+## Part1: Linear Regression
 
 We will perform a linear regression using daily cigarettes smoked and exercise level as predictors, $X$, and lived years as the outcome, $y$.
 
 ![](../figures/lin_reg.jpg){fig-align="center"}
 
-## Load data
+### Load data
 
 In order to focus on the technical aspects we'll use a simple toy dataset. It contains the number of cigarettes smoked per day and how long the person lived. It is inspired by [this paper](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC2598467/) if you want to take a look.
 
@@ -198,7 +198,7 @@ RMSE(pred$real,pred$pred)
 
 Our predictions are on average 0.88 years 'off'.
 
-## Classification
+## Part2: Logistic Regression
 
 Classification is the method we use when the outcome variable we are interested in is not continuous, but instead consists of two or more classes.
 
@@ -371,115 +371,4 @@ You can calculate the accuracy yourself, or you can use a function like `confusi
 
 ```{r}
 caret::confusionMatrix(y_pred, test$early_death)
-```
-
-## Kmeans Clustering
-
-Clustering is a type of unsupervised learning technique used to group similar data points together based on their features. The goal is to find inherent patterns or structures within the data, e.g. to see whether the data points fall into distinct groups with distinct features or not.
-
-### Wine dataset
-
-For this we will use the wine data set as an example:
-
-```{r warning=FALSE, message=FALSE}
-library(ContaminatedMixt)
-library(factoextra)
-```
-
-Let's load in the dataset
-
-```{r}
-data('wine') #load dataset
-df_wine <- wine %>% as_tibble() #convert to tibble
-df_wine
-```
-
-This dataset contains 178 wine, each corresponding to one of three different cultivars of wine. It has 13 numerical columns that record different features of the wine.
-
-We will try out a popular method, k-means clustering. It works by initializing K centroids and assigning each data point to the nearest centroid. The algorithm then recalculates the centroids as the mean of the points in each cluster, repeating the process until the clusters stabilize. You can see an illustration of the process below. Its weakness is that we need to define the number of centroids, i.e. clusters, beforehand.
-
-![](../figures/kmeans.jpg){fig-align="center"}
-
-### Running k-means
-
-For k-means it is very important that the data is numeric and scaled so we will do that before running the algorithm.
-
-```{r}
-# Set seed to ensure reproducibility
-set.seed(123)  
-
-# Pull numeric variables and scale these
-kmeans_df <- df_wine %>%
-  dplyr::select(where(is.numeric)) %>%
-  mutate(across(everything(), scale))
-
-kmeans_df
-
-```
-
-Kmeans clustering in R is easy, we simply run the `kmeans()` function:
-
-```{r}
-set.seed(123)  
-
-kmeans_res <- kmeans_df %>%
-  kmeans(centers = 4, nstart = 25)
-
-kmeans_res
-
-```
-
-We can call `kmeans_res$centers` to inspect the values the centroids. For example the center of cluster 1 is placed at the coordinates -0.79 for Alcohol, 0.04 for Malic Acid, 0.22 for Ash and so on. Since our data has 13 dimensions, i.e. features, the cluster centers also do.
-
-This is not super practical if we would like to visually inspect the clustering since we cannot plot in 13 dimensions. How could we solve this?
-
-### Visualizing k-means results
-
-We would like to see where our wine bottles and their clusters lie in a low-dimensional space. This can easily be done using the `fviz_cluster()`
-
-```{r}
-fviz_cluster(object = kmeans_res, 
-             data = kmeans_df,
-             palette = c("#2E9FDF", "#00AFBB", "#E7B800", "orchid3"), 
-             geom = "point",
-             ellipse.type = "norm", 
-             ggtheme = theme_bw())
-```
-
-### Optimal number of clusters
-
-There are several ways to investigate the ideal number of clusters and `fviz_nbclust` from the `factoextra` package provides three of them:
-
-The so-called elbow method observes how the sum of squared errors (sse) changes as we vary the number of clusters. This is also sometimes referred to as "within sum of square" (wss).
-
-```{r}
-kmeans_df %>%
-  fviz_nbclust(kmeans, method = "wss")
-```
-
-The gap statistic compares the within-cluster variation (how compact the clusters are) for different values of K to the expected variation under a null reference distribution (i.e., random clustering).
-
-```{r}
-kmeans_df %>%
-  fviz_nbclust(kmeans, method = "gap_stat")
-```
-
-Both of these tell us that there should be three clusters and we also know that there are three cultivars of wine in the dataset. Let's redo k-means with three centroids.
-
-```{r}
-# Set seed to ensure reproducibility
-set.seed(123)  
-
-#run kmeans
-kmeans_res <- kmeans_df %>%
-  kmeans(centers = 3, nstart = 25)
-```
-
-```{r}
-#add updated cluster info to the dataframe
-fviz_cluster(kmeans_res, data = kmeans_df,
-             palette = c("#2E9FDF", "#00AFBB", "#E7B800", "orchid3"), 
-             geom = "point",
-             ellipse.type = "norm", 
-             ggtheme = theme_bw())
 ```

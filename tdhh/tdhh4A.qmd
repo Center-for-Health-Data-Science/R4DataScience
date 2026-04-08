@@ -69,18 +69,8 @@ if (Smoker == 'Smoker' & BMI > 35){
 
 ## Loops
 
-3.  Create a vector with at least five elements of your choice. Use a for loop to print each element individually.
 
-```{r}
-my_v <- c(1, 78, 5, 'hello', 7)
-
-for (el in my_v) {
-  print(el)
-}
-
-```
-
-4.  Print each column name in the `diabetes_glucose` data frame using a for loop.
+3.  Print each column name in the `diabetes_glucose` data frame using a for loop.
 
 ```{r}
 for (col in colnames(diabetes_glucose)) {
@@ -88,27 +78,19 @@ for (col in colnames(diabetes_glucose)) {
 }
 ```
 
-5.  Loop over all rows of diabetes_glucose and determine whether the person's blood pressure is high, low or normal with the same conditions as in 1. Print the blood pressure value as well as the statement so you can verify whether you have classified the blood pressure correctly as high, normal or low. 
+4.  Loop over all rows of diabetes_glucose and determine whether the person's blood pressure is high, low or normal with the same conditions as in 1. Print the blood pressure value as well as the statement so you can verify whether you have classified the blood pressure correctly as high, normal or low. 
 
 ```{r}
-#We'll only show the first 10 rows here for brevity
-#for (i in 1:nrow(diabetes_glucose)) {
-
-for (i in 1:10) {
-  bp <- diabetes_glucose$BloodPressure[i]
-
+for (i in 1:nrow(diabetes_glucose)) {
+  bp <- diabetes_glucose[i, ]$BloodPressure
+  ID <- diabetes_glucose[i, ]$ID
   if (bp > 100){
-    print(paste(bp,'is high blood pressure'))
-  } else if (bp < 50) {
-    print(paste(bp,'is low blood pressure'))
-  } else {
-    print(paste(bp,'is normal blood pressure'))
+    print(paste('ID:', ID, '-', bp,'is high blood pressure'))
   } 
-  
 }
 ```
 
-6.  Loop over all rows of diabetes_glucose and extract the smoking habits and BMI for each row and determine the health risk with the same conditions as in Exercise 4.2. Print the smoking habits and BMI as well as the health risk level to make it easier to see whether your code works correctly.
+5.  Loop over all rows of diabetes_glucose and extract the smoking habits and BMI for each row and determine the health risk with the same conditions as in Exercise 4.2. Print the smoking habits and BMI as well as the health risk level to make it easier to see whether your code works correctly.
 
 ::: {.callout-tip collapse="true"}
 ## Hint
@@ -122,7 +104,7 @@ An easy way to printing several variables is to pass a vector into print: `print
 #We'll only show the first 10 rows here for brevity
 #for (i in 1:nrow(diabetes_glucose)) {
 
-for (i in 1:10) {
+for (i in 1:nrow(diabetes_glucose)) {
   Smoker <- diabetes_glucose$Smoker[i]
   BMI <- diabetes_glucose$BMI[i]
 
@@ -137,14 +119,16 @@ for (i in 1:10) {
 
 ```
 
-7.  Do the same as above but instead of printing the risk status, append it to a list. Start by initiating an empty list.
+6.  Do the same as above but instead of printing the risk status, append it to a list. Start by initiating an empty list.
+
 
 ```{r}
+
+# Solution 1
+
 # Initiate list
 risk_status <- list()
-```
 
-```{r}
 for (i in 1:nrow(diabetes_glucose)) {
   Smoker <- diabetes_glucose$Smoker[i]
   BMI <- diabetes_glucose$BMI[i]
@@ -158,13 +142,30 @@ for (i in 1:nrow(diabetes_glucose)) {
   }
 }
 
+
+# Solution 2 
+# Initiate list
+risk_status <- list()
+
+for (i in 1:nrow(diabetes_glucose)) {
+  Smoker <- diabetes_glucose$Smoker[i]
+  BMI <- diabetes_glucose$BMI[i]
+    
+  if (Smoker == 'Smoker' & BMI > 35){
+    risk_status[i] <- 'High risk'
+  } else if (Smoker == 'Smoker' | BMI > 35) {
+    risk_status[i] <- 'Moderate risk'
+  } else {
+    risk_status[i] <- 'Low risk'
+  }
+}
 ```
 
 ```{r}
 risk_status %>% head()
 ```
 
-8.  Check the length of the list. Is it as expected?
+7.  Check the length of the list. Is it as expected?
 
 Since we looped through all the rows in the `diabetes_glucose` dataframe, the list should be as long as there are row in the dataframe.
 
@@ -176,36 +177,55 @@ length(risk_status)
 nrow(diabetes_glucose)
 ```
 
-9.  Add the list as a new column in the `diabetes_glucose` data frame. Note: Before assigning it, use the `unlist()` function to convert the list to a flat vector. This ensures that each value aligns correctly with the rows of the data frame.
+8.  Add the list as a new column in the `diabetes_glucose` data frame. Note: Before assigning it, use the `unlist()` function to convert the list to a flat vector. This ensures that each value aligns correctly with the rows of the data frame.
 
 ```{r}
+# Solution 1
 diabetes_glucose$risk_status <- unlist(risk_status)
+
+# Solution 2
+diabetes_glucose <- diabetes_glucose %>% 
+  mutate(risk_status = unlist(risk_status))
 ```
 
 ```{r}
 diabetes_glucose %>% select(BMI, Smoker, risk_status)
 ```
 
-10. Make a list of all the column names in `diabetes_glucose` that contain categorical variables. Write a `for` loop that goes through the list and prints a barplot for each of the categorical variables.
+9. Make a list of all the column names in `diabetes_glucose` that contain categorical variables. Write a `for` loop that goes through the list and prints a barplot for each of the categorical variables.
 
 ```{r}
+# List solutions
 categorical <- list('Sex', 'Smoker', 'Diabetes', 'Married', 'Work')
-```
 
-```{r}
-for (var in categorical){
+for (var in categorical) {
   
-  p <- ggplot(diabetes_glucose, 
-         aes(x = !!sym(var))) + 
+  p <- ggplot(diabetes_glucose, aes(x = .data[[var]])) +
     geom_bar() +
-    labs(title = paste('Barplot of', var))
+    labs(title = paste("Barplot of", var))
   
   print(p)
-  
 }
+
+
+
+# Check column data type solutions:
+for (var in colnames(diabetes_glucose)) {
+  
+  if (is.character(diabetes_glucose[[var]])) {
+    
+    p <- ggplot(diabetes_glucose, aes(x = .data[[var]])) +
+      geom_bar() +
+      labs(title = paste("Barplot of", var))
+    
+    print(p)
+  }
+}
+
+
 ```
 
-11. Make a list of all the column names in `diabetes_glucose` that contain numeric variables. Make a for loop that goes through the list and prints a boxplot for each of the categorical variables.
+10. Make a list of all the column names in `diabetes_glucose` that contain numeric variables. Make a for loop that goes through the list and prints a boxplot for each of the categorical variables.
 
 ```{r}
 head(diabetes_glucose)
@@ -216,14 +236,12 @@ numeric <- list('Age', 'BloodPressure', 'BMI', 'PhysicalActivity', 'Serum_ca2')
 ```
 
 ```{r}
-for (var in numeric){
+for (var in numeric) {
   
-  p <- ggplot(diabetes_glucose, 
-         aes(y = !!sym(var))) + 
-    geom_boxplot() + 
-    labs(title = paste('Boxplot of', var))
+  p <- ggplot(diabetes_glucose, aes(y = .data[[var]], fill=risk_status)) +
+    geom_boxplot() +
+    labs(title = paste("Barplot of", var))
   
   print(p)
-  
 }
 ```

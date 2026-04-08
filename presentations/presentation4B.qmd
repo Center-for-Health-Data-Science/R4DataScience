@@ -103,13 +103,12 @@ if (age >= 18){
 
 ## Combining function call with for-loops
 
-Or we can choose to execute our function once for every element of an iterable, e.g. every row in a dataframe:
+Or we can choose to execute our function once for every element of an iterable, e.g. every row in a df:
 
 ```{r}
-df <- data.frame(row.names = 1:5,
-                 age = c(45, 16, 31, 56, 19),
-                 weight_kg = c(85, 65, 100, 45, 76),
-                 height_m = c(1.75, 1.45, 1.95, 1.51, 1.89))
+df <- tibble(age = c(45, 16, 31, 56, 19),
+             weight_kg = c(85, 65, 100, 45, 76),
+             height_m = c(1.75, 1.45, 1.95, 1.51, 1.89))
 
 df
 ```
@@ -205,13 +204,13 @@ df
 Define function that creates boxplots
 
 ```{r}
-my_boxplot <- function(dataframe, variable = ''){
+my_boxplot <- function(df, var = ''){
   
-  p <- ggplot(data = dataframe, 
-         aes(y = !!sym(variable))) + # Use variable as column reference
-  geom_boxplot(color = 'blue') + 
-  theme_bw() + 
-  labs(title = paste('Boxplot of', variable)) # Use variable as string
+  p <- ggplot(data = df, 
+         aes(y = .data[[var]])) + # Use variable as column reference
+  geom_boxplot(fill='steelblue') + 
+  theme_minimal() + 
+  labs(title = paste('Boxplot of', var)) # Use variable as string
   
   return(p)
   
@@ -228,13 +227,13 @@ colnames(df)[1]
 Run function on age.
 
 ```{r}
-my_boxplot(dataframe = df, 'age')
+my_boxplot(df = df, 'age')
 ```
 
 Or equivalently
 
 ```{r}
-my_boxplot(dataframe = df, colnames(df)[1])
+my_boxplot(df = df, colnames(df)[1])
 ```
 
 ## Error handling in user-defined functions
