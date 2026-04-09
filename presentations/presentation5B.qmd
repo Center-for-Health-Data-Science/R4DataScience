@@ -335,7 +335,7 @@ Next, we use the test set to evaluate our model performance. We will do this wit
 ```{r}
 # Predict class probabilities
 y_pred <- predict(rf_model, newdata = test, type = "prob")
-y_pred
+head(y_pred)
 ```
 
 As the output of predict is a probability of belonging to a specific class, we will need to convert these probabilities to class labels (yesHD or noHD). This way we can compare a predicted label with the true label in the test set to evaluate our model performance.
