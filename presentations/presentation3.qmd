@@ -8,7 +8,7 @@ project:
 
 In this section, we’ll move past basic summary stats and simple bivariate plots to uncover more complex relationships in our data.
 
-We’ll use PCA (Principal Component Analysis) — a popular dimensionality reduction method — to reveal hidden structure and highlight the most informative patterns. in the data.
+We’ll use PCA (Principal Component Analysis) — a popular dimensionality reduction method — to reveal hidden structure and highlight the most informative patterns in the data.
 
 -   *Our focus is to assess whether the collagen (COL) gene family plays a role in ovarian cancer, and whether cell type proportions (tumor, stromal, or normal) influence collagen expression.*
 
@@ -24,7 +24,7 @@ library(tidyverse)
 library(FactoMineR)
 library(factoextra)
 library(ggpubr)
-# if (!require("BiocManager", quietly = TRUE))
+#if (!require("BiocManager", quietly = TRUE))
 #    install.packages("BiocManager")
 # BiocManager::install("DESeq2")
 library(DESeq2)
@@ -34,6 +34,7 @@ library(DESeq2)
 # Load the pre-saved RData file
 load("../data/Ovarian_comb_prep_Col.RData")
 # Subset the data we will use and drop NA values
+
 df_comb <- df_comb %>%
   select(
     where(is.integer) | 
@@ -41,17 +42,25 @@ df_comb <- df_comb %>%
     where(is.numeric)
   ) %>% 
   drop_na(where(is.integer))
+#560
+
 ```
 
-## Normality and Data Transformation
+# Normality and Data Transformation
 
-Before running PCA or other multivariate analyses, it’s important to check if our variables are roughly **normally distributed**, since many methods assume or work best with normal data.
-
-One simple way to do this is with a **QQ (Quantile-Quantile) plots**, which visually compares the distribution of our data to a normal distribution.
+Before moving to PCA or other multivariate analyses, it is useful to **inspect the distribution** of our sample-level variables, such as age or estimated cell type proportions. Because skewed variables and extreme values can dominate variance-based methods, this check helps determine whether a transformation is needed to make variables more comparable.
 
 ### Checking for Normality: QQ Plot
 
-Let’s check the normality of **all integer variables at once** by reshaping the data and plotting QQ plots for each.
+Let’s check the normality of clinical/sample-level numeric variables (**all integer variables)** at once. One simple way to do this is with a **QQ (Quantile-Quantile) plots**, which visually compares the distribution of our data to a normal distribution.
+
+-   If the points fall along the diagonal line, the data is approximately normal.
+
+-   If the points curve **above the line**, the data is **right-skewed**.
+
+-   If the points fall **below the line**, the data is **left-skewed**.
+
+Lets reshape the data and plot QQ plots for each variable.
 
 ```{r warning=FALSE}
 # Pivot integer columns to long format for easy faceting
@@ -64,27 +73,27 @@ df_long <- df_comb %>%
 ggplot(df_long, aes(sample = value)) + 
   geom_qq_line(color = "red") +
   geom_qq(color = "#482878FF", alpha = 0.7) +
-  labs(title = "QQ Plot for Gene Expression",
+  labs(title = "QQ Plot for Clinical Variables",
        x = "Theoretical Quantiles", y = "Sample Quantiles") +
   theme_minimal() +
   facet_wrap(vars(variable), nrow = 2, scales = "free")
 ```
 
--   If the points fall along the diagonal line, the data is approximately normal.
-
--   If the points curve **above the line**, the data is **right-skewed**.
-
--   If the points fall **below the line**, the data is **left-skewed**.
-
-This quick check shows whether a **transformation** is needed to improve symmetry and model accuracy.
-
 In this case, we can see that Age is approximately normally distributed, while percent tumor cells and percent normal cells are not. This is very common — many variables, especially in biological or economic data, naturally tend to be **skewed** rather than perfectly normal.
 
 ### Transformations to Reduce Skewness
 
-Depending on your data and goals, it’s often necessary to **scale or transform variables** for meaningful analysis. If normality is an issue, transformations like a **log** or **square root** can help make distributions more symmetric and stabilize variance.
+Depending on your data and goals, it’s often necessary to **transform variables** for meaningful analysis. Common transformations include:
 
-Let’s apply a transformation to our data now to help **reduce skewness** and get our variables closer to normal.
+-   **log transformation** for strongly right-skewed variables
+
+-   **square-root transformation** for moderately skewed variables
+
+-   **power transformations** for variables compressed near one end of the scale
+
+The goal is not perfect normality, but a distribution that is less skewed and more suitable for downstream analysis.
+
+Let’s now apply a transformation to reduce skewness and make the variables easier to compare.
 
 ```{r}
 df_raw <- df_comb %>%
@@ -100,7 +109,6 @@ df_scaled <- df_raw %>%
     #percent_not_cancer_cells = log2(percent_not_cancer_cells + 1),
     percent_normal_cells = log2(percent_normal_cells + 1),
     percent_tumor_cells = percent_tumor_cells^3) 
-
 ```
 
 ### Histogram Before and After Transformation
@@ -108,7 +116,6 @@ df_scaled <- df_raw %>%
 Lets take a look!
 
 ```{r}
-
 p1 <- df_long %>%
   filter(variable %in% c("days_to_death", "percent_normal_cells", "percent_tumor_cells")) %>%
   ggplot(aes(x = value)) +
@@ -133,7 +140,7 @@ ggarrange(p1, p2, nrow = 2, ncol = 1)
 
 ### Summary
 
--   **Always check for normality** before choosing a transformation.
+-   **Always check data distribution** before choosing a transformation.
 
 -   **Right-skewed data** can benefit from log or sqrt transformations.
 
@@ -143,7 +150,7 @@ ggarrange(p1, p2, nrow = 2, ncol = 1)
 
 ## Applying Z-Score Scaling
 
-Z-score standardization is essential when variables have different units or ranges
+Because these variables are often measured on different scales/units, we also apply **z-score scaling** before multivariate analysis so that no single variable **dominates only because of its range.**
 
 ```{r warning=FALSE}
 #| out-width: 100%
@@ -177,205 +184,46 @@ ggarrange(p1, p2, nrow = 1)
 
 ```
 
-# Principal Component Analysis (PCA)
+# Gene Expression Data Are Special
 
-There are many frameworks for performing PCA in R. Here, we’ll use the `FactoMineR` and `factoextra` packages to compute and visualize PCA results.
+Now that we've explored distributions of our clinical parameters it's time to take a look at our gene expression values. RNA-seq data behave differently from ordinary clinical variables.
 
-Since **PCA is sensitive to scale and variance**, it’s important to use the **cleaned and transformed data** we prepared earlier.
+Genes with higher expression often also have higher variance. This mean-variance relationship makes simple transformations less effective, especially when we want to compare genes fairly in downstream analyses.
 
-Let’s run PCA on the integer variables:
-
-```{r}
-group_var <- df_comb %>%
-  select(where(is.factor))
-
-# Compute PCA
-res.pca_transformed <- PCA(df_scaled, graph = FALSE, scale.unit = TRUE)
-```
-
-### Eigenvalues and Variance Explained
-
-Next, we’ll check how much variance each principal component explains and visualize the results!
-
-```{r}
-#| fig-height: 3
-fviz_screeplot(res.pca_transformed, addlabels = TRUE, ylim = c(0, 50))
-```
-
-The scree plot shows the percentage of total variance explained by each principal component. This helps decide how many components to keep.
-
-### Variable-Level Results
-
-We can extract variable-level results with:
-
-```{r}
-var <- get_pca_var(res.pca_transformed)
-```
-
-This gives us:
-
--   `var$coord`: Coordinates (i.e., how variables align with PCs)
-
--   `var$cos2`: Quality of representation
-
--   `var$contrib`: Contribution to each principal component
-
-Visualize variable relationships: this plot shows how strongly each variable contributes to the PCs. Variables closer to the circle’s edge are well represented and more influential.
-
-```{r}
-# Color by cos2 values: quality on the factor map
-fviz_pca_var(res.pca_transformed, 
-             col.var = "cos2",
-             gradient.cols = c("#00AFBB", "#E7B800", "#FC4E07"), 
-             repel = TRUE) # Avoid text overlapping)
-
-```
-
-Check which variables contribute the most to **PC1** and **PC2** individually.
-
-```{r}
-#| fig-height: 4
-p1 <- fviz_cos2(res.pca_transformed, choice = "var", axes = 1, top=10)
-p2 <- fviz_cos2(res.pca_transformed, choice = "var", axes = 2, top=10)
-ggarrange(p1, p2, nrow = 1, ncol = 2)
-```
-
-### Individual-Level Results
-
-Beyond looking at variables, PCA also provides insights at the **individual level** (i.e., each sample or patient). You can access their coordinates, cos2 values, and contributions.
-
-```{r}
-# Extract individual results
-ind <- get_pca_ind(res.pca_transformed)
-```
-
-To see which individuals contribute most to the main axes, plot their contributions. (same as for variables):
-
-```{r}
-#| fig-height: 3
-# Quality of representation (cos²) for individuals
-p1 <- fviz_cos2(res.pca_transformed, choice = "ind", axes = 1, top = 20)
-p2 <- fviz_cos2(res.pca_transformed, choice = "ind", axes = 2, top = 20)
-#p3 <- fviz_cos2(res.pca_transformed, choice = "ind", axes = 1:4, top = 20)
-ggarrange(p1, p2, nrow = 1, ncol = 2)
-```
-
-You can also color individuals by important **integer variables** to explore patterns.\
-For example, color points by age, stromal cells, normal cells, or tumor cells:
-
-```{r}
-#| out-width: 100%
-#| fig-height: 6
-t1 <- fviz_pca_ind(res.pca_transformed, 
-                   col.ind = df_scaled$age_at_initial_path_diagn, 
-                   geom = c("point"), title = "Age") + scale_color_viridis_c()
-t2 <- fviz_pca_ind(res.pca_transformed, 
-                   col.ind = df_scaled$percent_stromal_cells, 
-                   geom = c("point"), title = "Stromal Cells") + scale_color_viridis_c()
-t3 <- fviz_pca_ind(res.pca_transformed, 
-                   col.ind = df_scaled$percent_normal_cells, 
-                   geom = c("point"), title = "Normal Cells") + scale_color_viridis_c()
-t4 <- fviz_pca_ind(res.pca_transformed, 
-                   col.ind = df_scaled$percent_tumor_cells, 
-                   geom = c("point"), title = "Tumor Cells") + scale_color_viridis_c()
-ggarrange(t1, t2, t3, t4, ncol = 2, nrow = 2)
-
-```
-
-*Note that, individuals that are similar are grouped together on the plot.*
-
-### Coloring by Groups (Factors)
-
-Want to color by groups? Just add a column to your metadata and pass it in:
-
-```{r warning=FALSE}
-p1 <- fviz_pca_ind(
-  res.pca_transformed,
-  col.ind = group_var$batch,
-  geom = "point",
-  legend.title = "Batch") +
-  scale_color_viridis_d() +
-  theme(legend.position = "bottom")
-
-p2 <- fviz_pca_ind(
-  res.pca_transformed,
-  col.ind = group_var$stage,
-  geom = "point",
-  legend.title = "Stage",
-  pointsize = 2) +
-  scale_color_viridis_d() +
-  theme(legend.position = "bottom")
-
-ggarrange(p1, p2, ncol = 2, nrow = 1)
-```
-
-That’s a complete walkthrough of PCA: computing it, exploring results, and visualizing them effectively. PCA is a critical tool for working with high-dimensional data.
-
-## Variance Stabilization
-
-Now that we've explored data tranformations and PCAs, it's time to address another important aspect: **variance stabilization**.
-
--   Log or square-root transformations can help reduce variance when larger values have higher variability.
-
--   If that’s not enough, try more robust methods like:
-
-    -   `rlog()` (regularized log transformation)
-
-    -   `varianceStabilizingTransformation()` (VST)
-
-These advanced tools, available in the **DESeq2** package, are specifically designed for stabilizing variance in count data.
+A simple `log2(count + 1)` transformation can help, but it does not always stabilize the variance sufficiently across the full expression range.
 
 ### Example: Apply VST, rlog, and log2 Transformations
 
-Lets examine this using our gene expression data.
+We can see that log2 helps, but sometime rlog and VST do a better job of flattening the sd/variance. However, rlog may overly compress some expression values.
 
-Since our expression values are already log2-transformed, we’ll first reverse them back to raw counts. Then, we can test and compare various transformations side-by-side to see how they affect variance and distribution.
+![](https://raw.githubusercontent.com/Center-for-Health-Data-Science/R4DataScience/main/figures/mean_sd_plot_large.png)
+
+
+For this reason, RNA-seq workflows often use transformations designed specifically for count data, such as:
+
+-   `rlog()` (regularized log transformation)
+
+-   `varianceStabilizingTransformation()` (VST)
+
+These advanced tools, available in the **DESeq2** package, are specifically designed for stabilizing variance in count data.
+
+### VST Transformations
+
+We will proceed using the VST-transformed data.
+
+Since our expression values currently are already log2-transformed, for illustration, we back-transform `log2(count + 1)` values to approximate counts. In a real RNA-seq workflow, VST/rlog should be applied to the original count matrix.
 
 ```{r message=FALSE}
-
-# 1. Extract COL genes and convert to counts
 df_matrix <- df_comb %>%
   select(starts_with('COL')) %>%
   mutate(across(everything(), ~ 2^.)) %>%
   mutate(across(everything(), as.integer)) %>%
   as.matrix()
 
-# 3. Create variance stabilized versions
-log2_df <- log2(df_matrix)
-rlog_df <- rlog(df_matrix, blind = TRUE)
+#Create variance stabilized versions
 vst_df  <- varianceStabilizingTransformation(df_matrix, blind = TRUE)
 
 ```
-
-### Comparing Mean-Variance Relationships
-
-Now we visualize how well each transformation stabilizes variance:
-
-```{r}
-# 4. Function for mean-variance plot
-plot_mean_var <- function(mat, title) {
-  df_mv <- tibble(
-    mean = rowMeans(mat),
-    variance = apply(mat, 1, var),
-    rank = rank(rowMeans(mat))
-  )
-  
-  ggplot(df_mv, aes(x = rank, y = variance)) +
-    geom_point(alpha = 0.5, color = "#482878FF") +
-    theme_minimal() +
-    labs(title = title, x = "Mean Rank", y = "Variance")
-}
-
-mv1 <- plot_mean_var(df_matrix, "Mean-Variance: Raw Counts")
-mv2 <- plot_mean_var(log2_df, "Mean-Variance: log2(counts + 1)")
-mv3 <- plot_mean_var(rlog_df, "Mean-Variance: rlog")
-mv4 <- plot_mean_var(vst_df, "Mean-Variance: VST")
-
-# 5. Arrange and display plots
-ggarrange(mv1, mv2, mv3, mv4, ncol = 2, nrow = 2)
-```
-
-We can see that log2 helps, but rlog and VST do a better job of flattening the variance. However, rlog may overly compress high-expression values. For that reason, we will proceed using the VST-transformed data.
 
 ### Expression Distribution Comparison
 
@@ -400,16 +248,13 @@ plot_box <- function(mat, title) {
 }
 
 # Generate plots
-p1 <- plot_box(log2_df, "Boxplot: log2")
-p2 <- plot_box(rlog_df, "Boxplot: rlog")
-p3 <- plot_box(vst_df, "Boxplot: VST")
+p1 <- plot_box(log2(df_matrix+1), "Boxplot: log2")
+p2 <- plot_box(vst_df, "Boxplot: VST")
 
 
 # Arrange and display plots
-ggarrange(p1, p2, p3, nrow = 3)
+ggarrange(p1, p2, nrow = 2)
 ```
-
-We will go with the VST!
 
 ### Caution: Transformations Are Not a Cure-All
 
@@ -421,27 +266,149 @@ We will go with the VST!
 
 > Best Practice: Try multiple transformations and assess both statistical fit and interpretability.
 
-# PCA on VST-Stabilized Data
+# Principal Component Analysis (PCA)
 
-Now that our gene expression data has undergone variance stabilization using the **VST** transformation, we’re ready to run PCA and explore structure, key contributors, and biological relevance.
+Now that our gene expression data has undergone variance stabilization using the **VST** transformation, we’re ready to run PCA and explore the main sources of variation across samples and key contributors, and biological relevance.
+
+Here, PCA is performed on the **gene expression data**, while clinical variables such as stage, batch, or tumor composition are used afterward to help interpret the observed patterns.
+
+There are many frameworks for performing PCA in R. Here, we’ll use the `FactoMineR` and `factoextra` packages to compute and visualize PCA results.
+
+Since **PCA is sensitive to scale and variance**, it’s important to use the **cleaned and transformed data** we prepared earlier.
+
+## PCA on VST-Stabilized Data
+
+Let’s run the PCA:
 
 ```{r}
 #| fig-height: 3
 #| out-width: 100%
-# Run PCA
+
+# Compute PCA
 res.pca_genes_vst  <- PCA(vst_df, graph = FALSE, scale.unit = TRUE)
+res.pca_genes_vst
+```
+
+### Eigenvalues and Variance Explained
+
+Next, we’ll check how much variance each principal component explains and visualize the results!
+
+```{r}
+#| fig-height: 3
 fviz_screeplot(res.pca_genes_vst, addlabels = TRUE, ylim = c(0, 50))
 ```
 
-Inspect Variable Contributions
+The scree plot shows the percentage of total variance explained by each principal component. This helps decide how many components to keep.
+
+
+### Individual-Level Results
+
+Beyond looking at variables, PCA also provides insights at the **individual level** (i.e., each sample or patient). You can access their coordinates, cos2 values, and contributions.
+
+```{r}
+# Extract individual results
+ind <- get_pca_ind(res.pca_genes_vst)
+ind
+```
+
+To see which individuals contribute most to the main axes, plot their contributions. (same as for variables):
+
+```{r}
+#| fig-height: 3
+
+# Quality of representation (cos²) for individuals
+p1 <- fviz_cos2(res.pca_genes_vst, choice = "ind", axes = 1, top = 20)
+p2 <- fviz_cos2(res.pca_genes_vst, choice = "ind", axes = 2, top = 20)
+#p3 <- fviz_cos2(res.pca_genes_vst, choice = "ind", axes = 1:4, top = 20)
+ggarrange(p1, p2, nrow = 1, ncol = 2)
+
+```
+
+You can also color individuals by important **integer variables** to explore patterns.\
+For example, color points by age, stromal cells, normal cells, or tumor cells:
+
+```{r}
+#| out-width: 100%
+#| fig-height: 6
+t1 <- fviz_pca_ind(res.pca_genes_vst, 
+                   col.ind = df_scaled$age_at_initial_path_diagn, 
+                   geom = c("point"), title = "Age") + scale_color_viridis_c()
+t2 <- fviz_pca_ind(res.pca_genes_vst, 
+                   col.ind = df_scaled$percent_stromal_cells, 
+                   geom = c("point"), title = "Stromal Cells") + scale_color_viridis_c()
+t3 <- fviz_pca_ind(res.pca_genes_vst, 
+                   col.ind = df_scaled$percent_normal_cells, 
+                   geom = c("point"), title = "Normal Cells") + scale_color_viridis_c()
+t4 <- fviz_pca_ind(res.pca_genes_vst, 
+                   col.ind = df_scaled$percent_tumor_cells, 
+                   geom = c("point"), title = "Tumor Cells") + scale_color_viridis_c()
+ggarrange(t1, t2, t3, t4, ncol = 2, nrow = 2)
+
+```
+
+*Note that, individuals that are similar are grouped together on the plot.*
+
+### Coloring by Groups (Factors)
+
+Want to color by groups? Just add a column to your metadata and pass it in:
+
+```{r warning=FALSE}
+
+group_var <- df_comb %>%
+  select(where(is.factor))
+
+p1 <- fviz_pca_ind(
+  res.pca_genes_vst,
+  col.ind = group_var$batch,
+  geom = "point",
+  legend.title = "Batch") +
+  scale_color_viridis_d() +
+  theme(legend.position = "bottom")
+
+p2 <- fviz_pca_ind(
+  res.pca_genes_vst,
+  col.ind = group_var$stage,
+  geom = "point",
+  legend.title = "Stage",
+  pointsize = 2) +
+  scale_color_viridis_d() +
+  theme(legend.position = "bottom")
+
+ggarrange(p1, p2, ncol = 2, nrow = 1)
+```
+
+### Variable-Level Results
+
+We can extract variable-level results with:
+
+```{r}
+var <- get_pca_var(res.pca_genes_vst)
+var
+```
+
+This gives us:
+
+-   `var$coord`: Coordinates (i.e., how variables align with PCs)
+
+-   `var$cos2`: Quality of representation
+
+-   `var$contrib`: Contribution to each principal component
+
+Visualize variable relationships: this plot shows how strongly each variable/gene contributes to the PCs. Variables closer to the circle’s edge are well represented and more influential.
 
 ```{r}
 #| out-width: 100%
 
-fviz_pca_var(res.pca_genes_vst, col.var = "coord", 
-                 gradient.cols = c("#00AFBB", "#E7B800", "#FC4E07"),  repel = TRUE)
+# Color by cos2 values: quality on the factor map
+fviz_pca_var(res.pca_genes_vst, 
+             col.var = "cos2",
+             select.var = list(cos2 = 0.25),
+             gradient.cols = c("#00AFBB", "#E7B800", "#FC4E07"), 
+             repel = TRUE) # Avoid text overlapping)
 
 ```
+
+Check which variables contribute the most to **PC1** and **PC2** individually.
 
 ```{r}
 #| out-width: 100%
@@ -458,19 +425,22 @@ We can project individual samples onto PCA space and color them by expression of
 ```{r}
 #| out-width: 100%
 #| fig-height: 6
-p1 <- fviz_pca_ind(res.pca_genes_vst, col.ind = log2_df[,"COL5A1"], geom = "point",
+p1 <- fviz_pca_ind(res.pca_genes_vst, col.ind = vst_df[,"COL5A1"], geom = "point",
                    title = "COL5A1") + scale_color_viridis_c()
-p2 <- fviz_pca_ind(res.pca_genes_vst, col.ind = log2_df[,"COL1A1"], geom = "point",
+p2 <- fviz_pca_ind(res.pca_genes_vst, col.ind = vst_df[,"COL1A1"], geom = "point",
                    title = "COL1A1") + scale_color_viridis_c()
-p3 <- fviz_pca_ind(res.pca_genes_vst, col.ind = log2_df[,"COL9A3"], geom = "point",
+p3 <- fviz_pca_ind(res.pca_genes_vst, col.ind = vst_df[,"COL9A3"], geom = "point",
                    title = "COL9A3") + scale_color_viridis_c()
-p4 <- fviz_pca_ind(res.pca_genes_vst, col.ind = log2_df[,"COL4A6"], geom = "point",
-                   title = "COL4A6") + scale_color_viridis_c()
+p4 <- fviz_pca_ind(res.pca_genes_vst, col.ind = vst_df[,"COL2A1"], geom = "point",
+                   title = "COL2A1") + scale_color_viridis_c()
 ggarrange(p1, p2, p3, p4, ncol = 2, nrow = 2)
 
 ```
 
 **Observation:** COL5A1 is a major driver of variation along PC1, while COL9A3 appears more influential along PC2.
+
+
+That’s a complete walkthrough of PCA: computing it, exploring results, and visualizing them effectively. PCA is a critical tool for working with high-dimensional data.
 
 # Results: Investigating Collagen Genes and Tumor Characteristics
 
@@ -485,8 +455,8 @@ loadings_df <- as.data.frame(loadings)
 loadings_df$gene <- rownames(loadings_df)
 
 # Top genes from PC1 and PC2
-top_pc1 <- loadings_df %>% arrange(desc(abs(Dim.1))) %>% slice_head(n = 2)
-top_pc2 <- loadings_df %>% arrange(desc(abs(Dim.2))) %>% slice_head(n = 2)
+top_pc1 <- loadings_df %>% arrange(desc(abs(Dim.1))) %>% slice_head(n = 1)
+top_pc2 <- loadings_df %>% arrange(desc(abs(Dim.2))) %>% slice_head(n = 1)
 
 top_genes <- unique(c(top_pc1$gene, top_pc2$gene))
 top_genes
@@ -509,8 +479,9 @@ ggplot(df_long, aes(x = gene, y = value, fill = stage)) +
   geom_boxplot() + 
   scale_fill_viridis_d() +
   theme_minimal() + 
-  facet_wrap(vars(gene), nrow = 2, scales = "free") +
+  facet_wrap(vars(gene), nrow = 1, scales = "free") +
   labs(title = "Gene Expression by Tumor Stage")
+
 ```
 
 From these boxplots:
@@ -535,7 +506,8 @@ df_long <- df_comb %>%
                names_to = "gene",
                values_to = "value")
 
-ggplot(df_long, aes(x = percent_tumor_cells^3, y = value, color = percent_stromal_cells)) +
+ggplot(df_long, aes(x = percent_tumor_cells^3, 
+                    y = value, color = log2(percent_stromal_cells + 1))) +
   geom_point(alpha = 0.5) +
   scale_color_viridis_c() +
   theme_minimal() +
@@ -544,7 +516,6 @@ ggplot(df_long, aes(x = percent_tumor_cells^3, y = value, color = percent_stroma
   stat_cor(method = "pearson", p.accuracy = 0.001, r.accuracy = 0.001) +
   labs(title = "Expression vs. Tumor Cell Composition") +
   theme(legend.position = "bottom")
-
 
 ```
 
