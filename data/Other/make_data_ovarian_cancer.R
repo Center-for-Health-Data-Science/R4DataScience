@@ -224,6 +224,7 @@ p_all
 ggsave("fugures/mean_sd_plot_small.png", plot = p_all, width = 6, height = 5.2, dpi = 300)
 ggsave("fugures/mean_sd_plot_large.png", plot = p_all, width = 7.5, height = 6.5, dpi = 300)
 
+# LOAD ####
 ##############################################################################################################
 ##############################################################################################################
 ##############################################################################################################
@@ -231,6 +232,8 @@ ggsave("fugures/mean_sd_plot_large.png", plot = p_all, width = 7.5, height = 6.5
 
 load("./data/Ovarian_data.RData")
 df_ov_old <- df_ov
+df_ov_old$unique_patient_ID <- str_sub(df_ov_old$alt_sample_name, 1,16)
+
 load("./data/Other/GDC_Ovarian_RAW.RData")
 head(df_ov_old)
 head(df_ov)
@@ -241,22 +244,21 @@ names(df_ov)
 library(dplyr)
 
 df_ov_old2 <- df_ov_old %>%
-  mutate(patient_ID = unique_patient_ID)
+  mutate(unique_patient_ID = unique_patient_ID)
 
 df_ov2 <- df_ov %>%
-  mutate(patient_ID = substr(unique_patient_ID, 1, 12))
+  mutate(unique_patient_ID = substr(unique_patient_ID, 1, 16))
 
 dim(df_ov_old2)
 dim(df_ov2)
 
 df_ov_overlap <- df_ov_old2 %>%
-  inner_join(df_ov2, by = "patient_ID")
+  left_join(df_ov2, by = "unique_patient_ID")
 dim(df_ov_overlap)
 
 meta_cols <- c(
   "alt_sample_name",
-  "unique_patient_ID.x",
-  "sample" ,
+  "unique_patient_ID",
   "sample_type",
   "histological_type",
   "primarysite",
@@ -319,6 +321,14 @@ n_living <- ceiling(0.05 * length(idx_living))
 sel_living <- sample(idx_living, n_living)
 
 df_ov_overlap$vital_status[sel_living] <- "living "
+table(df_ov_overlap$vital_status)
+
+# 5% of living -> "NA "
+idx_living <- which(is.na(df_ov_overlap$vital_status))
+n_living <- ceiling(0.05 * length(idx_living))
+sel_living <- sample(idx_living, n_living)
+
+df_ov_overlap$vital_status[sel_living] <- "NA "
 table(df_ov_overlap$vital_status)
 
 
@@ -409,15 +419,23 @@ df_exp[1:3,1:3]
 # Replace "." with "-" in TCGA IDs
 df_exp$unique_patient_ID <- gsub("\\.", "-", df_exp$unique_patient_ID)
 
+ids <- df_exp$unique_patient_ID
+ids<- str_sub(ids, 1,16)
+head(ids)
 
+df_ov <- df_ov %>%
+  filter(unique_patient_ID %in% ids)
+
+df_exp$unique_patient_ID <- str_sub(df_exp$unique_patient_ID, 1,16)
+
+head(df_exp)[1:4, 1:4]
+head(df_ov)[1:4, 1:4]
 
 getwd()
 save(df_ov,df_exp, file = "data/other/GDC_Ovarian.RData")
 
 
 
-head(df_exp)[1:4, 1:4]
-head(df_ov)[1:4, 1:4]
 
 
 
