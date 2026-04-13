@@ -4,4 +4,9 @@
 /.quarto/
 .Rproj.user
 
+*.qmd
+!slides/Code_for_slides/MainScript.qmd
+!slides/Code_for_slides/Quarto_example.qmd
+
 **/*.quarto_ipynb
+
