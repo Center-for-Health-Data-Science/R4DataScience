@@ -14,9 +14,12 @@ query_exp <- GDCquery(
   project = "TCGA-OV",
   data.category = "Transcriptome Profiling",
   data.type = "Gene Expression Quantification",
-  workflow.type = "STAR - Counts",
-  sample.type = "Primary Tumor"
+  workflow.type = "STAR - Counts"
 )
+
+res <- getResults(query_exp)
+colnames(res)
+table(res$sample_type)
 
 GDCdownload(
   query = query_exp,
@@ -26,28 +29,179 @@ GDCdownload(
 
 se_ov <- GDCprepare(query_exp)
 
-
 # counts: genes x samples
 count_mat <- assay(se_ov, "unstranded")
 
-# row annotations
-row_df <- as.data.frame(rowData(se_ov))
+# optional checks
+dim(count_mat)
+assayNames(se_ov)
+head(colnames(count_mat))
+head(rownames(count_mat))
+
+
+# ----------------------------
+# 2. Map Ensembl IDs to gene symbols
+# ----------------------------
+row_annot <- as.data.frame(rowData(se_ov))
+colnames(row_annot)
+
+# choose the gene-symbol column automatically
+symbol_col <- intersect(
+  c("gene_name", "external_gene_name", "gene_symbol", "symbol"),
+  colnames(row_annot)
+)[1]
+
+if (is.na(symbol_col)) {
+  stop("Could not find a gene symbol column in rowData(se_ov).")
+}
+
+gene_symbols <- row_annot[[symbol_col]]
+
+# keep genes with a valid symbol
+keep_symbol <- !is.na(gene_symbols) & gene_symbols != ""
+count_mat2 <- count_mat[keep_symbol, , drop = FALSE]
+gene_symbols2 <- gene_symbols[keep_symbol]
+
+# collapse duplicated gene symbols by summing counts
+count_df <- as.data.frame(count_mat2)
+count_df$gene_symbol <- gene_symbols2
+
+count_by_symbol <- count_df %>%
+  group_by(gene_symbol) %>%
+  summarise(across(everything(), sum), .groups = "drop") %>%
+  as.data.frame()
+
+rownames(count_by_symbol) <- count_by_symbol$gene_symbol
+count_by_symbol$gene_symbol <- NULL
+
+count_by_symbol <- as.matrix(count_by_symbol)
+
+dim(count_by_symbol)
+head(rownames(count_by_symbol))
+
+# ----------------------------
+# 3. Filter low-expressed genes
+# ----------------------------
+min_count <- 10
+min_prop_samples <- 0.20
+min_samples <- ceiling(ncol(count_by_symbol) * min_prop_samples)
+
+keep_genes <- rowSums(count_by_symbol >= min_count) >= min_samples
+table(keep_genes)
+
+count_filt <- count_by_symbol[keep_genes, , drop = FALSE]
+
+dim(count_filt)
+
+# ----------------------------
+# 4. Make a simple expression matrix for scoring
+# ----------------------------
+# Practical and robust for this use case
+expr_mat <- log2(count_filt + 1)
+
+summary(as.vector(expr_mat))
+
+
+#if (!require("BiocManager", quietly = TRUE))
+#  install.packages("BiocManager")
+
+#BiocManager::install("EDASeq")
+library(EDASeq)
+
+# ----------------------------
+# 5. Compute stemness score
+# ----------------------------
+data("SC_PCBC_stemSig", package = "TCGAbiolinks")
+
+# check overlap before scoring
+common_stem_genes <- intersect(names(SC_PCBC_stemSig), rownames(expr_mat))
+length(common_stem_genes)
+head(common_stem_genes)
+
+stemness_df <- TCGAanalyze_Stemness(
+  stemSig = SC_PCBC_stemSig,
+  dataGE = expr_mat,
+  colname.score = "stemness_score"
+)
+
+head(stemness_df)
+dim(stemness_df)
+
+
+
+# ----------------------------
+# 6. Build sample metadata and attach stemness
+# ----------------------------
+meta_ov <- as.data.frame(colData(se_ov)) %>%
+  rownames_to_column("sample_barcode_full") %>%
+  mutate(
+    sample_id16 = substr(sample_barcode_full, 1, 16),
+    case_id12   = substr(sample_barcode_full, 1, 12)
+  )
+
+# make stemness join robust to column naming
+names(stemness_df)[1] <- "sample_barcode_full"
+stemness_df <- stemness_df %>%
+  mutate(
+    sample_id16 = substr(sample_barcode_full, 1, 16),
+    case_id12   = substr(sample_barcode_full, 1, 12)
+  )
+
+meta_scores <- meta_ov %>%
+  left_join(
+    stemness_df %>% select(sample_id16, stemness_score),
+    by = "sample_id16"
+  )
+
+head(meta_scores[, c("sample_barcode_full", "sample_id16", "stemness_score")])
+
+
+# ----------------------------
+# 7. Optional: add tumor purity
+# ----------------------------
+data("Tumor.purity", package = "TCGAbiolinks")
+
+purity_ov <- Tumor.purity %>%
+  filter(Cancer.type == "OV") %>%
+  transmute(
+    sample_id16 = substr(Sample.ID, 1, 16),
+    ESTIMATE,
+    ABSOLUTE,
+    LUMP,
+    IHC,
+    CPE
+  )
+
+meta_scores <- meta_scores %>%
+  left_join(purity_ov, by = "sample_id16")
+
+head(meta_scores[, c("sample_id16", "stemness_score", "CPE", "ESTIMATE")])
+
+
+
+############################################################
+
+## row annotations
+#row_df <- as.data.frame(rowData(se_ov))
 
 # inspect available columns once
-colnames(row_df)
+#colnames(row_df)
 
 # use gene symbols when available
-gene_symbols <- row_df$gene_name
+#gene_symbols <- row_df$gene_name
 
 # fallback to Ensembl ID if symbol is missing/blank
-gene_symbols[is.na(gene_symbols) | gene_symbols == ""] <- row_df$gene_id[is.na(gene_symbols) | gene_symbols == ""]
+#gene_symbols[is.na(gene_symbols) | gene_symbols == ""] <- row_df$gene_id[is.na(gene_symbols) | gene_symbols == ""]
 
 # make unique, because multiple Ensembl IDs can share the same symbol
-gene_symbols <- make.unique(gene_symbols)
+#gene_symbols <- make.unique(gene_symbols)
 
 # replace rownames
-rownames(count_mat) <- gene_symbols
+#rownames(count_mat) <- gene_symbols
 
+
+dim(se_ov)
+dim(count_mat)
 expr_mat <- count_mat[rowData(se_ov)$gene_type == "protein_coding", , drop = FALSE]
 dim(expr_mat)
 
@@ -65,13 +219,14 @@ df_sample <- as.data.frame(colData(se_ov)) %>%
 
 df_ov <- df_sample
 getwd()
-save(expr_mat, df_ov, file = "data/other/GDC_Ovarian_RAW.RData")
+save(expr_mat, df_ov, meta_scores, file = "data/other/GDC_Ovarian_RAW_B.RData")
 
 ##############################################################################################################
 ##############################################################################################################
 ##############################################################################################################
 
-sel_col <- c("unique_patient_ID", 
+sel_col <- c("sample_barcode_full",
+             "unique_patient_ID", 
              "vital_status" ,  
              "classification_of_tumor" , 
              "days_to_death",
@@ -80,31 +235,21 @@ sel_col <- c("unique_patient_ID",
              "tumor_grade", 
              "vital_status" , 
              "sample" , 
-             "days_to_last_follow_up")
-df_ov <- df_ov[, colnames(df_ov) %in% sel_col ]
+             "sample_type",
+             "classification_of_tumor",
+             "days_to_last_follow_up",
+             "CPE", 
+             "stemness_score")
+
+
+df_ov <- meta_scores[, colnames(meta_scores) %in% sel_col ]
+
+names(df_ov)[names(df_ov) == "sample_barcode_full"] <- "unique_patient_ID"
+
 
 library(TCGAbiolinks)
 library(dplyr)
 
-data("Tumor.purity", package = "TCGAbiolinks")
-
-# Inspect available columns once
-colnames(Tumor.purity)
-
-# Clean barcodes to match your df_ov
-purity_df <- Tumor.purity %>%
-  as.data.frame() %>%
-  mutate(
-    sample = gsub("\\.", "-", Sample.ID),
-    IHC = suppressWarnings(as.numeric(gsub(",", ".", IHC))),
-    CPE = suppressWarnings(as.numeric(gsub(",", ".", CPE)))
-  ) %>%
-  select(sample, IHC, CPE)
-
-# Add to your metadata
-
-df_ov <- df_ov %>%
-  left_join(purity_df, by = "sample")
 
 getwd()
 save(expr_mat, df_ov, file = "data/other/GDC_Ovarian_RAW.RData")
@@ -224,7 +369,7 @@ p_all
 ggsave("fugures/mean_sd_plot_small.png", plot = p_all, width = 6, height = 5.2, dpi = 300)
 ggsave("fugures/mean_sd_plot_large.png", plot = p_all, width = 7.5, height = 6.5, dpi = 300)
 
-# LOAD ####
+# UPDATE LOAD ####
 ##############################################################################################################
 ##############################################################################################################
 ##############################################################################################################
@@ -241,6 +386,12 @@ head(df_ov)
 names(df_ov_old)
 names(df_ov)
 
+dim(expr_mat)
+keep_genes <- rowSums(expr_mat >= 3) >= 0.05 * ncol(expr_mat)
+table(keep_genes)
+expr_mat <- expr_mat[keep_genes, , drop = FALSE]
+dim(expr_mat)
+
 library(dplyr)
 
 df_ov_old2 <- df_ov_old %>%
@@ -252,37 +403,59 @@ df_ov2 <- df_ov %>%
 dim(df_ov_old2)
 dim(df_ov2)
 
-df_ov_overlap <- df_ov_old2 %>%
-  left_join(df_ov2, by = "unique_patient_ID")
-dim(df_ov_overlap)
-
 meta_cols <- c(
   "alt_sample_name",
   "unique_patient_ID",
   "sample_type",
   "histological_type",
   "primarysite",
+  "tumorstage",
   "summarygrade",
-  "figo_stage",
-  "tumor_grade",
-  "summarystage" ,
+  "grade",
   "age_at_initial_path_diagn",
-  "classification_of_tumor",
-  "recurrence_status",
-  "days_to_death.y",
-  "days_to_last_follow_up",
-  "vital_status.y",
   "os_binary",
-  "relapse_binary",
-  "primary_therapy_outcome_success",
   "percent_normal_cells",
   "percent_stromal_cells",
   "percent_tumor_cells",
-  "CPE",
   "batch"
 )
 
+df_ov_old2 <- df_ov_old2[, meta_cols]
+
+
+
+df_ov_overlap <- df_ov_old2 %>%
+  full_join(df_ov2, by = "unique_patient_ID")
+dim(df_ov_overlap)
+
+
+meta_cols <- c(
+  "alt_sample_name",
+  "unique_patient_ID",
+  "sample_type.y",
+  "histological_type",
+  "primarysite",
+  "tumor_grade",
+  "summarygrade",
+  "grade",
+  "figo_stage",
+  "tumorstage",
+  "age_at_initial_path_diagn",
+  "percent_normal_cells",
+  "percent_stromal_cells",
+  "percent_tumor_cells",
+  "os_binary",
+  "days_to_death",
+  "days_to_last_follow_up",
+  "CPE",
+  "stemness_score",
+  "batch",
+  "vital_status",
+  "classification_of_tumor"
+)
+
 df_ov_overlap <- df_ov_overlap[, meta_cols]
+df_ov_overlap$primarysite <- NA
 
 #names(df_ov_overlap)[names(df_ov_overlap) == "age_at_initial_pathologic_diagnosis"] <- "age_at_initial_path_diagn"
 
@@ -327,15 +500,28 @@ table(df_ov_overlap$vital_status)
 idx_living <- which(is.na(df_ov_overlap$vital_status))
 n_living <- ceiling(0.05 * length(idx_living))
 sel_living <- sample(idx_living, n_living)
-
 df_ov_overlap$vital_status[sel_living] <- "NA "
 table(df_ov_overlap$vital_status)
+
+
+# 5% of living -> "NA "
+idx_living <- which(is.na(df_ov_overlap$summarygrade))
+n_living <- ceiling(0.05 * length(idx_living))
+sel_living <- sample(idx_living, n_living)
+df_ov_overlap$summarygrade[sel_living] <- "NA "
+table(df_ov_overlap$summarygrade)
 
 
 # Convert back to factor if you want
 df_ov_overlap$summarygrade <- toupper(df_ov_overlap$summarygrade)
 table(df_ov_overlap$summarygrade)
+df_ov_overlap$summarygrade[85] 
+df_ov_overlap$summarygrade[85] <- "NA"
+df_ov_overlap$summarygrade[85] 
 
+df_ov_overlap$summarygrade[106] 
+df_ov_overlap$summarygrade[106] <- "NA"
+df_ov_overlap$summarygrade[106] 
 
 df_ov_overlap <- df_ov_overlap %>%
   mutate(
@@ -373,6 +559,50 @@ df_ov_overlap %>%
 
 df_ov <- df_ov_overlap
 
+
+
+df_ov <- df_ov %>% 
+  mutate(
+    figo_stage = if_else(
+      is.na(figo_stage) & !is.na(tumorstage),
+      paste("Stage", as.character(as.roman(tumorstage))),
+      figo_stage
+    )
+  )
+
+df_ov <- df_ov %>% 
+  mutate(
+    tumor_grade = if_else(
+      is.na(tumor_grade) & !is.na(grade),
+      paste0("G", as.character((grade))),
+      tumor_grade
+    )
+  )
+
+df_ov$tumor_grade[df_ov$tumor_grade == "GB"&!is.na(df_ov$tumor_grade)] <- "G1"
+df_ov$tumor_grade[df_ov$tumor_grade == "GX"&!is.na(df_ov$tumor_grade)] <- NA
+table(df_ov$tumor_grade)
+
+
+df_ov <- df_ov %>% 
+  mutate(
+    summarygrade = if_else(
+      is.na(summarygrade) & !is.na(tumor_grade),
+      paste0("G-", as.character((tumor_grade))),
+      summarygrade
+    )
+  )
+
+df_ov$summarygrade[df_ov$summarygrade == "G-GB"&!is.na(df_ov$summarygrade)] <- "LOW"
+df_ov$summarygrade[df_ov$summarygrade == "G-GX"&!is.na(df_ov$summarygrade)] <- NA
+df_ov$summarygrade[df_ov$summarygrade == "G-G2"&!is.na(df_ov$summarygrade)] <- "LOW"
+df_ov$summarygrade[df_ov$summarygrade == "G-G1"&!is.na(df_ov$summarygrade)] <- "LOW"
+df_ov$summarygrade[df_ov$summarygrade == "G-G3"&!is.na(df_ov$summarygrade)] <- "HIGH"
+table(df_ov$summarygrade)
+
+df_ov <- df_ov %>% 
+  select(-tumorstage, -grade, -sample_type)
+
 ##############################################################################################################
 ##############################################################################################################
 ##############################################################################################################
@@ -381,8 +611,10 @@ dim(expr_mat)
 
 head(expr_mat)[1:4, 1:4]
 gene_symbols <- row.names(expr_mat)
-sel_idx <- grepl("^(COL|CDH|KRT|ELN|LAMA|LAMB|LAMC|FN1|FBN)", gene_symbols)
+#sel_idx <- grepl("^(COL\\d|CLDN)", gene_symbols)
+sel_idx <- grepl("^(COL\\d)", gene_symbols)
 
+table(sel_idx)
 # Expression matrix: selected genes only
 sel_expr_mat <- expr_mat[sel_idx, , drop = FALSE]
 rownames(sel_expr_mat) <- gene_symbols[sel_idx]
@@ -393,11 +625,13 @@ table(
   family = case_when(
     grepl("^COL",  rownames(sel_expr_mat)) ~ "Collagen",
     grepl("^CDH",  rownames(sel_expr_mat)) ~ "Cadherin",
-    grepl("^KRT",  rownames(sel_expr_mat)) ~ "Keratin",
-    grepl("^ELN",  rownames(sel_expr_mat)) ~ "Elastin",
-    grepl("^LAMA|^LAMB|^LAMC", rownames(sel_expr_mat)) ~ "Laminin",
-    grepl("^FN1",  rownames(sel_expr_mat)) ~ "Fibronectin",
-    grepl("^FBN",  rownames(sel_expr_mat)) ~ "Fibrillin",
+    #grepl("^KRT",  rownames(sel_expr_mat)) ~ "Keratin",
+    grepl("^MMP",  rownames(sel_expr_mat)) ~ "Matrix",
+    grepl("^ITGA|^ITGB", rownames(sel_expr_mat)) ~ "Integrins",
+    grepl("^CLDN|^OCLN$|^TJP", rownames(sel_expr_mat)) ~ "Tight junction",
+    
+    #grepl("^FN1",  rownames(sel_expr_mat)) ~ "Fibronectin",
+    #grepl("^FBN",  rownames(sel_expr_mat)) ~ "Fibrillin",
     TRUE ~ "Other"
   )
 )
@@ -431,10 +665,49 @@ df_exp$unique_patient_ID <- str_sub(df_exp$unique_patient_ID, 1,16)
 head(df_exp)[1:4, 1:4]
 head(df_ov)[1:4, 1:4]
 
+
+df_ov$classification_of_tumor[seq(1,430,4)] <- NA
+df_ov$classification_of_tumor[seq(3,230,4)] <- NA
+df_ov$classification_of_tumor[seq(200,430,4)] <- NA
+df_ov$classification_of_tumor[seq(250,400,5)] <- NA
+table(is.na(df_ov$classification_of_tumor))
+
+
+df_ov <- df_ov %>%
+  mutate(
+    new_stromal = 100 - percent_tumor_cells - percent_normal_cells,
+    percent_stromal_cells = case_when(
+      percent_stromal_cells == 0 &
+        percent_normal_cells > 0 &
+        percent_tumor_cells > 0 &
+        new_stromal >= 0 ~ new_stromal,
+      TRUE ~ percent_stromal_cells
+    )
+  ) %>%
+  select(-new_stromal)
+
+
+df_ov <- df_ov %>% select(-percent_normal_cells, -days_to_death, -tumor_grade)
+
+names(df_ov)[names(df_ov) == "days_to_last_follow_up"] <- "days_to_death_or_last_follow_up"
+
+df_ov$CPE <- str_replace_all(df_ov$CPE, ",", ".")
+df_ov$CPE <- as.numeric(df_ov$CPE)
+
+df_ov[df_ov$unique_patient_ID == "TCGA-04-1514-01A",] 
+
+df_ov[df_ov$unique_patient_ID == "TCGA-04-1514-01A", "CPE"] <- 0.1
+df_ov[df_ov$unique_patient_ID == "TCGA-04-1514-01A", "percent_stromal_cells"] <- 1
+df_ov[df_ov$unique_patient_ID == "TCGA-04-1514-01A", "percent_tumor_cells"] <- 3
+df_ov[df_ov$unique_patient_ID == "TCGA-04-1514-01A", "stemness_score"] <- 0.01
+df_ov[df_ov$unique_patient_ID == "TCGA-04-1514-01A", "age_at_initial_path_diagn"] <- 18
+df_ov[df_ov$unique_patient_ID == "TCGA-04-1514-01A", "days_to_death_or_last_follow_up"] <- 5010
+
+
+df_ov[df_ov$unique_patient_ID == "TCGA-04-1514-01A",] 
+
 getwd()
 save(df_ov,df_exp, file = "data/other/GDC_Ovarian.RData")
-
-
 
 
 

@@ -6,13 +6,12 @@ project:
  output-dir: ../docs
 ---
 
-In this section, we'll focus on cleaning a dataset. We'll primarily use functions from the `tidyverse` package, but in some cases base R offers quick and effective alternatives.
+In this section, we will clean and prepare a dataset for analysis. We will mainly use functions from the `tidyverse`, although in some cases base R provides quick and effective alternatives.
 
 ## Load Packages
 
 ```{r warning=FALSE, message=FALSE}
 library(tidyverse)
-library(ggforce) # extension of ggplot2
 # unload MASS since it has select function we don't want to use. 
 ```
 
@@ -24,7 +23,7 @@ We’ll work with two datasets:
 
 -   `df_exp`: gene expression data for collagen genes.
 
-We use the `load()` function, which automatically imports an R object - let's have a look at it.
+We load these data using `load()`, which imports one or more R objects stored in an .RData file. Let's have a look at it.
 
 ```{r warning=FALSE, message=FALSE}
 # .RData can contain several objects 
@@ -38,21 +37,14 @@ df_ov %>% head()
 ```{r}
 class(df_exp)
 dim(df_exp)
-df_exp [1:6, 1:10]
+df_exp %>% head() 
 ```
 
 ### Some Basics
 
-Firstly, lets take a look at our data.
+First, let’s look at the variable `vital_status` in the clinical metadata. It indicates whether the patient is alive or deceased, and in later analyses can be used as an outcome variable.
 
 ```{r}
-str(df_ov)
-```
-
-Lets look at the variable `vital_status` from the clinical metadata. This variable contains information about whether the patient is alive or deceased and in the analysis below we will denote this our outcome / response variable.
-
-```{r}
-# output: vector the tidyverse
 df_ov %>%
   select(vital_status)
 ```
@@ -61,9 +53,10 @@ df_ov %>%
 table(df_ov$figo_stage)
 ```
 
+Let’s take a look at the structure of the clinical dataset.
+
 ```{r}
-library(skimr)
-skimr::skim(df_ov)  # very nice detailed overview
+str(df_ov)
 ```
 
 ## Data wrangling and cleaning
@@ -72,9 +65,9 @@ skimr::skim(df_ov)  # very nice detailed overview
 
 1.  Check Missing values and NAs
 
-2.  Drop Non-Informative Variables
+2.  Drop Variables with Too Many Missing Values
 
-3.  Drop Variables with Too Many Missing Values
+3.  Drop Non-Informative Variables
 
 4.  Standardize Categorical Data
 
@@ -86,18 +79,18 @@ skimr::skim(df_ov)  # very nice detailed overview
 
 ### Step 1: Check for missing values and convert `"NA"` strings to real `NA`s
 
-Sometimes missing values are stored as text, such as `"NA"` or `""`, rather than as true `NA` values. Before exploring missingness, it is a good idea to clean these up so that R can recognize them correctly.
+Sometimes missing values are stored as text, such as `"NA "` or `"na"`, rather than as true `NA` values. Before exploring missingness, it is a good idea to clean these up so that R can recognize them correctly.
 
 ```{r}
 df_ov$summarygrade %>% 
   unique()
 ```
 
-We can convert this string to a proper missing value using `na_if()`:
+We can convert this text value to a proper missing value using `na_if()`:
 
 ```{r}
 df_ov <- df_ov %>%
-  mutate(summarygrade = na_if(summarygrade, "NA"))
+  mutate(summarygrade = na_if(summarygrade, "NA "))
 ```
 
 After this cleanup, the column contains only the valid categories and true missing values:
@@ -107,14 +100,16 @@ df_ov$summarygrade %>%
   unique()
 ```
 
-This looks much better, but it is useful to check the whole dataset as well.
+This looks better, but it is useful to apply the same check across all character variables in the dataset.
 
 ```{r}
 df_ov <- df_ov %>%
-  mutate(across(where(is.character), ~ na_if(., "NA")))
+  mutate(across(where(is.character), ~ na_if(., "NA ")))
 ```
 
-We first use `is.na()` to identify missing values in the data frame. This creates a logical matrix where `TRUE` indicates a missing value. Next, `colSums()` counts how many missing values each column contains. Finally, we use a base R `barplot()` to visualize the number of missing values across variables.
+Now that we have NAs sorted out, let´s count how many there are.
+
+We use `is.na()` to identify missing values in the data frame. This creates a logical matrix where `TRUE` indicates a missing value. Next, `colSums()` counts how many missing values each column contains. Finally, we use a base R `barplot()` to visualize the number of missing values across variables.
 
 ```{r}
 df_ov %>% 
@@ -144,10 +139,11 @@ names_removed <- names(df_ov)[!keep_cols]
 df_ov %>% 
   select(all_of(names_removed)) %>% 
   slice_head(n = 6)
+```
 
+```{r}
 df_ov <- df_ov %>% 
   select(-names_removed)
-
 ```
 
 This keeps only the variables that are mostly complete.
@@ -159,46 +155,35 @@ Let’s check a few categorical variables and remove any that are redundant or i
 ```{r}
 df_ov$histological_type %>% table()
 
-df_ov$primarysite %>% table()
 ```
 
 Example of irrelevant variable: `histological_type` has 100% of the same value, so it’s not useful for analysis. We can drop it with `select()` and a minus sign.
 
 ```{r, warning=FALSE}
 df_ov <- df_ov %>% 
-  select(-histological_type,-primarysite)
+  select(-histological_type)
 ```
 
 ### Step 4: Standardize Categorical Variables
 
-Counting the number of occurrences for each level of a categorical variable.
-
-Here we count how many dead or alive individuals we have. This is useful for checking balance across groups or categories.
-
-```{r}
-df_ov %>% 
-  select(vital_status) %>% 
-  table(useNA = 'ifany') #%>% barplot()
-```
-
-Looks like we have two groups of deceased and living. Let's have a closer look at the unique values of this variable.
+Sometimes, typos, hidden characters or spaces cause mis-grouped levels. So let's have a closer look at the unique values of `vital_status`.
 
 ```{r}
 df_ov$vital_status %>% 
   unique()
 ```
 
-Whitespace includes spaces, newlines, and other blank characters in text. It can cause errors or inconsistencies in data, so removing unnecessary whitespace is an important step in cleaning data. Sometimes, hidden characters or spaces cause misgrouped levels.
+It looks like the variable contains two main groups: alive and deceased. But there is an issue whitespaces.
 
-Use the `str_trim()` function to remove whitespace.
+Whitespace includes spaces, newlines, and other blank characters in text. It can cause errors or inconsistencies in data, so removing unnecessary whitespace is an important step in cleaning data.
+
+We can use the `str_trim()` function to remove whitespace.
 
 ```{r}
 str_trim(" Hello World!   ")
 ```
 
-Trim whitespace and standardize:
-
-Like other function, the `str_trim()` function can also be used inside the `mutate()` function to alter the dataframe.
+Like many other functions, `str_trim()` can be used inside `mutate()` to modify a data frame column.
 
 ```{r}
 df_ov <- df_ov %>% 
@@ -214,34 +199,39 @@ df_ov$vital_status %>%
 
 ### Step 5: Fix Variable Types
 
-Some variables are stored as **character** or **numeric** when they should actually be **factors** (i.e., categorical variables). Convert character/numeric columns to factors:
+Some variables are stored as **character** or **numeric** vectors even though they represent categories and should be stored as **factors**. In those cases, it makes more sense to convert them to **factors**.
 
 ```{r}
 # One by one...
 table(df_ov$batch)
 class(df_ov$batch)
 #df_ov$batch <- as.factor(df_ov$batch)
+```
 
+```{r}
 # In one go:
-cols_to_factor <- c('sample_type', 
-                    'recurrence_status', 
-                    'vital_status', 
+cols_to_factor <- c('vital_status', 
                     'figo_stage', 
-                    'summarystage', 
-                    'tumor_grade', 
                     'summarygrade', 
-                    'classification_of_tumor', 
-                    'primary_therapy_outcome_success', 
                     'batch')
 
 df_ov <- df_ov %>%
   mutate(across(any_of(cols_to_factor), as.factor))
-
 ```
 
-### Step 6: Re-code and Reorder Factors
+```{r}
+cols_to_numeric <- c('age_at_initial_path_diagn', 
+                    'days_to_death_or_last_follow_up',
+                    'CPE',
+                    'stemness_score')
 
-Sometimes we want to **set the order of factor levels manually**, especially if there's a natural or meaningful order (e.g., "low" → "high"): This helps when plotting or interpreting regression coefficients.
+df_ov <- df_ov %>%
+  mutate(across(any_of(cols_to_numeric), as.numeric))
+```
+
+### Step 6: Recode and Reorder Factors
+
+Sometimes we want to **set the order of factor levels manually**, especially if there's a natural or meaningful order (e.g., "low" → "high"): This makes plots and model outputs (regression coefficients) easier to interpret.
 
 ```{r}
 # Recode factor 
@@ -249,39 +239,49 @@ df_ov$summarygrade %>% table()
 ```
 
 ```{r}
-df_ov <- df_ov %>% 
-  mutate(summarygrade = fct_recode(summarygrade, "high" = "HIGH"),
-         summarygrade = fct_recode(summarygrade, "low" = "LOW"))
-
-df_ov$summarygrade %>% table()
-```
-
-```{r}
 # Reorder levels 
-df_ov$summarygrade <- factor(df_ov$summarygrade, levels = c('low', 'high'))
+df_ov$summarygrade <- factor(df_ov$summarygrade, levels = c('LOW', 'HIGH'))
 
 levels(df_ov$summarygrade) # low, high
 ```
 
-### Step 7: Creating New Variables
-
-Now, we would like to create a new data column by extracting specific information or combining other columns.
-
-Add a column combining other columns into one:
+Some stage categories can be merged to create larger and easier-to-interpret groups.
 
 ```{r}
-df_ov %>% select(percent_stromal_cells, 
-                 percent_normal_cells)
-
-df_ov <- df_ov %>% 
-  mutate(percent_not_cancer_cells = percent_stromal_cells + percent_normal_cells)
-
-df_ov %>% select(percent_stromal_cells, 
-                 percent_normal_cells, 
-                 percent_not_cancer_cells)
+table(df_ov$figo_stage)
 ```
 
-For character vectors you can use functions `paste` and `paste0` . The `paste` function concatenates two strings into one. This one is from baseR.
+```{r}
+df_ov <- df_ov %>%
+  mutate(figo_stage = fct_recode(figo_stage,
+                            "Stage II" = "Stage II",
+                            "Stage II" = "Stage IIA",
+                            "Stage II" = "Stage IIB",
+                            "Stage II" = "Stage IIC",
+                            "Stage III" = "Stage III",
+                            "Stage III" = "Stage IIIA",
+                            "Stage III" = "Stage IIIB",
+                            "Stage III" = "Stage IIIC"))
+table(df_ov$figo_stage)
+```
+
+### Step 7: Creating New Variables
+
+Next, we will create a few new variables by combining or transforming existing columns.
+
+#### Add a column susing mathematical operation.
+
+```{r}
+df_ov %>% 
+  mutate(percent_normal_cells = 100 - percent_tumor_cells - percent_stromal_cells)  %>% 
+  select(percent_tumor_cells, 
+         percent_stromal_cells, 
+         percent_normal_cells)
+```
+
+#### Add a column combining other columns into one:
+
+For character vectors, base R provides the functions `paste` and `paste0` for combining strings. Here we use `paste` to join values with a separator.
 
 ```{r}
 paste('TCGA', 'Data', sep = ' ')
@@ -289,50 +289,61 @@ paste('TCGA', 'Data', sep = ' ')
 
 ```{r}
 df_ov <- df_ov %>% 
-  mutate(stage = paste(summarystage, summarygrade, sep = '-'))
+  mutate(Stage_Grade = paste(figo_stage, summarygrade, sep = '-'))
 
-df_ov %>% select(stage)
-df_ov %>% select(stage) %>% table()
-
+df_ov %>% select(Stage_Grade)
 ```
 
-Create logical variables with `ifelse`. Adding a column with content based on a condition with `ifelse`.
+#### Add a column based on conditions:
+
+We can also create new variables conditionally using `if_else`.
 
 ```{r results="show"}
-df_ov <- df_ov %>% 
+df_ov %>% 
   mutate(dominant_cell_type = if_else(
-    percent_not_cancer_cells > percent_tumor_cells, "not_cancer_cells", "cancer_cells"))
+    percent_tumor_cells < 50, "not_cancer_cells", "cancer_cells")) %>% 
+  select(percent_tumor_cells, 
+         dominant_cell_type)
 
-table(df_ov$dominant_cell_type)
 ```
 
-Extension of `ifelse`: `case_when`
+For multiple conditions, `case_when` is often more readable than nested `if_else` statements.
+
+```{r}
+table(df_ov$Stage_Grade)
+```
 
 ```{r results="show"}
-
-median(df_ov$age_at_initial_path_diagn)
-
 df_ov <- df_ov %>% 
-  mutate(group = case_when(
-    age_at_initial_path_diagn < 58 & summarygrade == "low" ~ "Low grade - Young",
-    age_at_initial_path_diagn < 58 & summarygrade == "high" ~ "High grade - Young",
-    age_at_initial_path_diagn >= 58 & summarygrade == "low" ~ "Low grade - Mature",
-    age_at_initial_path_diagn >= 58 & summarygrade == "high" ~ "High grade - Mature",
-    .default = NA))
+  mutate(Stage_Grade = case_when(
+    figo_stage ==  "Stage III" & summarygrade == "LOW" ~ "Stage III - low grade",
+    figo_stage ==  "Stage III" & summarygrade == "HIGH" ~ "Stage III - high grade",
+    figo_stage ==  "Stage III" & is.na(summarygrade) ~ NA,
+    .default = figo_stage)) %>% 
+  mutate(Stage_Grade = factor(Stage_Grade))
+  
+table(df_ov$Stage_Grade)
 
-table(df_ov$group)
+df_ov$Stage_Grade <- factor(df_ov$Stage_Grade, 
+                            levels = c('Stage II', 
+                                       'Stage III - low grade',
+                                       'Stage III - high grade',
+                                       'Stage IV'))
+
 
 ```
 
 ## String manipulation
 
-Sometimes the information you need is hidden inside longer text strings or encoded in specific patterns — especially in genomics or clinical datasets. In this example we notice that sample tissue source site information is unknown. Since we are TCGA experts, we know that this information is actually encoded in the full sample name `TCGA-20-0987-01A-02R-0434-01`. But How do we get it out.
+Sometimes useful information is stored inside longer text strings rather than in separate columns. This is common in clinical and genomics datasets.
 
-To extract and work with this kind of information, we can use what is called a **Regular Expression (Regex)** and **string manipulation** tools.
+In this example, the tissue source site is not stored as a separate variable. Since we are TCGA experts, we know that this information is actually encoded in the full sample name `TCGA-20-0987-01A-02R-0434-01`. But how do we get it out.
+
+To extract and work with this kind of information, we can use what is called a **Regular Expression (Regex)** and **string manipulation** tools from the `stringr` package..
 
 ### Regex: Regular expression
 
-Regular expressions (regex) are used to **search for patterns in text strings**. Regular expressions are super flexible and very powerful, BUT they can be slightly confusing at times...
+Regular expressions (regex) are used to **search for patterns in text strings**. Regular expressions are very flexible and powerful, although they can look unfamiliar at first.
 
 Instead of looking for an exact word like *cat*, a regex lets you search for things like:
 
@@ -344,11 +355,11 @@ Instead of looking for an exact word like *cat*, a regex lets you search for thi
 
 -   "A word containing a specific delimiter, e.g. a dash, as comma, etc."
 
-It might look a little weird (lots of slashes, dots, and symbols), but once you learn a few basics, it’s incredibly useful! And the good thing is that ChatCPT is very good at making regular expressions for you!
+It might look a little weird (lots of slashes, dots, and symbols), but once you learn a few basics, it’s incredibly useful! And the good thing is that ChatGPT is very good at making regular expressions for you!
 
 ![](../figures/regex1.png){fig-align="center"}
 
-We will do string manipulation the tidyverse way: using the `stringr` package where all the functions starts with `str_`. These functions often has a parameter called `pattern` which can take a regular expression as an argument. Let's start with some simple examples.
+We will do string manipulation the tidyverse way: using the `stringr` package where most functions starts with `str_`. These functions often has a parameter called `pattern` which can take a regular expression as an argument. Let's start with some simple examples.
 
 Let’s first look at one example sample name:
 
@@ -401,11 +412,12 @@ df_ov <- df_ov %>%
   mutate(tissue_sample_code = str_split_i(alt_sample_name, pattern = '-', i = 2))
 
 sort(table(df_ov$tissue_sample_code))
+
 ```
 
 The frequency table helps us inspect which tissue source site codes are present in the dataset.
 
-The second segment of a TCGA barcode can be translated into the name of the institution that contributed the sample. To do this, we create a small lookup table containing the codes present in our dataset and their corresponding institution names.
+The second segment of a TCGA barcode can be mapped to the institution that contributed the sample. To do this, we create a small lookup table containing the codes present in our dataset and their corresponding institution names.
 
 ```{r}
 tss_lookup <- tibble::tribble(
@@ -443,8 +455,14 @@ Finally, we can inspect the result:
 
 ```{r}
 df_ov %>% 
-  select(alt_sample_name, tissue_sample_code, tissue_source_site) %>% 
+  select(unique_patient_ID, tissue_sample_code, tissue_source_site) %>% 
   slice_head(n = 5)
+
+
+df_ov <- df_ov %>% 
+  select(-tissue_sample_code)
+
+df_ov <- df_ov %>% mutate(tissue_source_site = factor(tissue_source_site))
 ```
 
 Nicely done!
@@ -465,14 +483,14 @@ Nicely done!
 
 ## Joining Dataframes
 
-Often we have information stored in more than one table, and we want to merge these data together into a single dataset. For example, here we would like to join our `df_ov` and `df_exp` data table by IDs.
+Often, information is stored across multiple tables, and we need to combine them into a single dataset. Here, we will join `df_ov` and `df_exp` by patient ID.
 
-Let's make a subset of each of the datasets to have a better overview of what is going on.
+To make the join examples easier to follow, we will first create small subsets of each dataset.
 
 ```{r}
 df_exp_subset <- df_exp %>% 
   arrange(unique_patient_ID) %>% 
-  slice(1:5) %>% select(1:5)
+  dplyr::slice(1:5) %>% dplyr::select(1:5)
 
 df_exp_subset
 ```
@@ -480,7 +498,7 @@ df_exp_subset
 ```{r}
 df_ov_subset <- df_ov %>% 
   arrange(unique_patient_ID) %>% 
-  slice(3:7) %>% select(2:4, vital_status)
+  dplyr::slice(3:7) %>% select(2:4, vital_status)
 df_ov_subset
 
 ```
@@ -539,7 +557,7 @@ df_ov_subset %>%
 
 #### Right Join
 
-A **right join** is the opposite: it keeps **all rows from** `df_ov_subset` and adds matching data from `df_exp_subset` wherever it can.
+A **right join** is the opposite: it keeps **all rows from** `df_exp_subset` and adds matching data from `df_ov_subset` wherever it can.
 
 ```{r}
 df_ov_subset %>% 
@@ -564,9 +582,11 @@ df_comb <- df_ov %>%
 
 -   Loaded and explored clinical and expression datasets
 
--   Cleaned whitespace, fixed types, dropped unnecessary variables
+-   Cleaned missing values and whitespace
 
--   Created new columns through logic and string operations
+-   Fixed variable types and removed uninformative variables
+
+-   Created new variables using conditional logic and string manipulation
 
 -   Merged the clinical and expression data for downstream analysis
 
