@@ -1228,13 +1228,15 @@ Caused by error in `mean.default()`:
 <p>And inspect those samples in the original dataset:</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb60"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb60-1"><a href="#cb60-1" aria-hidden="true" tabindex="-1"></a>df_comb <span class="sc">%&gt;%</span></span>
-<span id="cb60-2"><a href="#cb60-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(unique_patient_ID <span class="sc">%in%</span> outlier_ids) <span class="sc">%&gt;%</span> <span class="fu">select</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb60-2"><a href="#cb60-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(unique_patient_ID <span class="sc">%in%</span> outlier_ids) <span class="sc">%&gt;%</span> <span class="fu">select</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">8</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 1 × 5
+<pre><code># A tibble: 1 × 8
   alt_sample_name              unique_patient_ID summarygrade figo_stage
   &lt;chr&gt;                        &lt;chr&gt;             &lt;fct&gt;        &lt;fct&gt;     
 1 TCGA-04-1514-01A-01R-0502-01 TCGA-04-1514-01A  LOW          Stage III 
-# ℹ 1 more variable: age_at_initial_path_diagn &lt;dbl&gt;</code></pre>
+# ℹ 4 more variables: age_at_initial_path_diagn &lt;dbl&gt;,
+#   percent_stromal_cells &lt;dbl&gt;, percent_tumor_cells &lt;dbl&gt;,
+#   days_to_death_or_last_follow_up &lt;dbl&gt;</code></pre>
 </div>
 </div>
 <p>Next, we’ll bring back our&nbsp;<strong>summary statistics table</strong>&nbsp;to see whether these measurements fall outside what’s typical for the dataset.</p>
