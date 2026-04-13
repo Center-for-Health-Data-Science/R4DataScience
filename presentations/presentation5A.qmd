@@ -13,7 +13,6 @@ In this section we'll look at how to define and fit regression models in R.
 ```{r warning=FALSE, message=FALSE}
 library(tidyverse)
 library(caret)
-library(readxl)
 ```
 
 ## Part1: Linear Regression
@@ -34,7 +33,8 @@ df_smoke
 We have daily cigarettes smoked (number) and life (in years). Both of these are numeric variables. We also have a variable named exercise, it seems that this variable might in fact be an ordinal factor variable. Exercise is encoded as a numeric variable, so the first thing we will do is to convert it to a factor.
 
 ```{r}
-df_smoke %>% distinct(exercise)
+df_smoke %>% 
+  distinct(exercise)
 
 df_smoke <- df_smoke %>% 
   mutate(exercise = as.factor(exercise))
@@ -52,7 +52,7 @@ set.seed(123)
 df_smoke$ID <- 1:nrow(df_smoke)
 
 train <- df_smoke %>% 
-  sample_frac(0.75)
+  sample_frac(0.70)
 
 nrow(train)
 
@@ -86,7 +86,7 @@ We need to tell R which of our variables is the outcome, $y$, and which predicto
 
 ```{r eval=FALSE}
 #the formula is written like so:
-lm(y ~ x_1 + x_2 + ...)
+lm(y ~ x1 + x2 + ..., data = myDataSet)
 #see the help
 ?lm
 ```
@@ -105,6 +105,7 @@ By calling `lm` we have already trained our model! The return of `lm()` is, just
 ```{r}
 class(model)
 names(model)
+model
 ```
 
 Let's have a look at the results. The summary gives us a lot of information about the model we trained:
@@ -126,7 +127,7 @@ The **R-squared** value indicates the proportion of variance explained by the mo
 
 Finally, the **F-statistic** and its p-value tests whether the model as a whole explains a significant portion of the variance in the response variable (the outcome, $y$).
 
-Lets plot the results:
+Lets plot the results and IMPORTANTLY check if model assumptions are upheld:
 
 ```{r}
 par(mfrow=c(2,2))
@@ -135,11 +136,15 @@ plot(model)
 
 ### Model interpretation
 
-Plot to understand the model:
+Now, lets predict the life-expectancy for the individuals in our training data based on our fitted model. For this we will use the `predict()` function:
 
 ```{r, eval=FALSE, echo=FALSE}
 train$predicted_life <- predict(model, newdata = train)
+```
 
+Plot to understand the model
+
+```{r, eval=FALSE, echo=FALSE}
 ggplot(train) + 
   geom_point(aes(x = daily_cigarettes, 
                  y = life, 
@@ -176,7 +181,7 @@ We now use our held out test data to evaluate the model performance. For that we
 
 ```{r}
 #use the fitted model to make predictions for the test data
-y_pred <- predict(model, test)
+y_pred <- predict(model, newdata = test)
 ```
 
 Let's see how the predicted values fit with the observed values.
@@ -196,7 +201,7 @@ Not too bad! We usually calculate the root mean square error (rmse) between pred
 RMSE(pred$real,pred$pred)
 ```
 
-Our predictions are on average 0.88 years 'off'.
+Our predictions are on average 0.87 years 'off'.
 
 ## Part2: Logistic Regression
 
@@ -218,13 +223,13 @@ Let's remake our training and test data. This time we have classes that we would
 
 ```{r}
 # Set seed to ensure reproducibility
-set.seed(123)  
+set.seed(100)  
 
 #add an ID column to keep track of observations
 df_smoke$ID <- 1:nrow(df_smoke)
 
 train <- df_smoke %>% 
-  sample_frac(0.75)
+  sample_frac(0.70)
 
 table(train$early_death)
 
@@ -256,15 +261,23 @@ In a logistic regression model the link function is the logit. In a linear model
 
 In order to understand what that means we'll need a tiny bit of math.
 
-Our $y$ is either 0 or 1. However we cannot model that, so instead we will model the probability of the outcome being 1: $P(earlydeath == 1)$. Except probabilities are bounded between 0 and 1 which is mathematically difficult to impose (it means all $y's$ have to be between these two values and how are we gonna enforce that?) So instead, we will model the log-odds of early death:
+Our $y$ is either 0 or 1. However we cannot model that, so instead we will model the probability of the outcome being 1: $P(earlydeath == 1)$. This means that all $y's$ have to be between these two values and how are we gonna enforce that? We wont.
+
+Instead, we will model the log-odds of early death:
 
 $$ y = \log(\frac{P(earlydeath == 1)}{1-P(earlydeath == 1)})$$
 
 It may not look like it but we promise you this $y$ is a well behaved number because it can be anywhere between - infinity and + infinity. So therefore our actual model is:
 
+$$ y \sim \beta * X$$
+
 $$ \log(\frac{P(earlydeath == 1)}{1-P(earlydeath == 1)} = \beta * X$$
 
-And if we want to know what this means for the probability of dying early, we just take invert the link function:
+And if we want to know what this means for the probability of dying early, we just take and invert the link function:
+
+$$ P(earlydeath == 1) = \frac{e^{(\beta * X)}}{1+ e^{(\beta * X)}} $$
+
+Which can be shortened to:
 
 $$ P(earlydeath == 1) = \frac{1}{1+ e^{(-y)}} $$
 
@@ -276,16 +289,17 @@ So in order to fit a logistic regression we will use the function for generalize
 
 ```{r}
 model_log <- glm(early_death ~ daily_cigarettes + exercise, data = train, family = "binomial")
+
 summary(model_log)
 ```
 
 ### Model interpretation
 
-We see from looking at the summary that the coefficient of exercise level 1 and level 2 is not significant. This means that we are not confident that doing any level of exercise has a significant impact on the probability of dying before 75 compared to doing no exercise. This does not mean that there can be no influence, merely that we do not have enough data to detect it if it is there.
+We see from looking at the summary that the coefficient of exercise level 1 and level 2 is not significant. This means that we are not confident that doing any level of exercise has a significant impact on the probability of dying before 75 compared to doing no exercise.
 
 Are you surprised? Exercise level was significant when we modelled the number of years lived with linear regressions.
 
-With the number of daily cigarettes predictor we have a high degree of certainty that it influences the probability of dying before 75 (in this dataset!), but what does a coefficient of 0.84 mean?
+With the number of daily cigarettes predictor we have a high degree of certainty that it influences the probability of dying before 75 (in this dataset!), but what does a coefficient of 1.1 mean?
 
 We know that:
 
@@ -295,7 +309,7 @@ and (leaving out the exercise level since it's not significant):
 
 $$ y = \beta_0 + \beta_1 * cigs $$
 
-So how does $y$ change as $0.84 * cigs$ becomes larger? Let's agree that $y$ becomes larger. What does that mean for the probability of dying before 75? Is $e^{(-y)}$ a large number if $y$ is large? Luckily we have a calculator handy:
+So how does $y$ change as $1.1 * cigs$ becomes larger? Let's agree that $y$ becomes larger. What does that mean for the probability of dying before 75? Is $e^{(-y)}$ a large number if $y$ is large? Luckily we have a calculator handy:
 
 ```{r}
 #exp(b) is e^b in R
@@ -317,7 +331,11 @@ So the larger $y$ the smaller $e^{(-y)}$ and the closer we get to $P(earlydeath 
 
 Now we know how to fit linear models and interpret the results. But often there are several predictors we could include or not include, so how do we know that one model is better than another?
 
-There are several ways to compare models. One is the likelihood ratio test which tests whether adding predictors significantly improves model fit by comparing the log-likelihoods of the two models. Another much used comparison is to look at the AIC (Akaike Information Criterion) or BIC (Bayesian Information Criterion). Lower AIC/BIC values generally indicate a better trade-off between model fit and complexity.
+There are several ways to compare models.
+
+One is the likelihood ratio test which tests whether adding predictors significantly improves model fit by comparing the log-likelihoods of the two models.
+
+Another very used way of comparing models is to look at the AIC (Akaike Information Criterion) or BIC (Bayesian Information Criterion). Lower AIC/BIC values generally indicate a better trade-off between model fit and complexity.
 
 For example we made this logistic regression model above:
 
@@ -325,7 +343,7 @@ For example we made this logistic regression model above:
 summary(model_log)
 ```
 
-But `exercise` does not have a significant p-value. Perhaps we would have a better model if we only use `dialy_cigarettes`?
+But `exercise1` does not have a significant p-value. Perhaps we would have a better model if we only use `dialy_cigarettes`?
 
 Let's compare them:
 
@@ -340,9 +358,9 @@ We can use an anova with the Chi-square (kai-square) test to compare the log-lik
 anova(model_reduced, model_log, test = 'Chisq')
 ```
 
-The p-value of the Chi-square test tells us if there is evidence that the difference in log-likelihoods is significant. If it is not significant, we do not have evidence that the more complex model is a better fit than the less complex model and we would therefore choose the less complex model with fewer predictors since that gives us more statistical power and less overfitting.
+The p-value of the Chi-square test tells us that there is evidence that the difference in log-likelihoods is significant. If it is not significant we would choose the less complex model with fewer predictors since that gives us more statistical power and less overfitting.
 
-In this case the p-value is significant which means that the more complex model, that includes exercises, is a better fit. Do you think this makes sense with the exercises levels not being significant predictors when we looked at `summary(model_log)`.
+In our case the p-value is significant indicating that the model with exercise might in fact be better even if Exercise level 1 was not significant in the model.
 
 ### Model Evaluation
 
