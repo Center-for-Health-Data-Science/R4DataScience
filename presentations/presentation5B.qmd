@@ -17,7 +17,7 @@ For this we will use the wine data set as an example:
 ```{r warning=FALSE, message=FALSE}
 library(tidyverse)
 library(ggplot2)
-library(ContaminatedMixt)
+#library(ContaminatedMixt)
 library(factoextra)
 ```
 
@@ -25,11 +25,13 @@ Let's load in the dataset
 
 ```{r}
 data('wine') #load dataset
-df_wine <- wine %>% as_tibble() #convert to tibble
+df_wine <- wine %>% 
+  as_tibble() #convert to tibble
+
 df_wine
 ```
 
-This dataset contains 178 wine, each corresponding to one of three different cultivars of wine. It has 13 numerical columns that record different features of the wine.
+This dataset contains 178 rows, each corresponding to one of three different cultivars of wine. It has 13 numerical columns that record different features of the wine.
 
 We will try out a popular method, k-means clustering. It works by initializing K centroids and assigning each data point to the nearest centroid. The algorithm then recalculates the centroids as the mean of the points in each cluster, repeating the process until the clusters stabilize. You can see an illustration of the process below. Its weakness is that we need to define the number of centroids, i.e. clusters, beforehand.
 
@@ -134,13 +136,24 @@ fzPlot <- fviz_cluster(kmeans_res, data = kmeans_df,
 wine_labs <- transform(fzPlot$data,
                        my_label = df_wine$Type)
 
+wine_labs
+```
+
+
+```{r}
 fzPlot + geom_text(data = wine_labs,
   aes(label = my_label), size = 2.5)
 ```
 
-The answer to question (II) is a bit more tricky. One way to get a sense of which variables may be contributing to the clustering is to examine the variance of the cluster centers across variables. A higher variance suggests that the cluster centroids differ more on that variable, so that variable may be playing a larger role in separating the clusters.
+The answer to question (II) is a bit more tricky. 
+One way to get a sense of which variables may be contributing to the clustering is to examine the variance of the cluster centers for each variable. A higher variance suggests that the cluster centroids differ more on that variable, so that variable may be playing a larger role in separating the clusters.
 
 **Note:** This is only a descriptive heuristic, not a statistical test. Unlike PCA, k-means does not produce loadings, so there is no direct measure of variable importance in the same sense.
+
+```{r}
+kmeans_res$centers
+```
+
 
 ```{r}
 var_importance <- apply(kmeans_res$centers, 2, var)
@@ -326,7 +339,7 @@ rf_model$bestTune
 plot(rf_model)
 ```
 
-As we see from the plot above, the model performs best with four variables randomly sampled as candidates at each split (`mtry = 4`). There are different `tuning parameters` in a random forest, these include; n_estimators (number of trees), max_features (features to try at splits), max_depth (tree depth), and min_samples_split (minimum number of samples required to split a node).
+As we see from the plot above, the model performs best with four variables randomly sampled as candidates at each split (`mtry = 10`). There are different `tuning parameters` in a random forest, these include; n_estimators (number of trees), max_features (features to try at splits), max_depth (tree depth), and min_samples_split (minimum number of samples required to split a node).
 
 The `tuneLength` argument in the `train()` function specifies how many different values of the tuning parameters to try.
 
@@ -363,4 +376,4 @@ varImportance <- as.data.frame(as.matrix(varImpOut$importance)) %>%
 varImportance
 ```
 
-Variable importance is based on how much each variable improves the model's accuracy across splits. Variables `nMajorVessels` and `DefectType` appear to be highlight predictive of heart disease.
+Variable importance is based on how much each variable improves the model's accuracy across splits. Variables `DefectType`, `nMajorVessels` and `chestPainType`  appear to be highlight predictive of heart disease.
