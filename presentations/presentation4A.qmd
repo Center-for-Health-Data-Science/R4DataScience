@@ -1,5 +1,5 @@
 ---
-title: "Presentation 4A: Scripting in R - Conditions and For-loops"
+title: "Presentation 4A: Scripting in R - Conditions and Loops"
 format: html
 project:
  type: website
