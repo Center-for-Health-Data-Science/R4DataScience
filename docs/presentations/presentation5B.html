@@ -1,0 +1,1787 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.8.24">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Presentation 5B: Kmeans and Random Forest – R for Data Science</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dc55a5b9e770e841cd82e46aadbfb9b0.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark-b651517ce65839d647a86e2780455cfb.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dc55a5b9e770e841cd82e46aadbfb9b0.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-22462e58806cbbcd8bc8d1d3f565882a.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-dark-322e48d93d3308346e1c37988a1f282e.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../site_libs/bootstrap/bootstrap-22462e58806cbbcd8bc8d1d3f565882a.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+</head>
+
+<body class="nav-sidebar floating nav-fixed quarto-light"><script id="quarto-html-before-body" type="application/javascript">
+    const toggleBodyColorMode = (bsSheetEl) => {
+      const mode = bsSheetEl.getAttribute("data-mode");
+      const bodyEl = window.document.querySelector("body");
+      if (mode === "dark") {
+        bodyEl.classList.add("quarto-dark");
+        bodyEl.classList.remove("quarto-light");
+      } else {
+        bodyEl.classList.add("quarto-light");
+        bodyEl.classList.remove("quarto-dark");
+      }
+    }
+    const toggleBodyColorPrimary = () => {
+      const bsSheetEl = window.document.querySelector("link#quarto-bootstrap:not([rel=disabled-stylesheet])");
+      if (bsSheetEl) {
+        toggleBodyColorMode(bsSheetEl);
+      }
+    }
+    const setColorSchemeToggle = (alternate) => {
+      const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
+      for (let i=0; i < toggles.length; i++) {
+        const toggle = toggles[i];
+        if (toggle) {
+          if (alternate) {
+            toggle.classList.add("alternate");
+          } else {
+            toggle.classList.remove("alternate");
+          }
+        }
+      }
+    };
+    const toggleColorMode = (alternate) => {
+      // Switch the stylesheets
+      const primaryStylesheets = window.document.querySelectorAll('link.quarto-color-scheme:not(.quarto-color-alternate)');
+      const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
+      manageTransitions('#quarto-margin-sidebar .nav-link', false);
+      if (alternate) {
+        // note: dark is layered on light, we don't disable primary!
+        enableStylesheet(alternateStylesheets);
+        for (const sheetNode of alternateStylesheets) {
+          if (sheetNode.id === "quarto-bootstrap") {
+            toggleBodyColorMode(sheetNode);
+          }
+        }
+      } else {
+        disableStylesheet(alternateStylesheets);
+        enableStylesheet(primaryStylesheets)
+        toggleBodyColorPrimary();
+      }
+      manageTransitions('#quarto-margin-sidebar .nav-link', true);
+      // Switch the toggles
+      setColorSchemeToggle(alternate)
+      // Hack to workaround the fact that safari doesn't
+      // properly recolor the scrollbar when toggling (#1455)
+      if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
+        manageTransitions("body", false);
+        window.scrollTo(0, 1);
+        setTimeout(() => {
+          window.scrollTo(0, 0);
+          manageTransitions("body", true);
+        }, 40);
+      }
+    }
+    const disableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        stylesheet.rel = 'disabled-stylesheet';
+      }
+    }
+    const enableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        if(stylesheet.rel !== 'stylesheet') { // for Chrome, which will still FOUC without this check
+          stylesheet.rel = 'stylesheet';
+        }
+      }
+    }
+    const manageTransitions = (selector, allowTransitions) => {
+      const els = window.document.querySelectorAll(selector);
+      for (let i=0; i < els.length; i++) {
+        const el = els[i];
+        if (allowTransitions) {
+          el.classList.remove('notransition');
+        } else {
+          el.classList.add('notransition');
+        }
+      }
+    }
+    const isFileUrl = () => {
+      return window.location.protocol === 'file:';
+    }
+    const hasAlternateSentinel = () => {
+      let styleSentinel = getColorSchemeSentinel();
+      if (styleSentinel !== null) {
+        return styleSentinel === "alternate";
+      } else {
+        return false;
+      }
+    }
+    const setStyleSentinel = (alternate) => {
+      const value = alternate ? "alternate" : "default";
+      if (!isFileUrl()) {
+        window.localStorage.setItem("quarto-color-scheme", value);
+      } else {
+        localAlternateSentinel = value;
+      }
+    }
+    const getColorSchemeSentinel = () => {
+      if (!isFileUrl()) {
+        const storageValue = window.localStorage.getItem("quarto-color-scheme");
+        return storageValue != null ? storageValue : localAlternateSentinel;
+      } else {
+        return localAlternateSentinel;
+      }
+    }
+    const toggleGiscusIfUsed = (isAlternate, darkModeDefault) => {
+      const baseTheme = document.querySelector('#giscus-base-theme')?.value ?? 'light';
+      const alternateTheme = document.querySelector('#giscus-alt-theme')?.value ?? 'dark';
+      let newTheme = '';
+      if(authorPrefersDark) {
+        newTheme = isAlternate ? baseTheme : alternateTheme;
+      } else {
+        newTheme = isAlternate ? alternateTheme : baseTheme;
+      }
+      const changeGiscusTheme = () => {
+        // From: https://github.com/giscus/giscus/issues/336
+        const sendMessage = (message) => {
+          const iframe = document.querySelector('iframe.giscus-frame');
+          if (!iframe) return;
+          iframe.contentWindow.postMessage({ giscus: message }, 'https://giscus.app');
+        }
+        sendMessage({
+          setConfig: {
+            theme: newTheme
+          }
+        });
+      }
+      const isGiscussLoaded = window.document.querySelector('iframe.giscus-frame') !== null;
+      if (isGiscussLoaded) {
+        changeGiscusTheme();
+      }
+    };
+    const authorPrefersDark = false;
+    const darkModeDefault = authorPrefersDark;
+      document.querySelector('link#quarto-text-highlighting-styles.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+      document.querySelector('link#quarto-bootstrap.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+    let localAlternateSentinel = darkModeDefault ? 'alternate' : 'default';
+    // Dark / light mode switch
+    window.quartoToggleColorScheme = () => {
+      // Read the current dark / light value
+      let toAlternate = !hasAlternateSentinel();
+      toggleColorMode(toAlternate);
+      setStyleSentinel(toAlternate);
+      toggleGiscusIfUsed(toAlternate, darkModeDefault);
+      window.dispatchEvent(new Event('resize'));
+    };
+    // Switch to dark mode if need be
+    if (hasAlternateSentinel()) {
+      toggleColorMode(true);
+    } else {
+      toggleColorMode(false);
+    }
+  </script>
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a href="../index.html" class="navbar-brand navbar-brand-logo">
+    </a>
+    <a class="navbar-brand" href="../index.html">
+    <span class="navbar-title">R for Data Science</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link active" href="../index.html" aria-current="page"> 
+<span class="menu-text">Course Material</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../about_heads.html"> 
+<span class="menu-text">About us</span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+  <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../presentations/presentation1.html">Presentations</a></li><li class="breadcrumb-item"><a href="../presentations/presentation5B.html">Presentation 5B: K-means and Random Forest</a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+      <a href="../index.html" class="sidebar-logo-link">
+      </a>
+      </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../slides/R4datascience_slides.pdf" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Slides️</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+ <span class="menu-text">Presentations</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../presentations/presentation1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Presentation 1: Data Cleaning</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../presentations/presentation2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Presentation 2: Summary Statistics and Data Wrangling</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../presentations/presentation3.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Presentation 3: Exploratory Data Analysis</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../presentations/presentation4A.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Presentation 4A: Conditions and For-loops</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../presentations/presentation4B.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Presentation 4B: Functions</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../presentations/presentation5A.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Presentation 5A: Linear and Logistic Regression</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../presentations/presentation5B.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">Presentation 5B: K-means and Random Forest</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../presentations/presentation5C.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Presentation 5C: Elastic Net Regression</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="false">
+ <span class="menu-text">Exercises</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../exercises/exercise0.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Exercise 0: R script and Quarto</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../exercises/exercise1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Exercise 1: Data Cleaning</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../exercises/exercise2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Exercise 2: Summary Statistics and Data Wrangling</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../exercises/exercise3.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Exercise 3: Exploratory Data Analysis</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../exercises/exercise4A.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Exercise 4A: Conditions and For-loops</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../exercises/exercise4B.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Exercise 4B: Functions</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../exercises/exercise5A.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Exercise 5A: Linear and Logistic Regression</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../exercises/exercise5B.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Exercise 5B: K-means and Random Forest</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../exercises/exercise5C.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Exercise 5C: Elastic Net Regression</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="false">
+ <span class="menu-text">Solutions</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 ">  
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="false">
+ <span class="menu-text">Cheat Sheets</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../CheatSheet/quartoCheatSheet.pdf" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Quarto</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../CheatSheet/BaseRCheatSheet.pdf" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Base R</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../CheatSheet/TidyverseCheatSheet.pdf" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Tidyverse</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../CheatSheet/ggplotCheatSheet.pdf" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">ggplot2</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#part-1-k-means-clustering" id="toc-part-1-k-means-clustering" class="nav-link active" data-scroll-target="#part-1-k-means-clustering">Part 1: K-means Clustering</a>
+  <ul class="collapse">
+  <li><a href="#wine-dataset" id="toc-wine-dataset" class="nav-link" data-scroll-target="#wine-dataset">Wine dataset</a></li>
+  <li><a href="#running-k-means" id="toc-running-k-means" class="nav-link" data-scroll-target="#running-k-means">Running k-means</a></li>
+  <li><a href="#visualizing-k-means-results" id="toc-visualizing-k-means-results" class="nav-link" data-scroll-target="#visualizing-k-means-results">Visualizing k-means results</a></li>
+  <li><a href="#optimal-number-of-clusters" id="toc-optimal-number-of-clusters" class="nav-link" data-scroll-target="#optimal-number-of-clusters">Optimal number of clusters</a></li>
+  </ul></li>
+  <li><a href="#part-2-random-forest" id="toc-part-2-random-forest" class="nav-link" data-scroll-target="#part-2-random-forest">Part 2: Random Forest</a>
+  <ul class="collapse">
+  <li><a href="#train-test-set" id="toc-train-test-set" class="nav-link" data-scroll-target="#train-test-set">Train &amp; Test Set</a></li>
+  <li><a href="#random-forest-model" id="toc-random-forest-model" class="nav-link" data-scroll-target="#random-forest-model">Random Forest Model</a></li>
+  </ul></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../presentations/presentation1.html">Presentations</a></li><li class="breadcrumb-item"><a href="../presentations/presentation5B.html">Presentation 5B: K-means and Random Forest</a></li></ol></nav>
+<div class="quarto-title">
+<h1 class="title">Presentation 5B: Kmeans and Random Forest</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="part-1-k-means-clustering" class="level2">
+<h2 class="anchored" data-anchor-id="part-1-k-means-clustering">Part 1: K-means Clustering</h2>
+<p>Clustering is a type of unsupervised learning technique used to group similar data points together based on their features. The goal is to find inherent patterns or structures within the data, e.g.&nbsp;to see whether the data points fall into distinct groups with distinct features or not.</p>
+<section id="wine-dataset" class="level3">
+<h3 class="anchored" data-anchor-id="wine-dataset">Wine dataset</h3>
+<p>For this we will use the wine data set as an example:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ContaminatedMixt)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(factoextra)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Let’s load in the dataset</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(<span class="st">'wine'</span>) <span class="co">#load dataset</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>df_wine <span class="ot">&lt;-</span> wine <span class="sc">%&gt;%</span> </span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as_tibble</span>() <span class="co">#convert to tibble</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>df_wine</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 178 × 14
+   Type   Alcohol Malic   Ash Alcalinity Magnesium Phenols Flavanoids
+   &lt;fct&gt;    &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;      &lt;dbl&gt;     &lt;int&gt;   &lt;dbl&gt;      &lt;dbl&gt;
+ 1 Barolo    14.2  1.71  2.43       15.6       127    2.8        3.06
+ 2 Barolo    13.2  1.78  2.14       11.2       100    2.65       2.76
+ 3 Barolo    13.2  2.36  2.67       18.6       101    2.8        3.24
+ 4 Barolo    14.4  1.95  2.5        16.8       113    3.85       3.49
+ 5 Barolo    13.2  2.59  2.87       21         118    2.8        2.69
+ 6 Barolo    14.2  1.76  2.45       15.2       112    3.27       3.39
+ 7 Barolo    14.4  1.87  2.45       14.6        96    2.5        2.52
+ 8 Barolo    14.1  2.15  2.61       17.6       121    2.6        2.51
+ 9 Barolo    14.8  1.64  2.17       14          97    2.8        2.98
+10 Barolo    13.9  1.35  2.27       16          98    2.98       3.15
+# ℹ 168 more rows
+# ℹ 6 more variables: Nonflavanoid &lt;dbl&gt;, Proanthocyanins &lt;dbl&gt;, Color &lt;dbl&gt;,
+#   Hue &lt;dbl&gt;, Dilution &lt;dbl&gt;, Proline &lt;int&gt;</code></pre>
+</div>
+</div>
+<p>This dataset contains 178 rows, each corresponding to one of three different cultivars of wine. It has 13 numerical columns that record different features of the wine.</p>
+<p>We will try out a popular method, k-means clustering. It works by initializing K centroids and assigning each data point to the nearest centroid. The algorithm then recalculates the centroids as the mean of the points in each cluster, repeating the process until the clusters stabilize. You can see an illustration of the process below. Its weakness is that we need to define the number of centroids, i.e.&nbsp;clusters, beforehand.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../figures/kmeans.jpg" class="img-fluid quarto-figure quarto-figure-center figure-img"></p>
+</figure>
+</div>
+</section>
+<section id="running-k-means" class="level3">
+<h3 class="anchored" data-anchor-id="running-k-means">Running k-means</h3>
+<p>For k-means it is very important that the data is numeric and scaled so we will do that before running the algorithm.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Set seed to ensure reproducibility</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)  </span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Pull numeric variables and scale these</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>kmeans_df <span class="ot">&lt;-</span> df_wine <span class="sc">%&gt;%</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">select</span>(<span class="fu">where</span>(is.numeric)) <span class="sc">%&gt;%</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="fu">across</span>(<span class="fu">everything</span>(), scale))</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>kmeans_df</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 178 × 13
+   Alcohol[,1] Malic[,1] Ash[,1] Alcalinity[,1] Magnesium[,1] Phenols[,1]
+         &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;          &lt;dbl&gt;         &lt;dbl&gt;       &lt;dbl&gt;
+ 1       1.51    -0.561    0.231         -1.17         1.91         0.807
+ 2       0.246   -0.498   -0.826         -2.48         0.0181       0.567
+ 3       0.196    0.0212   1.11          -0.268        0.0881       0.807
+ 4       1.69    -0.346    0.487         -0.807        0.928        2.48 
+ 5       0.295    0.227    1.84           0.451        1.28         0.807
+ 6       1.48    -0.516    0.304         -1.29         0.858        1.56 
+ 7       1.71    -0.417    0.304         -1.47        -0.262        0.327
+ 8       1.30    -0.167    0.888         -0.567        1.49         0.487
+ 9       2.25    -0.623   -0.716         -1.65        -0.192        0.807
+10       1.06    -0.883   -0.352         -1.05        -0.122        1.09 
+# ℹ 168 more rows
+# ℹ 7 more variables: Flavanoids &lt;dbl[,1]&gt;, Nonflavanoid &lt;dbl[,1]&gt;,
+#   Proanthocyanins &lt;dbl[,1]&gt;, Color &lt;dbl[,1]&gt;, Hue &lt;dbl[,1]&gt;,
+#   Dilution &lt;dbl[,1]&gt;, Proline &lt;dbl[,1]&gt;</code></pre>
+</div>
+</div>
+<p>K-means clustering in R is easy, we simply run the <code>kmeans()</code> function:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)  </span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>kmeans_res <span class="ot">&lt;-</span> kmeans_df <span class="sc">%&gt;%</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kmeans</span>(<span class="at">centers =</span> <span class="dv">4</span>, <span class="at">nstart =</span> <span class="dv">25</span>)</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>kmeans_res</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>K-means clustering with 4 clusters of sizes 45, 56, 49, 28
+
+Cluster means:
+     Alcohol       Malic        Ash Alcalinity   Magnesium    Phenols
+1 -0.9051690 -0.53898599 -0.6498944  0.1592193 -0.71473842 -0.4537841
+2  0.9580555 -0.37748461  0.1969019 -0.8214121  0.39943022  0.9000233
+3  0.1860184  0.90242582  0.2485092  0.5820616 -0.05049296 -0.9857762
+4 -0.7869073  0.04195151  0.2157781  0.3683284  0.43818899  0.6543578
+  Flavanoids Nonflavanoid Proanthocyanins      Color        Hue    Dilution
+1 -0.2408779    0.3315072      -0.4329238 -0.9177666  0.5202140  0.07869143
+2  0.9848901   -0.6204018       0.5575193  0.2423047  0.4799084  0.76926636
+3 -1.2327174    0.7148253      -0.7474990  0.9857177 -1.1879477 -1.29787850
+4  0.5746004   -0.5429201       0.8888549 -0.7346332  0.2830335  0.60628629
+     Proline
+1 -0.7820425
+2  1.2184972
+3 -0.3789756
+4 -0.5169332
+
+Clustering vector:
+  [1] 2 2 2 2 4 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 4 2 2 2 4 2 2 2 2 2 2 2 2 2 2 2
+ [38] 2 2 2 2 2 2 4 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 1 1 1 1 4 1 4 2 1 1 4 1 4 1 4
+ [75] 4 1 1 1 4 4 1 1 1 3 4 1 1 1 1 1 1 1 1 4 4 4 4 1 4 4 1 1 4 1 1 1 1 1 1 4 4
+[112] 1 1 1 1 1 1 1 1 1 4 4 4 4 4 1 4 1 1 1 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3
+[149] 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3
+
+Within cluster sum of squares by cluster:
+[1] 289.9515 268.5747 302.9915 307.0966
+ (between_SS / total_SS =  49.2 %)
+
+Available components:
+
+[1] "cluster"      "centers"      "totss"        "withinss"     "tot.withinss"
+[6] "betweenss"    "size"         "iter"         "ifault"      </code></pre>
+</div>
+</div>
+<p>We can call <code>kmeans_res$centers</code> to inspect the values of the centroids. For example the center of cluster 1 is placed at the coordinates -0.79 for Alcohol, 0.04 for Malic Acid, 0.22 for Ash and so on. Since our data has 13 dimensions, i.e.&nbsp;features, the cluster centers also do.</p>
+<p>This is not super practical if we would like to visually inspect the clustering since we cannot plot in 13 dimensions. How could we solve this?</p>
+</section>
+<section id="visualizing-k-means-results" class="level3">
+<h3 class="anchored" data-anchor-id="visualizing-k-means-results">Visualizing k-means results</h3>
+<p>We would like to see where our wine bottles and their clusters lie in a low-dimensional space. This can easily be done using the <code>fviz_cluster()</code></p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">fviz_cluster</span>(<span class="at">object =</span> kmeans_res, </span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>             <span class="at">data =</span> kmeans_df,</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>             <span class="at">palette =</span> <span class="fu">c</span>(<span class="st">"#2E9FDF"</span>, <span class="st">"#00AFBB"</span>, <span class="st">"#E7B800"</span>, <span class="st">"orchid3"</span>), </span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>             <span class="at">geom =</span> <span class="st">"point"</span>,</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>             <span class="at">ellipse.type =</span> <span class="st">"norm"</span>, </span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>             <span class="at">ggtheme =</span> <span class="fu">theme_bw</span>())</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="presentation5B_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="optimal-number-of-clusters" class="level3">
+<h3 class="anchored" data-anchor-id="optimal-number-of-clusters">Optimal number of clusters</h3>
+<p>There are several ways to investigate the ideal number of clusters and <code>fviz_nbclust</code> from the <code>factoextra</code> package provides three of them:</p>
+<p>The so-called elbow method observes how the sum of squared errors (sse) changes as we vary the number of clusters. This is also sometimes referred to as “within sum of square” (wss).</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>kmeans_df <span class="sc">%&gt;%</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fviz_nbclust</span>(kmeans, <span class="at">method =</span> <span class="st">"wss"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="presentation5B_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>The gap statistic compares the within-cluster variation (how compact the clusters are) for different values of K to the expected variation under a null reference distribution (i.e., random clustering).</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>kmeans_df <span class="sc">%&gt;%</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fviz_nbclust</span>(kmeans, <span class="at">method =</span> <span class="st">"gap_stat"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="presentation5B_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Both of these tell us that there should be three clusters and we also know that there are three cultivars of wine in the dataset. Let’s redo k-means with three centroids.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Set seed to ensure reproducibility</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)  </span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="co">#run kmeans</span></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>kmeans_res <span class="ot">&lt;-</span> kmeans_df <span class="sc">%&gt;%</span></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kmeans</span>(<span class="at">centers =</span> <span class="dv">3</span>, <span class="at">nstart =</span> <span class="dv">25</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co">#add updated cluster info to the dataframe</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="fu">fviz_cluster</span>(kmeans_res, <span class="at">data =</span> kmeans_df,</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>             <span class="at">palette =</span> <span class="fu">c</span>(<span class="st">"#2E9FDF"</span>, <span class="st">"#00AFBB"</span>, <span class="st">"#E7B800"</span>), </span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>             <span class="at">geom =</span> <span class="st">"point"</span>,</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>             <span class="at">ellipse.type =</span> <span class="st">"norm"</span>, </span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>             <span class="at">ggtheme =</span> <span class="fu">theme_bw</span>())</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="presentation5B_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Now, some obvious questions to ask might be (I) how do the clusters relate to the three cultivars of wine in the dataset? and (II) which variables are mainly driving the clustering?</p>
+<p>Question (I) can be can be answered somewhat easily simply by coloring the clusters according to wine label or adding the label to the points in the plot above.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>fzPlot <span class="ot">&lt;-</span> <span class="fu">fviz_cluster</span>(kmeans_res, <span class="at">data =</span> kmeans_df,</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>             <span class="at">palette =</span> <span class="fu">c</span>(<span class="st">"#2E9FDF"</span>, <span class="st">"#00AFBB"</span>, <span class="st">"#E7B800"</span>), </span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>             <span class="at">geom =</span> <span class="st">"point"</span>,</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>             <span class="at">ellipse.type =</span> <span class="st">"norm"</span>, </span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>             <span class="at">ggtheme =</span> <span class="fu">theme_bw</span>())</span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>wine_labs <span class="ot">&lt;-</span> <span class="fu">transform</span>(fzPlot<span class="sc">$</span>data,</span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>                       <span class="at">my_label =</span> df_wine<span class="sc">$</span>Type)</span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a>wine_labs</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>    name           x           y      coord cluster   my_label
+1      1 -3.30742097 -1.43940225 13.0109123       2     Barolo
+2      2 -2.20324981  0.33245507  4.9648361       2     Barolo
+3      3 -2.50966069 -1.02825072  7.3556964       2     Barolo
+4      4 -3.74649719 -2.74861839 21.5911443       2     Barolo
+5      5 -1.00607049 -0.86738404  1.7645329       2     Barolo
+6      6 -3.04167373 -2.11643092 13.7310589       2     Barolo
+7      7 -2.44220051 -1.17154534  7.3368618       2     Barolo
+8      8 -2.05364379 -1.60443714  6.7916714       2     Barolo
+9      9 -2.50381135 -0.91548847  7.1071904       2     Barolo
+10    10 -2.74588238 -0.78721703  8.1595807       2     Barolo
+11    11 -3.46994837 -1.29866985 13.7270851       2     Barolo
+12    12 -1.74981688 -0.61025577  3.4342712       2     Barolo
+13    13 -2.10751729 -0.67380561  4.8956431       2     Barolo
+14    14 -3.44842921 -1.12744948 13.1628064       2     Barolo
+15    15 -4.30065228 -2.09007971 22.8640433       2     Barolo
+16    16 -2.29870383 -1.65787506  8.0325890       2     Barolo
+17    17 -2.16584568 -2.32075875 10.0768087       2     Barolo
+18    18 -1.89362947 -1.62677993  6.2322455       2     Barolo
+19    19 -3.53202167 -2.51125971 18.7816024       2     Barolo
+20    20 -2.07865856 -1.05815307  5.4405093       2     Barolo
+21    21 -3.11561376 -0.78468361 10.3227775       2     Barolo
+22    22 -1.08351361 -0.24106354  1.2321134       2     Barolo
+23    23 -2.52809263  0.09158228  6.3996397       2     Barolo
+24    24 -1.64036108  0.51482667  2.9558310       2     Barolo
+25    25 -1.75662066  0.31625681  3.1857345       2     Barolo
+26    26 -0.98729406 -0.93802129  1.8546335       2     Barolo
+27    27 -1.77028387 -0.68424496  3.6020961       2     Barolo
+28    28 -1.23194878  0.08955442  1.5257178       2     Barolo
+29    29 -2.18225047 -0.68762990  5.2350520       2     Barolo
+30    30 -2.24976267 -0.19092336  5.0978838       2     Barolo
+31    31 -2.49318704 -1.23734344  7.7470004       2     Barolo
+32    32 -2.66987964 -1.46773335  9.2824985       2     Barolo
+33    33 -1.62399801 -0.05255620  2.6401317       2     Barolo
+34    34 -1.89733870 -1.62846673  6.2517980       2     Barolo
+35    35 -1.40642118 -0.69597107  2.4623963       2     Barolo
+36    36 -1.89847087 -0.17621387  3.6352430       2     Barolo
+37    37 -1.38096669 -0.65678714  2.3384383       2     Barolo
+38    38 -1.11905070 -0.11378878  1.2652224       2     Barolo
+39    39 -1.49796891  0.76726764  2.8326105       2     Barolo
+40    40 -2.52268490 -1.79793023  9.5964922       2     Barolo
+41    41 -2.58081526 -0.77742329  7.2649943       2     Barolo
+42    42 -0.66660159 -0.16948285  0.4730821       2     Barolo
+43    43 -3.06216898 -1.15266742 10.7055210       2     Barolo
+44    44 -0.46090897 -0.32981177  0.3212129       2     Barolo
+45    45 -2.09544094  0.07080918  4.3958867       2     Barolo
+46    46 -1.13297020 -1.77210849  4.4239900       2     Barolo
+47    47 -2.71893118 -1.18798353  8.8038917       2     Barolo
+48    48 -2.81340300 -0.64444071  8.3305403       2     Barolo
+49    49 -2.00419725 -1.24352164  5.5631527       2     Barolo
+50    50 -2.69987528 -1.74703922 10.3414726       2     Barolo
+51    51 -3.20587409 -0.16652226 10.3053583       2     Barolo
+52    52 -2.85091773 -0.74318238  8.6800519       2     Barolo
+53    53 -3.49574328 -1.60819732 14.8065197       2     Barolo
+54    54 -2.21853316 -1.86989325  8.4183902       2     Barolo
+55    55 -2.14094846 -1.01389147  5.6116362       2     Barolo
+56    56 -2.46238340 -1.32526988  7.8196723       2     Barolo
+57    57 -2.73380617 -1.43250785  9.5257749       2     Barolo
+58    58 -2.16762631 -1.20878999  6.1597770       2     Barolo
+59    59 -3.13054925 -1.72670828 12.7818601       2     Barolo
+60    60  0.92596992  3.06484062 10.2506683       3 Grignolino
+61    61  1.53814123  1.37755758  4.2635433       3 Grignolino
+62    62  1.83108449  0.82764942  4.0378740       1 Grignolino
+63    63 -0.03052074  1.25923400  1.5866018       3 Grignolino
+64    64 -2.04449433  1.91961759  7.8648888       3 Grignolino
+65    65  0.60796583  1.90269154  3.9898575       3 Grignolino
+66    66 -0.89769555  0.76176263  1.3861396       3 Grignolino
+67    67 -2.24218226  1.87929123  8.5591168       3 Grignolino
+68    68 -0.18286818  2.42031869  5.8913833       3 Grignolino
+69    69  0.81051865  0.21989369  0.7052937       3 Grignolino
+70    70 -1.97006319  1.39933587  5.8392898       3 Grignolino
+71    71  1.56779366  0.88249373  3.2367721       3 Grignolino
+72    72 -1.65301884  0.95402102  3.6426274       3 Grignolino
+73    73  0.72333196  1.06065342  1.6481948       3 Grignolino
+74    74 -2.55501977 -0.25946663  6.5954489       2 Grignolino
+75    75 -1.82741266  1.28425547  4.9887491       3 Grignolino
+76    76  0.86555129  2.43722606  6.6892499       3 Grignolino
+77    77 -0.36897357  2.14784815  4.7493932       3 Grignolino
+78    78  1.45327752  1.37946048  4.0149268       3 Grignolino
+79    79 -1.25937829  0.76868117  2.1769044       3 Grignolino
+80    80 -0.37509228  1.02415439  1.1895864       3 Grignolino
+81    81 -0.75992026  3.36555997 11.9044727       3 Grignolino
+82    82 -1.03166776  1.44662897  3.1570737       3 Grignolino
+83    83  0.49348469  2.37454522  5.8819921       3 Grignolino
+84    84  2.53183508  0.08719738  6.4177923       1 Grignolino
+85    85 -0.83297044  1.46952520  2.8533441       3 Grignolino
+86    86 -0.78568828  2.02092573  4.7014469       3 Grignolino
+87    87  0.80456258  2.22754675  5.6092855       3 Grignolino
+88    88  0.55647288  2.36631035  5.9090867       3 Grignolino
+89    89  1.11197430  1.79717757  4.4663340       3 Grignolino
+90    90  0.55415961  2.65006452  7.3299348       3 Grignolino
+91    91  1.34548982  2.11204365  6.2710712       3 Grignolino
+92    92  1.56008180  1.84700434  5.8452803       3 Grignolino
+93    93  1.92711944  1.55510868  6.1321523       3 Grignolino
+94    94 -0.74456561  2.30642556  5.8739768       3 Grignolino
+95    95 -0.95476209  2.21727377  5.8278736       3 Grignolino
+96    96 -2.53670943 -0.16879786  6.4633875       2 Grignolino
+97    97  0.54242248  0.36788878  0.4295643       3 Grignolino
+98    98 -1.02814946  2.55835254  7.6022591       3 Grignolino
+99    99 -2.24557492  1.42871116  7.0838223       3 Grignolino
+100  100 -1.40624916  2.16009839  6.6435617       3 Grignolino
+101  101 -0.79547585  2.37026258  6.2509265       3 Grignolino
+102  102  0.54798592  2.28667820  5.5291858       3 Grignolino
+103  103  0.16072037  1.16120769  1.3742343       3 Grignolino
+104  104  0.65793897  2.67242260  7.5747263       3 Grignolino
+105  105 -0.39125074  2.09282809  4.5330066       3 Grignolino
+106  106  1.76751314  1.71245783  6.0566145       3 Grignolino
+107  107  0.36523707  2.16325103  4.8130531       3 Grignolino
+108  108  1.61611371  1.35177021  4.4391062       3 Grignolino
+109  109 -0.08230361  2.29974728  5.2956114       3 Grignolino
+110  110 -1.57383547  1.45792167  4.6024937       3 Grignolino
+111  111 -1.41657326  1.41421730  4.0066904       3 Grignolino
+112  112  0.27791878  1.92513751  3.7833933       3 Grignolino
+113  113  1.29947929  0.76102555  2.2678063       3 Grignolino
+114  114  0.45578615  2.26303187  5.3290542       3 Grignolino
+115  115  0.49279573  1.93359062  3.9816203       3 Grignolino
+116  116 -0.48071836  3.86089273 15.1375828       3 Grignolino
+117  117  0.25217752  2.81355567  7.9796890       3 Grignolino
+118  118  0.10692601  1.92349609  3.7112704       3 Grignolino
+119  119  2.42616867  1.25360477  7.4578193       1 Grignolino
+120  120  0.54953935  2.21591073  5.2122539       3 Grignolino
+121  121 -0.73754141  1.40499335  2.5179736       3 Grignolino
+122  122 -1.33256273 -0.25262431  1.8395425       2 Grignolino
+123  123  1.17377592  0.66209914  1.8161252       3 Grignolino
+124  124  0.46103449  0.61654897  0.5926854       3 Grignolino
+125  125 -0.97572169  1.44150419  3.0299671       3 Grignolino
+126  126  0.09653741  2.10406268  4.4363993       3 Grignolino
+127  127 -0.03837888  1.26319878  1.5971441       3 Grignolino
+128  128  1.59266578  1.20474513  3.9879951       3 Grignolino
+129  129  0.47821593  1.93338681  3.9666750       3 Grignolino
+130  130  1.78779033  1.14705241  4.5119235       3 Grignolino
+131  131  1.32336859 -0.16990994  1.7801738       1    Barbera
+132  132  2.37779336 -0.37352893  5.7934251       1    Barbera
+133  133  2.92867865 -0.26311960  8.6463906       1    Barbera
+134  134  2.14077227 -0.36721907  4.7177558       1    Barbera
+135  135  2.36320318  0.45834188  5.7948065       1    Barbera
+136  136  3.05522315 -0.35241870  9.4585874       1    Barbera
+137  137  3.90473898 -0.15414769 15.2707480       1    Barbera
+138  138  3.92539034 -0.65783157 15.8414317       1    Barbera
+139  139  3.08557209 -0.34786148  9.6417627       1    Barbera
+140  140  2.36779237 -0.29115903  5.6912143       1    Barbera
+141  141  2.77099630 -0.28599811  7.7602154       1    Barbera
+142  142  2.28012931 -0.37146000  5.3369722       1    Barbera
+143  143  2.97723506 -0.48784177  9.1019182       1    Barbera
+144  144  2.36851341 -0.48097694  5.8411946       1    Barbera
+145  145  2.20364930 -1.15678934  6.1942318       1    Barbera
+146  146  2.61823528 -0.56157662  7.1705243       1    Barbera
+147  147  4.26859758 -0.64784348 18.6406264       1    Barbera
+148  148  3.57256360 -1.26912271 14.3738831       1    Barbera
+149  149  2.79916760 -1.56611596 10.2880585       1    Barbera
+150  150  2.89150275 -2.03531563 12.5032979       1    Barbera
+151  151  2.31420887 -2.34973775 10.8768302       1    Barbera
+152  152  2.54265841 -2.03952982 10.6247937       1    Barbera
+153  153  1.80744271 -1.52334876  5.5874406       1    Barbera
+154  154  2.75238051 -2.13291565 12.1249276       1    Barbera
+155  155  2.72945105 -0.40873328  7.6169659       1    Barbera
+156  156  3.59472857 -1.79731421 16.1524119       1    Barbera
+157  157  2.88169708 -1.91980308 11.9898219       1    Barbera
+158  158  3.38261413 -1.30818615 13.1534293       1    Barbera
+159  159  1.04523342 -3.50520194 13.3789535       1    Barbera
+160  160  1.60538369 -2.39986842  8.3366252       1    Barbera
+161  161  3.13428951 -0.73608464 10.3655913       1    Barbera
+162  162  2.23385546 -1.17215877  6.3640664       1    Barbera
+163  163  2.83966343 -0.55447984  8.3711363       1    Barbera
+164  164  2.59019044 -0.69600220  7.1935056       1    Barbera
+165  165  2.94100316 -1.55093397 11.0548957       1    Barbera
+166  166  3.52010248 -0.88004430 13.1655994       1    Barbera
+167  167  2.39934228 -2.58506402 12.4393994       1    Barbera
+168  168  2.92084537 -1.27086200 10.1464279       1    Barbera
+169  169  2.17527658 -2.07169331  9.0237414       1    Barbera
+170  170  2.37423037 -2.58138565 12.3005217       1    Barbera
+171  171  3.20258311  0.25054235 10.3193101       1    Barbera
+172  172  3.66757294 -0.84536318 14.1657302       1    Barbera
+173  173  2.45862032 -2.18762727 10.8305270       1    Barbera
+174  174  3.36104305 -2.21005484 16.1809528       1    Barbera
+175  175  2.59463669 -1.75228636  9.8026471       1    Barbera
+176  176  2.67030685 -2.75313287 14.7102793       1    Barbera
+177  177  2.38030254 -2.29088437 10.9139914       1    Barbera
+178  178  3.19973210 -2.76113075 17.8621285       1    Barbera</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>fzPlot <span class="sc">+</span> <span class="fu">geom_text</span>(<span class="at">data =</span> wine_labs,</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">aes</span>(<span class="at">label =</span> my_label), <span class="at">size =</span> <span class="fl">2.5</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="presentation5B_files/figure-html/unnamed-chunk-11-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>The answer to question (II) is a bit more tricky. One way to get a sense of which variables may be contributing to the clustering is to examine the variance of the cluster centers for each variable. A higher variance suggests that the cluster centroids differ more on that variable, so that variable may be playing a larger role in separating the clusters.</p>
+<p><strong>Note:</strong> This is only a descriptive heuristic, not a statistical test. Unlike PCA, k-means does not produce loadings, so there is no direct measure of variable importance in the same sense.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>kmeans_res<span class="sc">$</span>centers</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>     Alcohol      Malic        Ash Alcalinity   Magnesium     Phenols
+1  0.1644436  0.8690954  0.1863726  0.5228924 -0.07526047 -0.97657548
+2  0.8328826 -0.3029551  0.3636801 -0.6084749  0.57596208  0.88274724
+3 -0.9234669 -0.3929331 -0.4931257  0.1701220 -0.49032869 -0.07576891
+   Flavanoids Nonflavanoid Proanthocyanins      Color        Hue   Dilution
+1 -1.21182921   0.72402116     -0.77751312  0.9388902 -1.1615122 -1.2887761
+2  0.97506900  -0.56050853      0.57865427  0.1705823  0.4726504  0.7770551
+3  0.02075402  -0.03343924      0.05810161 -0.8993770  0.4605046  0.2700025
+     Proline
+1 -0.4059428
+2  1.1220202
+3 -0.7517257</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>var_importance <span class="ot">&lt;-</span> <span class="fu">apply</span>(kmeans_res<span class="sc">$</span>centers, <span class="dv">2</span>, var)</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="fu">sort</span>(var_importance, <span class="at">decreasing =</span> <span class="cn">TRUE</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>     Flavanoids        Dilution         Proline             Hue         Phenols 
+      1.2020837       1.1590920       0.9941934       0.8835955       0.8645478 
+          Color         Alcohol           Malic Proanthocyanins    Nonflavanoid 
+      0.8523894       0.7858539       0.4957524       0.4680695       0.4169275 
+     Alcalinity       Magnesium             Ash 
+      0.3351087       0.2888914       0.2045454 </code></pre>
+</div>
+</div>
+</section>
+</section>
+<section id="part-2-random-forest" class="level2">
+<h2 class="anchored" data-anchor-id="part-2-random-forest">Part 2: Random Forest</h2>
+<p>In this section, we will train a <strong>Random Forest (RF)</strong> model. <strong>Random Forest</strong> is a simple ensemble machine learning method that builds multiple decision trees and combines their predictions to improve accuracy and robustness. By averaging the results of many trees, it reduces overfitting and increases generalization, making it particularly effective for complex, <strong>non-linear</strong> relationships. One of its key strengths is its ability to handle large datasets with many features, while also providing insights into feature importance.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../figures/RandomForest.png" class="img-fluid quarto-figure quarto-figure-center figure-img"></p>
+</figure>
+</div>
+<p>Why do we want to try a <strong>RF</strong>? Unlike linear, logistic, or elastic net regression (presentation 5C - only if time permits), RF does not require predictors (or model residuals) to be normally distributed, nor does RF assume a linear relationship between predictors and the outcome — it can naturally capture non-linear patterns and complex interactions between variables.</p>
+<p>Another advantage is that RF considers one predictor at a time when splitting at a predictor, making it robust to differences in variable scales and allowing it to handle categorical variables directly.</p>
+<p>The downside to a is RF model is that it typically require a reasonably large sample size to perform well and can be less interpretable compared to regression-based approaches.</p>
+<p>First and foremost, lets load the R packages needed for analysis:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(caret)</span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(randomForest)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>For this exercise we will use a dataset from patients with Heart Disease. Information on the columns in the dataset can be found <a href="https://www.kaggle.com/datasets/redwankarimsony/heart-disease-data">here</a>.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>HD <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"../data/HeartDisease.csv"</span>)</span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(HD)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 6 × 14
+    age   sex chestPainType restBP  chol fastingBP restElecCardio maxHR
+  &lt;dbl&gt; &lt;dbl&gt;         &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt;     &lt;dbl&gt;          &lt;dbl&gt; &lt;dbl&gt;
+1    52     1             0    125   212         0              1   168
+2    53     1             0    140   203         1              0   155
+3    70     1             0    145   174         0              1   125
+4    61     1             0    148   203         0              1   161
+5    62     0             0    138   294         1              1   106
+6    58     0             0    100   248         0              0   122
+# ℹ 6 more variables: exerciseAngina &lt;dbl&gt;, STdepEKG &lt;dbl&gt;,
+#   slopePeakExST &lt;dbl&gt;, nMajorVessels &lt;dbl&gt;, DefectType &lt;dbl&gt;,
+#   heartDisease &lt;dbl&gt;</code></pre>
+</div>
+</div>
+<p>Let’s convert some of the variables that are encoded as numeric datatypes but should be factors:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>facCols <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"sex"</span>, </span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>             <span class="st">"chestPainType"</span>, </span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>             <span class="st">"fastingBP"</span>, </span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>             <span class="st">"restElecCardio"</span>, </span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>             <span class="st">"exerciseAngina"</span>, </span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a>             <span class="st">"slopePeakExST"</span>, </span>
+<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a>             <span class="st">"DefectType"</span>, </span>
+<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a>             <span class="st">"heartDisease"</span>)</span>
+<span id="cb23-9"><a href="#cb23-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-10"><a href="#cb23-10" aria-hidden="true" tabindex="-1"></a>HD <span class="ot">&lt;-</span> HD <span class="sc">%&gt;%</span> </span>
+<span id="cb23-11"><a href="#cb23-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="fu">across</span>(<span class="fu">all_of</span>(facCols), as.factor))</span>
+<span id="cb23-12"><a href="#cb23-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-13"><a href="#cb23-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-14"><a href="#cb23-14" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(HD)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 6 × 14
+    age sex   chestPainType restBP  chol fastingBP restElecCardio maxHR
+  &lt;dbl&gt; &lt;fct&gt; &lt;fct&gt;          &lt;dbl&gt; &lt;dbl&gt; &lt;fct&gt;     &lt;fct&gt;          &lt;dbl&gt;
+1    52 1     0                125   212 0         1                168
+2    53 1     0                140   203 1         0                155
+3    70 1     0                145   174 0         1                125
+4    61 1     0                148   203 0         1                161
+5    62 0     0                138   294 1         1                106
+6    58 0     0                100   248 0         0                122
+# ℹ 6 more variables: exerciseAngina &lt;fct&gt;, STdepEKG &lt;dbl&gt;,
+#   slopePeakExST &lt;fct&gt;, nMajorVessels &lt;dbl&gt;, DefectType &lt;fct&gt;,
+#   heartDisease &lt;fct&gt;</code></pre>
+</div>
+</div>
+<p>Next, let’s do some summary statistics to have a look at the variables we have in our dataset. Firstly, the numeric columns. We can get a quick overview of variable distributions and ranges with some histograms.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Reshape data to long format for ggplot2</span></span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>long_data <span class="ot">&lt;-</span> HD <span class="sc">%&gt;%</span> </span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">select</span>(<span class="fu">where</span>(is.numeric)) <span class="sc">%&gt;%</span></span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="at">cols =</span> <span class="fu">everything</span>(), </span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>               <span class="at">names_to =</span> <span class="st">"variable"</span>, </span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a>               <span class="at">values_to =</span> <span class="st">"value"</span>)</span>
+<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(long_data)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 6 × 2
+  variable      value
+  &lt;chr&gt;         &lt;dbl&gt;
+1 age              52
+2 restBP          125
+3 chol            212
+4 maxHR           168
+5 STdepEKG          1
+6 nMajorVessels     2</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot histograms for each numeric variable in one grid</span></span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(long_data, </span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>       <span class="fu">aes</span>(<span class="at">x =</span> value)) <span class="sc">+</span></span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="at">binwidth =</span> <span class="fl">0.5</span>, <span class="at">fill =</span> <span class="st">"#9395D3"</span>, <span class="at">color =</span><span class="st">'grey30'</span>) <span class="sc">+</span></span>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="fu">vars</span>(variable), <span class="at">scales =</span> <span class="st">"free"</span>) <span class="sc">+</span></span>
+<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="presentation5B_files/figure-html/unnamed-chunk-18-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Importantly, let’s check the balance of the categorical/factor variables.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>HD <span class="sc">%&gt;%</span></span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">select</span>(<span class="fu">where</span>(is.factor)) <span class="sc">%&gt;%</span></span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="fu">everything</span>(), <span class="at">names_to =</span> <span class="st">"Variable"</span>, <span class="at">values_to =</span> <span class="st">"Level"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">count</span>(Variable, Level, <span class="at">name =</span> <span class="st">"Count"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 22 × 3
+   Variable       Level Count
+   &lt;chr&gt;          &lt;fct&gt; &lt;int&gt;
+ 1 DefectType     0         7
+ 2 DefectType     1        64
+ 3 DefectType     2       544
+ 4 DefectType     3       410
+ 5 chestPainType  0       497
+ 6 chestPainType  1       167
+ 7 chestPainType  2       284
+ 8 chestPainType  3        77
+ 9 exerciseAngina 0       680
+10 exerciseAngina 1       345
+# ℹ 12 more rows</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="co"># OR</span></span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a><span class="co"># cat_cols &lt;- HD_EN %&gt;% dplyr::select(where(is.factor)) %&gt;% colnames()</span></span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a><span class="co"># </span></span>
+<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a><span class="co"># for (col in cat_cols){</span></span>
+<span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a><span class="co">#   print(col)</span></span>
+<span id="cb30-7"><a href="#cb30-7" aria-hidden="true" tabindex="-1"></a><span class="co">#   print(table(HD_EN[[col]]))</span></span>
+<span id="cb30-8"><a href="#cb30-8" aria-hidden="true" tabindex="-1"></a><span class="co"># }</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>From our count table above we see that variables <code>DefectType</code>, <code>chestPainType</code>, <code>restElecCardio</code>, and <code>slopePeakExST</code> are unbalanced. Especially <code>DefectType</code> and <code>restElecCardio</code> are problematic with only 7 and 15 observations for one of the factor levels.</p>
+<p>To avoid issues when modelling, we will filter out these observations and re-level the two variables.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>HD_RF <span class="ot">&lt;-</span> HD <span class="sc">%&gt;%</span> </span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(DefectType <span class="sc">!=</span> <span class="st">"0"</span>, restElecCardio <span class="sc">!=</span> <span class="st">"2"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">DefectType =</span> <span class="fu">as.factor</span>(<span class="fu">as.character</span>(DefectType)), </span>
+<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a>         <span class="at">restElecCardio =</span> <span class="fu">as.factor</span>(<span class="fu">as.character</span>(restElecCardio)))</span>
+<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(HD_RF)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 6 × 14
+    age sex   chestPainType restBP  chol fastingBP restElecCardio maxHR
+  &lt;dbl&gt; &lt;fct&gt; &lt;fct&gt;          &lt;dbl&gt; &lt;dbl&gt; &lt;fct&gt;     &lt;fct&gt;          &lt;dbl&gt;
+1    52 1     0                125   212 0         1                168
+2    53 1     0                140   203 1         0                155
+3    70 1     0                145   174 0         1                125
+4    61 1     0                148   203 0         1                161
+5    62 0     0                138   294 1         1                106
+6    58 0     0                100   248 0         0                122
+# ℹ 6 more variables: exerciseAngina &lt;fct&gt;, STdepEKG &lt;dbl&gt;,
+#   slopePeakExST &lt;fct&gt;, nMajorVessels &lt;dbl&gt;, DefectType &lt;fct&gt;,
+#   heartDisease &lt;fct&gt;</code></pre>
+</div>
+</div>
+<p>In addition to ensuring an at least somewhat balanced data set, RF requires the outcome variable to be a categorical type, meaning we must convert <code>heartDisease</code> from a binary (0 or 1) variables to a category variable.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Mutate outcome to category and add ID column for splitting</span></span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>HD_RF <span class="ot">&lt;-</span> HD_RF <span class="sc">%&gt;%</span> </span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">heartDisease =</span> <span class="fu">fct_recode</span>(heartDisease, <span class="at">noHD =</span> <span class="st">"0"</span>, <span class="at">yesHD =</span> <span class="st">"1"</span>)) </span>
+<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-5"><a href="#cb33-5" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(HD_RF<span class="sc">$</span>heartDisease)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] noHD  noHD  noHD  noHD  noHD  yesHD
+Levels: noHD yesHD</code></pre>
+</div>
+</div>
+<section id="train-test-set" class="level3">
+<h3 class="anchored" data-anchor-id="train-test-set">Train &amp; Test Set</h3>
+<p>We split our dataset into train and test set, we will keep 70% of the data in the training set and take out 30% for the test set. Importantly, we must ensure that all levels of each categorical/factor variable are represented in both sets! There are different ways of doing this in R, but one very easy way to achieve a good split is with the <code>createDataPartition()</code> function from <code>caret</code>.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Set seed to ensure same split when code is re-run</span></span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a><span class="co">#</span></span>
+<span id="cb35-5"><a href="#cb35-5" aria-hidden="true" tabindex="-1"></a>idx <span class="ot">&lt;-</span> <span class="fu">createDataPartition</span>(HD_RF<span class="sc">$</span>heartDisease, <span class="at">p =</span> <span class="fl">0.7</span>, <span class="at">list =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb35-6"><a href="#cb35-6" aria-hidden="true" tabindex="-1"></a>train <span class="ot">&lt;-</span> HD_RF[idx, ]</span>
+<span id="cb35-7"><a href="#cb35-7" aria-hidden="true" tabindex="-1"></a>test  <span class="ot">&lt;-</span> HD_RF[<span class="sc">-</span>idx, ]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Split on outcome variable</span></span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(train<span class="sc">$</span>heartDisease)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+ noHD yesHD 
+  339   364 </code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(test<span class="sc">$</span>heartDisease)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+ noHD yesHD 
+  144   156 </code></pre>
+</div>
+</div>
+<p>In our case, because we have a fairly balanced dataset, we are lucky and all levels of the outcome variable can be represented in both sets. If this was not the case, we might have had to remove some variables (or levels) altogether.</p>
+</section>
+<section id="random-forest-model" class="level3">
+<h3 class="anchored" data-anchor-id="random-forest-model">Random Forest Model</h3>
+<p>Now let’s set up a RF model with cross-validation - this way we do not overfit our model. The R-package <code>caret</code> has a very versatile function <code>trainControl()</code> which can be used with a range of re-sampling methods including bootstrapping, out-of-bag error, and leave-one-out cross-validation.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Set up cross-validation: 5-fold CV</span></span>
+<span id="cb40-4"><a href="#cb40-4" aria-hidden="true" tabindex="-1"></a>RFcv <span class="ot">&lt;-</span> <span class="fu">trainControl</span>(</span>
+<span id="cb40-5"><a href="#cb40-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">method =</span> <span class="st">"cv"</span>,</span>
+<span id="cb40-6"><a href="#cb40-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">number =</span> <span class="dv">5</span>,</span>
+<span id="cb40-7"><a href="#cb40-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">classProbs =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb40-8"><a href="#cb40-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">summaryFunction =</span> twoClassSummary,</span>
+<span id="cb40-9"><a href="#cb40-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">savePredictions =</span> <span class="st">"final"</span></span>
+<span id="cb40-10"><a href="#cb40-10" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Now that we have set up parameters for cross validation in the <code>RFcv</code> object above, we can feed it to the <code>train()</code> function from the <code>caret</code> packages. We also specify the <strong>training data</strong>, the <strong>name of the outcome variable</strong>, and, importantly, that we want to perform random forest (<code>method = "rf"</code>) as the <code>train()</code> function can be used for different models.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a>rf_model <span class="ot">&lt;-</span> <span class="fu">train</span>(</span>
+<span id="cb41-4"><a href="#cb41-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">x =</span> train <span class="sc">%&gt;%</span> dplyr<span class="sc">::</span><span class="fu">select</span>(<span class="sc">-</span>heartDisease),</span>
+<span id="cb41-5"><a href="#cb41-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">y =</span> train<span class="sc">$</span>heartDisease,</span>
+<span id="cb41-6"><a href="#cb41-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">method =</span> <span class="st">"rf"</span>,</span>
+<span id="cb41-7"><a href="#cb41-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">trControl =</span> RFcv,</span>
+<span id="cb41-8"><a href="#cb41-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">metric =</span> <span class="st">"Accuracy"</span>,</span>
+<span id="cb41-9"><a href="#cb41-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">tuneLength =</span> <span class="dv">5</span>,</span>
+<span id="cb41-10"><a href="#cb41-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">importance =</span> <span class="cn">TRUE</span></span>
+<span id="cb41-11"><a href="#cb41-11" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb41-12"><a href="#cb41-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-13"><a href="#cb41-13" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(rf_model)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Random Forest 
+
+703 samples
+ 13 predictor
+  2 classes: 'noHD', 'yesHD' 
+
+No pre-processing
+Resampling: Cross-Validated (5 fold) 
+Summary of sample sizes: 563, 562, 562, 563, 562 
+Resampling results across tuning parameters:
+
+  mtry  ROC        Sens       Spec     
+   2    0.9929161  0.9645742  0.9945205
+   4    0.9927587  0.9675154  0.9945205
+   7    0.9940726  0.9645303  0.9945205
+  10    0.9942133  0.9645303  0.9945205
+  13    0.9937031  0.9645303  0.9917808
+
+ROC was used to select the optimal model using the largest value.
+The final value used for the model was mtry = 10.</code></pre>
+</div>
+</div>
+<p>Next, we can plot your model fit to see how many explanatory variables significantly contribute to our model.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Best parameters</span></span>
+<span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a>rf_model<span class="sc">$</span>bestTune</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  mtry
+4   10</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb45"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot performance</span></span>
+<span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(rf_model)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="presentation5B_files/figure-html/unnamed-chunk-26-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>As we see from the plot above, the model performs best with four variables randomly sampled as candidates at each split (<code>mtry = 10</code>). There are different <code>tuning parameters</code> in a random forest, these include; n_estimators (number of trees), max_features (features to try at splits), max_depth (tree depth), and min_samples_split (minimum number of samples required to split a node).</p>
+<p>The <code>tuneLength</code> argument in the <code>train()</code> function specifies how many different values of the tuning parameters to try.</p>
+<p>Next, we use the test set to evaluate our model performance. We will do this with the predict function, which will give us the predicted probabilities for each class.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb46"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Predict class probabilities</span></span>
+<span id="cb46-2"><a href="#cb46-2" aria-hidden="true" tabindex="-1"></a>y_pred <span class="ot">&lt;-</span> <span class="fu">predict</span>(rf_model, <span class="at">newdata =</span> test, <span class="at">type =</span> <span class="st">"prob"</span>)</span>
+<span id="cb46-3"><a href="#cb46-3" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(y_pred)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   noHD yesHD
+1 0.994 0.006
+2 0.968 0.032
+3 0.016 0.984
+4 1.000 0.000
+5 0.998 0.002
+6 1.000 0.000</code></pre>
+</div>
+</div>
+<p>As the output of predict is a probability of belonging to a specific class, we will need to convert these probabilities to class labels (yesHD or noHD). This way we can compare a predicted label with the true label in the test set to evaluate our model performance.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb48"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a>y_pred <span class="ot">&lt;-</span> <span class="fu">as.factor</span>(<span class="fu">ifelse</span>(y_pred<span class="sc">$</span>yesHD <span class="sc">&gt;</span> <span class="fl">0.5</span>, <span class="st">"yesHD"</span>, <span class="st">"noHD"</span>))</span>
+<span id="cb48-2"><a href="#cb48-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb48-3"><a href="#cb48-3" aria-hidden="true" tabindex="-1"></a>caret<span class="sc">::</span><span class="fu">confusionMatrix</span>(y_pred, test<span class="sc">$</span>heartDisease)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Confusion Matrix and Statistics
+
+          Reference
+Prediction noHD yesHD
+     noHD   141     0
+     yesHD    3   156
+                                          
+               Accuracy : 0.99            
+                 95% CI : (0.9711, 0.9979)
+    No Information Rate : 0.52            
+    P-Value [Acc &gt; NIR] : &lt;2e-16          
+                                          
+                  Kappa : 0.98            
+                                          
+ Mcnemar's Test P-Value : 0.2482          
+                                          
+            Sensitivity : 0.9792          
+            Specificity : 1.0000          
+         Pos Pred Value : 1.0000          
+         Neg Pred Value : 0.9811          
+             Prevalence : 0.4800          
+         Detection Rate : 0.4700          
+   Detection Prevalence : 0.4700          
+      Balanced Accuracy : 0.9896          
+                                          
+       'Positive' Class : noHD            
+                                          </code></pre>
+</div>
+</div>
+<p>Lastly, we can extract the predictive variables with the greatest importance from your fit.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb50"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a>varImpOut <span class="ot">&lt;-</span> <span class="fu">varImp</span>(rf_model)</span>
+<span id="cb50-2"><a href="#cb50-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-3"><a href="#cb50-3" aria-hidden="true" tabindex="-1"></a>varImpOut<span class="sc">$</span>importance</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                    noHD     yesHD
+age             62.08613  62.08613
+sex             30.02973  30.02973
+chestPainType   94.83905  94.83905
+restBP          65.98055  65.98055
+chol            75.11579  75.11579
+fastingBP        0.00000   0.00000
+restElecCardio  20.85050  20.85050
+maxHR           63.45448  63.45448
+exerciseAngina  12.77844  12.77844
+STdepEKG        93.18319  93.18319
+slopePeakExST   31.04470  31.04470
+nMajorVessels   96.73773  96.73773
+DefectType     100.00000 100.00000</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb52"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Order by importance</span></span>
+<span id="cb52-2"><a href="#cb52-2" aria-hidden="true" tabindex="-1"></a>varImportance <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(<span class="fu">as.matrix</span>(varImpOut<span class="sc">$</span>importance)) <span class="sc">%&gt;%</span> </span>
+<span id="cb52-3"><a href="#cb52-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rownames_to_column</span>(<span class="at">var =</span> <span class="st">'VarName'</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb52-4"><a href="#cb52-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(yesHD))</span>
+<span id="cb52-5"><a href="#cb52-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb52-6"><a href="#cb52-6" aria-hidden="true" tabindex="-1"></a>varImportance</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>          VarName      noHD     yesHD
+1      DefectType 100.00000 100.00000
+2   nMajorVessels  96.73773  96.73773
+3   chestPainType  94.83905  94.83905
+4        STdepEKG  93.18319  93.18319
+5            chol  75.11579  75.11579
+6          restBP  65.98055  65.98055
+7           maxHR  63.45448  63.45448
+8             age  62.08613  62.08613
+9   slopePeakExST  31.04470  31.04470
+10            sex  30.02973  30.02973
+11 restElecCardio  20.85050  20.85050
+12 exerciseAngina  12.77844  12.77844
+13      fastingBP   0.00000   0.00000</code></pre>
+</div>
+</div>
+<p>Variable importance is based on how much each variable improves the model’s accuracy across splits. Variables <code>DefectType</code>, <code>nMajorVessels</code> and <code>chestPainType</code> appear to be highlight predictive of heart disease.</p>
+
+
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    // Ensure there is a toggle, if there isn't float one in the top right
+    if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
+      const a = window.document.createElement('a');
+      a.classList.add('top-right');
+      a.classList.add('quarto-color-scheme-toggle');
+      a.href = "";
+      a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+      const i = window.document.createElement("i");
+      i.classList.add('bi');
+      a.appendChild(i);
+      window.document.body.appendChild(a);
+    }
+    setColorSchemeToggle(hasAlternateSentinel())
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

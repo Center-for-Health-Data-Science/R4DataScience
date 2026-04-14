@@ -1,0 +1,1815 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.8.24">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Presentation 1: Data Cleaning – R for Data Science</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dc55a5b9e770e841cd82e46aadbfb9b0.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark-b651517ce65839d647a86e2780455cfb.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dc55a5b9e770e841cd82e46aadbfb9b0.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-22462e58806cbbcd8bc8d1d3f565882a.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-dark-322e48d93d3308346e1c37988a1f282e.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../site_libs/bootstrap/bootstrap-22462e58806cbbcd8bc8d1d3f565882a.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+</head>
+
+<body class="nav-sidebar floating nav-fixed quarto-light"><script id="quarto-html-before-body" type="application/javascript">
+    const toggleBodyColorMode = (bsSheetEl) => {
+      const mode = bsSheetEl.getAttribute("data-mode");
+      const bodyEl = window.document.querySelector("body");
+      if (mode === "dark") {
+        bodyEl.classList.add("quarto-dark");
+        bodyEl.classList.remove("quarto-light");
+      } else {
+        bodyEl.classList.add("quarto-light");
+        bodyEl.classList.remove("quarto-dark");
+      }
+    }
+    const toggleBodyColorPrimary = () => {
+      const bsSheetEl = window.document.querySelector("link#quarto-bootstrap:not([rel=disabled-stylesheet])");
+      if (bsSheetEl) {
+        toggleBodyColorMode(bsSheetEl);
+      }
+    }
+    const setColorSchemeToggle = (alternate) => {
+      const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
+      for (let i=0; i < toggles.length; i++) {
+        const toggle = toggles[i];
+        if (toggle) {
+          if (alternate) {
+            toggle.classList.add("alternate");
+          } else {
+            toggle.classList.remove("alternate");
+          }
+        }
+      }
+    };
+    const toggleColorMode = (alternate) => {
+      // Switch the stylesheets
+      const primaryStylesheets = window.document.querySelectorAll('link.quarto-color-scheme:not(.quarto-color-alternate)');
+      const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
+      manageTransitions('#quarto-margin-sidebar .nav-link', false);
+      if (alternate) {
+        // note: dark is layered on light, we don't disable primary!
+        enableStylesheet(alternateStylesheets);
+        for (const sheetNode of alternateStylesheets) {
+          if (sheetNode.id === "quarto-bootstrap") {
+            toggleBodyColorMode(sheetNode);
+          }
+        }
+      } else {
+        disableStylesheet(alternateStylesheets);
+        enableStylesheet(primaryStylesheets)
+        toggleBodyColorPrimary();
+      }
+      manageTransitions('#quarto-margin-sidebar .nav-link', true);
+      // Switch the toggles
+      setColorSchemeToggle(alternate)
+      // Hack to workaround the fact that safari doesn't
+      // properly recolor the scrollbar when toggling (#1455)
+      if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
+        manageTransitions("body", false);
+        window.scrollTo(0, 1);
+        setTimeout(() => {
+          window.scrollTo(0, 0);
+          manageTransitions("body", true);
+        }, 40);
+      }
+    }
+    const disableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        stylesheet.rel = 'disabled-stylesheet';
+      }
+    }
+    const enableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        if(stylesheet.rel !== 'stylesheet') { // for Chrome, which will still FOUC without this check
+          stylesheet.rel = 'stylesheet';
+        }
+      }
+    }
+    const manageTransitions = (selector, allowTransitions) => {
+      const els = window.document.querySelectorAll(selector);
+      for (let i=0; i < els.length; i++) {
+        const el = els[i];
+        if (allowTransitions) {
+          el.classList.remove('notransition');
+        } else {
+          el.classList.add('notransition');
+        }
+      }
+    }
+    const isFileUrl = () => {
+      return window.location.protocol === 'file:';
+    }
+    const hasAlternateSentinel = () => {
+      let styleSentinel = getColorSchemeSentinel();
+      if (styleSentinel !== null) {
+        return styleSentinel === "alternate";
+      } else {
+        return false;
+      }
+    }
+    const setStyleSentinel = (alternate) => {
+      const value = alternate ? "alternate" : "default";
+      if (!isFileUrl()) {
+        window.localStorage.setItem("quarto-color-scheme", value);
+      } else {
+        localAlternateSentinel = value;
+      }
+    }
+    const getColorSchemeSentinel = () => {
+      if (!isFileUrl()) {
+        const storageValue = window.localStorage.getItem("quarto-color-scheme");
+        return storageValue != null ? storageValue : localAlternateSentinel;
+      } else {
+        return localAlternateSentinel;
+      }
+    }
+    const toggleGiscusIfUsed = (isAlternate, darkModeDefault) => {
+      const baseTheme = document.querySelector('#giscus-base-theme')?.value ?? 'light';
+      const alternateTheme = document.querySelector('#giscus-alt-theme')?.value ?? 'dark';
+      let newTheme = '';
+      if(authorPrefersDark) {
+        newTheme = isAlternate ? baseTheme : alternateTheme;
+      } else {
+        newTheme = isAlternate ? alternateTheme : baseTheme;
+      }
+      const changeGiscusTheme = () => {
+        // From: https://github.com/giscus/giscus/issues/336
+        const sendMessage = (message) => {
+          const iframe = document.querySelector('iframe.giscus-frame');
+          if (!iframe) return;
+          iframe.contentWindow.postMessage({ giscus: message }, 'https://giscus.app');
+        }
+        sendMessage({
+          setConfig: {
+            theme: newTheme
+          }
+        });
+      }
+      const isGiscussLoaded = window.document.querySelector('iframe.giscus-frame') !== null;
+      if (isGiscussLoaded) {
+        changeGiscusTheme();
+      }
+    };
+    const authorPrefersDark = false;
+    const darkModeDefault = authorPrefersDark;
+      document.querySelector('link#quarto-text-highlighting-styles.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+      document.querySelector('link#quarto-bootstrap.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+    let localAlternateSentinel = darkModeDefault ? 'alternate' : 'default';
+    // Dark / light mode switch
+    window.quartoToggleColorScheme = () => {
+      // Read the current dark / light value
+      let toAlternate = !hasAlternateSentinel();
+      toggleColorMode(toAlternate);
+      setStyleSentinel(toAlternate);
+      toggleGiscusIfUsed(toAlternate, darkModeDefault);
+      window.dispatchEvent(new Event('resize'));
+    };
+    // Switch to dark mode if need be
+    if (hasAlternateSentinel()) {
+      toggleColorMode(true);
+    } else {
+      toggleColorMode(false);
+    }
+  </script>
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a href="../index.html" class="navbar-brand navbar-brand-logo">
+    </a>
+    <a class="navbar-brand" href="../index.html">
+    <span class="navbar-title">R for Data Science</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link active" href="../index.html" aria-current="page"> 
+<span class="menu-text">Course Material</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../about_heads.html"> 
+<span class="menu-text">About us</span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+  <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../presentations/presentation1.html">Presentations</a></li><li class="breadcrumb-item"><a href="../presentations/presentation1.html">Presentation 1: Data Cleaning</a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+      <a href="../index.html" class="sidebar-logo-link">
+      </a>
+      </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../slides/R4datascience_slides.pdf" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Slides️</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+ <span class="menu-text">Presentations</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../presentations/presentation1.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">Presentation 1: Data Cleaning</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../presentations/presentation2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Presentation 2: Summary Statistics and Data Wrangling</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../presentations/presentation3.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Presentation 3: Exploratory Data Analysis</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../presentations/presentation4A.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Presentation 4A: Conditions and For-loops</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../presentations/presentation4B.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Presentation 4B: Functions</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../presentations/presentation5A.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Presentation 5A: Linear and Logistic Regression</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../presentations/presentation5B.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Presentation 5B: K-means and Random Forest</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../presentations/presentation5C.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Presentation 5C: Elastic Net Regression</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="false">
+ <span class="menu-text">Exercises</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../exercises/exercise0.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Exercise 0: R script and Quarto</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../exercises/exercise1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Exercise 1: Data Cleaning</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../exercises/exercise2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Exercise 2: Summary Statistics and Data Wrangling</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../exercises/exercise3.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Exercise 3: Exploratory Data Analysis</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../exercises/exercise4A.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Exercise 4A: Conditions and For-loops</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../exercises/exercise4B.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Exercise 4B: Functions</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../exercises/exercise5A.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Exercise 5A: Linear and Logistic Regression</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../exercises/exercise5B.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Exercise 5B: K-means and Random Forest</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../exercises/exercise5C.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Exercise 5C: Elastic Net Regression</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="false">
+ <span class="menu-text">Solutions</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 ">  
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="false">
+ <span class="menu-text">Cheat Sheets</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../CheatSheet/quartoCheatSheet.pdf" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Quarto</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../CheatSheet/BaseRCheatSheet.pdf" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Base R</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../CheatSheet/TidyverseCheatSheet.pdf" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Tidyverse</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../CheatSheet/ggplotCheatSheet.pdf" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">ggplot2</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#load-packages" id="toc-load-packages" class="nav-link active" data-scroll-target="#load-packages">Load Packages</a></li>
+  <li><a href="#load-data" id="toc-load-data" class="nav-link" data-scroll-target="#load-data">Load data</a>
+  <ul class="collapse">
+  <li><a href="#some-basics" id="toc-some-basics" class="nav-link" data-scroll-target="#some-basics">Some Basics</a></li>
+  </ul></li>
+  <li><a href="#data-wrangling-and-cleaning" id="toc-data-wrangling-and-cleaning" class="nav-link" data-scroll-target="#data-wrangling-and-cleaning">Data wrangling and cleaning</a>
+  <ul class="collapse">
+  <li><a href="#lets-do-some-cleanup" id="toc-lets-do-some-cleanup" class="nav-link" data-scroll-target="#lets-do-some-cleanup"><strong>Let’s do some cleanup</strong></a></li>
+  <li><a href="#step-1-check-for-missing-values-and-convert-na-strings-to-real-nas" id="toc-step-1-check-for-missing-values-and-convert-na-strings-to-real-nas" class="nav-link" data-scroll-target="#step-1-check-for-missing-values-and-convert-na-strings-to-real-nas">Step 1: Check for missing values and convert <code>"NA"</code> strings to real <code>NA</code>s</a></li>
+  <li><a href="#step-2-drop-variables-with-too-many-missing-values" id="toc-step-2-drop-variables-with-too-many-missing-values" class="nav-link" data-scroll-target="#step-2-drop-variables-with-too-many-missing-values">Step 2: Drop Variables with Too Many Missing Values</a></li>
+  <li><a href="#step-3-drop-non-informative-variables" id="toc-step-3-drop-non-informative-variables" class="nav-link" data-scroll-target="#step-3-drop-non-informative-variables">Step 3: Drop Non-Informative Variables</a></li>
+  <li><a href="#step-4-standardize-categorical-variables" id="toc-step-4-standardize-categorical-variables" class="nav-link" data-scroll-target="#step-4-standardize-categorical-variables">Step 4: Standardize Categorical Variables</a></li>
+  <li><a href="#step-5-fix-variable-types" id="toc-step-5-fix-variable-types" class="nav-link" data-scroll-target="#step-5-fix-variable-types">Step 5: Fix Variable Types</a></li>
+  <li><a href="#step-6-recode-and-reorder-factors" id="toc-step-6-recode-and-reorder-factors" class="nav-link" data-scroll-target="#step-6-recode-and-reorder-factors">Step 6: Recode and Reorder Factors</a></li>
+  <li><a href="#step-7-creating-new-variables" id="toc-step-7-creating-new-variables" class="nav-link" data-scroll-target="#step-7-creating-new-variables">Step 7: Creating New Variables</a></li>
+  </ul></li>
+  <li><a href="#string-manipulation" id="toc-string-manipulation" class="nav-link" data-scroll-target="#string-manipulation">String manipulation</a>
+  <ul class="collapse">
+  <li><a href="#regex-regular-expression" id="toc-regex-regular-expression" class="nav-link" data-scroll-target="#regex-regular-expression">Regex: Regular expression</a></li>
+  <li><a href="#extracting-metadata-from-tcga-sample-names" id="toc-extracting-metadata-from-tcga-sample-names" class="nav-link" data-scroll-target="#extracting-metadata-from-tcga-sample-names"><strong>Extracting metadata from TCGA sample names</strong></a></li>
+  </ul></li>
+  <li><a href="#joining-dataframes" id="toc-joining-dataframes" class="nav-link" data-scroll-target="#joining-dataframes">Joining Dataframes</a>
+  <ul class="collapse">
+  <li><a href="#lets-join-our-datasets" id="toc-lets-join-our-datasets" class="nav-link" data-scroll-target="#lets-join-our-datasets">Let’s join our datasets</a></li>
+  <li><a href="#recap" id="toc-recap" class="nav-link" data-scroll-target="#recap">Recap</a></li>
+  </ul></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../presentations/presentation1.html">Presentations</a></li><li class="breadcrumb-item"><a href="../presentations/presentation1.html">Presentation 1: Data Cleaning</a></li></ol></nav>
+<div class="quarto-title">
+<h1 class="title">Presentation 1: Data Cleaning</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<p>In this section, we will clean and prepare a dataset for analysis. We will mainly use functions from the <code>tidyverse</code>, although in some cases base R provides quick and effective alternatives.</p>
+<section id="load-packages" class="level2">
+<h2 class="anchored" data-anchor-id="load-packages">Load Packages</h2>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="co"># unload MASS since it has select function we don't want to use. </span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="load-data" class="level2">
+<h2 class="anchored" data-anchor-id="load-data">Load data</h2>
+<p>We’ll work with two datasets:</p>
+<ul>
+<li><p><code>df_ov</code>: clinical information for ovarian cancer patients.</p></li>
+<li><p><code>df_exp</code>: gene expression data for collagen genes.</p></li>
+</ul>
+<p>We load these data using <code>load()</code>, which imports one or more R objects stored in an .RData file. Let’s have a look at it.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># .RData can contain several objects </span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">load</span>(<span class="st">"../data/Other/GDC_Ovarian.RData"</span>)</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="fu">class</span>(df_ov)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "tbl_df"     "tbl"        "data.frame"</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(df_ov)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 434  16</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>df_ov <span class="sc">%&gt;%</span> <span class="fu">head</span>() </span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 6 × 16
+  alt_sample_name   unique_patient_ID histological_type primarysite summarygrade
+  &lt;chr&gt;             &lt;chr&gt;             &lt;chr&gt;             &lt;lgl&gt;       &lt;chr&gt;       
+1 TCGA-20-0987-01A… TCGA-20-0987-01A  ser               NA          HIGH        
+2 TCGA-24-0979-01A… TCGA-24-0979-01A  ser               NA          HIGH        
+3 TCGA-23-1021-01B… TCGA-23-1021-01B  ser               NA          HIGH        
+4 TCGA-04-1337-01A… TCGA-04-1337-01A  ser               NA          LOW         
+5 TCGA-23-1032-01A… TCGA-23-1032-01A  ser               NA          HIGH        
+6 TCGA-23-1118-01A… TCGA-23-1118-01A  ser               NA          HIGH        
+# ℹ 11 more variables: figo_stage &lt;chr&gt;, age_at_initial_path_diagn &lt;int&gt;,
+#   percent_stromal_cells &lt;dbl&gt;, percent_tumor_cells &lt;dbl&gt;, os_binary &lt;lgl&gt;,
+#   days_to_death_or_last_follow_up &lt;int&gt;, CPE &lt;dbl&gt;, stemness_score &lt;dbl&gt;,
+#   batch &lt;int&gt;, vital_status &lt;chr&gt;, classification_of_tumor &lt;chr&gt;</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">class</span>(df_exp)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "data.frame"</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(df_exp)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 434  45</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>df_exp <span class="sc">%&gt;%</span> <span class="fu">head</span>() </span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  unique_patient_ID COL9A2 COL23A1 COL11A1 COL17A1 COL5A3 COL4A4 COL19A1
+1  TCGA-13-1489-02A   4711    1833     342      13    475     47      11
+2  TCGA-29-1691-01A   2446     164    1401      23    641     75      31
+3  TCGA-23-1023-01A   1732     365     229      25    608    385       1
+4  TCGA-23-1023-01R   8136   15648    9414    3057   7497     59       5
+5  TCGA-29-2414-02A   1882     512     740      10    533    139       1
+6  TCGA-29-2414-01A   1528     778   12401       6   1880     66       2
+  COL16A1 COL9A3 COL20A1  COL1A1 COL12A1 COL9A1 COL7A1 COL10A1 COL21A1 COL5A1
+1     675     35      17   30675    1850    381   1635     373      13   1630
+2    1195   1110       0   91791    4152   2413   1326     679     384   6771
+3    6377    267      18  548304    5477     71    193     565     134  19063
+4    2614   2524      18 1366398   27440    198   5266    5596      17  72285
+5     509    349      13   49686   10566    826   1655     397       9   3375
+6    1885    411       6  596853   28469    375    691    7018      20  36959
+  COL4A2 COL2A1 COL6A1 COL6A2 COL8A1 COL26A1 COL6A3 COL1A2 COL3A1 COL4A3
+1   7298      0   9119   9637    349     688   3929  17897  14857     35
+2  24582   2196   9166  10042   1679      31   7622  36847  30676     26
+3  31386     96  43404  63891   2717     255  24990 189240  74207     33
+4  80848    102 126341 140975   4312   15763  66211 443393 316695      9
+5   6068    757   8173   7159    330     158   7202  21642  17183     38
+6  11399    274  42200  39900   6991     272  28921 223930 152278     11
+  COL22A1 COL24A1 COL8A2 COL6A5 COL18A1 COL4A1 COL14A1 COL4A5 COL25A1 COL27A1
+1     837       8    504      2    4120   7376      35     69     891     997
+2      29     235   1194      2   11153  17143    1681   1782     168    1674
+3      20       6    686      9   33578  18811    5985   1044      74     783
+4    2953     150   3627     73   67487  73812    4670   4490      10    4509
+5     790    1411    825     31   16691   5416     274   2007     175    6969
+6     274     198   3448     18   18895  10875    1313   1826     289    2122
+  COL13A1 COL4A6 COL11A2 COL5A2 COL15A1 COL6A6 COL28A1
+1     128      3      77   1275     385     11      38
+2    1150    328     666   3669    1983     25      54
+3     308    141      47   3430    1744     44      37
+4    1603    327     394  25452    6795    312      91
+5     634    351     516   1632     470    111     315
+6     611    359      92  12321     847    272      97</code></pre>
+</div>
+</div>
+<section id="some-basics" class="level3">
+<h3 class="anchored" data-anchor-id="some-basics">Some Basics</h3>
+<p>First, let’s look at the variable <code>vital_status</code> in the clinical metadata. It indicates whether the patient is alive or deceased, and in later analyses can be used as an outcome variable.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>df_ov <span class="sc">%&gt;%</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(vital_status)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 434 × 1
+   vital_status
+   &lt;chr&gt;       
+ 1 "deceased"  
+ 2 "deceased"  
+ 3 "deceased"  
+ 4 "deceased"  
+ 5 "deceased"  
+ 6 "living"    
+ 7 "living"    
+ 8 "living"    
+ 9 "deceased"  
+10 "deceased " 
+# ℹ 424 more rows</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(df_ov<span class="sc">$</span>figo_stage)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+  Stage II  Stage IIA  Stage IIB  Stage IIC  Stage III Stage IIIA Stage IIIB 
+         8          2          4         11        110          5          8 
+Stage IIIC   Stage IV 
+       207         66 </code></pre>
+</div>
+</div>
+<p>Let’s take a look at the structure of the clinical dataset.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(df_ov)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>tibble [434 × 16] (S3: tbl_df/tbl/data.frame)
+ $ alt_sample_name                : chr [1:434] "TCGA-20-0987-01A-02R-0434-01" "TCGA-24-0979-01A-01R-0434-01" "TCGA-23-1021-01B-01R-0434-01" "TCGA-04-1337-01A-01R-0434-01" ...
+ $ unique_patient_ID              : chr [1:434] "TCGA-20-0987-01A" "TCGA-24-0979-01A" "TCGA-23-1021-01B" "TCGA-04-1337-01A" ...
+ $ histological_type              : chr [1:434] "ser" "ser" "ser" "ser" ...
+ $ primarysite                    : logi [1:434] NA NA NA NA NA NA ...
+ $ summarygrade                   : chr [1:434] "HIGH" "HIGH" "HIGH" "LOW" ...
+ $ figo_stage                     : chr [1:434] "Stage III" "Stage IV" "Stage IV" "Stage IIIC" ...
+ $ age_at_initial_path_diagn      : int [1:434] 61 53 45 78 73 45 45 78 50 77 ...
+ $ percent_stromal_cells          : num [1:434] 1 25 0 36 5 NA NA 4 0 30 ...
+ $ percent_tumor_cells            : num [1:434] 72 72 100 64 72 NA NA 94 0 70 ...
+ $ os_binary                      : logi [1:434] NA NA NA NA NA NA ...
+ $ days_to_death_or_last_follow_up: int [1:434] 701 1264 1446 61 84 2616 816 797 1646 679 ...
+ $ CPE                            : num [1:434] 0.649 0.833 0.873 0.772 0.79 ...
+ $ stemness_score                 : num [1:434] 0.716 0.685 0.757 0.164 0.818 ...
+ $ batch                          : int [1:434] 12 12 12 12 12 12 12 12 12 12 ...
+ $ vital_status                   : chr [1:434] "deceased" "deceased" "deceased" "deceased" ...
+ $ classification_of_tumor        : chr [1:434] NA "primary" NA "primary" ...</code></pre>
+</div>
+</div>
+</section>
+</section>
+<section id="data-wrangling-and-cleaning" class="level2">
+<h2 class="anchored" data-anchor-id="data-wrangling-and-cleaning">Data wrangling and cleaning</h2>
+<section id="lets-do-some-cleanup" class="level3">
+<h3 class="anchored" data-anchor-id="lets-do-some-cleanup"><strong>Let’s do some cleanup</strong></h3>
+<ol type="1">
+<li><p>Check Missing values and NAs</p></li>
+<li><p>Drop Variables with Too Many Missing Values</p></li>
+<li><p>Drop Non-Informative Variables</p></li>
+<li><p>Standardize Categorical Data</p></li>
+<li><p>Fix Variable Types</p></li>
+<li><p>Recode and Reorder Factors</p></li>
+<li><p>Create New Variables from existing ones</p></li>
+</ol>
+</section>
+<section id="step-1-check-for-missing-values-and-convert-na-strings-to-real-nas" class="level3">
+<h3 class="anchored" data-anchor-id="step-1-check-for-missing-values-and-convert-na-strings-to-real-nas">Step 1: Check for missing values and convert <code>"NA"</code> strings to real <code>NA</code>s</h3>
+<p>Sometimes missing values are stored as text, such as <code>"NA "</code> or <code>"na"</code>, rather than as true <code>NA</code> values. Before exploring missingness, it is a good idea to clean these up so that R can recognize them correctly.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>df_ov<span class="sc">$</span>summarygrade <span class="sc">%&gt;%</span> </span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">unique</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "HIGH" "LOW"  NA     "NA " </code></pre>
+</div>
+</div>
+<p>We can convert this text value to a proper missing value using <code>na_if()</code>:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>df_ov <span class="ot">&lt;-</span> df_ov <span class="sc">%&gt;%</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">summarygrade =</span> <span class="fu">na_if</span>(summarygrade, <span class="st">"NA "</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>After this cleanup, the column contains only the valid categories and true missing values:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>df_ov<span class="sc">$</span>summarygrade <span class="sc">%&gt;%</span> </span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">unique</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "HIGH" "LOW"  NA    </code></pre>
+</div>
+</div>
+<p>This looks better, but it is useful to apply the same check across all character variables in the dataset.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>df_ov <span class="ot">&lt;-</span> df_ov <span class="sc">%&gt;%</span></span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="fu">across</span>(<span class="fu">where</span>(is.character), <span class="sc">~</span> <span class="fu">na_if</span>(., <span class="st">"NA "</span>)))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Now that we have NAs sorted out, let´s count how many there are.</p>
+<p>We use <code>is.na()</code> to identify missing values in the data frame. This creates a logical matrix where <code>TRUE</code> indicates a missing value. Next, <code>colSums()</code> counts how many missing values each column contains. Finally, we use a base R <code>barplot()</code> to visualize the number of missing values across variables.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>df_ov <span class="sc">%&gt;%</span> </span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">is.na</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">colSums</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">barplot</span>(<span class="at">las=</span><span class="dv">2</span>, <span class="at">cex.names=</span><span class="fl">0.6</span>) <span class="co"># baseR barplot since we are plotting a vector</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="presentation1_files/figure-html/unnamed-chunk-11-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Here, <code>las = 2</code> rotates the variable names to make them easier to read, and <code>cex.names = 0.6</code> makes the labels smaller so they fit better.</p>
+<p>This gives a quick overview of missingness in the dataset and helps identify variables that may need further cleaning or filtering.</p>
+</section>
+<section id="step-2-drop-variables-with-too-many-missing-values" class="level3">
+<h3 class="anchored" data-anchor-id="step-2-drop-variables-with-too-many-missing-values">Step 2: Drop Variables with Too Many Missing Values</h3>
+<p>On this note. If a variable has more than ~50% missing data, it probably won’t be useful. Let’s remove those:</p>
+<p>We calculate the proportion of missing values in each column using <code>colMeans(is.na(df_ov))</code>. This works because <code>is.na(df_ov)</code> returns <code>TRUE</code> for missing values and <code>FALSE</code> otherwise, and <code>colMeans()</code> treats <code>TRUE</code> as 1 and <code>FALSE</code> as 0, giving the fraction of missing values in each column.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>threshold <span class="ot">&lt;-</span> <span class="fl">0.50</span> <span class="co"># 50% threshold</span></span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>keep_cols <span class="ot">&lt;-</span> <span class="fu">colMeans</span>(<span class="fu">is.na</span>(df_ov)) <span class="sc">&lt;</span> threshold</span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a>names_removed <span class="ot">&lt;-</span> <span class="fu">names</span>(df_ov)[<span class="sc">!</span>keep_cols]</span>
+<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a><span class="co"># inspect removed variables</span></span>
+<span id="cb27-8"><a href="#cb27-8" aria-hidden="true" tabindex="-1"></a>df_ov <span class="sc">%&gt;%</span> </span>
+<span id="cb27-9"><a href="#cb27-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="fu">all_of</span>(names_removed)) <span class="sc">%&gt;%</span> </span>
+<span id="cb27-10"><a href="#cb27-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">slice_head</span>(<span class="at">n =</span> <span class="dv">6</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 6 × 3
+  primarysite os_binary classification_of_tumor
+  &lt;lgl&gt;       &lt;lgl&gt;     &lt;chr&gt;                  
+1 NA          NA        &lt;NA&gt;                   
+2 NA          NA        primary                
+3 NA          NA        &lt;NA&gt;                   
+4 NA          NA        primary                
+5 NA          NA        &lt;NA&gt;                   
+6 NA          NA        primary                </code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>df_ov <span class="ot">&lt;-</span> df_ov <span class="sc">%&gt;%</span> </span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>names_removed)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: Using an external vector in selections was deprecated in tidyselect 1.1.0.
+ℹ Please use `all_of()` or `any_of()` instead.
+  # Was:
+  data %&gt;% select(names_removed)
+
+  # Now:
+  data %&gt;% select(all_of(names_removed))
+
+See &lt;https://tidyselect.r-lib.org/reference/faq-external-vector.html&gt;.</code></pre>
+</div>
+</div>
+<p>This keeps only the variables that are mostly complete.</p>
+</section>
+<section id="step-3-drop-non-informative-variables" class="level3">
+<h3 class="anchored" data-anchor-id="step-3-drop-non-informative-variables">Step 3: Drop Non-Informative Variables</h3>
+<p>Let’s check a few categorical variables and remove any that are redundant or irrelevant. If they don’t provide useful or well-curated information, we can drop them:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>df_ov<span class="sc">$</span>histological_type <span class="sc">%&gt;%</span> <span class="fu">table</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>.
+ser 
+415 </code></pre>
+</div>
+</div>
+<p>Example of irrelevant variable: <code>histological_type</code> has 100% of the same value, so it’s not useful for analysis. We can drop it with <code>select()</code> and a minus sign.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>df_ov <span class="ot">&lt;-</span> df_ov <span class="sc">%&gt;%</span> </span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>histological_type)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="step-4-standardize-categorical-variables" class="level3">
+<h3 class="anchored" data-anchor-id="step-4-standardize-categorical-variables">Step 4: Standardize Categorical Variables</h3>
+<p>Sometimes, typos, hidden characters or spaces cause mis-grouped levels. So let’s have a closer look at the unique values of <code>vital_status</code>.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>df_ov<span class="sc">$</span>vital_status <span class="sc">%&gt;%</span> </span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">unique</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "deceased"  "living"    "deceased " "living "  </code></pre>
+</div>
+</div>
+<p>It looks like the variable contains two main groups: alive and deceased. But there is an issue whitespaces.</p>
+<p>Whitespace includes spaces, newlines, and other blank characters in text. It can cause errors or inconsistencies in data, so removing unnecessary whitespace is an important step in cleaning data.</p>
+<p>We can use the <code>str_trim()</code> function to remove whitespace.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str_trim</span>(<span class="st">" Hello World!   "</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "Hello World!"</code></pre>
+</div>
+</div>
+<p>Like many other functions, <code>str_trim()</code> can be used inside <code>mutate()</code> to modify a data frame column.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a>df_ov <span class="ot">&lt;-</span> df_ov <span class="sc">%&gt;%</span> </span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">vital_status =</span> <span class="fu">str_trim</span>(vital_status))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Accessing the unique values of the <code>vital_status</code> column.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a>df_ov<span class="sc">$</span>vital_status <span class="sc">%&gt;%</span> </span>
+<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">unique</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "deceased" "living"  </code></pre>
+</div>
+</div>
+</section>
+<section id="step-5-fix-variable-types" class="level3">
+<h3 class="anchored" data-anchor-id="step-5-fix-variable-types">Step 5: Fix Variable Types</h3>
+<p>Some variables are stored as <strong>character</strong> or <strong>numeric</strong> vectors even though they represent categories and should be stored as <strong>factors</strong>. In those cases, it makes more sense to convert them to <strong>factors</strong>.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="co"># One by one...</span></span>
+<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(df_ov<span class="sc">$</span>batch)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+ 9 11 12 13 14 15 17 18 19 21 22 24 40 
+22 28 36 39 41 21 46 42 29 33 38 39  1 </code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a><span class="fu">class</span>(df_ov<span class="sc">$</span>batch)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "integer"</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb45"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="co">#df_ov$batch &lt;- as.factor(df_ov$batch)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb46"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a><span class="co"># In one go:</span></span>
+<span id="cb46-2"><a href="#cb46-2" aria-hidden="true" tabindex="-1"></a>cols_to_factor <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">'vital_status'</span>, </span>
+<span id="cb46-3"><a href="#cb46-3" aria-hidden="true" tabindex="-1"></a>                    <span class="st">'figo_stage'</span>, </span>
+<span id="cb46-4"><a href="#cb46-4" aria-hidden="true" tabindex="-1"></a>                    <span class="st">'summarygrade'</span>, </span>
+<span id="cb46-5"><a href="#cb46-5" aria-hidden="true" tabindex="-1"></a>                    <span class="st">'batch'</span>)</span>
+<span id="cb46-6"><a href="#cb46-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb46-7"><a href="#cb46-7" aria-hidden="true" tabindex="-1"></a>df_ov <span class="ot">&lt;-</span> df_ov <span class="sc">%&gt;%</span></span>
+<span id="cb46-8"><a href="#cb46-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="fu">across</span>(<span class="fu">any_of</span>(cols_to_factor), as.factor))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb47"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a>cols_to_numeric <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">'age_at_initial_path_diagn'</span>, </span>
+<span id="cb47-2"><a href="#cb47-2" aria-hidden="true" tabindex="-1"></a>                    <span class="st">'days_to_death_or_last_follow_up'</span>,</span>
+<span id="cb47-3"><a href="#cb47-3" aria-hidden="true" tabindex="-1"></a>                    <span class="st">'CPE'</span>,</span>
+<span id="cb47-4"><a href="#cb47-4" aria-hidden="true" tabindex="-1"></a>                    <span class="st">'stemness_score'</span>)</span>
+<span id="cb47-5"><a href="#cb47-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-6"><a href="#cb47-6" aria-hidden="true" tabindex="-1"></a>df_ov <span class="ot">&lt;-</span> df_ov <span class="sc">%&gt;%</span></span>
+<span id="cb47-7"><a href="#cb47-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="fu">across</span>(<span class="fu">any_of</span>(cols_to_numeric), as.numeric))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="step-6-recode-and-reorder-factors" class="level3">
+<h3 class="anchored" data-anchor-id="step-6-recode-and-reorder-factors">Step 6: Recode and Reorder Factors</h3>
+<p>Sometimes we want to <strong>set the order of factor levels manually</strong>, especially if there’s a natural or meaningful order (e.g., “low” → “high”): This makes plots and model outputs (regression coefficients) easier to interpret.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb48"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Recode factor </span></span>
+<span id="cb48-2"><a href="#cb48-2" aria-hidden="true" tabindex="-1"></a>df_ov<span class="sc">$</span>summarygrade <span class="sc">%&gt;%</span> <span class="fu">table</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>.
+HIGH  LOW 
+ 362   52 </code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb50"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Reorder levels </span></span>
+<span id="cb50-2"><a href="#cb50-2" aria-hidden="true" tabindex="-1"></a>df_ov<span class="sc">$</span>summarygrade <span class="ot">&lt;-</span> <span class="fu">factor</span>(df_ov<span class="sc">$</span>summarygrade, <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">'LOW'</span>, <span class="st">'HIGH'</span>))</span>
+<span id="cb50-3"><a href="#cb50-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-4"><a href="#cb50-4" aria-hidden="true" tabindex="-1"></a><span class="fu">levels</span>(df_ov<span class="sc">$</span>summarygrade) <span class="co"># low, high</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "LOW"  "HIGH"</code></pre>
+</div>
+</div>
+<p>Some stage categories can be merged to create larger and easier-to-interpret groups.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb52"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(df_ov<span class="sc">$</span>figo_stage)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+  Stage II  Stage IIA  Stage IIB  Stage IIC  Stage III Stage IIIA Stage IIIB 
+         8          2          4         11        110          5          8 
+Stage IIIC   Stage IV 
+       207         66 </code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb54"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true" tabindex="-1"></a>df_ov <span class="ot">&lt;-</span> df_ov <span class="sc">%&gt;%</span></span>
+<span id="cb54-2"><a href="#cb54-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">figo_stage =</span> <span class="fu">fct_recode</span>(figo_stage,</span>
+<span id="cb54-3"><a href="#cb54-3" aria-hidden="true" tabindex="-1"></a>                            <span class="st">"Stage II"</span> <span class="ot">=</span> <span class="st">"Stage II"</span>,</span>
+<span id="cb54-4"><a href="#cb54-4" aria-hidden="true" tabindex="-1"></a>                            <span class="st">"Stage II"</span> <span class="ot">=</span> <span class="st">"Stage IIA"</span>,</span>
+<span id="cb54-5"><a href="#cb54-5" aria-hidden="true" tabindex="-1"></a>                            <span class="st">"Stage II"</span> <span class="ot">=</span> <span class="st">"Stage IIB"</span>,</span>
+<span id="cb54-6"><a href="#cb54-6" aria-hidden="true" tabindex="-1"></a>                            <span class="st">"Stage II"</span> <span class="ot">=</span> <span class="st">"Stage IIC"</span>,</span>
+<span id="cb54-7"><a href="#cb54-7" aria-hidden="true" tabindex="-1"></a>                            <span class="st">"Stage III"</span> <span class="ot">=</span> <span class="st">"Stage III"</span>,</span>
+<span id="cb54-8"><a href="#cb54-8" aria-hidden="true" tabindex="-1"></a>                            <span class="st">"Stage III"</span> <span class="ot">=</span> <span class="st">"Stage IIIA"</span>,</span>
+<span id="cb54-9"><a href="#cb54-9" aria-hidden="true" tabindex="-1"></a>                            <span class="st">"Stage III"</span> <span class="ot">=</span> <span class="st">"Stage IIIB"</span>,</span>
+<span id="cb54-10"><a href="#cb54-10" aria-hidden="true" tabindex="-1"></a>                            <span class="st">"Stage III"</span> <span class="ot">=</span> <span class="st">"Stage IIIC"</span>))</span>
+<span id="cb54-11"><a href="#cb54-11" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(df_ov<span class="sc">$</span>figo_stage)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+ Stage II Stage III  Stage IV 
+       25       330        66 </code></pre>
+</div>
+</div>
+</section>
+<section id="step-7-creating-new-variables" class="level3">
+<h3 class="anchored" data-anchor-id="step-7-creating-new-variables">Step 7: Creating New Variables</h3>
+<p>Next, we will create a few new variables by combining or transforming existing columns.</p>
+<section id="add-a-column-susing-mathematical-operation." class="level4">
+<h4 class="anchored" data-anchor-id="add-a-column-susing-mathematical-operation.">Add a column susing mathematical operation.</h4>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb56"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb56-1"><a href="#cb56-1" aria-hidden="true" tabindex="-1"></a>df_ov <span class="sc">%&gt;%</span> </span>
+<span id="cb56-2"><a href="#cb56-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">percent_normal_cells =</span> <span class="dv">100</span> <span class="sc">-</span> percent_tumor_cells <span class="sc">-</span> percent_stromal_cells)  <span class="sc">%&gt;%</span> </span>
+<span id="cb56-3"><a href="#cb56-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(percent_tumor_cells, </span>
+<span id="cb56-4"><a href="#cb56-4" aria-hidden="true" tabindex="-1"></a>         percent_stromal_cells, </span>
+<span id="cb56-5"><a href="#cb56-5" aria-hidden="true" tabindex="-1"></a>         percent_normal_cells)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 434 × 3
+   percent_tumor_cells percent_stromal_cells percent_normal_cells
+                 &lt;dbl&gt;                 &lt;dbl&gt;                &lt;dbl&gt;
+ 1                  72                     1                   27
+ 2                  72                    25                    3
+ 3                 100                     0                    0
+ 4                  64                    36                    0
+ 5                  72                     5                   23
+ 6                  NA                    NA                   NA
+ 7                  NA                    NA                   NA
+ 8                  94                     4                    2
+ 9                   0                     0                  100
+10                  70                    30                    0
+# ℹ 424 more rows</code></pre>
+</div>
+</div>
+</section>
+<section id="add-a-column-combining-other-columns-into-one" class="level4">
+<h4 class="anchored" data-anchor-id="add-a-column-combining-other-columns-into-one">Add a column combining other columns into one:</h4>
+<p>For character vectors, base R provides the functions <code>paste</code> and <code>paste0</code> for combining strings. Here we use <code>paste</code> to join values with a separator.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb58"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb58-1"><a href="#cb58-1" aria-hidden="true" tabindex="-1"></a><span class="fu">paste</span>(<span class="st">'TCGA'</span>, <span class="st">'Data'</span>, <span class="at">sep =</span> <span class="st">' '</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "TCGA Data"</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb60"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb60-1"><a href="#cb60-1" aria-hidden="true" tabindex="-1"></a>df_ov <span class="ot">&lt;-</span> df_ov <span class="sc">%&gt;%</span> </span>
+<span id="cb60-2"><a href="#cb60-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Stage_Grade =</span> <span class="fu">paste</span>(figo_stage, summarygrade, <span class="at">sep =</span> <span class="st">'-'</span>))</span>
+<span id="cb60-3"><a href="#cb60-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb60-4"><a href="#cb60-4" aria-hidden="true" tabindex="-1"></a>df_ov <span class="sc">%&gt;%</span> <span class="fu">select</span>(Stage_Grade)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 434 × 1
+   Stage_Grade   
+   &lt;chr&gt;         
+ 1 Stage III-HIGH
+ 2 Stage IV-HIGH 
+ 3 Stage IV-HIGH 
+ 4 Stage III-LOW 
+ 5 Stage IV-HIGH 
+ 6 Stage III-HIGH
+ 7 Stage III-HIGH
+ 8 Stage II-HIGH 
+ 9 Stage III-HIGH
+10 Stage III-HIGH
+# ℹ 424 more rows</code></pre>
+</div>
+</div>
+</section>
+<section id="add-a-column-based-on-conditions" class="level4">
+<h4 class="anchored" data-anchor-id="add-a-column-based-on-conditions">Add a column based on conditions:</h4>
+<p>We can also create new variables conditionally using <code>if_else</code>.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb62"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb62-1"><a href="#cb62-1" aria-hidden="true" tabindex="-1"></a>df_ov <span class="sc">%&gt;%</span> </span>
+<span id="cb62-2"><a href="#cb62-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">dominant_cell_type =</span> <span class="fu">if_else</span>(</span>
+<span id="cb62-3"><a href="#cb62-3" aria-hidden="true" tabindex="-1"></a>    percent_tumor_cells <span class="sc">&lt;</span> <span class="dv">50</span>, <span class="st">"not_cancer_cells"</span>, <span class="st">"cancer_cells"</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb62-4"><a href="#cb62-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(percent_tumor_cells, </span>
+<span id="cb62-5"><a href="#cb62-5" aria-hidden="true" tabindex="-1"></a>         dominant_cell_type)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 434 × 2
+   percent_tumor_cells dominant_cell_type
+                 &lt;dbl&gt; &lt;chr&gt;             
+ 1                  72 cancer_cells      
+ 2                  72 cancer_cells      
+ 3                 100 cancer_cells      
+ 4                  64 cancer_cells      
+ 5                  72 cancer_cells      
+ 6                  NA &lt;NA&gt;              
+ 7                  NA &lt;NA&gt;              
+ 8                  94 cancer_cells      
+ 9                   0 not_cancer_cells  
+10                  70 cancer_cells      
+# ℹ 424 more rows</code></pre>
+</div>
+</div>
+<p>For multiple conditions, <code>case_when</code> is often more readable than nested <code>if_else</code> statements.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb64"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb64-1"><a href="#cb64-1" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(df_ov<span class="sc">$</span>Stage_Grade)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+       NA-HIGH          NA-NA  Stage II-HIGH   Stage II-LOW    Stage II-NA 
+             2             11             14              8              3 
+Stage III-HIGH  Stage III-LOW   Stage III-NA  Stage IV-HIGH   Stage IV-LOW 
+           292             34              4             54             10 
+   Stage IV-NA 
+             2 </code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb66"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb66-1"><a href="#cb66-1" aria-hidden="true" tabindex="-1"></a>df_ov <span class="ot">&lt;-</span> df_ov <span class="sc">%&gt;%</span> </span>
+<span id="cb66-2"><a href="#cb66-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Stage_Grade =</span> <span class="fu">case_when</span>(</span>
+<span id="cb66-3"><a href="#cb66-3" aria-hidden="true" tabindex="-1"></a>    figo_stage <span class="sc">==</span>  <span class="st">"Stage III"</span> <span class="sc">&amp;</span> summarygrade <span class="sc">==</span> <span class="st">"LOW"</span> <span class="sc">~</span> <span class="st">"Stage III - low grade"</span>,</span>
+<span id="cb66-4"><a href="#cb66-4" aria-hidden="true" tabindex="-1"></a>    figo_stage <span class="sc">==</span>  <span class="st">"Stage III"</span> <span class="sc">&amp;</span> summarygrade <span class="sc">==</span> <span class="st">"HIGH"</span> <span class="sc">~</span> <span class="st">"Stage III - high grade"</span>,</span>
+<span id="cb66-5"><a href="#cb66-5" aria-hidden="true" tabindex="-1"></a>    figo_stage <span class="sc">==</span>  <span class="st">"Stage III"</span> <span class="sc">&amp;</span> <span class="fu">is.na</span>(summarygrade) <span class="sc">~</span> <span class="cn">NA</span>,</span>
+<span id="cb66-6"><a href="#cb66-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">.default =</span> figo_stage)) <span class="sc">%&gt;%</span> </span>
+<span id="cb66-7"><a href="#cb66-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Stage_Grade =</span> <span class="fu">factor</span>(Stage_Grade))</span>
+<span id="cb66-8"><a href="#cb66-8" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb66-9"><a href="#cb66-9" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(df_ov<span class="sc">$</span>Stage_Grade)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+              Stage II Stage III - high grade  Stage III - low grade 
+                    25                    292                     34 
+              Stage IV 
+                    66 </code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb68"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb68-1"><a href="#cb68-1" aria-hidden="true" tabindex="-1"></a>df_ov<span class="sc">$</span>Stage_Grade <span class="ot">&lt;-</span> <span class="fu">factor</span>(df_ov<span class="sc">$</span>Stage_Grade, </span>
+<span id="cb68-2"><a href="#cb68-2" aria-hidden="true" tabindex="-1"></a>                            <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">'Stage II'</span>, </span>
+<span id="cb68-3"><a href="#cb68-3" aria-hidden="true" tabindex="-1"></a>                                       <span class="st">'Stage III - low grade'</span>,</span>
+<span id="cb68-4"><a href="#cb68-4" aria-hidden="true" tabindex="-1"></a>                                       <span class="st">'Stage III - high grade'</span>,</span>
+<span id="cb68-5"><a href="#cb68-5" aria-hidden="true" tabindex="-1"></a>                                       <span class="st">'Stage IV'</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+</section>
+</section>
+<section id="string-manipulation" class="level2">
+<h2 class="anchored" data-anchor-id="string-manipulation">String manipulation</h2>
+<p>Sometimes useful information is stored inside longer text strings rather than in separate columns. This is common in clinical and genomics datasets.</p>
+<p>In this example, the tissue source site is not stored as a separate variable. Since we are TCGA experts, we know that this information is actually encoded in the full sample name <code>TCGA-20-0987-01A-02R-0434-01</code>. But how do we get it out.</p>
+<p>To extract and work with this kind of information, we can use what is called a <strong>Regular Expression (Regex)</strong> and <strong>string manipulation</strong> tools from the <code>stringr</code> package..</p>
+<section id="regex-regular-expression" class="level3">
+<h3 class="anchored" data-anchor-id="regex-regular-expression">Regex: Regular expression</h3>
+<p>Regular expressions (regex) are used to <strong>search for patterns in text strings</strong>. Regular expressions are very flexible and powerful, although they can look unfamiliar at first.</p>
+<p>Instead of looking for an exact word like <em>cat</em>, a regex lets you search for things like:</p>
+<ul>
+<li><p>“Any word that starts with ‘c’ and ends with ‘t’”</p></li>
+<li><p>“Any sequence of digits”</p></li>
+<li><p>“A word that may or may not have a certain letter”</p></li>
+<li><p>“A word containing a specific delimiter, e.g.&nbsp;a dash, as comma, etc.”</p></li>
+</ul>
+<p>It might look a little weird (lots of slashes, dots, and symbols), but once you learn a few basics, it’s incredibly useful! And the good thing is that ChatGPT is very good at making regular expressions for you!</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../figures/regex1.png" class="img-fluid quarto-figure quarto-figure-center figure-img"></p>
+</figure>
+</div>
+<p>We will do string manipulation the tidyverse way: using the <code>stringr</code> package where most functions starts with <code>str_</code>. These functions often has a parameter called <code>pattern</code> which can take a regular expression as an argument. Let’s start with some simple examples.</p>
+<p>Let’s first look at one example sample name:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb69"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb69-1"><a href="#cb69-1" aria-hidden="true" tabindex="-1"></a>example_name <span class="ot">&lt;-</span>  df_ov<span class="sc">$</span>alt_sample_name[<span class="dv">1</span>]</span>
+<span id="cb69-2"><a href="#cb69-2" aria-hidden="true" tabindex="-1"></a>example_name</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "TCGA-20-0987-01A-02R-0434-01"</code></pre>
+</div>
+</div>
+<p>Extract the first 4 characters</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb71"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb71-1"><a href="#cb71-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str_sub</span>(example_name, <span class="at">start =</span> <span class="dv">1</span>, <span class="at">end =</span> <span class="dv">4</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "TCGA"</code></pre>
+</div>
+</div>
+<p>Extract the last 2 characters</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb73"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb73-1"><a href="#cb73-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str_sub</span>(example_name, <span class="at">start =</span> <span class="sc">-</span><span class="dv">2</span>, <span class="at">end =</span> <span class="sc">-</span><span class="dv">1</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "01"</code></pre>
+</div>
+</div>
+<section id="check-whether-a-string-contains-a-pattern" class="level4">
+<h4 class="anchored" data-anchor-id="check-whether-a-string-contains-a-pattern">Check whether a string contains a pattern</h4>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb75"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb75-1"><a href="#cb75-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str_detect</span>(example_name, <span class="st">"TCGA"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] TRUE</code></pre>
+</div>
+</div>
+<p>We can also replace text patterns:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb77"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb77-1"><a href="#cb77-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str_replace_all</span>(<span class="at">string =</span> example_name, <span class="at">pattern =</span> <span class="st">'TCGA'</span>, <span class="at">replacement =</span> <span class="st">'Data boss -'</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "Data boss --20-0987-01A-02R-0434-01"</code></pre>
+</div>
+</div>
+</section>
+</section>
+<section id="extracting-metadata-from-tcga-sample-names" class="level3">
+<h3 class="anchored" data-anchor-id="extracting-metadata-from-tcga-sample-names"><strong>Extracting metadata from TCGA sample names</strong></h3>
+<p>Sometimes useful metadata is embedded directly in the sample name. For TCGA-style identifiers, different parts of the name are separated by hyphens (<code>-</code>). We can use <code>str_split_i()</code> to split the string at each hyphen and extract a specific part.</p>
+<p>In the example below, we extract the <strong>second</strong> segment of the barcode:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb79"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb79-1"><a href="#cb79-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str_split_i</span>(<span class="st">'TCGA-20-0987-01A-02R-0434-01'</span>, <span class="at">pattern =</span> <span class="st">'-'</span>, <span class="at">i =</span> <span class="dv">2</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "20"</code></pre>
+</div>
+</div>
+<p>This returns <code>"20"</code>, which corresponds to the <strong>tissue source site (TSS) code</strong>.</p>
+<p>We can apply the same logic to the full column using <code>mutate()</code> and create a new variable containing the extracted code for each sample:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb81"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb81-1"><a href="#cb81-1" aria-hidden="true" tabindex="-1"></a>df_ov <span class="ot">&lt;-</span> df_ov <span class="sc">%&gt;%</span> </span>
+<span id="cb81-2"><a href="#cb81-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">tissue_sample_code =</span> <span class="fu">str_split_i</span>(alt_sample_name, <span class="at">pattern =</span> <span class="st">'-'</span>, <span class="at">i =</span> <span class="dv">2</span>))</span>
+<span id="cb81-3"><a href="#cb81-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb81-4"><a href="#cb81-4" aria-hidden="true" tabindex="-1"></a><span class="fu">sort</span>(<span class="fu">table</span>(df_ov<span class="sc">$</span>tissue_sample_code))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+31 57 59 20 10 30 36 09 04 23 29 61 25 13 24 
+ 7  7  7  8  9 11 11 22 24 27 35 40 42 75 90 </code></pre>
+</div>
+</div>
+<p>The frequency table helps us inspect which tissue source site codes are present in the dataset.</p>
+<p>The second segment of a TCGA barcode can be mapped to the institution that contributed the sample. To do this, we create a small lookup table containing the codes present in our dataset and their corresponding institution names.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb83"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb83-1"><a href="#cb83-1" aria-hidden="true" tabindex="-1"></a>tss_lookup <span class="ot">&lt;-</span> tibble<span class="sc">::</span><span class="fu">tribble</span>(</span>
+<span id="cb83-2"><a href="#cb83-2" aria-hidden="true" tabindex="-1"></a>  <span class="sc">~</span>sample_code, <span class="sc">~</span>tissue_source_site,</span>
+<span id="cb83-3"><a href="#cb83-3" aria-hidden="true" tabindex="-1"></a>  <span class="st">"04"</span>, <span class="st">"Gynecologic Oncology Group"</span>,</span>
+<span id="cb83-4"><a href="#cb83-4" aria-hidden="true" tabindex="-1"></a>  <span class="st">"09"</span>, <span class="st">"UCSF"</span>,</span>
+<span id="cb83-5"><a href="#cb83-5" aria-hidden="true" tabindex="-1"></a>  <span class="st">"10"</span>, <span class="st">"MD Anderson Cancer Center"</span>,</span>
+<span id="cb83-6"><a href="#cb83-6" aria-hidden="true" tabindex="-1"></a>  <span class="st">"13"</span>, <span class="st">"Memorial Sloan Kettering"</span>,</span>
+<span id="cb83-7"><a href="#cb83-7" aria-hidden="true" tabindex="-1"></a>  <span class="st">"20"</span>, <span class="st">"Fox Chase Cancer Center"</span>,</span>
+<span id="cb83-8"><a href="#cb83-8" aria-hidden="true" tabindex="-1"></a>  <span class="st">"23"</span>, <span class="st">"Cedars Sinai"</span>,</span>
+<span id="cb83-9"><a href="#cb83-9" aria-hidden="true" tabindex="-1"></a>  <span class="st">"24"</span>, <span class="st">"Washington University"</span>,</span>
+<span id="cb83-10"><a href="#cb83-10" aria-hidden="true" tabindex="-1"></a>  <span class="st">"25"</span>, <span class="st">"Mayo Clinic - Rochester"</span>,</span>
+<span id="cb83-11"><a href="#cb83-11" aria-hidden="true" tabindex="-1"></a>  <span class="st">"29"</span>, <span class="st">"Duke"</span>,</span>
+<span id="cb83-12"><a href="#cb83-12" aria-hidden="true" tabindex="-1"></a>  <span class="st">"30"</span>, <span class="st">"Harvard"</span>,</span>
+<span id="cb83-13"><a href="#cb83-13" aria-hidden="true" tabindex="-1"></a>  <span class="st">"31"</span>, <span class="st">"Imperial College"</span>,</span>
+<span id="cb83-14"><a href="#cb83-14" aria-hidden="true" tabindex="-1"></a>  <span class="st">"36"</span>, <span class="st">"BC Cancer Agency"</span>,</span>
+<span id="cb83-15"><a href="#cb83-15" aria-hidden="true" tabindex="-1"></a>  <span class="st">"57"</span>, <span class="st">"International Genomics Consortium"</span>,</span>
+<span id="cb83-16"><a href="#cb83-16" aria-hidden="true" tabindex="-1"></a>  <span class="st">"59"</span>, <span class="st">"Roswell Park"</span>,</span>
+<span id="cb83-17"><a href="#cb83-17" aria-hidden="true" tabindex="-1"></a>  <span class="st">"61"</span>, <span class="st">"University of Pittsburgh"</span></span>
+<span id="cb83-18"><a href="#cb83-18" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>We can now join this lookup table to the metadata:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb84"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb84-1"><a href="#cb84-1" aria-hidden="true" tabindex="-1"></a>df_ov <span class="ot">&lt;-</span> df_ov <span class="sc">%&gt;%</span> </span>
+<span id="cb84-2"><a href="#cb84-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(tss_lookup, <span class="at">by =</span> <span class="fu">c</span>(<span class="st">"tissue_sample_code"</span> <span class="ot">=</span> <span class="st">"sample_code"</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>This adds a new variable, <code>tissue_source_site</code>, containing a readable institution name for each sample.</p>
+<p>Finally, we can inspect the result:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb85"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb85-1"><a href="#cb85-1" aria-hidden="true" tabindex="-1"></a>df_ov <span class="sc">%&gt;%</span> </span>
+<span id="cb85-2"><a href="#cb85-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(unique_patient_ID, tissue_sample_code, tissue_source_site) <span class="sc">%&gt;%</span> </span>
+<span id="cb85-3"><a href="#cb85-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">slice_head</span>(<span class="at">n =</span> <span class="dv">5</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 5 × 3
+  unique_patient_ID tissue_sample_code tissue_source_site        
+  &lt;chr&gt;             &lt;chr&gt;              &lt;chr&gt;                     
+1 TCGA-20-0987-01A  20                 Fox Chase Cancer Center   
+2 TCGA-24-0979-01A  24                 Washington University     
+3 TCGA-23-1021-01B  23                 Cedars Sinai              
+4 TCGA-04-1337-01A  04                 Gynecologic Oncology Group
+5 TCGA-23-1032-01A  23                 Cedars Sinai              </code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb87"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb87-1"><a href="#cb87-1" aria-hidden="true" tabindex="-1"></a>df_ov <span class="ot">&lt;-</span> df_ov <span class="sc">%&gt;%</span> </span>
+<span id="cb87-2"><a href="#cb87-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>tissue_sample_code)</span>
+<span id="cb87-3"><a href="#cb87-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb87-4"><a href="#cb87-4" aria-hidden="true" tabindex="-1"></a>df_ov <span class="ot">&lt;-</span> df_ov <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="at">tissue_source_site =</span> <span class="fu">factor</span>(tissue_source_site))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Nicely done!</p>
+<p><strong>At this point, we have:</strong></p>
+<ol type="1">
+<li><p>Dropped Non-Informative Variables</p></li>
+<li><p>Dropped Variables with Too Many Missing Values</p></li>
+<li><p>Standardized Categorical Data</p></li>
+<li><p>Fixed Variable Types</p></li>
+<li><p>Recoded and Reordered Factors</p></li>
+<li><p>Created New Variables from existing ones</p></li>
+</ol>
+</section>
+</section>
+<section id="joining-dataframes" class="level2">
+<h2 class="anchored" data-anchor-id="joining-dataframes">Joining Dataframes</h2>
+<p>Often, information is stored across multiple tables, and we need to combine them into a single dataset. Here, we will join <code>df_ov</code> and <code>df_exp</code> by patient ID.</p>
+<p>To make the join examples easier to follow, we will first create small subsets of each dataset.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb88"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb88-1"><a href="#cb88-1" aria-hidden="true" tabindex="-1"></a>df_exp_subset <span class="ot">&lt;-</span> df_exp <span class="sc">%&gt;%</span> </span>
+<span id="cb88-2"><a href="#cb88-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(unique_patient_ID) <span class="sc">%&gt;%</span> </span>
+<span id="cb88-3"><a href="#cb88-3" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">slice</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>) <span class="sc">%&gt;%</span> dplyr<span class="sc">::</span><span class="fu">select</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>)</span>
+<span id="cb88-4"><a href="#cb88-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb88-5"><a href="#cb88-5" aria-hidden="true" tabindex="-1"></a>df_exp_subset</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  unique_patient_ID COL9A2 COL23A1 COL11A1 COL17A1
+1  TCGA-04-1331-01A   9119    1552    1936      10
+2  TCGA-04-1332-01A   2150     788    1123      31
+3  TCGA-04-1337-01A   4664    6089   17644      92
+4  TCGA-04-1338-01A   1289     155    7244     383
+5  TCGA-04-1341-01A  31058     788    2731      19</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb90"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb90-1"><a href="#cb90-1" aria-hidden="true" tabindex="-1"></a>df_ov_subset <span class="ot">&lt;-</span> df_ov <span class="sc">%&gt;%</span> </span>
+<span id="cb90-2"><a href="#cb90-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(unique_patient_ID) <span class="sc">%&gt;%</span> </span>
+<span id="cb90-3"><a href="#cb90-3" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">slice</span>(<span class="dv">3</span><span class="sc">:</span><span class="dv">7</span>) <span class="sc">%&gt;%</span> <span class="fu">select</span>(<span class="dv">2</span><span class="sc">:</span><span class="dv">4</span>, vital_status)</span>
+<span id="cb90-4"><a href="#cb90-4" aria-hidden="true" tabindex="-1"></a>df_ov_subset</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 5 × 4
+  unique_patient_ID summarygrade figo_stage vital_status
+  &lt;chr&gt;             &lt;fct&gt;        &lt;fct&gt;      &lt;fct&gt;       
+1 TCGA-04-1337-01A  LOW          Stage III  deceased    
+2 TCGA-04-1338-01A  HIGH         Stage III  living      
+3 TCGA-04-1341-01A  HIGH         &lt;NA&gt;       living      
+4 TCGA-04-1343-01A  HIGH         Stage IV   deceased    
+5 TCGA-04-1347-01A  HIGH         Stage IV   living      </code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb92"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb92-1"><a href="#cb92-1" aria-hidden="true" tabindex="-1"></a>df_exp_subset<span class="sc">$</span>unique_patient_ID <span class="sc">%in%</span> </span>
+<span id="cb92-2"><a href="#cb92-2" aria-hidden="true" tabindex="-1"></a>  df_ov_subset<span class="sc">$</span>unique_patient_ID <span class="sc">%&gt;%</span> </span>
+<span id="cb92-3"><a href="#cb92-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">table</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>.
+FALSE  TRUE 
+    2     3 </code></pre>
+</div>
+</div>
+<p>A quick recap of join types from <code>dplyr</code>:</p>
+<ul>
+<li><p><code>full_join()</code>: all rows from both</p></li>
+<li><p><code>inner_join()</code>: only matched rows</p></li>
+<li><p><code>left_join()</code>: all from left, matched from right</p></li>
+<li><p><code>right_join()</code>: all from right, matched from left</p></li>
+</ul>
+<section id="full-join" class="level4">
+<h4 class="anchored" data-anchor-id="full-join">Full Join</h4>
+<p>A <strong>full join</strong> keeps <em>everything</em> — all rows from both <code>df_ov_subset</code> and <code>df_exp_subset</code>. If there’s no match, missing values (<code>NA</code>) are filled in.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb94"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb94-1"><a href="#cb94-1" aria-hidden="true" tabindex="-1"></a>df_ov_subset <span class="sc">%&gt;%</span> </span>
+<span id="cb94-2"><a href="#cb94-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">full_join</span>(df_exp_subset, <span class="at">by =</span> <span class="st">"unique_patient_ID"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 7 × 8
+  unique_patient_ID summarygrade figo_stage vital_status COL9A2 COL23A1 COL11A1
+  &lt;chr&gt;             &lt;fct&gt;        &lt;fct&gt;      &lt;fct&gt;         &lt;int&gt;   &lt;int&gt;   &lt;int&gt;
+1 TCGA-04-1337-01A  LOW          Stage III  deceased       4664    6089   17644
+2 TCGA-04-1338-01A  HIGH         Stage III  living         1289     155    7244
+3 TCGA-04-1341-01A  HIGH         &lt;NA&gt;       living        31058     788    2731
+4 TCGA-04-1343-01A  HIGH         Stage IV   deceased         NA      NA      NA
+5 TCGA-04-1347-01A  HIGH         Stage IV   living           NA      NA      NA
+6 TCGA-04-1331-01A  &lt;NA&gt;         &lt;NA&gt;       &lt;NA&gt;           9119    1552    1936
+7 TCGA-04-1332-01A  &lt;NA&gt;         &lt;NA&gt;       &lt;NA&gt;           2150     788    1123
+# ℹ 1 more variable: COL17A1 &lt;int&gt;</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb96"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb96-1"><a href="#cb96-1" aria-hidden="true" tabindex="-1"></a><span class="co"># N row:</span></span>
+<span id="cb96-2"><a href="#cb96-2" aria-hidden="true" tabindex="-1"></a><span class="co"># union(df_exp_subset$unique_patient_ID, df_ov_subset$unique_patient_ID) %&gt;% length()</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="inner-join" class="level4">
+<h4 class="anchored" data-anchor-id="inner-join">Inner Join</h4>
+<p>An <strong>inner join</strong> keeps only the rows that appear in <strong>both</strong> data frames. So if an ID exists in one but not the other, it’s dropped.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb97"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb97-1"><a href="#cb97-1" aria-hidden="true" tabindex="-1"></a>df_ov_subset <span class="sc">%&gt;%</span> </span>
+<span id="cb97-2"><a href="#cb97-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">inner_join</span>(df_exp_subset, <span class="at">by =</span> <span class="st">"unique_patient_ID"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 3 × 8
+  unique_patient_ID summarygrade figo_stage vital_status COL9A2 COL23A1 COL11A1
+  &lt;chr&gt;             &lt;fct&gt;        &lt;fct&gt;      &lt;fct&gt;         &lt;int&gt;   &lt;int&gt;   &lt;int&gt;
+1 TCGA-04-1337-01A  LOW          Stage III  deceased       4664    6089   17644
+2 TCGA-04-1338-01A  HIGH         Stage III  living         1289     155    7244
+3 TCGA-04-1341-01A  HIGH         &lt;NA&gt;       living        31058     788    2731
+# ℹ 1 more variable: COL17A1 &lt;int&gt;</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb99"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb99-1"><a href="#cb99-1" aria-hidden="true" tabindex="-1"></a><span class="co"># N row:</span></span>
+<span id="cb99-2"><a href="#cb99-2" aria-hidden="true" tabindex="-1"></a><span class="co"># intersect(df_exp_subset$unique_patient_ID, df_ov_subset$unique_patient_ID) %&gt;% length()</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="left-join" class="level4">
+<h4 class="anchored" data-anchor-id="left-join">Left Join</h4>
+<p>A <strong>left join</strong> keeps <strong>all rows from</strong> <code>df_ov_subset</code>, and matches info from <code>df_exp_subset</code> wherever possible. Unmatched rows from <code>df_ov_subset</code> get <code>NA</code> for the new columns.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb100"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb100-1"><a href="#cb100-1" aria-hidden="true" tabindex="-1"></a>df_ov_subset <span class="sc">%&gt;%</span> </span>
+<span id="cb100-2"><a href="#cb100-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(df_exp_subset, <span class="at">by =</span> <span class="st">"unique_patient_ID"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 5 × 8
+  unique_patient_ID summarygrade figo_stage vital_status COL9A2 COL23A1 COL11A1
+  &lt;chr&gt;             &lt;fct&gt;        &lt;fct&gt;      &lt;fct&gt;         &lt;int&gt;   &lt;int&gt;   &lt;int&gt;
+1 TCGA-04-1337-01A  LOW          Stage III  deceased       4664    6089   17644
+2 TCGA-04-1338-01A  HIGH         Stage III  living         1289     155    7244
+3 TCGA-04-1341-01A  HIGH         &lt;NA&gt;       living        31058     788    2731
+4 TCGA-04-1343-01A  HIGH         Stage IV   deceased         NA      NA      NA
+5 TCGA-04-1347-01A  HIGH         Stage IV   living           NA      NA      NA
+# ℹ 1 more variable: COL17A1 &lt;int&gt;</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb102"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb102-1"><a href="#cb102-1" aria-hidden="true" tabindex="-1"></a><span class="co"># N row:</span></span>
+<span id="cb102-2"><a href="#cb102-2" aria-hidden="true" tabindex="-1"></a><span class="co"># df_ov_subset$unique_patient_ID %&gt;% length()</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="right-join" class="level4">
+<h4 class="anchored" data-anchor-id="right-join">Right Join</h4>
+<p>A <strong>right join</strong> is the opposite: it keeps <strong>all rows from</strong> <code>df_exp_subset</code> and adds matching data from <code>df_ov_subset</code> wherever it can.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb103"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb103-1"><a href="#cb103-1" aria-hidden="true" tabindex="-1"></a>df_ov_subset <span class="sc">%&gt;%</span> </span>
+<span id="cb103-2"><a href="#cb103-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">right_join</span>(df_exp_subset, <span class="at">by =</span> <span class="st">"unique_patient_ID"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 5 × 8
+  unique_patient_ID summarygrade figo_stage vital_status COL9A2 COL23A1 COL11A1
+  &lt;chr&gt;             &lt;fct&gt;        &lt;fct&gt;      &lt;fct&gt;         &lt;int&gt;   &lt;int&gt;   &lt;int&gt;
+1 TCGA-04-1337-01A  LOW          Stage III  deceased       4664    6089   17644
+2 TCGA-04-1338-01A  HIGH         Stage III  living         1289     155    7244
+3 TCGA-04-1341-01A  HIGH         &lt;NA&gt;       living        31058     788    2731
+4 TCGA-04-1331-01A  &lt;NA&gt;         &lt;NA&gt;       &lt;NA&gt;           9119    1552    1936
+5 TCGA-04-1332-01A  &lt;NA&gt;         &lt;NA&gt;       &lt;NA&gt;           2150     788    1123
+# ℹ 1 more variable: COL17A1 &lt;int&gt;</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb105"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb105-1"><a href="#cb105-1" aria-hidden="true" tabindex="-1"></a><span class="co"># N row:</span></span>
+<span id="cb105-2"><a href="#cb105-2" aria-hidden="true" tabindex="-1"></a><span class="co"># df_exp_subset$unique_patient_ID %&gt;% length()</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="lets-join-our-datasets" class="level3">
+<h3 class="anchored" data-anchor-id="lets-join-our-datasets">Let’s join our datasets</h3>
+<p>We will join the two full datasets.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb106"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb106-1"><a href="#cb106-1" aria-hidden="true" tabindex="-1"></a>df_comb <span class="ot">&lt;-</span> df_ov <span class="sc">%&gt;%</span> </span>
+<span id="cb106-2"><a href="#cb106-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(df_exp, <span class="at">by =</span> <span class="st">"unique_patient_ID"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="recap" class="level3">
+<h3 class="anchored" data-anchor-id="recap">Recap</h3>
+<p><strong>By now, we have:</strong></p>
+<ul>
+<li><p>Loaded and explored clinical and expression datasets</p></li>
+<li><p>Cleaned missing values and whitespace</p></li>
+<li><p>Fixed variable types and removed uninformative variables</p></li>
+<li><p>Created new variables using conditional logic and string manipulation</p></li>
+<li><p>Merged the clinical and expression data for downstream analysis</p></li>
+<li><p>Your data is now prepped and ready for modeling, visualization, or more advanced statistical analysis.</p></li>
+</ul>
+<p><strong>Your dataset <code>df_comb</code> is now ready for summary statistics and exploratory data analysis (EDA).</strong></p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb107"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb107-1"><a href="#cb107-1" aria-hidden="true" tabindex="-1"></a><span class="fu">save</span>(df_comb, <span class="at">file=</span><span class="st">"../data/GDC_Ovarian_cleaned.RData"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+
+
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    // Ensure there is a toggle, if there isn't float one in the top right
+    if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
+      const a = window.document.createElement('a');
+      a.classList.add('top-right');
+      a.classList.add('quarto-color-scheme-toggle');
+      a.href = "";
+      a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+      const i = window.document.createElement("i");
+      i.classList.add('bi');
+      a.appendChild(i);
+      window.document.body.appendChild(a);
+    }
+    setColorSchemeToggle(hasAlternateSentinel())
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>
