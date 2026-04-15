@@ -1,6 +1,6 @@
 # R4DataScience
 Advanced R course following FromExceltoR (https://github.com/Center-for-Health-Data-Science/FromExceltoR).
 
-Course feedback form: https://forms.office.com/Pages/ResponsePage.aspx?id=kX-So6HNlkaviYyfHO_6kaKwKoywcVlMq5OaNsGbwftUNVA5NFBVSTE5V0hGUDFTQjlQQUxOME1DNCQlQCN0PWcu
+Course feedback form: https://forms.cloud.microsoft/Pages/ResponsePage.aspx?id=kX-So6HNlkaviYyfHO_6kaKwKoywcVlMq5OaNsGbwftUQ1pDMjMzTUg4TDlWTzREUkc4T1JNUTUwSiQlQCN0PWcu
 
 ![image](https://github.com/Center-for-Health-Data-Science/R4DataScience/blob/main/slides/program.jpeg)
