@@ -139,21 +139,18 @@ wine_labs <- transform(fzPlot$data,
 wine_labs
 ```
 
-
 ```{r}
 fzPlot + geom_text(data = wine_labs,
   aes(label = my_label), size = 2.5)
 ```
 
-The answer to question (II) is a bit more tricky. 
-One way to get a sense of which variables may be contributing to the clustering is to examine the variance of the cluster centers for each variable. A higher variance suggests that the cluster centroids differ more on that variable, so that variable may be playing a larger role in separating the clusters.
+The answer to question (II) is a bit more tricky. One way to get a sense of which variables may be contributing to the clustering is to examine the variance of the cluster centers for each variable. A higher variance suggests that the cluster centroids differ more on that variable, so that variable may be playing a larger role in separating the clusters.
 
 **Note:** This is only a descriptive heuristic, not a statistical test. Unlike PCA, k-means does not produce loadings, so there is no direct measure of variable importance in the same sense.
 
 ```{r}
 kmeans_res$centers
 ```
-
 
 ```{r}
 var_importance <- apply(kmeans_res$centers, 2, var)
@@ -186,6 +183,7 @@ For this exercise we will use a dataset from patients with Heart Disease. Inform
 HD <- read_csv("../data/HeartDisease.csv")
 
 head(HD)
+table(HD$chestPainType)
 ```
 
 Let's convert some of the variables that are encoded as numeric datatypes but should be factors:
@@ -308,6 +306,8 @@ RFcv <- trainControl(
   savePredictions = "final"
 )
 
+RFcv
+
 ```
 
 Now that we have set up parameters for cross validation in the `RFcv` object above, we can feed it to the `train()` function from the `caret` packages. We also specify the **training data**, the **name of the outcome variable**, and, importantly, that we want to perform random forest (`method = "rf"`) as the `train()` function can be used for different models.
@@ -376,4 +376,4 @@ varImportance <- as.data.frame(as.matrix(varImpOut$importance)) %>%
 varImportance
 ```
 
-Variable importance is based on how much each variable improves the model's accuracy across splits. Variables `DefectType`, `nMajorVessels` and `chestPainType`  appear to be highlight predictive of heart disease.
+Variable importance is based on how much each variable improves the model's accuracy across splits. Variables `DefectType`, `nMajorVessels` and `chestPainType` appear to be highlight predictive of heart disease.
